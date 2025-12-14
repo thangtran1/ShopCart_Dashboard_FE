@@ -11,6 +11,7 @@ import {
 } from "@/ui/table";
 import PriceFormatter from "./PriceFormatter";
 import { CreditCard, Truck, MapPin, Phone, Mail, User, Calendar, Package } from "lucide-react";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 interface OrderDetailsDialogProps {
   order: Order | null;
@@ -28,11 +29,14 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="!max-w-4xl max-h-[90vh] overflow-y-scroll">
-        {/* Header */}
         <DialogHeader>
           <DialogTitle className="text-xl text-foreground font-semibold">
             Chi tiết đơn hàng – {order.orderNumber}
           </DialogTitle>
+
+          <DialogDescription className="text-sm text-muted-foreground">
+            Thông tin chi tiết về đơn hàng, sản phẩm, người nhận và trạng thái xử lý.
+          </DialogDescription>
         </DialogHeader>
 
         {/* Thông tin đơn hàng */}

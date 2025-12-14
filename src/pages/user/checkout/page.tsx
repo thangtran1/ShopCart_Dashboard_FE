@@ -211,7 +211,6 @@ const CheckoutPage = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="flex items-center gap-2 mb-4">
-          <CreditCard className="text-darkColor" />
           <Title>Thanh Toán</Title>
         </div>
 
@@ -226,43 +225,32 @@ const CheckoutPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Products */}
-            <div className="space-y-3 max-h-60 overflow-y-auto">
-  {groupedItems.map(({ product, quantity }) => {
-    // Xử lý URL ảnh an toàn
-    const imageUrl =
-      product.image && typeof product.image === "string"
-        ? product.image
-        : product.images?.[0]?.asset?.url;
-
-    const finalUrl = imageUrl?.startsWith("http")
-      ? imageUrl
-      : `${import.meta.env.VITE_API_URL}/${imageUrl || "uploads/avatar-default.png"}`;
-
-    return (
-      <div
-        key={product._id}
-        className="flex items-center gap-3 p-2 border border-border rounded-lg hover:shadow-md transition-shadow"
-      >
-        <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-          <img
-            src={finalUrl}
-            alt={product.name}
-            className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
-          />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm md:text-base font-medium truncate">{product.name}</p>
-          <p className="text-xs md:text-sm text-gray-500">Số lượng: {quantity}</p>
-        </div>
-        <PriceFormatter
-          amount={product.price * quantity}
-          className="text-sm md:text-base font-semibold"
-        />
-      </div>
-    );
-  })}
-</div>
+                <div className="space-y-3 max-h-60 overflow-y-auto">
+                  {groupedItems.map(({ product, quantity }) => {
+                    return (
+                      <div
+                        key={product._id}
+                        className="flex items-center gap-3 p-2 border border-border rounded-lg hover:shadow-md transition-shadow"
+                      >
+                        <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm md:text-base font-medium truncate">{product.name}</p>
+                          <p className="text-xs md:text-sm text-gray-500">Số lượng: {quantity}</p>
+                        </div>
+                        <PriceFormatter
+                          amount={product.price * quantity}
+                          className="text-sm md:text-base font-semibold"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
                 <Separator />
 
                 {/* Price Summary */}
@@ -444,7 +432,6 @@ const CheckoutPage = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CreditCard className="w-5 h-5" />
                   Phương Thức Thanh Toán
                 </CardTitle>
               </CardHeader>
@@ -533,12 +520,6 @@ const CheckoutPage = () => {
                         />
                       </div>
                     </div>
-
-                    <div className="flex items-center gap-2 pt-2 border-t border-border">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-6" />
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard" className="h-6" />
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/200px-American_Express_logo_%282018%29.svg.png" alt="Amex" className="h-6" />
-                    </div>
                   </motion.div>
                 )}
 
@@ -578,10 +559,9 @@ const CheckoutPage = () => {
                       {paymentMethod === "card" ? "Đang thanh toán..." : "Đang xử lý..."}
                     </div>
                   ) : (
-                    <div className="flex text-foreground items-center gap-2">
+                    <div className="flex text-foreground cursor-pointer items-center gap-2">
                       {paymentMethod === "card" ? (
                         <>
-                          <CreditCard className="w-5 h-5" />
                           Thanh Toán - <PriceFormatter amount={getTotalPrice()} />
                         </>
                       ) : (

@@ -3,7 +3,7 @@
 import useStore from "@/store/store";
 import { useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Table, Button, Typography, Space, message } from "antd";
+import { Table, Button, Typography, Space, message, Popconfirm, Tooltip } from "antd";
 import { Link } from "react-router";
 import PriceFormatter from "./PriceFormatter";
 import AddToCartButton from "./AddToCartButton";
@@ -31,7 +31,7 @@ const WishListProducts = () => {
 
   const handleRemoveProduct = (id: string) => {
     removeFromFavorite(id);
-    message.success("Product removed from wishlist");
+    toast.success("Product removed from wishlist");
   };
 
   const columns: ColumnType<Product>[] = [
@@ -44,7 +44,7 @@ const WishListProducts = () => {
           <Link to={`/product/${record.slug}`}>
             <img
               src={
-                record.image?.startsWith("http")
+                record.image
                   ? record.image
                   : `${import.meta.env.VITE_API_URL}/${record.image}`
               }
@@ -97,12 +97,24 @@ const WishListProducts = () => {
       render: (_: any, record: any) => (
         <Space size={8} wrap>
           <AddToCartButton product={record} className="w-full sm:w-auto" />
-          <Button
-            icon={<DeleteOutlined />}
-            danger
-            size="small"
-            onClick={() => handleRemoveProduct(record._id)}
-          />
+
+          <Popconfirm
+            title="Xóa sản phẩm"
+            description="Bạn có chắc muốn xóa sản phẩm này?"
+            okText="Xóa"
+            cancelText="Hủy"
+            okButtonProps={{ danger: true }}
+            onConfirm={() => handleRemoveProduct(record._id)}
+          >
+            <Tooltip title="Xóa">
+              <Button
+                icon={<DeleteOutlined />}
+                danger
+                size="small"
+              />
+            </Tooltip>
+          </Popconfirm>
+
         </Space>
       ),
     },

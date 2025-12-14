@@ -32,8 +32,9 @@ export default function NewsPage() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
-            <BreadcrumbSeparator />
           </BreadcrumbItem>
+          <BreadcrumbSeparator />
+
           <BreadcrumbItem>
             <BreadcrumbPage>Tin tức</BreadcrumbPage>
           </BreadcrumbItem>

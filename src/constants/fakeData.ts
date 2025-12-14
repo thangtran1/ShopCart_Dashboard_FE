@@ -50,8 +50,8 @@ export const fakeBlogDetail = [
     isFeatured: true,
   },
   {
-    id: 1,
-    _id: "blog_1",
+    id: 2,
+    _id: "blog_2",
     title: "Elon Musk tiết lộ Grok 4.20, tham vọng vượt GPT và Gemini",
     slug: "elon-musk-tiet-lo-grok-4-20-tham-vong-vuot-gpt-va-gemini",
     description:
@@ -100,8 +100,8 @@ export const fakeBlogDetail = [
     isFeatured: true,
   },
   {
-    id: 1,
-    _id: "blog_1",
+    id: 3,
+    _id: "blog_3",
     title: "Elon Musk tiết lộ Grok 4.20, tham vọng vượt GPT và Gemini",
     slug: "elon-musk-tiet-lo-grok-4-20-tham-vong-vuot-gpt-va-gemini",
     description:
@@ -150,8 +150,8 @@ export const fakeBlogDetail = [
     isFeatured: true,
   },
   {
-    id: 1,
-    _id: "blog_1",
+    id: 4,
+    _id: "blog_4",
     title: "Elon Musk tiết lộ Grok 4.20, tham vọng vượt GPT và Gemini",
     slug: "elon-musk-tiet-lo-grok-4-20-tham-vong-vuot-gpt-va-gemini",
     description:
@@ -200,8 +200,8 @@ export const fakeBlogDetail = [
     isFeatured: true,
   },
   {
-    id: 1,
-    _id: "blog_1",
+    id: 5,
+    _id: "blog_5",
     title: "Elon Musk tiết lộ Grok 4.20, tham vọng vượt GPT và Gemini",
     slug: "elon-musk-tiet-lo-grok-4-20-tham-vong-vuot-gpt-va-gemini",
     description:
@@ -250,8 +250,8 @@ export const fakeBlogDetail = [
     isFeatured: true,
   },
   {
-    id: 1,
-    _id: "blog_1",
+    id: 6,
+    _id: "blog_6",
     title: "Elon Musk tiết lộ Grok 4.20, tham vọng vượt GPT và Gemini",
     slug: "elon-musk-tiet-lo-grok-4-20-tham-vong-vuot-gpt-va-gemini",
     description:

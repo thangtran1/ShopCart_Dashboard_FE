@@ -181,7 +181,7 @@ const SingleProductPage = () => {
               <span className="font-bold">Trả góp 0%</span>
             </Button>
 
-           <BuyNowButton product={product} />
+            <BuyNowButton product={product} />
 
             <AddToCartButton
               product={product}
@@ -190,24 +190,24 @@ const SingleProductPage = () => {
           </div>
 
           <div className={cn("border border-primary/40 rounded-lg p-4 bg-[#f1f6ff]")}>
-      <h3 className="text-xl font-bold text-gray-900 flex items-center pb-2">
-        <span className="mr-2 text-red-600">🎁</span>
-        Ưu đãi thanh toán
-      </h3>
-      <ul className="space-y-3">
-        {paymentOffers.map((offer) => (
-          <li key={offer.id} className="flex items-start text-sm text-gray-700">
-            <Check className="flex-shrink-0 w-4 h-4 text-green-600 mr-2 mt-0.5" />
-            
-            <p className="leading-relaxed">
-              <span className={cn({ "text-blue-600 font-medium hover:underline": offer.isLink })}>
-                {offer.text}
-              </span>
-            </p>
-          </li>
-        ))}
-      </ul>
-    </div>
+            <h3 className="text-xl font-bold text-gray-900 flex items-center pb-2">
+              <span className="mr-2 text-red-600">🎁</span>
+              Ưu đãi thanh toán
+            </h3>
+            <ul className="space-y-3">
+              {paymentOffers.map((offer) => (
+                <li key={offer.id} className="flex items-start text-sm text-gray-700">
+                  <Check className="flex-shrink-0 w-4 h-4 text-green-600 mr-2 mt-0.5" />
+
+                  <p className="leading-relaxed">
+                    <span className={cn({ "text-blue-600 font-medium hover:underline": offer.isLink })}>
+                      {offer.text}
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 

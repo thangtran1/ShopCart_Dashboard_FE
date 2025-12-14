@@ -28,12 +28,16 @@ const NewSlugDetail = () => {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
-            <BreadcrumbSeparator />
           </BreadcrumbItem>
+
+          <BreadcrumbSeparator />
+
           <BreadcrumbItem>
             <BreadcrumbPage>Tin tức</BreadcrumbPage>
-            <BreadcrumbSeparator />
           </BreadcrumbItem>
+
+          <BreadcrumbSeparator />
+
           <BreadcrumbItem>
             <BreadcrumbPage>{slug}</BreadcrumbPage>
           </BreadcrumbItem>

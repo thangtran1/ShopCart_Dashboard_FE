@@ -72,13 +72,13 @@ export default function ImageView({
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
-            <BreadcrumbSeparator />
           </BreadcrumbItem>
+          <BreadcrumbSeparator />
 
           <BreadcrumbItem>
             <BreadcrumbLink href="/shop">Shop</BreadcrumbLink>
-            <BreadcrumbSeparator />
           </BreadcrumbItem>
+          <BreadcrumbSeparator />
 
           <BreadcrumbItem>
             <BreadcrumbPage>Chi tiết sản phẩm</BreadcrumbPage>
@@ -166,9 +166,8 @@ export default function ImageView({
 
         <div className="flex overflow-hidden flex-1">
           <div
-            className={`flex gap-2 flex-nowrap ${
-              images.length * 77 < window.innerWidth - 120 ? "mx-auto" : ""
-            }`}
+            className={`flex gap-2 flex-nowrap ${images.length * 77 < window.innerWidth - 120 ? "mx-auto" : ""
+              }`}
           >
             {images.map((img, i) => (
               <div
@@ -177,11 +176,10 @@ export default function ImageView({
                 onMouseEnter={() => setHoverIndex(i)}
                 onMouseLeave={() => setHoverIndex(null)}
                 className={`w-[75px] h-[75px] flex-shrink-0 flex items-center justify-center border border-border p-1 rounded-md cursor-pointer overflow-hidden transition-all duration-300
-            ${
-              displayIndex === i
-                ? "!border-primary scale-105 shadow-md"
-                : "opacity-75 hover:opacity-100 hover:scale-105"
-            }`}
+            ${displayIndex === i
+                    ? "!border-primary scale-105 shadow-md"
+                    : "opacity-75 hover:opacity-100 hover:scale-105"
+                  }`}
               >
                 <img
                   src={img.url}
