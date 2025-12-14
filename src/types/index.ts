@@ -34,7 +34,7 @@ export interface Product {
   price: number;
   discount?: number;
   description?: string;
-  image?: Image;
+  image?: string;
   images?: Image[];
   category?: Category;
   brand?: Brand;

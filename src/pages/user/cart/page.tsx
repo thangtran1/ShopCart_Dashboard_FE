@@ -72,15 +72,8 @@ const CartPage = () => {
                       >
                         <div className="flex flex-1 items-start gap-2 h-36 md:h-44">
                           <div className="border border-success/20 p-4 rounded-2xl">
-                            <img
-                              src={
-                                product?.image?.startsWith("http")
-                                  ? product.image
-                                  : `${import.meta.env.VITE_API_URL}/${
-                                      product.image
-                                    }`
-                              }
-                              alt={product?.name || "product image"}
+                            <img src={product.image}
+                              alt={product?.name}
                               className="w-32 h-28 object-cover rounded-lg hover:scale-105 transition"
                             />
                           </div>
