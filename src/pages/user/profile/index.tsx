@@ -39,6 +39,7 @@ export default function UserProfile() {
       const url = await uploadAvatar(file); // upload file, trả về URL
       const updated = await updateUserProfile({ avatar: url }); // update profile
       updateProfile(updated);
+      window.dispatchEvent(new CustomEvent("avatarUpdated", { detail: updated }));
       toast.success("Cập nhật ảnh đại diện thành công!");
     } catch (err: any) {
       toast.error(err.message || "Upload thất bại");

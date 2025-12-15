@@ -31,7 +31,7 @@ const { VITE_APP_ADMIN: HOMEPAGE } = import.meta.env;
 export function LoginForm() {
   const { t } = useTranslation();
   const token = useUserToken();
-  const { role } = useUserInfo();
+  const userInfo = useUserInfo();
   const [remember, setRemember] = useState(true);
   const { setUserToken, setUserInfo } = useUserActions();
   const { loginState, setLoginState } = useLoginStateContext();
@@ -54,7 +54,10 @@ export function LoginForm() {
   });
 
   if (token.accessToken) {
-    if (String(role) === "user") return <Navigate to={"/"} replace />;
+    if (userInfo.loginCount === 1) {
+      return <Navigate to="/ho-so" replace />;
+    }
+    if (userInfo.role === "user") return <Navigate to="/" replace />;
     return <Navigate to={HOMEPAGE} replace />;
   }
 

@@ -66,7 +66,7 @@
       "noAccount": "Chưa có tài khoản?",
       "signUpFormTitle": "Đăng ký",
 
-      "registerSuccess": "Đăng ký thành công!",
+      "registerSuccess": "Đăng ký thành công và đã gửi email thông báo!",
       "registering": "Đang đăng ký...",
       "emaildPlaceholder": "Nhập email",
       "email": "Email",

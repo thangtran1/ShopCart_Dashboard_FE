@@ -15,6 +15,7 @@ export interface UserInfo {
   role?: Role | string;
   status?: BasicStatus;
   permissions?: Permission[];
+  loginCount?: number;
 }
 
 export interface Permission {
