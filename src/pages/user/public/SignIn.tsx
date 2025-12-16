@@ -71,60 +71,60 @@ const SignIn = () => {
               {profile?.name || "Hồ sơ"}
             </span>
           </div>
-            {dropdownOpen && (
-              <div className="absolute right-0 w-56 bg-muted rounded-xl border border-border shadow-xl z-50 animate-fade-in">
-            {/* Top avatar + name */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
-              {profile?.avatar ? (
-                <img
-                  src={`${import.meta.env.VITE_API_URL}${profile.avatar}`}
-                  className="w-8 h-8 rounded-full object-cover border border-gray-200"
-                />
-              ) : (
-                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                  <UserCircle className="w-5 h-5 text-gray-500" />
+          {dropdownOpen && (
+            <div className="absolute right-0 w-56 bg-muted rounded-xl border border-border shadow-xl z-50 animate-fade-in">
+              {/* Top avatar + name */}
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+                {profile?.avatar ? (
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}${profile.avatar}`}
+                    className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                    <UserCircle className="w-5 h-5 text-gray-500" />
+                  </div>
+                )}
+
+                <div className="flex flex-col">
+                  <span className="text-sm font-medium">
+                    {profile?.name || "Hồ sơ"}
+                  </span>
+                  <span className="text-xs">Tài khoản cá nhân</span>
                 </div>
+              </div>
+
+              {/* Admin */}
+              {profile?.role === "admin" && (
+                <Button
+                  onClick={() => router.push("/dashboard/workbench")}
+                  className="w-full !border-none !flex !justify-between items-center px-4"
+                >
+                  <span>Trang Quản Trị</span>
+                  <Shield className="w-4 h-4" />
+                </Button>
               )}
 
-              <div className="flex flex-col">
-                <span className="text-sm font-medium">
-                  {profile?.name || "Hồ sơ"}
-                </span>
-                <span className="text-xs">Tài khoản cá nhân</span>
-              </div>
-            </div>
-
-            {/* Admin */}
-            {profile?.role === "admin" && (
-              <button
-                onClick={() => router.push("/dashboard/workbench")}
-                className="flex justify-between items-center w-full px-4 py-2 text-sm hover:bg-primary transition"
+              {/* Hồ sơ */}
+              <Button
+                onClick={() => router.push("/ho-so")}
+                className="w-full !border-none !flex !justify-between items-center px-4"
               >
-                <span>Trang Quản Trị</span>
-                <Shield className="w-4 h-4" />
-              </button>
-            )}
+                <span>Hồ sơ</span>
+                <UserCircle className="w-4 h-4 !text-foreground hover:!text-primary" />
+              </Button>
 
-            {/* Hồ sơ */}
-            <Button
-              onClick={() => router.push("/ho-so")}
-              className="w-full !border-none !flex !justify-between items-center px-4"
-            >
-              <span>Hồ sơ</span>
-              <UserCircle className="w-4 h-4 !text-foreground hover:!text-primary" />
-            </Button>
+              {/* Logout */}
+              <Button
+                onClick={handleLogout}
+                className="w-full !border-none !flex !justify-between items-center px-4"
+              >
+                <span>Đăng xuất</span>
+                <LogOut className="w-4 h-4 text-red-500" />
+              </Button>
+            </div>
+          )}
 
-            {/* Logout */}
-            <Button
-              onClick={handleLogout}
-              className="w-full !border-none !flex !justify-between items-center px-4"
-            >
-              <span>Đăng xuất</span>
-              <LogOut className="w-4 h-4 text-red-500" />
-            </Button>
-          </div>
-            )}
-          
         </div>
       )}
     </div>

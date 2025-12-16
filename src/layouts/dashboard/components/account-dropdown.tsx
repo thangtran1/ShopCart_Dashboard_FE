@@ -29,7 +29,7 @@ export default function AccountDropdown() {
         toast.error(response.data?.message);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error, 'error')
     }
   };
 

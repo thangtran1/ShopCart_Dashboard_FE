@@ -97,7 +97,7 @@ const CategoryProduct = () => {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Title className="text-2xl font-semibold">Danh mục phổ biến</Title>
-        <SeeMore to="/category-product">Xem thêm</SeeMore>
+        <SeeMore to="/category">Xem thêm</SeeMore>
       </div>
 
       {loading || error ? (

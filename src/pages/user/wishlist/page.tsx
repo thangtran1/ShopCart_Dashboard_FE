@@ -2,7 +2,7 @@ import NoAccess from "@/components/user/NoAccess";
 import WishListProducts from "@/components/user/WishListProducts";
 import { useUserInfo } from "@/store/userStore";
 const WishListPage = () => {
-  const userInfo= useUserInfo();
+  const userInfo = useUserInfo();
   return (
     <>
       {userInfo?.id ? (

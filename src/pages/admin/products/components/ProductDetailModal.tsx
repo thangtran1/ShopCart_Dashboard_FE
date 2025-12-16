@@ -173,7 +173,6 @@ export default function ProductDetailModal({
       }
     } catch (error) {
       console.error("Error replying to review:", error);
-      toast.error("Lỗi khi gửi phản hồi");
     } finally {
       setLoadingAction(null);
     }
@@ -189,7 +188,7 @@ export default function ProductDetailModal({
     { key: "specs", icon: "solar:settings-bold-duotone", label: "Thông số" },
     { key: "reviews", icon: "solar:star-bold-duotone", label: "Đánh giá", dynamicCount: product.reviewCount || 0 },
   ];
-  
+
   const tabItems = tabConfig.map(tab => ({
     key: tab.key,
     label: (
@@ -636,7 +635,6 @@ function ReviewCard({
   onDelete,
   onSubmitReply,
 }: ReviewCardProps) {
-  console.log(review, 'review')
   const isLoading = loadingAction === review._id;
   const [showAllReplies, setShowAllReplies] = useState<Record<string, boolean>>({});
   const visibleReplies = (review: any) => {
@@ -750,48 +748,48 @@ function ReviewCard({
 
           {/* Replies */}
           {review.replies && review.replies.length > 0 && (
-  <div className="mt-4 space-y-3">
-    {visibleReplies(review).map((reply: any, index: number) => (
-      <div
-        key={reply._id || index}
-        className="pl-4 border-l-2 border-primary/30 ml-2 bg-muted/30 rounded-r-lg p-3"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Icon
-              icon={reply.isAdmin ? "solar:shield-user-bold-duotone" : "solar:shop-bold-duotone"}
-              className="w-4 h-4 text-success"
-            />
-            <span className="font-medium text-success">
-              {reply.isAdmin ? "Admin" : reply.userName || "Shop"}
-            </span>
-          </div>
-          {reply.createdAt && (
-            <span className="text-xs text-muted-foreground">
-              {dayjs(reply.createdAt).fromNow()}
-            </span>
-          )}
-        </div>
-        <p className="mt-2 text-foreground">{reply.comment}</p>
-      </div>
-    ))}
+            <div className="mt-4 space-y-3">
+              {visibleReplies(review).map((reply: any, index: number) => (
+                <div
+                  key={reply._id || index}
+                  className="pl-4 border-l-2 border-primary/30 ml-2 bg-muted/30 rounded-r-lg p-3"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        icon={reply.isAdmin ? "solar:shield-user-bold-duotone" : "solar:shop-bold-duotone"}
+                        className="w-4 h-4 text-success"
+                      />
+                      <span className="font-medium text-success">
+                        {reply.isAdmin ? "Admin" : reply.userName || "Shop"}
+                      </span>
+                    </div>
+                    {reply.createdAt && (
+                      <span className="text-xs text-muted-foreground">
+                        {dayjs(reply.createdAt).fromNow()}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-2 text-foreground">{reply.comment}</p>
+                </div>
+              ))}
 
-    {/* Nút Xem thêm / Thu gọn */}
-    {review.replies.length > 2 && (
-      <button
-        onClick={() =>
-          setShowAllReplies((prev) => ({
-            ...prev,
-            [review._id]: !prev[review._id],
-          }))
-        }
-        className="text-sm text-primary hover:underline mt-1"
-      >
-        {showAllReplies[review._id] ? "Thu gọn" : "Xem thêm phản hồi"}
-      </button>
-    )}
-  </div>
-)}
+              {/* Nút Xem thêm / Thu gọn */}
+              {review.replies.length > 2 && (
+                <button
+                  onClick={() =>
+                    setShowAllReplies((prev) => ({
+                      ...prev,
+                      [review._id]: !prev[review._id],
+                    }))
+                  }
+                  className="text-sm text-primary hover:underline mt-1"
+                >
+                  {showAllReplies[review._id] ? "Thu gọn" : "Xem thêm phản hồi"}
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Reply Form */}
           <AnimatePresence>

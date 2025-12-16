@@ -9,8 +9,6 @@ export const useAuthSession = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [authSessions, setAuthSessions] = useState<AuthSession[]>([]);
-  console.log('authSessions', authSessions);
-  
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState<number>(0);
@@ -106,7 +104,6 @@ export const useAuthSession = () => {
             to?: string;
           }
         );
-        console.log('response', response);
         setAuthSessions(response.data.authSessions);
         setTotal(response.data.total);
         setPage(pageNum);
