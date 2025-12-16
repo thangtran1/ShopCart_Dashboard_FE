@@ -477,7 +477,7 @@ export default function ProductModal({
                       </Select>
                     </div>
 
-                      <div className="flex items-center justify-evenly">
+                    <div className="flex items-center justify-evenly">
                       <Label className="text-sm font-medium text-foreground flex items-center gap-1.5">
                         <Icon icon="solar:star-bold" className="w-4 h-4 text-amber-500" />
                         Nổi bật
@@ -849,9 +849,9 @@ export default function ProductModal({
 
                     {(!formData.specifications || formData.specifications.length === 0) && (
                       <div className="text-center py-6 text-foreground border-2 border-dashed border-border rounded-lg">
-                      <p className="text-sm">Chưa có thông số kỹ thuật nào</p>
-                      <p className="text-xs mt-1 text-muted-foreground">Thông số kỹ thuật giúp người dùng hiểu rõ hơn về sản phẩm</p>
-                    </div>
+                        <p className="text-sm">Chưa có thông số kỹ thuật nào</p>
+                        <p className="text-xs mt-1 text-muted-foreground">Thông số kỹ thuật giúp người dùng hiểu rõ hơn về sản phẩm</p>
+                      </div>
                     )}
                   </div>
                 </motion.div>
@@ -922,7 +922,8 @@ export default function ProductModal({
                         {formData.name || "Tên sản phẩm"}
                       </div>
                       <div className="text-emerald-600 dark:text-emerald-400 text-sm">
-                        https://yoursite.com/products/{formData.slug || "duong-dan-san-pham"}
+
+                        {`${import.meta.env.VITE_API_URL}/products/${formData.slug || "duong-dan"}`}
                       </div>
                       <div className="text-muted-foreground text-sm line-clamp-2">
                         {formData.shortDescription || formData.description || "Mô tả sản phẩm sẽ hiển thị ở đây..."}

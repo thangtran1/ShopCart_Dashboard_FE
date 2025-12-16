@@ -212,11 +212,11 @@ export default function ProductsManagement() {
                 <Icon icon="solar:box-bold-duotone" className="w-8 h-8 text-primary" />
               </div>
             )}
-          {(record?.discount ?? 0) > 0 && (
-  <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
-    -{record.discount}%
-  </div>
-)}
+            {(record?.discount ?? 0) > 0 && (
+              <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">
+                -{record.discount}%
+              </div>
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-semibold text-foreground truncate max-w-[200px]" title={record.name}>
@@ -517,7 +517,7 @@ export default function ProductsManagement() {
               <span className="text-sm font-medium">{product.averageRating?.toFixed(1) || "0.0"}</span>
               <span className="text-xs text-muted-foreground">({product.reviewCount || 0})</span>
             </div>
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="flex items-center gap-3 text-xs">
               <span className="flex items-center gap-1">
                 <Icon icon="solar:eye-bold" className="w-3.5 h-3.5" />
                 {product.viewCount || 0}
@@ -531,7 +531,7 @@ export default function ProductsManagement() {
 
           {/* Stock */}
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Kho:</span>
+            <span >Kho:</span>
             <span
               className={`font-semibold ${(product.stock || 0) > 10
                 ? "text-emerald-600 dark:text-emerald-400"
@@ -558,9 +558,9 @@ export default function ProductsManagement() {
       >
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-          <div className="p-2.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl">
-                            <Icon icon="solar:box-bold-duotone" className="h-7 w-7 text-primary" />
-                        </div>
+            <div className="p-2.5 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl">
+              <Icon icon="solar:box-bold-duotone" className="h-7 w-7 text-primary" />
+            </div>
             Quản lý Sản phẩm
           </h2>
           <p className="text-muted-foreground ml-14">Tổng cộng {total} sản phẩm</p>
@@ -606,17 +606,15 @@ export default function ProductsManagement() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-card border border-border rounded-2xl p-5"
+        className="bg-card border-y py-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-          {/* Search Input */}
           <div className="sm:col-span-2 lg:col-span-1">
             <label className="block text-sm font-medium text-foreground mb-2">Tìm kiếm</label>
             <Input
               placeholder="Tìm theo tên, SKU..."
               value={searchTerm}
               size="large"
-              prefix={<Icon icon="solar:magnifer-bold" className="w-4 h-4 text-muted-foreground" />}
               onChange={(e) => handleSearch(e.target.value)}
               className="w-full"
               allowClear
@@ -716,7 +714,7 @@ export default function ProductsManagement() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="rounded-2xl overflow-hidden"
+          className="overflow-hidden"
         >
           <TableAntd
             columns={columns}
@@ -729,7 +727,7 @@ export default function ProductsManagement() {
             }}
             onPageChange={handlePageChange}
             scroll={{ x: 1200 }}
-            // onRowClick={(record) => handleViewProduct(record)}
+          // onRowClick={(record) => handleViewProduct(record)}
           />
         </motion.div>
       )}

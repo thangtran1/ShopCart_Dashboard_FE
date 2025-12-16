@@ -203,7 +203,7 @@ export default function CategoryModal({ open, onClose, onSave, category }: Categ
                         {formData.name || "Tên danh mục"}
                       </div>
                       <div className="text-emerald-600 dark:text-emerald-400 text-sm">
-                        https://yoursite.com/category/{formData.slug || "duong-dan"}
+                        {`${import.meta.env.VITE_API_URL}/category/${formData.slug || "duong-dan"}`}
                       </div>
                       <div className="text-muted-foreground text-sm line-clamp-2">
                         {formData.description || "Mô tả danh mục sẽ hiển thị ở đây..."}
@@ -243,7 +243,7 @@ export default function CategoryModal({ open, onClose, onSave, category }: Categ
                         <img
                           src={formData.image}
                           alt="Preview"
-                        className="w-full h-full  auto object-contain"
+                          className="w-full h-full  auto object-contain"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = "none";
                           }}
@@ -331,7 +331,7 @@ export default function CategoryModal({ open, onClose, onSave, category }: Categ
                         <span className="text-foreground">Trạng thái:</span>
                         <span className="ml-2 font-medium text-foreground">
                           {formData.status === CategoryStatus.ACTIVE ? <Badge variant="success">Hiển thị</Badge>
-                           : <Badge variant="error">Ẩn</Badge>}
+                            : <Badge variant="error">Ẩn</Badge>}
                         </span>
                       </div>
                       <div>
@@ -350,7 +350,7 @@ export default function CategoryModal({ open, onClose, onSave, category }: Categ
 
           {/* Actions */}
           <div className="flex gap-3 pt-4 border-t border-border mt-auto justify-end">
-            <Button size="large" danger onClick={onClose}  disabled={loading}>
+            <Button size="large" danger onClick={onClose} disabled={loading}>
               Hủy
             </Button>
             <Button

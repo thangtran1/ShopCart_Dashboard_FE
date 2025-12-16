@@ -40,7 +40,6 @@ export interface ReviewProductDto {
   type: 'Đã mua hàng' | 'Chưa mua hàng';
   images?: string[];
   replies?: ReviewReplyProductDto[];
-  isApproved?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -223,11 +222,6 @@ export const productService = {
 
   replyToReview: async (productId: string, reviewId: string, data: ReplyReviewDto): Promise<{ success: boolean; message: string; data: any }> => {
     const response = await apiClient.post({ url: `/products/${productId}/reviews/${reviewId}/reply`, data });
-    return response.data as { success: boolean; message: string; data: ReviewProductDto };
-  },
-
-  approveReview: async (productId: string, reviewId: string): Promise<{ success: boolean; message: string; data: ReviewProductDto }> => {
-    const response = await apiClient.patch({ url: `/products/${productId}/reviews/${reviewId}/approve` });
     return response.data as { success: boolean; message: string; data: ReviewProductDto };
   },
 

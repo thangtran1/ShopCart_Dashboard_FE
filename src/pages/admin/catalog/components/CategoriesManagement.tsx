@@ -392,17 +392,15 @@ export default function CategoriesManagement() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-card border border-border rounded-2xl p-5"
+        className="bg-card border-y py-6"
       >
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {/* Search Input */}
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-foreground mb-2">Tìm kiếm</label>
             <Input
               placeholder="Tìm kiếm danh mục..."
               value={searchTerm}
               size="large"
-              prefix={<Icon icon="solar:magnifer-bold" className="w-4 h-4 text-muted-foreground" />}
               onChange={(e) => handleSearch(e.target.value)}
               className="w-full"
               allowClear
@@ -442,7 +440,7 @@ export default function CategoriesManagement() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="bg-card border border-border rounded-2xl overflow-hidden"
+          className="bg-card overflow-hidden"
         >
           <TableAntd
             columns={columns}

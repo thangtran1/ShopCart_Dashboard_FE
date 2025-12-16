@@ -209,7 +209,7 @@ export default function BrandModal({ open, onClose, onSave, brand }: BrandModalP
                         {formData.name || "Tên thương hiệu"}
                       </div>
                       <div className="text-emerald-600 dark:text-emerald-400 text-sm">
-                        https://yoursite.com/brand/{formData.slug || "duong-dan"}
+                        {`${import.meta.env.VITE_API_URL}/brand/${formData.slug || "duong-dan"}`}
                       </div>
                       <div className="text-muted-foreground text-sm line-clamp-2">
                         {formData.description || "Mô tả thương hiệu sẽ hiển thị ở đây..."}
@@ -403,7 +403,7 @@ export default function BrandModal({ open, onClose, onSave, brand }: BrandModalP
 
           {/* Actions */}
           <div className="flex gap-3 pt-4 border-t border-border mt-auto justify-end">
-            <Button size="large" danger onClick={onClose}  disabled={loading}>
+            <Button size="large" danger onClick={onClose} disabled={loading}>
               Hủy
             </Button>
             <Button

@@ -19,6 +19,7 @@ import {
 import { Info, StarIcon } from "lucide-react";
 import ProductSideMenu from "@/pages/user/public/ProductSideMenu";
 import Title from "@/ui/title";
+import { Icon } from "@/components/icon";
 
 interface ImageViewProps {
   images?: { url: string; alt?: string }[];
@@ -115,6 +116,17 @@ export default function ImageView({
             />
           ))}
           <p className="font-semibold">(120)</p>
+        </div>
+
+        <div className="flex gap-3">
+          <span className="flex items-center gap-2">
+            <Icon icon="solar:eye-bold" className="w-3.5 h-3.5" />
+            {product.viewCount || 0}
+          </span>
+          <span className="flex items-center gap-2">
+            <Icon icon="solar:cart-check-bold" className="w-3.5 h-3.5" />
+            {product.soldCount || 0}
+          </span>
         </div>
       </div>
       {/* Hidden preview group */}

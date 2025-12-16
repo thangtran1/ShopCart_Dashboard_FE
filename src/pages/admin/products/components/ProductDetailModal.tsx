@@ -116,24 +116,6 @@ export default function ProductDetailModal({
     }
   };
 
-  const handleApproveReview = async (reviewId: string) => {
-    setLoadingAction(reviewId);
-    try {
-      const response = await productService.approveReview(product._id, reviewId);
-      if (response.success) {
-        toast.success("Đã duyệt đánh giá");
-        // Refresh cả local state và parent
-        await refreshProductDetail();
-        await onRefresh();
-      }
-    } catch (error) {
-      console.error("Error approving review:", error);
-      toast.error("Lỗi khi duyệt đánh giá");
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
   const handleDeleteReview = async (reviewId: string) => {
     setLoadingAction(reviewId);
     try {
@@ -590,7 +572,6 @@ export default function ProductDetailModal({
                           }
                         }}
                         onReplyContentChange={setReplyContent}
-                        onApprove={() => handleApproveReview(review._id)}
                         onDelete={() => handleDeleteReview(review._id)}
                         onSubmitReply={() => handleReplyReview(review._id)}
                       />
@@ -619,11 +600,9 @@ interface ReviewCardProps {
   loadingAction: string | null;
   onToggleReply: () => void;
   onReplyContentChange: (value: string) => void;
-  onApprove: () => void;
   onDelete: () => void;
   onSubmitReply: () => void;
 }
-
 function ReviewCard({
   review,
   isReplying,
@@ -631,7 +610,6 @@ function ReviewCard({
   loadingAction,
   onToggleReply,
   onReplyContentChange,
-  onApprove,
   onDelete,
   onSubmitReply,
 }: ReviewCardProps) {
@@ -646,12 +624,10 @@ function ReviewCard({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`p-4 rounded-xl border ${review.isApproved
-        ? "bg-card border-border"
-        : "bg-amber-50/50 dark:bg-amber-900/10 border-amber-200 dark:border-amber-800"
-        }`}
+      className="border bg-card border-y py-6"
+
     >
-      <div className="flex gap-4">
+      <div className="flex gap-2">
         <img
           src={`${import.meta.env.VITE_API_URL}/${review.user?.avatar || "uploads/avatar-default.png"}`}
           alt={review.user?.name || "Người dùng"}
@@ -669,11 +645,6 @@ function ReviewCard({
                 >
                   {review.type}
                 </Tag>
-                {!review.isApproved && (
-                  <Tag color="warning" className="text-xs">
-                    Chờ duyệt
-                  </Tag>
-                )}
               </div>
               <div className="flex items-center gap-2 mt-1">
                 <Rate disabled value={review.rating} className="text-sm" />
@@ -684,18 +655,6 @@ function ReviewCard({
             </div>
 
             <div className="flex items-center gap-1">
-              {!review.isApproved && (
-                <Tooltip title="Duyệt đánh giá" getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}>
-                  <Button
-                    type="text"
-                    size="small"
-                    icon={<CheckCircleOutlined />}
-                    onClick={onApprove}
-                    loading={isLoading}
-                    className="text-success bg-success/10 hover:text-success-600 hover:bg-success/20 dark:hover:bg-success/900/20"
-                  />
-                </Tooltip>
-              )}
               <Tooltip title="Phản hồi" getPopupContainer={(trigger) => trigger.parentNode as HTMLElement}>
                 <Button
                   type="text"
