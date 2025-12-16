@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import Title from "@/ui/title";
 import { Button } from "@/ui/button";
@@ -25,10 +25,16 @@ import {
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useRouter } from "@/router/hooks";
+import { District, locationApi, Province, Ward } from "@/api/services/provinceApi";
 
 const CheckoutPage = () => {
-  const navigate = useRouter();
+  const [provinces, setProvinces] = useState<Province[]>([]);
+const [districts, setDistricts] = useState<District[]>([]);
+const [wards, setWards] = useState<Ward[]>([]);
 
+
+
+  const navigate = useRouter();
   const { getTotalPrice, getSubTotalPrice, resetCart, addOrder } = useStore();
   const groupedItems = useStore((state) => state.getGroupedItems());
 
@@ -40,10 +46,11 @@ const CheckoutPage = () => {
     email: "",
     phone: "",
     address: "",
-    city: "",
-    state: "",
+    city: "",   // Phường/Xã
+    state: "",  // Tỉnh/Thành
     zipCode: "",
-    notes: ""
+    notes: "",
+    district: "", // Quận/Huyện (mới thêm)
   });
 
   // Thông tin thẻ tín dụng
@@ -54,12 +61,11 @@ const CheckoutPage = () => {
     cvv: ""
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleCardInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,6 +208,50 @@ const CheckoutPage = () => {
   if (groupedItems.length === 0) {
     return null; // Will redirect in useEffect
   }
+
+
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      try {
+        const data = await locationApi.getProvinces();
+        setProvinces(data);
+      } catch (error) {
+        console.error("Error fetching provinces:", error);
+      }
+    };
+    fetchProvinces();
+  }, []);
+  
+  useEffect(() => {
+    if (formData.state) {
+      const fetchDistricts = async () => {
+        try {
+          const data = await locationApi.getDistricts(formData.state);
+          setDistricts(data);
+          setFormData(prev => ({ ...prev, district: "", city: "" }));
+          setWards([]);
+        } catch (error) {
+          console.error("Error fetching districts:", error);
+        }
+      };
+      fetchDistricts();
+    }
+  }, [formData.state]);
+  
+  useEffect(() => {
+    if (formData.district) {
+      const fetchWards = async () => {
+        try {
+          const data = await locationApi.getWards(formData.district);
+          setWards(data);
+          setFormData(prev => ({ ...prev, city: "" }));
+        } catch (error) {
+          console.error("Error fetching wards:", error);
+        }
+      };
+      fetchWards();
+    }
+  }, [formData.district]);
 
   return (
     <div className="min-h-screen pb-5">
@@ -361,72 +411,119 @@ const CheckoutPage = () => {
 
             {/* Shipping Address */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5" />
-                  Địa Chỉ Giao Hàng
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="address">Địa chỉ *</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="Số nhà, tên đường"
-                    required
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="city">Thành phố *</Label>
-                    <Input
-                      id="city"
-                      name="city"
-                      value={formData.city}
-                      onChange={handleInputChange}
-                      placeholder="Hà Nội"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="state">Tỉnh/Thành *</Label>
-                    <Input
-                      id="state"
-                      name="state"
-                      value={formData.state}
-                      onChange={handleInputChange}
-                      placeholder="Hà Nội"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="zipCode">Mã bưu điện *</Label>
-                    <Input
-                      id="zipCode"
-                      name="zipCode"
-                      value={formData.zipCode}
-                      onChange={handleInputChange}
-                      placeholder="100000"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
-                  <Textarea
-                    id="notes"
-                    name="notes"
-                    value={formData.notes}
-                    onChange={handleInputChange}
-                    placeholder="Ghi chú thêm cho đơn hàng..."
-                    rows={3}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <MapPin className="w-5 h-5" />
+      Địa Chỉ Giao Hàng
+    </CardTitle>
+  </CardHeader>
+  <CardContent className="space-y-4">
+    {/* Số nhà, đường */}
+    <div className="space-y-2">
+      <Label htmlFor="address">Địa chỉ *</Label>
+      <Input
+        id="address"
+        name="address"
+        value={formData.address}
+        onChange={handleInputChange}
+        placeholder="Số nhà, tên đường"
+        required
+      />
+    </div>
+
+    {/* Tỉnh/Thành, Quận/Huyện, Phường/Xã */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Province / Tỉnh */}
+      <div className="space-y-2">
+        <Label htmlFor="state">Tỉnh/Thành *</Label>
+        <select
+          id="state"
+          name="state"
+          value={formData.state}
+          onChange={handleInputChange}
+          className="w-full border cursor-pointer bg-muted rounded-md px-2 py-1"
+          required
+        >
+          <option value="">Chọn Tỉnh/Thành</option>
+          {provinces.map((p) => (
+            <option key={p.province_id} value={p.province_id}>
+              {p.province_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* District / Quận */}
+      <div className="space-y-2">
+        <Label htmlFor="district">Quận/Huyện *</Label>
+        <select
+          id="district"
+          name="district"
+          value={formData.district}
+          onChange={handleInputChange}
+          className="w-full cursor-pointer border bg-muted rounded-md px-2 py-1"
+          required
+          disabled={!districts.length}
+        >
+          <option value="">Chọn Quận/Huyện</option>
+          {districts.map((d) => (
+            <option key={d.district_id} value={d.district_id}>
+              {d.district_name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Ward / Phường */}
+      <div className="space-y-2">
+        <Label htmlFor="city">Phường/Xã *</Label>
+        <select
+          id="city"
+          name="city"
+          value={formData.city}
+          onChange={handleInputChange}
+          className="w-full cursor-pointer bg-muted border rounded-md px-2 py-1"
+          required
+          disabled={!wards.length}
+        >
+          <option value="">Chọn Phường/Xã</option>
+          {wards.map((w) => (
+            <option key={w.ward_id} value={w.ward_name}>
+              {w.ward_name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    {/* Zip code */}
+    <div className="space-y-2">
+      <Label htmlFor="zipCode">Mã bưu điện *</Label>
+      <Input
+        id="zipCode"
+        name="zipCode"
+        value={formData.zipCode}
+        onChange={handleInputChange}
+        placeholder="100000"
+        required
+      />
+    </div>
+
+    {/* Ghi chú */}
+    <div className="space-y-2">
+      <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
+      <Textarea
+        id="notes"
+        name="notes"
+        value={formData.notes}
+        onChange={handleInputChange}
+        placeholder="Ghi chú thêm cho đơn hàng..."
+        rows={3}
+      />
+    </div>
+  </CardContent>
+</Card>
+
 
             {/* Payment Method */}
             <Card>
