@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import PriceFormatter from "@/components/user/PriceFormatter";
-import Title from "@/ui/title";
 import { Button } from "@/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
@@ -16,23 +14,27 @@ import {
   Truck,
   Shield,
   CheckCircle,
-  MapPin,
-  Phone,
-  Mail,
-  User,
-  ShoppingBag
 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useRouter } from "@/router/hooks";
-import { District, locationApi, Province, Ward } from "@/api/services/provinceApi";
+import {
+  District,
+  locationApi,
+  Province,
+  Ward,
+} from "@/api/services/provinceApi";
+import {} from "antd";
+
+import { Typography, Select } from "antd";
+import SelectPayment from "./components/SelectPayment";
+const { Title } = Typography;
+const { Option } = Select;
 
 const CheckoutPage = () => {
   const [provinces, setProvinces] = useState<Province[]>([]);
-const [districts, setDistricts] = useState<District[]>([]);
-const [wards, setWards] = useState<Ward[]>([]);
-
-
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [wards, setWards] = useState<Ward[]>([]);
 
   const navigate = useRouter();
   const { getTotalPrice, getSubTotalPrice, resetCart, addOrder } = useStore();
@@ -46,8 +48,8 @@ const [wards, setWards] = useState<Ward[]>([]);
     email: "",
     phone: "",
     address: "",
-    city: "",   // Phường/Xã
-    state: "",  // Tỉnh/Thành
+    city: "", // Phường/Xã
+    state: "", // Tỉnh/Thành
     zipCode: "",
     notes: "",
     district: "", // Quận/Huyện (mới thêm)
@@ -58,14 +60,23 @@ const [wards, setWards] = useState<Ward[]>([]);
     cardNumber: "",
     cardName: "",
     expiryDate: "",
-    cvv: ""
+    cvv: "",
   });
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleCardInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,26 +86,29 @@ const [wards, setWards] = useState<Ward[]>([]);
     if (name === "cardNumber") {
       const cleaned = value.replace(/\s/g, "").replace(/\D/g, "").slice(0, 16);
       const formatted = cleaned.replace(/(\d{4})(?=\d)/g, "$1 ");
-      setCardData(prev => ({ ...prev, cardNumber: formatted }));
+      setCardData((prev) => ({ ...prev, cardNumber: formatted }));
       return;
     }
 
     // Format expiry date: MM/YY
     if (name === "expiryDate") {
       const cleaned = value.replace(/\D/g, "").slice(0, 4);
-      const formatted = cleaned.length > 2 ? `${cleaned.slice(0, 2)}/${cleaned.slice(2)}` : cleaned;
-      setCardData(prev => ({ ...prev, expiryDate: formatted }));
+      const formatted =
+        cleaned.length > 2
+          ? `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`
+          : cleaned;
+      setCardData((prev) => ({ ...prev, expiryDate: formatted }));
       return;
     }
 
     // CVV: chỉ cho phép 3-4 số
     if (name === "cvv") {
       const cleaned = value.replace(/\D/g, "").slice(0, 4);
-      setCardData(prev => ({ ...prev, cvv: cleaned }));
+      setCardData((prev) => ({ ...prev, cvv: cleaned }));
       return;
     }
 
-    setCardData(prev => ({ ...prev, [name]: value }));
+    setCardData((prev) => ({ ...prev, [name]: value }));
   };
 
   // Validate thông tin thẻ
@@ -145,8 +159,19 @@ const [wards, setWards] = useState<Ward[]>([]);
 
   const handlePlaceOrder = async () => {
     // Validate form thông tin khách hàng
-    const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'address', 'city', 'state', 'zipCode'];
-    const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "address",
+      "city",
+      "state",
+      "zipCode",
+    ];
+    const missingFields = requiredFields.filter(
+      (field) => !formData[field as keyof typeof formData]
+    );
 
     if (missingFields.length > 0) {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
@@ -167,13 +192,15 @@ const [wards, setWards] = useState<Ward[]>([]);
       if (paymentMethod === "card") {
         // Simulate thanh toán thẻ tín dụng
         toast.info("Đang xử lý thanh toán...");
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         // Simulate: 90% thành công, 10% thất bại (demo)
         const isPaymentSuccess = Math.random() > 0.1;
 
         if (!isPaymentSuccess) {
-          toast.error("Thanh toán thất bại! Vui lòng kiểm tra lại thông tin thẻ hoặc thử lại sau.");
+          toast.error(
+            "Thanh toán thất bại! Vui lòng kiểm tra lại thông tin thẻ hoặc thử lại sau."
+          );
           setLoading(false);
           return;
         }
@@ -184,19 +211,19 @@ const [wards, setWards] = useState<Ward[]>([]);
         toast.success("Thanh toán thành công!");
         resetCart();
         navigate.push(`/success?orderNumber=${orderNumber}&payment=card`);
-
       } else {
         // COD - Thanh toán khi nhận hàng
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
         // Lưu order vào store trước khi reset cart
         addOrder(orderNumber, formData, paymentMethod);
 
-        toast.success("Đặt hàng thành công! Vui lòng chuẩn bị tiền mặt khi nhận hàng.");
+        toast.success(
+          "Đặt hàng thành công! Vui lòng chuẩn bị tiền mặt khi nhận hàng."
+        );
         resetCart();
         navigate.push(`/success?orderNumber=${orderNumber}&payment=cod`);
       }
-
     } catch (error) {
       console.error("Error placing order:", error);
       toast.error("Có lỗi xảy ra khi đặt hàng!");
@@ -209,7 +236,6 @@ const [wards, setWards] = useState<Ward[]>([]);
     return null; // Will redirect in useEffect
   }
 
-
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -221,14 +247,13 @@ const [wards, setWards] = useState<Ward[]>([]);
     };
     fetchProvinces();
   }, []);
-  
   useEffect(() => {
     if (formData.state) {
       const fetchDistricts = async () => {
         try {
           const data = await locationApi.getDistricts(formData.state);
           setDistricts(data);
-          setFormData(prev => ({ ...prev, district: "", city: "" }));
+          setFormData((prev) => ({ ...prev, district: "", city: "" }));
           setWards([]);
         } catch (error) {
           console.error("Error fetching districts:", error);
@@ -237,14 +262,13 @@ const [wards, setWards] = useState<Ward[]>([]);
       fetchDistricts();
     }
   }, [formData.state]);
-  
   useEffect(() => {
     if (formData.district) {
       const fetchWards = async () => {
         try {
           const data = await locationApi.getWards(formData.district);
           setWards(data);
-          setFormData(prev => ({ ...prev, city: "" }));
+          setFormData((prev) => ({ ...prev, city: "" }));
         } catch (error) {
           console.error("Error fetching wards:", error);
         }
@@ -260,47 +284,43 @@ const [wards, setWards] = useState<Ward[]>([]);
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <Title>Thanh Toán</Title>
-        </div>
-
+        <Title level={2}>Thanh Toán</Title>
         <div className="grid lg:grid-cols-3 gap-4">
           {/* Order Summary - Mobile First */}
-          <div className="lg:order-2">
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5" />
-                  Tóm Tắt Đơn Hàng
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3 max-h-60 overflow-y-auto">
-                  {groupedItems.map(({ product, quantity }) => {
-                    return (
-                      <div
-                        key={product._id}
-                        className="flex items-center gap-3 p-2 border border-border rounded-lg hover:shadow-md transition-shadow"
-                      >
-                        <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm md:text-base font-medium truncate">{product.name}</p>
-                          <p className="text-xs md:text-sm text-gray-500">Số lượng: {quantity}</p>
-                        </div>
-                        <PriceFormatter
-                          amount={product.price * quantity}
-                          className="text-sm md:text-base font-semibold"
+          <div className="lg:col-span-1 lg:order-2 w-full">
+            <div className="lg:sticky lg:top-4">
+              <Title level={4}>Tóm Tắt Đơn Hàng</Title>
+
+              <div className="space-y-4 border border-border rounded-lg p-4">
+                <div className="space-y-2">
+                  {groupedItems.map(({ product, quantity }) => (
+                    <div
+                      key={product._id}
+                      className="flex items-center gap-3 p-2 border border-border rounded-lg hover:shadow-md transition-shadow"
+                    >
+                      <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="object-cover w-full h-full hover:scale-105 transition-transform duration-200"
                         />
                       </div>
-                    );
-                  })}
+                      <div className="flex-1">
+                        <p className="text-sm md:text-base font-medium">
+                          {product.name}
+                        </p>
+                        <p className="text-xs md:text-sm text-muted-foreground">
+                          Số lượng: {quantity}
+                        </p>
+                      </div>
+                      <PriceFormatter
+                        amount={product.price * quantity}
+                        className="text-sm md:text-base font-semibold"
+                      />
+                    </div>
+                  ))}
                 </div>
+
                 <Separator />
 
                 {/* Price Summary */}
@@ -311,7 +331,9 @@ const [wards, setWards] = useState<Ward[]>([]);
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Giảm giá:</span>
-                    <PriceFormatter amount={getSubTotalPrice() - getTotalPrice()} />
+                    <PriceFormatter
+                      amount={getSubTotalPrice() - getTotalPrice()}
+                    />
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Phí vận chuyển:</span>
@@ -320,7 +342,10 @@ const [wards, setWards] = useState<Ward[]>([]);
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Tổng cộng:</span>
-                    <PriceFormatter amount={getTotalPrice()} className="text-lg font-bold" />
+                    <PriceFormatter
+                      amount={getTotalPrice()}
+                      className="text-lg font-bold"
+                    />
                   </div>
                 </div>
 
@@ -335,21 +360,15 @@ const [wards, setWards] = useState<Ward[]>([]);
                     <span className="text-primary">Giao hàng nhanh</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
           {/* Checkout Form */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Customer Information */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Thông Tin Khách Hàng
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
+            <div>
+              <Title level={4}>Thông Tin Khách Hàng</Title>
+              <div className="space-y-4 border border-border rounded-lg p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">Họ *</Label>
@@ -377,7 +396,6 @@ const [wards, setWards] = useState<Ward[]>([]);
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="flex items-center gap-1">
-                      <Mail className="w-4 h-4" />
                       Email *
                     </Label>
                     <Input
@@ -392,7 +410,6 @@ const [wards, setWards] = useState<Ward[]>([]);
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="flex items-center gap-1">
-                      <Phone className="w-4 h-4" />
                       Số điện thoại *
                     </Label>
                     <Input
@@ -406,144 +423,158 @@ const [wards, setWards] = useState<Ward[]>([]);
                     />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Shipping Address */}
-            <Card>
-  <CardHeader>
-    <CardTitle className="flex items-center gap-2">
-      <MapPin className="w-5 h-5" />
-      Địa Chỉ Giao Hàng
-    </CardTitle>
-  </CardHeader>
-  <CardContent className="space-y-4">
-    {/* Số nhà, đường */}
-    <div className="space-y-2">
-      <Label htmlFor="address">Địa chỉ *</Label>
-      <Input
-        id="address"
-        name="address"
-        value={formData.address}
-        onChange={handleInputChange}
-        placeholder="Số nhà, tên đường"
-        required
-      />
-    </div>
+            <div>
+              <Title level={4}>Địa Chỉ Giao Hàng</Title>
+              <div className="space-y-4 border border-border rounded-lg p-4">
+                {/* Số nhà, đường */}
+                <div className="space-y-2">
+                  <Label htmlFor="address">Địa chỉ *</Label>
+                  <Input
+                    id="address"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    placeholder="Số nhà, tên đường"
+                    required
+                  />
+                </div>
 
-    {/* Tỉnh/Thành, Quận/Huyện, Phường/Xã */}
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* Province / Tỉnh */}
-      <div className="space-y-2">
-        <Label htmlFor="state">Tỉnh/Thành *</Label>
-        <select
-          id="state"
-          name="state"
-          value={formData.state}
-          onChange={handleInputChange}
-          className="w-full border cursor-pointer bg-muted rounded-md px-2 py-1"
-          required
-        >
-          <option value="">Chọn Tỉnh/Thành</option>
-          {provinces.map((p) => (
-            <option key={p.province_id} value={p.province_id}>
-              {p.province_name}
-            </option>
-          ))}
-        </select>
-      </div>
+                {/* Tỉnh/Thành, Quận/Huyện, Phường/Xã */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="state">Tỉnh/Thành *</Label>
+                    <Select
+                      id="state"
+                      value={formData.state || undefined} 
+                      onChange={(value) => handleSelectChange("state", value)}
+                      placeholder="Chọn Tỉnh/Thành"
+                      className="w-full"
+                      dropdownClassName="border border-border rounded-md shadow-md"
+                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
+                    >
+                      {provinces.map((p) => (
+                        <Option key={p.province_id} value={p.province_id}>
+                          {p.province_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
 
-      {/* District / Quận */}
-      <div className="space-y-2">
-        <Label htmlFor="district">Quận/Huyện *</Label>
-        <select
-          id="district"
-          name="district"
-          value={formData.district}
-          onChange={handleInputChange}
-          className="w-full cursor-pointer border bg-muted rounded-md px-2 py-1"
-          required
-          disabled={!districts.length}
-        >
-          <option value="">Chọn Quận/Huyện</option>
-          {districts.map((d) => (
-            <option key={d.district_id} value={d.district_id}>
-              {d.district_name}
-            </option>
-          ))}
-        </select>
-      </div>
+                  {/* District / Quận */}
+                  <div className="space-y-2">
+                    <Label htmlFor="district">Quận/Huyện *</Label>
+                    <Select
+                      id="district"
+                      value={formData.district || undefined} 
+                      onChange={(value) =>
+                        handleSelectChange("district", value)
+                      }
+                      placeholder="Chọn Quận/Huyện"
+                      className="w-full"
+                      dropdownClassName="border border-border rounded-md shadow-md"
+                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
+                      disabled={!districts.length}
+                    >
+                      {districts.map((d) => (
+                        <Option key={d.district_id} value={d.district_id}>
+                          {d.district_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
 
-      {/* Ward / Phường */}
-      <div className="space-y-2">
-        <Label htmlFor="city">Phường/Xã *</Label>
-        <select
-          id="city"
-          name="city"
-          value={formData.city}
-          onChange={handleInputChange}
-          className="w-full cursor-pointer bg-muted border rounded-md px-2 py-1"
-          required
-          disabled={!wards.length}
-        >
-          <option value="">Chọn Phường/Xã</option>
-          {wards.map((w) => (
-            <option key={w.ward_id} value={w.ward_name}>
-              {w.ward_name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+                  {/* Ward / Phường */}
+                  <div className="space-y-2">
+                    <Label htmlFor="city">Phường/Xã *</Label>
+                    <Select
+                      id="city"
+                      value={formData.city || undefined} 
+                      onChange={(value) => handleSelectChange("city", value)}
+                      placeholder="Chọn Phường/Xã"
+                      className="w-full"
+                      dropdownClassName="border border-border rounded-md shadow-md"
+                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
+                      disabled={!wards.length}
+                    >
+                      {wards.map((w) => (
+                        <Option key={w.ward_id} value={w.ward_name}>
+                          {w.ward_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
 
-    {/* Zip code */}
-    <div className="space-y-2">
-      <Label htmlFor="zipCode">Mã bưu điện *</Label>
-      <Input
-        id="zipCode"
-        name="zipCode"
-        value={formData.zipCode}
-        onChange={handleInputChange}
-        placeholder="100000"
-        required
-      />
-    </div>
+                {/* Zip code */}
+                <div className="space-y-2">
+                  <Label htmlFor="zipCode">Mã bưu điện *</Label>
+                  <Input
+                    id="zipCode"
+                    name="zipCode"
+                    value={formData.zipCode}
+                    onChange={handleInputChange}
+                    placeholder="100000"
+                    required
+                  />
+                </div>
 
-    {/* Ghi chú */}
-    <div className="space-y-2">
-      <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
-      <Textarea
-        id="notes"
-        name="notes"
-        value={formData.notes}
-        onChange={handleInputChange}
-        placeholder="Ghi chú thêm cho đơn hàng..."
-        rows={3}
-      />
-    </div>
-  </CardContent>
-</Card>
-
+                {/* Ghi chú */}
+                <div className="space-y-2">
+                  <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    placeholder="Ghi chú thêm cho đơn hàng..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </div>
 
             {/* Payment Method */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  Phương Thức Thanh Toán
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                  <div className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${paymentMethod === 'card' ? 'border-primary bg-primary/5' : ''}`}>
+            <SelectPayment />
+            <div>
+              <Title level={4}>Phương Thức Thanh Toán</Title>
+
+              <div className="space-y-4 border border-border rounded-lg p-4">
+                <RadioGroup
+                  value={paymentMethod}
+                  onValueChange={setPaymentMethod}
+                >
+                  <div
+                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${
+                      paymentMethod === "card"
+                        ? "border-primary bg-primary/5"
+                        : ""
+                    }`}
+                  >
                     <RadioGroupItem value="card" id="card" />
-                    <Label htmlFor="card" className="flex items-center gap-2 cursor-pointer flex-1">
+                    <Label
+                      htmlFor="card"
+                      className="flex items-center gap-2 cursor-pointer flex-1"
+                    >
                       <CreditCard className="w-5 h-5" />
                       Thẻ tín dụng/ghi nợ
                     </Label>
                   </div>
-                  <div className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${paymentMethod === 'cod' ? 'border-primary bg-primary/5' : ''}`}>
+                  <div
+                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${
+                      paymentMethod === "cod"
+                        ? "border-primary bg-primary/5"
+                        : ""
+                    }`}
+                  >
                     <RadioGroupItem value="cod" id="cod" />
-                    <Label htmlFor="cod" className="flex items-center gap-2 cursor-pointer flex-1">
+                    <Label
+                      htmlFor="cod"
+                      className="flex items-center gap-2 cursor-pointer flex-1"
+                    >
                       <Truck className="w-5 h-5" />
                       Thanh toán khi nhận hàng (COD)
                     </Label>
@@ -561,7 +592,9 @@ const [wards, setWards] = useState<Ward[]>([]);
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <Shield className="w-4 h-4 text-green-500" />
-                      <span className="text-sm text-muted-foreground">Thông tin thẻ được mã hóa an toàn</span>
+                      <span className="text-sm text-muted-foreground">
+                        Thông tin thẻ được mã hóa an toàn
+                      </span>
                     </div>
 
                     <div className="space-y-2">
@@ -631,19 +664,23 @@ const [wards, setWards] = useState<Ward[]>([]);
                   >
                     <div className="flex items-center gap-2 text-amber-600">
                       <Truck className="w-5 h-5" />
-                      <span className="font-medium">Thanh toán khi nhận hàng</span>
+                      <span className="font-medium">
+                        Thanh toán khi nhận hàng
+                      </span>
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Bạn sẽ thanh toán bằng tiền mặt khi nhận được hàng. Vui lòng chuẩn bị đúng số tiền để thuận tiện cho việc giao hàng.
+                      Bạn sẽ thanh toán bằng tiền mặt khi nhận được hàng. Vui
+                      lòng chuẩn bị đúng số tiền để thuận tiện cho việc giao
+                      hàng.
                     </p>
                   </motion.div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Place Order Button */}
-            <Card>
-              <CardContent className="pt-2">
+            <div>
+              <div className="pt-2 border border-border rounded-lg p-4">
                 <Button
                   onClick={handlePlaceOrder}
                   disabled={loading}
@@ -653,28 +690,33 @@ const [wards, setWards] = useState<Ward[]>([]);
                   {loading ? (
                     <div className="flex items-center gap-2">
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      {paymentMethod === "card" ? "Đang thanh toán..." : "Đang xử lý..."}
+                      {paymentMethod === "card"
+                        ? "Đang thanh toán..."
+                        : "Đang xử lý..."}
                     </div>
                   ) : (
                     <div className="flex text-foreground cursor-pointer items-center gap-2">
                       {paymentMethod === "card" ? (
                         <>
-                          Thanh Toán - <PriceFormatter amount={getTotalPrice()} />
+                          Thanh Toán -{" "}
+                          <PriceFormatter amount={getTotalPrice()} />
                         </>
                       ) : (
                         <>
                           <CheckCircle className="w-5 h-5" />
-                          Đặt Hàng (COD) - <PriceFormatter amount={getTotalPrice()} />
+                          Đặt Hàng (COD) -{" "}
+                          <PriceFormatter amount={getTotalPrice()} />
                         </>
                       )}
                     </div>
                   )}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center mt-2">
-                  Bằng cách đặt hàng, bạn đồng ý với điều khoản và chính sách của chúng tôi
+                  Bằng cách đặt hàng, bạn đồng ý với điều khoản và chính sách
+                  của chúng tôi
                 </p>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
