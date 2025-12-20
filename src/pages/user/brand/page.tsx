@@ -9,12 +9,12 @@ import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useState } from "react";
 
 interface Props {
-  categories: any[];
+  brands: any[];
   slug?: string;
   products: Product[];
 }
 
-const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
+const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
   const [loading, setLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -28,40 +28,47 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
   const handleCategoryChange = (newSlug: string) => {
     if (newSlug === currentSlug) return;
     setCurrentSlug(newSlug);
-    navigate(newSlug === "all" ? "/category" : `/category/${newSlug}`);
+    navigate(newSlug === "all" ? "/brand" : `/brand/${newSlug}`);
   };
 
-  const getCategoryProductCount = (categoryId: string) =>
-    allProducts.filter(p => p.category?._id === categoryId).length;
+  const getBrandCount = (brandId: string) =>
+    allProducts.filter((p) => p.brand?._id === brandId).length;
 
   const totalProductCount = allProducts.length;
 
   // Lọc sản phẩm theo categorySlug
-  const filteredProducts = allProducts.filter(p =>
-    currentSlug === "all" ? true : p.category?._id === categories.find(cat => cat.slug === currentSlug)?._id
+  const filteredProducts = allProducts.filter((p) =>
+    currentSlug === "all"
+      ? true
+      : p.brand?._id === brands.find((cat) => cat.slug === currentSlug)?._id
   );
 
   const handleRefresh = () => {
     setLoading(true);
     setTimeout(() => setLoading(false), 200);
   };
-  const handleViewAll = () => navigate("/category");
+  const handleViewAll = () => navigate("/brand");
 
-  const currentCategory = categories.find(cat => cat.slug === currentSlug);
+  const currentCategory = brands.find((cat) => cat.slug === currentSlug);
+  console.log("🚀 ~ BrandPage ~ currentCategory:", currentCategory);
 
   return (
     <div className="pb-3 flex flex-row items-start gap-2">
       {/* Sidebar */}
-      <div className={`rounded-lg shadow-sm border transition-all duration-300 ${isSidebarCollapsed ? "w-12" : "w-54"}`}>
+      <div
+        className={`rounded-lg shadow-sm border transition-all duration-300 ${
+          isSidebarCollapsed ? "w-12" : "w-54"
+        }`}
+      >
         <div className="p-4 bg-primary/90 flex justify-between items-center">
           {!isSidebarCollapsed && (
             <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
-              <Package className="w-5 h-5 flex-none" /> Danh mục
+              <Package className="w-5 h-5 flex-none" /> Thương hiệu
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="text-foreground text-sm font-medium hover:text-gray-200"
+            className="text-foreground cursor-pointer text-sm font-medium hover:text-gray-200"
           >
             {isSidebarCollapsed ? "»" : "«"}
           </button>
@@ -71,16 +78,21 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           <button
             onClick={() => handleCategoryChange("all")}
             className={`group flex items-center gap-2 px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200 relative
-              ${currentSlug === "all" ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
+              ${
+                currentSlug === "all"
+                  ? "bg-primary/10 text-primary border-l-2 border-l-primary"
+                  : "text-foreground"
+              }`}
           >
             <LayoutGrid className="w-5 h-5 flex-none" />
             <span
-              className={`flex-1 truncate transition-opacity duration-300 ${isSidebarCollapsed
-                ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                : "opacity-100"
-                }`}
+              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${
+                isSidebarCollapsed
+                  ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                  : "opacity-100"
+              }`}
             >
-              Tất cả danh mục
+              Tất cả thương hiệu
             </span>
             {!isSidebarCollapsed && (
               <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
@@ -89,27 +101,32 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
             )}
           </button>
 
-          {categories?.map(item => (
+          {brands?.map((item) => (
             <button
               key={item._id}
               onClick={() => handleCategoryChange(item.slug || "")}
-              className={`group flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
-                ${item.slug === currentSlug ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
+              className={`group cursor-pointer flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
+                ${
+                  item.slug === currentSlug
+                    ? "bg-primary/10 text-primary border-l-2 border-l-primary"
+                    : "text-foreground"
+                }`}
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <Package className="w-5 h-5 flex-none" />
                 <span
-                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${isSidebarCollapsed
-                    ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                    : "opacity-100"
-                    }`}
+                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${
+                    isSidebarCollapsed
+                      ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                      : "opacity-100"
+                  }`}
                 >
                   {item.name}
                 </span>
               </div>
               {!isSidebarCollapsed && (
                 <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                  {getCategoryProductCount(item._id)}
+                  {getBrandCount(item._id)}
                 </span>
               )}
             </button>
@@ -124,19 +141,41 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-1 rounded-lg shadow-sm border p-3"
         >
-          <h2 className="text-2xl font-bold text-primary capitalize mb-1">
-            {currentSlug === "all" ? "Tất cả danh mục" : currentCategory?.name}
-          </h2>
-          {currentSlug === "all" ? (
-            <p className="text-foreground text-sm">Khám phá tất cả sản phẩm trong cửa hàng</p>
-          ) : (
-            currentCategory?.description && (
-              <p className="text-foreground text-sm">{currentCategory.description}</p>
-            )
-          )}
-          {!loading && filteredProducts.length > 0 && (
-            <p className="text-sm text-primary mt-2 font-medium">{filteredProducts.length} Sản phẩm có sẵn</p>
-          )}
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-primary capitalize mb-1">
+                {currentSlug === "all"
+                  ? "Tất cả thương hiệu"
+                  : currentCategory?.name}
+              </h2>
+              {currentSlug === "all" ? (
+                <p className="text-foreground text-sm">
+                  Khám phá tất cả sản phẩm trong cửa hàng
+                </p>
+              ) : (
+                currentCategory?.description && (
+                  <p className="text-foreground text-sm">
+                    {currentCategory.description}
+                  </p>
+                )
+              )}
+              {!loading && filteredProducts.length > 0 && (
+                <p className="text-sm text-primary mt-2 font-medium">
+                  {filteredProducts.length} Sản phẩm có sẵn
+                </p>
+              )}
+            </div>
+
+            {currentSlug !== "all" && currentCategory?.logo && (
+              <div className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-md">
+                <img
+                  src={currentCategory.logo}
+                  alt={currentCategory.name}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </div>
+            )}
+          </div>
         </motion.div>
 
         {loading ? (
@@ -170,11 +209,14 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
             ))}
           </motion.div>
         ) : (
-          <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
+          <NoProductAvailable
+            onRefresh={handleRefresh}
+            onViewAll={handleViewAll}
+          />
         )}
       </div>
     </div>
   );
 };
 
-export default CategoryPage;
+export default BrandPage;

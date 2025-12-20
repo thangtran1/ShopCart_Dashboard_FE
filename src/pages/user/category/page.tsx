@@ -61,7 +61,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="text-foreground text-sm font-medium hover:text-gray-200"
+            className="text-foreground cursor-pointer text-sm font-medium hover:text-gray-200"
           >
             {isSidebarCollapsed ? "»" : "«"}
           </button>
@@ -75,7 +75,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           >
             <LayoutGrid className="w-5 h-5 flex-none" />
             <span
-              className={`flex-1 truncate transition-opacity duration-300 ${isSidebarCollapsed
+              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${isSidebarCollapsed
                 ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
                 : "opacity-100"
                 }`}
@@ -93,7 +93,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
             <button
               key={item._id}
               onClick={() => handleCategoryChange(item.slug || "")}
-              className={`group flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
+              className={`group flex cursor-pointer justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
                 ${item.slug === currentSlug ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
