@@ -33,6 +33,7 @@ import FAQs from "@/pages/user/public/faqs";
 import Help from "@/pages/user/public/help";
 import NewsPage from "@/pages/user/news/page";
 import NewSlugDetail from "@/pages/user/news/[slug]/page";
+import DetailBrand from "@/pages/user/brand/[slug]/page";
 
 const { VITE_APP_ADMIN: HOMEPAGE, VITE_API_URL_MAINTENANCE: MAIN_APP } =
   import.meta.env;
@@ -162,6 +163,13 @@ export default function Router() {
         element: <DetailCategory />,
         children: [
           { path: ":slug", element: <DetailCategory /> },
+        ],
+      },
+      {
+        path: "brand",
+        element: <DetailBrand />,
+        children: [
+          { path: ":slug", element: <DetailBrand /> },
         ],
       },
       {

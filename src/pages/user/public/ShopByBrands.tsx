@@ -77,6 +77,8 @@ export default function ShopByBrands() {
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <Title className="text-2xl font-semibold">Thương hiệu phổ biến</Title>
+        <SeeMore to="/brand">Xem thêm</SeeMore>
+
       </div>
 
       <div className="border border-border p-2 rounded-xl shadow-sm space-y-6">
