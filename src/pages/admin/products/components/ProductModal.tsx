@@ -8,7 +8,7 @@ import { Textarea } from "@/ui/textarea";
 import { type Product, type CreateProductDto, type ProductImageDto } from "@/api/services/product";
 import { type Category } from "@/api/services/category";
 import { type Brand } from "@/api/services/brands";
-import { ProductStatus } from "@/types/enum";
+import { ProductStatus, ProductType } from "@/types/enum";
 import { PlusOutlined, DeleteOutlined, DragOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import { formatPrice, parsePrice } from "@/utils/format-number";
@@ -32,8 +32,10 @@ export default function ProductModal({
   categories,
   brands,
 }: ProductModalProps) {
+  const productTypes = Object.values(ProductType); 
   const [formData, setFormData] = useState<CreateProductDto>({
     name: "",
+    productType: "",
     slug: "",
     price: 0,
     discount: 0,
@@ -67,6 +69,7 @@ export default function ProductModal({
     if (product) {
       setFormData({
         name: product.name,
+        productType: product.productType,
         slug: product.slug || "",
         price: product.price,
         discount: product.discount || 0,
@@ -92,6 +95,7 @@ export default function ProductModal({
     } else {
       setFormData({
         name: "",
+        productType: "",
         slug: "",
         price: 0,
         discount: 0,
@@ -214,6 +218,10 @@ export default function ProductModal({
     // Validation
     if (!formData.name.trim()) {
       toast.error("Vui lòng nhập tên sản phẩm");
+      return;
+    }
+    if (!formData.productType) {
+      toast.error("Vui lòng chọn loại sản phẩm");
       return;
     }
     if (formData.price <= 0) {
@@ -352,6 +360,26 @@ export default function ProductModal({
                         prefix={<span className="text-muted-foreground">/products/</span>}
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                      Loại sản phẩm <span className="text-red-500">*</span>
+                    </Label>
+
+                    <Select
+                      getPopupContainer={(trigger) => trigger.parentNode} // Lấy container cha của trigger để popup không bị lệch
+                      size="large"
+                      value={formData.productType || undefined}
+                      onChange={(value) => handleInputChange("productType", value)}
+                      placeholder="Chọn loại sản phẩm"
+                      className="w-full"
+                    >
+                      {productTypes.map((type) => (
+                        <Option key={type} value={type}>
+                          {type}
+                        </Option>
+                      ))}
+                    </Select>
                   </div>
 
                   {/* Category & Brand */}

@@ -1,3 +1,4 @@
+import UserBannerMarquee from "@/components/user/banner-marquee/user-banner";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Carousel } from "antd";
 import { useRef } from "react";
@@ -11,11 +12,11 @@ const banners = [
 
 const CustomBannerItem = ({ imageUrl, type }: { imageUrl: string; type: string }) => {
   return (
-    <div className="flex px-1 justify-center">
+    <div className="flex justify-center">
       <img
         src={imageUrl}
         alt={`banner_${type}`}
-        className="w-full h-56 object-cover rounded-xl shadow-md"
+        className="w-full h-56 object-cover rounded-t-xl shadow-md"
       />
     </div>
   );
@@ -25,6 +26,7 @@ const HomeBannerWithCarousel = () => {
   const carouselRef = useRef<any>(null);
 
   return (
+   <>
     <div className="relative">
       {/* Carousel */}
       <Carousel
@@ -74,7 +76,11 @@ const HomeBannerWithCarousel = () => {
       >
         <RightOutlined />
       </button>
+    <UserBannerMarquee />
+
     </div>
+
+   </>
   );
 };
 

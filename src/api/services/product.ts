@@ -52,6 +52,7 @@ export interface DimensionsDto {
 
 export interface CreateProductDto {
   name: string;
+  productType?: string
   slug?: string;
   price: number;
   discount?: number;
@@ -78,6 +79,7 @@ export interface CreateProductDto {
 export interface Product {
   _id: string;
   name: string;
+  productType?: string
   slug?: string;
   price: number;
   discount?: number;
@@ -169,7 +171,7 @@ export const productService = {
   getAllProducts: async (
     page: number = 1,
     limit: number = 20,
-    options: { search?: string; status?: ProductStatus; isFeatured?: boolean }
+    options: { search?: string; status?: ProductStatus; isFeatured?: boolean, productType?: string }
   ): Promise<ProductListResponse> => {
     const response = await apiClient.get({ url: "/products", params: { page, limit, ...(options || {}) } });
     return response.data as ProductListResponse;

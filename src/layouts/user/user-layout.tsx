@@ -8,7 +8,6 @@ import { contentWrapper } from "@/utils/use-always";
 import ScrollToTop from "@/utils/ScrollToTop";
 import Logo from "@/ui/logo";
 import LocalePicker from "@/components/common/locale-picker";
-import UserBannerMarquee from "@/components/user/banner-marquee/user-banner";
 
 import Footer from "@/pages/user/public/footer";
 
@@ -20,8 +19,6 @@ export default function UserLayout() {
   return (
     <ThemeProvider adapters={[AntdAdapter]}>
       <ScrollToTop />
-      <UserBannerMarquee />
-
       <div className="sticky top-0 left-0 z-50 py-1 bg-muted shadow">
         <div
           className={clsx(

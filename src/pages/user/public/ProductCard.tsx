@@ -98,7 +98,7 @@ const ProductCard = ({ product }: { product: any }) => {
               />
             ))}
           </div>
-          <p className="text-foreground tracking-wide">
+          <p className="text-foreground line-clamp-1  tracking-wide">
             {" "}
             |{" "}
             {product?.reviews?.length > 0

@@ -42,7 +42,7 @@ const UserBannerMarquee = memo(() => {
 
   return (
     <div
-      className="w-full overflow-hidden py-2 border-b"
+      className="w-full rounded-b-2xl overflow-hidden py-2 border-b"
       style={{
         backgroundColor: bannerData.backgroundColor,
         color: bannerData.textColor,

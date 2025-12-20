@@ -20,11 +20,6 @@ export enum CategoryStatus {
   INACTIVE = 'inactive',
 }
 
-export enum ProductStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-}
-
 export enum StorageEnum {
   UserInfo = "userInfo",
   UserToken = "userToken",
@@ -87,4 +82,18 @@ export enum NotificationType {
 export enum AuthSessionStatus {
   ACTIVE = "active",
   REVOKED = "revoked",
+}
+
+export enum ProductType {
+  IPHONE = 'iPhone',
+  MACBOOK = 'MacBook',
+  ANDROID = 'Android',
+  LAPTOP = 'Laptop',
+  CAMERA = 'Camera',
+  TABLET = 'Tablet',
+}
+
+export enum ProductStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
 }

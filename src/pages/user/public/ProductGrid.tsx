@@ -10,6 +10,7 @@ import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { useTranslation } from "react-i18next";
 import { ProductStatus } from "@/types/enum";
+import ServiceFeatures from "./ServiceFeatures";
 
 const extractProducts = async (apiCall: () => Promise<any>): Promise<any[]> => {
   const res = await apiCall();
@@ -54,7 +55,7 @@ const ProductGrid = () => {
   const tabApiMap: Record<string, () => Promise<any[]>> = {
     all: () =>
       extractProducts(() =>
-        productService.getAllProducts(1, 100, { status: ProductStatus.ACTIVE })
+        productService.getAllProducts(1, 10, { status: ProductStatus.ACTIVE })
       ),
     new: () => extractProducts(() => productService.getProductsByNew()),
     bestSeller: () => extractProducts(() => productService.getProductsByBestSeller()),
@@ -106,6 +107,7 @@ const ProductGrid = () => {
           <span>Đang tải sản phẩm...</span>
         </div>
       ) : products.length ? (
+        <>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
           {products.map(product => (
             <AnimatePresence key={product._id}>
@@ -120,6 +122,10 @@ const ProductGrid = () => {
             </AnimatePresence>
           ))}
         </div>
+        <div className="mt-6 border-t">
+          <ServiceFeatures />
+        </div>
+        </>
       ) : (
         <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
       )}

@@ -1,102 +1,91 @@
-import { Tabs } from "antd";
-import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "./ProductCard";
+import NoProductAvailable from "./NoProductAvailable"; 
 import { productService } from "@/api/services/product";
-import { ProductStatus } from "@/types/enum";
+import { ProductType, ProductStatus } from "@/types/enum";
+import { Skeleton } from "antd";
 
-export default function SubProductCard() {
-    const [activeTab, setActiveTab] = useState("watch");
-    const [products, setProducts] = useState<any[]>([]);
+export default function ProductsPage() {
+  const [productsByType, setProductsByType] = useState<Record<string, any[]>>(
+    {}
+  );
+  const [loading, setLoading] = useState(true);
 
-    const bannerUrl = activeTab === "watch"
-        ? "https://cdn2.cellphones.com.vn/insecure/rs:fill:321:960/q:90/plain/https://media-asset.cellphones.com.vn/page_configs/01K8WKEW3CH6FD5HGP201X8WAC.png"
-        : "https://cdn2.cellphones.com.vn/insecure/rs:fill:321:960/q:90/plain/https://media-asset.cellphones.com.vn/page_configs/01KA0B56WR5FQC2QKJH8SQXAFR.jpg";
+  const fetchProductsByType = useCallback(async () => {
+    setLoading(true);
+    try {
+      const types = Object.values(ProductType);
+      const results: Record<string, any[]> = {};
 
+      await Promise.all(
+        types.map(async (type) => {
+          const res = await productService.getAllProducts(1, 20, {
+            status: ProductStatus.ACTIVE,
+            productType: type,
+          });
+          results[type] = res.data.data;
+        })
+      );
 
-    const fetchProducts = useCallback(async () => {
-        try {
-            const res = await productService.getAllProducts(1, 100, { status: ProductStatus.ACTIVE });
-            setProducts(res.data.data);
-        } catch (error) {
-            console.error("Product fetching error:", error);
-        }
-    }, []);
+      setProductsByType(results);
+    } catch (error) {
+      console.error("Product fetching error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-    useEffect(() => {
-        fetchProducts();
-    }, [fetchProducts]);
+  useEffect(() => {
+    fetchProductsByType();
+  }, [fetchProductsByType]);
 
-    const renderGrid = (items: any[]) => (
-        <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
-                {items.map(product => (
-                    <AnimatePresence key={product._id}>
-                        <motion.div
-                            layout
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                        >
-                            <ProductCard product={product} />
-                        </motion.div>
-                    </AnimatePresence>
+  // Kiểm tra toàn bộ productsByType có sản phẩm không
+  const hasProducts = Object.values(productsByType).some(
+    (products) => products.length > 0
+  );
+
+  return (
+    <div className="pb-3 space-y-6">
+      <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+        Sản phẩm công nghệ
+      </h1>
+
+      {loading ? (
+        Array.from({ length: 3 }).map((_, idx) => (
+          <div key={idx} className="space-y-4">
+            <Skeleton.Input active className="!w-60 !h-6" />
+            <Skeleton active paragraph={{ rows: 3 }} />
+          </div>
+        ))
+      ) : hasProducts ? (
+        Object.entries(productsByType)
+          .filter(([_, products]) => products.length > 0) // chỉ giữ loại có sản phẩm
+          .map(([type, products]) => (
+            <section key={type} className="space-y-4">
+              <div className="rounded-t-2xl bg-error/70 p-4">
+                <h2 className="md:text-2xl font-semibold">{type}</h2>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
+                {products.map((product) => (
+                  <AnimatePresence key={product._id}>
+                    <motion.div
+                      layout
+                      initial={{ opacity: 1 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <ProductCard key={product._id} product={product} />
+                    </motion.div>
+                  </AnimatePresence>
                 ))}
-            </div>
-        </>
-    );
-
-    return (
-        <div className="flex gap-4">
-            <div className="hidden lg:block w-[20%] h-[700px]">
-                <img
-                    src={bannerUrl}
-                    alt="Banner"
-                    className="h-full w-full rounded-xl object-cover shadow-sm"
-                />
-            </div>
-
-            <div className="w-full">
-                <div className="rounded-2xl border shadow-sm">
-                    <Tabs
-                        activeKey={activeTab}
-                        onChange={setActiveTab}
-                        centered
-                        className="custom-full-tabs"
-                        items={[
-                            {
-                                key: "watch",
-                                label: <span className="font-medium">Đồng hồ</span>,
-                                children: renderGrid(products),
-                            },
-                            {
-                                key: "audio",
-                                label: <span className="font-medium">Âm thanh</span>,
-                                children: renderGrid(products),
-                            },
-                        ]}
-                    />
-                </div>
-            </div>
-
-            <style>{`
-        .custom-full-tabs .ant-tabs-nav-list {
-          width: 100%;
-          display: flex;
-        }
-        .custom-full-tabs .ant-tabs-tab {
-          flex: 1;
-          justify-content: center;
-          padding: 12px 0;
-        }
-        .custom-full-tabs .ant-tabs-ink-bar {
-          background: #d70018;
-          height: 3px;
-        }
-        .custom-full-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
-          color: #d70018;
-        }
-      `}</style>
-        </div>
-    );
+              </div>
+            </section>
+          ))
+      ) : (
+        <NoProductAvailable />
+      )}
+    </div>
+  );
 }
