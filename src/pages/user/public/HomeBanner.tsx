@@ -62,7 +62,7 @@ const HomeBannerWithCarousel = () => {
       {/* Prev Button */}
       <button
         onClick={() => carouselRef.current.prev()}
-        className="absolute top-1/2 left-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
+        className="absolute cursor-pointer top-1/2 left-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
       >
         <LeftOutlined />
       </button>
@@ -70,7 +70,7 @@ const HomeBannerWithCarousel = () => {
       {/* Next Button */}
       <button
         onClick={() => carouselRef.current.next()}
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
+        className="absolute cursor-pointer top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
       >
         <RightOutlined />
       </button>

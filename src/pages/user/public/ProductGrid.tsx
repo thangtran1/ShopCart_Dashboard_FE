@@ -87,7 +87,10 @@ const ProductGrid = () => {
   ]);
 
   return (
-    <div className="flex flex-col lg:px-0 my-2">
+    <div className="flex flex-col lg:px-0 mb-2">
+      <div className="mb-2">
+        <img className="rounded-lg w-full" alt="img" src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:90/plain/https://dashboard.cellphones.com.vn/storage/s-edu-2-0-special-desk.gif" />
+      </div>
       <HomeTabbar
         productType={productTabs}
         selectedTab={selectedTab}
