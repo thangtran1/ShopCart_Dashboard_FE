@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Package, LayoutGrid } from "lucide-react";
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Props {
   categories: any[];
@@ -31,15 +31,23 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
     navigate(newSlug === "all" ? "/category" : `/category/${newSlug}`);
   };
 
-  const getCategoryProductCount = (categoryId: string) =>
-    allProducts.filter(p => p.category?._id === categoryId).length;
+  const categoryCountMap = useMemo(() => {
+    const map: Record<string, number> = {};
+
+    allProducts.forEach(p => {
+      const categoryId =
+        typeof p.category === "object"
+          ? p.category._id
+          : p.category;
+
+      if (!categoryId) return;
+
+      map[categoryId] = (map[categoryId] || 0) + 1;
+    });
+    return map;
+  }, [allProducts]);
 
   const totalProductCount = allProducts.length;
-
-  // Lọc sản phẩm theo categorySlug
-  const filteredProducts = allProducts.filter(p =>
-    currentSlug === "all" ? true : p.category?._id === categories.find(cat => cat.slug === currentSlug)?._id
-  );
 
   const handleRefresh = () => {
     setLoading(true);
@@ -48,6 +56,18 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
   const handleViewAll = () => navigate("/category");
 
   const currentCategory = categories.find(cat => cat.slug === currentSlug);
+
+  const filteredProducts = allProducts.filter(p => {
+    if (currentSlug === "all") return true;
+    if (!currentCategory || !p.category) return false;
+
+    const categoryId =
+      typeof p.category === "object"
+        ? p.category._id
+        : p.category;
+
+    return categoryId === currentCategory._id;
+  });
 
   return (
     <div className="pb-3 flex flex-row items-start gap-2">
@@ -109,7 +129,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
               </div>
               {!isSidebarCollapsed && (
                 <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                  {getCategoryProductCount(item._id)}
+                  {categoryCountMap[item._id] || 0}
                 </span>
               )}
             </button>

@@ -9,7 +9,6 @@ import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { useTranslation } from "react-i18next";
-import { ProductStatus } from "@/types/enum";
 import ServiceFeatures from "./ServiceFeatures";
 
 const extractProducts = async (apiCall: () => Promise<any>): Promise<any[]> => {
@@ -55,7 +54,7 @@ const ProductGrid = () => {
   const tabApiMap: Record<string, () => Promise<any[]>> = {
     all: () =>
       extractProducts(() =>
-        productService.getAllProducts(1, 10, { status: ProductStatus.ACTIVE })
+        productService.getActiveProducts()
       ),
     new: () => extractProducts(() => productService.getProductsByNew()),
     bestSeller: () => extractProducts(() => productService.getProductsByBestSeller()),
@@ -90,7 +89,7 @@ const ProductGrid = () => {
   return (
     <div className="flex flex-col lg:px-0 mb-2">
       <div className="mb-2">
-        <img className="rounded-lg w-full" alt="img" src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:90/plain/https://dashboard.cellphones.com.vn/storage/s-edu-2-0-special-desk.gif" />
+        <img className="rounded-lg  w-full" alt="img" src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:90/plain/https://dashboard.cellphones.com.vn/storage/s-edu-2-0-special-desk.gif" />
       </div>
       <HomeTabbar
         productType={productTabs}
@@ -108,23 +107,23 @@ const ProductGrid = () => {
         </div>
       ) : products.length ? (
         <>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
-          {products.map(product => (
-            <AnimatePresence key={product._id}>
-              <motion.div
-                layout
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <ProductCard key={product._id} product={product} />
-              </motion.div>
-            </AnimatePresence>
-          ))}
-        </div>
-        <div className="mt-6 border-t">
-          <ServiceFeatures />
-        </div>
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
+            {products.map(product => (
+              <AnimatePresence key={product._id}>
+                <motion.div
+                  layout
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <ProductCard key={product._id} product={product} />
+                </motion.div>
+              </AnimatePresence>
+            ))}
+          </div>
+          <div className="mt-6 border-t">
+            <ServiceFeatures />
+          </div>
         </>
       ) : (
         <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />

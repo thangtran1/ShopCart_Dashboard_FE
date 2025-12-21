@@ -1,7 +1,6 @@
 import Title from "@/ui/title";
 import { Link } from "react-router";
 import SeeMore from "@/ui/see-more";
-import { CategoryStatus } from "@/types/enum";
 import { Category, categoryService } from "@/api/services/category";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/ui/skeleton";
@@ -16,12 +15,10 @@ const CategoryProduct = () => {
       setLoading(true);
       setError(false);
 
-      const response = await categoryService.getAllCategories(1, 100, {
-        status: CategoryStatus.ACTIVE,
-      });
+      const response = await categoryService.getActive();
 
       if (response.success) {
-        setCategories(response.data.data || []);
+        setCategories(response.data || []);
       } else {
         setError(true);
         setCategories([]);

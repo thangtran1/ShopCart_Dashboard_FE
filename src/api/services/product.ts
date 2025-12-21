@@ -177,6 +177,20 @@ export const productService = {
     return response.data as ProductListResponse;
   },
 
+  getActiveProducts: async (
+    options?: { productType?: string } 
+  ): Promise<{ success: boolean; message: string; data: Product[] }> => {
+    const response = await apiClient.get({
+      url: "/products/active",
+      params: options || {},
+    });
+    return response.data as {
+      success: boolean;
+      message: string;
+      data: Product[];
+    };
+  },
+
   getProductById: async (id: string): Promise<{ success: boolean; message: string; data: Product }> => {
     const response = await apiClient.get({ url: `/products/${id}` });
     return response.data as { success: boolean; message: string; data: Product };

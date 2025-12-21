@@ -5,7 +5,6 @@ import { useParams } from "react-router";
 import CategoryPage from "@/pages/user/category/page";
 import { useEffect, useState } from "react";
 import { categoryService } from "@/api/services/category";
-import { CategoryStatus, ProductStatus } from "@/types/enum";
 import { productService } from "@/api/services/product";
 
 const DetailCategory = () => {
@@ -14,8 +13,8 @@ const DetailCategory = () => {
   const [products, setProducts] = useState<any[]>([]);
   useEffect(() => {
     const fetchCategory = async () => {
-      const response = await categoryService.getAllCategories(1, 10, { status: CategoryStatus.ACTIVE });
-      if (response.success && response.data) setCategory(response.data.data);
+      const response = await categoryService.getActive();
+      if (response.success && response.data) setCategory(response.data);
       else setCategory([]);
     };
     fetchCategory();
@@ -23,8 +22,8 @@ const DetailCategory = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await productService.getAllProducts(1, 10, { status: ProductStatus.ACTIVE });
-      if (response.success && response.data) setProducts(response.data.data);
+      const response = await productService.getActiveProducts();
+      if (response.success && response.data) setProducts(response.data);
       else setProducts([]);
     };
     fetchProducts();

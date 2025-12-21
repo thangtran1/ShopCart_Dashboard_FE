@@ -11,8 +11,6 @@ import ProductCard from "@/pages/user/public/ProductCard";
 import NoProductAvailable from "../public/NoProductAvailable";
 import { brandService } from "@/api/services/brands";
 import { categoryService } from "@/api/services/category";
-import { BrandStatus, ProductStatus } from "@/types/enum";
-import { CategoryStatus } from "@/types/enum";
 import { productService } from "@/api/services/product";
 
 const Shop = () => {
@@ -44,28 +42,22 @@ const Shop = () => {
 
   const fetchBrands = useCallback(async () => {
     try {
-      const response = await brandService.getAllBrands(1, 100, {
-        status: BrandStatus.ACTIVE,
-      });
+      const response = await brandService.getActive();
       if (response.success) {
-        setBrands(response.data.data);
+        setBrands(response.data);
       }
     } catch (error) {
       console.error("Error fetching brands:", error);
-      return [];
     }
   }, []);
   const fetchCategories = useCallback(async () => {
     try {
-      const response = await categoryService.getAllCategories(1, 100, {
-        status: CategoryStatus.ACTIVE,
-      });
+      const response = await categoryService.getActive();
       if (response.success) {
-        setCategories(response.data.data);
+        setCategories(response.data);
       }
     } catch (error) {
       console.error("Error fetching categories:", error);
-      return [];
     }
   }, []);
   useEffect(() => {
@@ -76,10 +68,8 @@ const Shop = () => {
   // Fetch products on filter change
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    const response = await productService.getAllProducts(1, 100, {
-      status: ProductStatus.ACTIVE,
-    });
-    const allProducts = response.data.data;
+    const response = await productService.getActiveProducts();
+    const allProducts = response.data;
     let filtered = allProducts;
     if (selectedCategory) {
       const cat = categories.find((c) => c.slug === selectedCategory);

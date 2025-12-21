@@ -24,7 +24,7 @@ export default function BrandsManagement() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(10);
 
   const fetchBrands = useCallback(async () => {
     try {

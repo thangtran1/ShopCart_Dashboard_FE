@@ -4,7 +4,6 @@ import Title from "@/ui/title";
 import { useParams } from "react-router";
 import BrandPage from "@/pages/user/brand/page";
 import { useEffect, useState } from "react";
-import { BrandStatus,  ProductStatus } from "@/types/enum";
 import { productService } from "@/api/services/product";
 import { brandService } from "@/api/services/brands";
 
@@ -14,8 +13,8 @@ const DetailCategory = () => {
   const [products, setProducts] = useState<any[]>([]);
   useEffect(() => {
     const fetchBrand = async () => {
-      const response = await brandService.getAllBrands(1, 10, { status: BrandStatus.ACTIVE });
-      if (response.success && response.data) setBrand(response.data.data);
+      const response = await brandService.getActive();
+      if (response.success && response.data) setBrand(response.data);
       else setBrand([]);
     };
     fetchBrand();
@@ -23,8 +22,8 @@ const DetailCategory = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await productService.getAllProducts(1, 10, { status: ProductStatus.ACTIVE });
-      if (response.success && response.data) setProducts(response.data.data);
+      const response = await productService.getActiveProducts();
+      if (response.success && response.data) setProducts(response.data);
       else setProducts([]);
     };
     fetchProducts();

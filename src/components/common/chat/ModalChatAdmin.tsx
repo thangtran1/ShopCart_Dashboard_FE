@@ -49,16 +49,14 @@ const ChatBubble = ({
   return (
     <div className={`flex mt-2 ${isAdmin ? "justify-end" : "justify-start"}`}>
       <div
-        className={`flex flex-col max-w-[70%] ${
-          isAdmin ? "items-end" : "items-start"
-        }`}
+        className={`flex flex-col max-w-[70%] ${isAdmin ? "items-end" : "items-start"
+          }`}
       >
         <div
           className={`p-[10px_14px] rounded-[18px] break-words shadow-[0_1px_2px_rgba(0,0,0,0.1)] 
-            ${
-              isAdmin
-                ? "bg-primary text-primary-foreground rounded-br-[4px]"
-                : "bg-background text-muted-foreground rounded-bl-[4px]"
+            ${isAdmin
+              ? "bg-primary text-primary-foreground rounded-br-[4px]"
+              : "bg-background text-muted-foreground rounded-bl-[4px]"
             }`}
         >
           {msg.content}
@@ -202,20 +200,18 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               <div
                 key={conversation.userId}
                 className={`cursor-pointer gap-2 p-[12px_20px] rounded-[8px] m-[4px_8px] transition-colors duration-200 border-none flex items-center
-                  ${
-                    selectedUserId === conversation.userId
-                      ? "bg-primary/10"
-                      : "hover:bg-muted/40"
+                  ${selectedUserId === conversation.userId
+                    ? "bg-primary/10"
+                    : "hover:bg-muted/40"
                   }`}
                 onClick={() => selectUser(conversation.userId)}
               >
                 <Avatar
                   size={40}
-                  className={`mr-3 ${
-                    onlineUsers.includes(conversation.userId)
+                  className={`mr-3 ${onlineUsers.includes(conversation.userId)
                       ? "bg-success"
                       : "bg-gray-400"
-                  }`}
+                    }`}
                 >
                   {conversation.userEmail.charAt(0).toUpperCase()}
                 </Avatar>
@@ -242,11 +238,10 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                 <div className="flex gap-2 items-center">
                   <Avatar
                     size={40}
-                    className={`mr-3 ${
-                      onlineUsers.includes(activeConversation.userId)
+                    className={`mr-3 ${onlineUsers.includes(activeConversation.userId)
                         ? "bg-success"
                         : "bg-gray-400"
-                    }`}
+                      }`}
                   >
                     {activeConversation.userEmail.charAt(0).toUpperCase()}
                   </Avatar>
@@ -256,11 +251,10 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                         activeConversation.userEmail}
                     </div>
                     <div
-                      className={`text-xs transition-colors ${
-                        onlineUsers.includes(activeConversation.userId)
+                      className={`text-xs transition-colors ${onlineUsers.includes(activeConversation.userId)
                           ? "text-success"
                           : "text-foreground"
-                      }`}
+                        }`}
                     >
                       {onlineUsers.includes(activeConversation.userId)
                         ? "Trực tuyến"

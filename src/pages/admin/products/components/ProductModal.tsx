@@ -32,7 +32,7 @@ export default function ProductModal({
   categories,
   brands,
 }: ProductModalProps) {
-  const productTypes = Object.values(ProductType); 
+  const productTypes = Object.values(ProductType);
   const [formData, setFormData] = useState<CreateProductDto>({
     name: "",
     productType: "",
@@ -499,7 +499,7 @@ export default function ProductModal({
                         <Option value={ProductStatus.INACTIVE}>
                           <div className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full bg-red-500" />
-                            Ẩn
+                            Không hoạt động
                           </div>
                         </Option>
                       </Select>

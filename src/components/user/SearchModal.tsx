@@ -8,7 +8,6 @@ import { Link, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "antd";
 import { productService } from "@/api/services/product";
-import { CategoryStatus, ProductStatus } from "@/types/enum";
 import { categoryService } from "@/api/services/category";
 
 interface SearchModalProps {
@@ -21,8 +20,8 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   useEffect(() => {
     if (!isOpen) return;
     const fetchCategories = async () => {
-      const response = await categoryService.getAllCategories(1, 100, { status: CategoryStatus.ACTIVE });
-      setCategories(response.data.data);
+      const response = await categoryService.getActive();
+      setCategories(response.data);
     };
     fetchCategories();
   }, [isOpen]);
@@ -67,20 +66,20 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
     const timer = setTimeout(async () => {
       if (!searchQuery.trim()) return setSearchResults([]);
       setIsLoading(true);
-      const response = await productService.getAllProducts(1, 100, { status: ProductStatus.ACTIVE });
-      const allProducts = response.data.data;
-  
+      const response = await productService.getActiveProducts();
+      const allProducts = response.data;
+
       const filtered = allProducts.filter((p: any) =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.category?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.brand?.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
-  
+
       setSearchResults(filtered.slice(0, 8) as any);
       setIsLoading(false);
     }, 300);
-  
+
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
@@ -119,21 +118,21 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
       <DialogContent hideClose className="max-w-2xl max-h-[80vh] p-0 overflow-hidden">
         <DialogHeader className="p-0">
           <div className="flex items-center gap-2 p-4 border-b">
-          <Input
-            placeholder="Tìm kiếm sản phẩm..."
-            value={searchQuery}
-            suffix={
-              searchQuery ? (
-                <X
-                  className="w-4 h-4 cursor-pointer text-foreground hover:text-primary"
-                  onClick={() => setSearchQuery("")}
-                />
-              ) : null
-            }
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="text-foreground"
-            onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
-          />
+            <Input
+              placeholder="Tìm kiếm sản phẩm..."
+              value={searchQuery}
+              suffix={
+                searchQuery ? (
+                  <X
+                    className="w-4 h-4 cursor-pointer text-foreground hover:text-primary"
+                    onClick={() => setSearchQuery("")}
+                  />
+                ) : null
+              }
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="text-foreground"
+              onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+            />
 
             <button
               onClick={onClose}
@@ -176,7 +175,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                           >
                             <div className="w-12 border border-border h-12 bg-background rounded-lg overflow-hidden flex-shrink-0">
                               <img
-                                src={p.images?.[0]?.asset?.url || "/images/products/product_1.png"}
+                                src={p.image}
                                 alt={p.name}
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                               />

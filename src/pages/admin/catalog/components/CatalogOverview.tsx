@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Icon } from "@/components/icon";
-import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
+import { Card, CardContent, CardTitle } from "@/ui/card";
 import { Badge } from "@/ui/badge";
 import { categoryService } from "@/api/services/category";
 import { brandService } from "@/api/services/brands";
-import { CategoryStatus, BrandStatus } from "@/types/enum";
 
 interface StatsData {
-  totalCategories: number;
   activeCategories: number;
-  totalBrands: number;
   activeBrands: number;
-  featuredBrands: number;
 }
 
-const StatCard = ({ 
-  title, 
-  value, 
-  icon, 
-  color, 
-  trend, 
-  delay = 0 
+const StatCard = ({
+  title,
+  value,
+  icon,
+  color,
+  trend,
+  delay = 0
 }: {
   title: string;
   value: number;
@@ -48,13 +44,13 @@ const StatCard = ({
                 {value.toLocaleString()}
               </h3>
               {trend && (
-                <Badge 
+                <Badge
                   variant={trend.isPositive ? "default" : "destructive"}
                   className="text-xs"
                 >
-                  <Icon 
-                    icon={trend.isPositive ? "solar:arrow-up-bold" : "solar:arrow-down-bold"} 
-                    className="w-3 h-3 mr-1" 
+                  <Icon
+                    icon={trend.isPositive ? "solar:arrow-up-bold" : "solar:arrow-down-bold"}
+                    className="w-3 h-3 mr-1"
                   />
                   {Math.abs(trend.value)}%
                 </Badge>
@@ -70,13 +66,13 @@ const StatCard = ({
   </motion.div>
 );
 
-const QuickActionCard = ({ 
-  title, 
-  description, 
-  icon, 
-  color, 
+const QuickActionCard = ({
+  title,
+  description,
+  icon,
+  color,
   onClick,
-  delay = 0 
+  delay = 0
 }: {
   title: string;
   description: string;
@@ -92,7 +88,7 @@ const QuickActionCard = ({
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
   >
-    <div 
+    <div
       className="cursor-pointer border rounded-xl hover:border-border transition-all duration-300 group"
       onClick={onClick}
     >
@@ -109,9 +105,9 @@ const QuickActionCard = ({
               {description}
             </p>
           </div>
-          <Icon 
-            icon="solar:arrow-right-bold" 
-            className="w-5 h-5 text-muted-foreground group-hover:text-blue-500 group-hover:translate-x-1 transition-all" 
+          <Icon
+            icon="solar:arrow-right-bold"
+            className="w-5 h-5 text-muted-foreground group-hover:text-blue-500 group-hover:translate-x-1 transition-all"
           />
         </div>
       </div>
@@ -121,11 +117,8 @@ const QuickActionCard = ({
 
 export default function CatalogOverview() {
   const [stats, setStats] = useState<StatsData>({
-    totalCategories: 0,
     activeCategories: 0,
-    totalBrands: 0,
-    activeBrands: 0,
-    featuredBrands: 0,
+    activeBrands: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -133,21 +126,18 @@ export default function CatalogOverview() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch categories data
-        const categoriesResponse = await categoryService.getAllCategories(1, 1000, { status: CategoryStatus.ACTIVE });
-        const categories = categoriesResponse.data.data;
-        
+        const categoriesResponse = await categoryService.getActive();
+        const categories = categoriesResponse.data;
+
         // Fetch brands data
-        const brandsResponse = await brandService.getAllBrands(1, 1000, { status: BrandStatus.ACTIVE });
-        const brands = brandsResponse.data.data;
-        
+        const brandsResponse = await brandService.getActive();
+        const brands = brandsResponse.data;
+
         setStats({
-          totalCategories: categories.length,
-          activeCategories: categories.filter(cat => cat.status === CategoryStatus.ACTIVE).length,
-          totalBrands: brands.length,
-          activeBrands: brands.filter(brand => brand.status === BrandStatus.ACTIVE).length,
-          featuredBrands: brands.filter(brand => brand.isFeatured).length,
+          activeCategories: categories.length,
+          activeBrands: brands.length,
         });
       } catch (error) {
         console.error("Error fetching stats:", error);
@@ -165,28 +155,28 @@ export default function CatalogOverview() {
       description: "Tạo danh mục sản phẩm mới cho cửa hàng",
       icon: "solar:add-folder-bold",
       color: "from-green-500 to-emerald-600",
-      onClick: () => console.log("Add category"),
+      onClick: () => ({}),
     },
     {
       title: "Thêm thương hiệu",
       description: "Thêm thương hiệu mới vào hệ thống",
       icon: "solar:star-bold",
       color: "from-orange-500 to-red-600",
-      onClick: () => console.log("Add brand"),
+      onClick: () => ({}),
     },
     {
       title: "Quản lý trạng thái",
       description: "Cập nhật trạng thái danh mục và thương hiệu",
       icon: "solar:settings-bold",
       color: "from-blue-500 to-purple-600",
-      onClick: () => console.log("Manage status"),
+      onClick: () => ({}),
     },
     {
       title: "Xuất báo cáo",
       description: "Tạo báo cáo thống kê danh mục",
       icon: "solar:document-bold",
       color: "from-purple-500 to-pink-600",
-      onClick: () => console.log("Export report"),
+      onClick: () => ({}),
     },
   ];
 
@@ -205,23 +195,16 @@ export default function CatalogOverview() {
     <div className="space-y-8">
       {/* Statistics Cards */}
       <div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           className="text-2xl font-bold text-foreground mb-2"
         >
           Thống kê tổng quan
         </motion.h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
-          <StatCard
-            title="Tổng danh mục"
-            value={stats.totalCategories}
-            icon="solar:folder-bold-duotone"
-            color="from-blue-500 to-blue-600"
-            trend={{ value: 12, isPositive: true }}
-            delay={0.1}
-          />
+
           <StatCard
             title="Danh mục hoạt động"
             value={stats.activeCategories}
@@ -231,27 +214,19 @@ export default function CatalogOverview() {
             delay={0.2}
           />
           <StatCard
-            title="Tổng thương hiệu"
-            value={stats.totalBrands}
+            title="Thương hiệu hoạt động"
+            value={stats.activeBrands}
             icon="solar:star-bold-duotone"
             color="from-orange-500 to-orange-600"
-            trend={{ value: 5, isPositive: false }}
-            delay={0.3}
+            trend={{ value: 8, isPositive: true }}
+            delay={0.2}
           />
-          <StatCard
-            title="Thương hiệu nổi bật"
-            value={stats.featuredBrands}
-            icon="solar:crown-bold-duotone"
-            color="from-purple-500 to-purple-600"
-            trend={{ value: 15, isPositive: true }}
-            delay={0.4}
-          />
+
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div>
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
@@ -259,7 +234,7 @@ export default function CatalogOverview() {
         >
           Thao tác nhanh
         </motion.h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {quickActions.map((action, index) => (
             <QuickActionCard
@@ -278,9 +253,9 @@ export default function CatalogOverview() {
         transition={{ delay: 1 }}
       >
         <div>
-            <CardTitle className="text-2xl font-bold text-foreground flex items-center">
-               Hoạt động gần đây
-            </CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground flex items-center">
+            Hoạt động gần đây
+          </CardTitle>
           <div className="pt-2">
             <div className="space-y-4 border rounded-xl">
               {[
@@ -296,16 +271,14 @@ export default function CatalogOverview() {
                   transition={{ delay: 1.2 + index * 0.1 }}
                   className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted transition-colors border-b"
                 >
-                  <div className={`p-2 rounded-md ${
-                    activity.type === 'category' 
-                      ? 'bg-primary/10' 
-                      : 'bg-success/10'
-                  }`}>
-                    <Icon 
-                      icon={activity.type === 'category' ? "solar:folder-bold" : "solar:star-bold"} 
-                      className={`w-4 h-4 ${
-                        activity.type === 'category' ? 'text-primary' : 'text-success'
-                      }`} 
+                  <div className={`p-2 rounded-md ${activity.type === 'category'
+                    ? 'bg-primary/10'
+                    : 'bg-success/10'
+                    }`}>
+                    <Icon
+                      icon={activity.type === 'category' ? "solar:folder-bold" : "solar:star-bold"}
+                      className={`w-4 h-4 ${activity.type === 'category' ? 'text-primary' : 'text-success'
+                        }`}
                     />
                   </div>
                   <div className="flex-1">

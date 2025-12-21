@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Package, LayoutGrid } from "lucide-react";
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface Props {
   brands: any[];
@@ -31,17 +31,37 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
     navigate(newSlug === "all" ? "/brand" : `/brand/${newSlug}`);
   };
 
-  const getBrandCount = (brandId: string) =>
-    allProducts.filter((p) => p.brand?._id === brandId).length;
+  const brandCountMap = useMemo(() => {
+    const map: Record<string, number> = {};
+
+    allProducts.forEach(p => {
+      const brandId =
+        typeof p.brand === "object"
+          ? p.brand._id
+          : p.brand;
+
+      if (!brandId) return;
+
+      map[brandId] = (map[brandId] || 0) + 1;
+    });
+    return map;
+  }, [allProducts]);
 
   const totalProductCount = allProducts.length;
 
-  // Lọc sản phẩm theo categorySlug
-  const filteredProducts = allProducts.filter((p) =>
-    currentSlug === "all"
-      ? true
-      : p.brand?._id === brands.find((cat) => cat.slug === currentSlug)?._id
-  );
+  const currentBrand = brands.find(b => b.slug === currentSlug);
+
+  const filteredProducts = allProducts.filter(p => {
+    if (currentSlug === "all") return true;
+    if (!currentBrand || !p.brand) return false;
+
+    const brandId =
+      typeof p.brand === "object"
+        ? p.brand._id
+        : p.brand;
+
+    return brandId === currentBrand._id;
+  });
 
   const handleRefresh = () => {
     setLoading(true);
@@ -50,15 +70,13 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
   const handleViewAll = () => navigate("/brand");
 
   const currentCategory = brands.find((cat) => cat.slug === currentSlug);
-  console.log("🚀 ~ BrandPage ~ currentCategory:", currentCategory);
 
   return (
     <div className="pb-3 flex flex-row items-start gap-2">
       {/* Sidebar */}
       <div
-        className={`rounded-lg shadow-sm border transition-all duration-300 ${
-          isSidebarCollapsed ? "w-12" : "w-54"
-        }`}
+        className={`rounded-lg shadow-sm border transition-all duration-300 ${isSidebarCollapsed ? "w-12" : "w-54"
+          }`}
       >
         <div className="p-4 bg-primary/90 flex justify-between items-center">
           {!isSidebarCollapsed && (
@@ -78,19 +96,17 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
           <button
             onClick={() => handleCategoryChange("all")}
             className={`group flex items-center gap-2 px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200 relative
-              ${
-                currentSlug === "all"
-                  ? "bg-primary/10 text-primary border-l-2 border-l-primary"
-                  : "text-foreground"
+              ${currentSlug === "all"
+                ? "bg-primary/10 text-primary border-l-2 border-l-primary"
+                : "text-foreground"
               }`}
           >
             <LayoutGrid className="w-5 h-5 flex-none" />
             <span
-              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${
-                isSidebarCollapsed
-                  ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                  : "opacity-100"
-              }`}
+              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${isSidebarCollapsed
+                ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                : "opacity-100"
+                }`}
             >
               Tất cả thương hiệu
             </span>
@@ -106,27 +122,25 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
               key={item._id}
               onClick={() => handleCategoryChange(item.slug || "")}
               className={`group cursor-pointer flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
-                ${
-                  item.slug === currentSlug
-                    ? "bg-primary/10 text-primary border-l-2 border-l-primary"
-                    : "text-foreground"
+                ${item.slug === currentSlug
+                  ? "bg-primary/10 text-primary border-l-2 border-l-primary"
+                  : "text-foreground"
                 }`}
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <Package className="w-5 h-5 flex-none" />
                 <span
-                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${
-                    isSidebarCollapsed
-                      ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                      : "opacity-100"
-                  }`}
+                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${isSidebarCollapsed
+                    ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                    : "opacity-100"
+                    }`}
                 >
                   {item.name}
                 </span>
               </div>
               {!isSidebarCollapsed && (
                 <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                  {getBrandCount(item._id)}
+                  {brandCountMap[item._id] || 0}
                 </span>
               )}
             </button>

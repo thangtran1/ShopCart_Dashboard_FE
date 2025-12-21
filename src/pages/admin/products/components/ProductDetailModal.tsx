@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@/components/icon";
 import { Badge } from "@/ui/badge";
-import { Button, Tabs, Input, Rate, Popconfirm, Empty, Avatar, Tooltip, Tag } from "antd";
+import { Button, Tabs, Input, Rate, Popconfirm, Empty, Tooltip, Tag } from "antd";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog";
 import {
   type Product,
@@ -12,7 +12,6 @@ import {
 import { ProductStatus } from "@/types/enum";
 import {
   EditOutlined,
-  CheckCircleOutlined,
   DeleteOutlined,
   MessageOutlined,
   StarFilled,

@@ -5,6 +5,7 @@ import SeeMore from "@/ui/see-more";
 import { useCallback, useEffect, useState } from "react";
 import { Brand, brandService } from "@/api/services/brands";
 import { Skeleton } from "@/ui/skeleton";
+import { Badge } from "@/ui/badge";
 
 const extraData = [
   { title: "Free Delivery", description: "Free shipping over $100", icon: <Truck size={40} /> },
@@ -23,9 +24,9 @@ export default function ShopByBrands() {
       setLoading(true);
       setError(false);
 
-      const response = await brandService.getAllBrands(1, 8, {});
+      const response = await brandService.getActive();
       if (response.success) {
-        setBrands(response.data.data || []);
+        setBrands(response.data || []);
       } else {
         setError(true);
         setBrands([]);
@@ -60,14 +61,15 @@ export default function ShopByBrands() {
       {brands.map((brand) => (
         <Link
           key={brand._id}
-          to={`/shop?brand=${brand.slug}`}
-          className="border border-border h-24 rounded-lg flex items-center justify-center hover:shadow-md transition-all duration-300"
+          to={`/brand/${brand.slug}`}
+          className="border relative border-border h-24 rounded-lg flex items-center justify-center hover:shadow-md transition-all duration-300"
         >
           <img
             src={brand.logo || "/images/brands/brand_1.webp"}
             alt={brand.name}
             className="w-28 h-20 object-contain opacity-80 hover:opacity-100 transition"
           />
+          <Badge className="absolute top-0 right-0" variant="success" >{brand.productCount}</Badge>
         </Link>
       ))}
     </div>

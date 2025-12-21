@@ -316,6 +316,7 @@ export default function BrandModal({ open, onClose, onSave, brand }: BrandModalP
                     <div className="space-y-2">
                       <Label className="text-sm font-medium text-foreground">Trạng thái</Label>
                       <Select
+                        getPopupContainer={(trigger) => trigger.parentNode} // Lấy container cha của trigger để popup không bị lệch
                         size="large"
                         value={formData.status}
                         onChange={(value) => handleInputChange("status", value)}
