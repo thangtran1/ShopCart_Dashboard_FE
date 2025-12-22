@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
-import maintenanceApi from "@/api/services/maintenanceApi";
-import { Maintenance, MaintenanceStatus } from "@/api/services/maintenanceApi";
+import { Maintenance, maintenanceApi, MaintenanceStatus } from "@/api/services/maintenanceApi";
 
 export function useMaintenancePolling(onStatusChange: () => void) {
   const timeoutRefs = useRef<{ [key: string]: NodeJS.Timeout }>({});

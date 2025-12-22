@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
 export interface BannerSettings {
@@ -53,56 +54,32 @@ const transformBanner = (banner: any): BannerConfig => ({
 });
 
 export const getBannerSettings = async (): Promise<BannerSettings> => {
-  const response = await apiClient.get({ url: "/banners/settings" });
+  const response = await apiClient.get({ url: API_URL.BANNER.SETTINGS });
   return response.data.data;
 };
 
-export const updateBannerSettings = async (
-  settings: UpdateBannerSettingsRequest
-): Promise<BannerSettings> => {
+export const updateBannerSettings = async (settings: UpdateBannerSettingsRequest): Promise<BannerSettings> => {
   const response = await apiClient.put({
-    url: "/banners/settings",
+    url: API_URL.BANNER.SETTINGS,
     data: settings,
   });
-
   return response.data.data;
 };
 
 export const resetBannerSettings = async (): Promise<BannerSettings> => {
-  const response = await apiClient.post({ url: "/banners/settings/reset" });
+  const response = await apiClient.post({ url: API_URL.BANNER.SETTINGS_RESET });
   return response.data.data;
 };
 
-// ========== BANNER API ==========
+// Banner CRUD
 
-export const createBanner = async (
-  banner: CreateBannerRequest
-): Promise<BannerConfig> => {
-  const response = await apiClient.post({
-    url: "/banners",
-    data: banner,
-  });
-
+export const createBanner = async (banner: CreateBannerRequest): Promise<BannerConfig> => {
+  const response = await apiClient.post({ url: API_URL.BANNER.CREATE, data: banner });
   return response.data.data;
 };
 
-export const getAllBanners = async (
-  page: number = 1,
-  limit: number = 10
-): Promise<{
-  banners: BannerConfig[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}> => {
-  const response = await apiClient.get({
-    url: "/banners",
-    params: { page, limit },
-  });
-
+export const getAllBanners = async (page = 1, limit = 10) => {
+  const response = await apiClient.get({ url: API_URL.BANNER.GET_ALL, params: { page, limit } });
   return {
     banners: response.data.data.map(transformBanner),
     pagination: response.data.pagination,
@@ -110,54 +87,33 @@ export const getAllBanners = async (
 };
 
 export const getActiveBanners = async (): Promise<BannerConfig[]> => {
-  const response = await apiClient.get({ url: "/banners/active" });
+  const response = await apiClient.get({ url: API_URL.BANNER.GET_ACTIVE });
   return response.data.data;
 };
 
 export const getBannerById = async (id: string): Promise<BannerConfig> => {
-  const response = await apiClient.get({ url: `/banners/${id}` });
+  const response = await apiClient.get({ url: API_URL.BANNER.GET_BY_ID(id) });
   return response.data.data;
 };
 
-export const updateBanner = async (
-  banner: UpdateBannerRequest
-): Promise<BannerConfig> => {
+export const updateBanner = async (banner: UpdateBannerRequest): Promise<BannerConfig> => {
   const { id, ...updateData } = banner;
-  const response = await apiClient.put({
-    url: `/banners/${id}`,
-    data: updateData,
-  });
-
+  const response = await apiClient.put({ url: API_URL.BANNER.UPDATE(id), data: updateData });
   return response.data.data;
 };
 
-export const toggleBanner = async (
-  id: string,
-  isActive: boolean
-): Promise<BannerConfig> => {
-  const response = await apiClient.put({
-    url: `/banners/${id}/toggle`,
-    data: { isActive },
-  });
-
+export const toggleBanner = async (id: string, isActive: boolean): Promise<BannerConfig> => {
+  const response = await apiClient.put({ url: API_URL.BANNER.TOGGLE(id), data: { isActive } });
   return response.data.data;
 };
 
-export const updateBannerOrder = async (
-  id: string,
-  order: number
-): Promise<BannerConfig> => {
-  const response = await apiClient.patch({
-    url: `/banners/${id}/order`,
-    data: { order },
-  });
-
+export const updateBannerOrder = async (id: string, order: number): Promise<BannerConfig> => {
+  const response = await apiClient.patch({ url: API_URL.BANNER.ORDER(id), data: { order } });
   return response.data.data;
 };
 
 export const deleteBanner = async (id: string): Promise<void> => {
-  const response = await apiClient.delete({ url: `/banners/${id}` });
-  return response.data.data;
+  await apiClient.delete({ url: API_URL.BANNER.DELETE(id) });
 };
 
 // ========== BATCH OPERATIONS ==========

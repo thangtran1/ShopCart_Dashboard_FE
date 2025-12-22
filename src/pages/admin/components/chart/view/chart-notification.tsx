@@ -9,11 +9,8 @@ import {
   SelectValue,
 } from "@/ui/select";
 import { useTranslation } from "react-i18next";
-import {
-  ResponseStats,
-  statsNotification,
-  StatsPeriod,
-} from "@/api/services/chartApt";
+import { ResponseStats, StatsPeriod, statsService } from "@/api/services/chartApi";
+
 
 export default function ChartNotification() {
   const { t } = useTranslation();
@@ -26,7 +23,7 @@ export default function ChartNotification() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await statsNotification.getNotificationStats(period);
+        const response = await statsService.notification(period);
         let data = response;
 
         // 🎯 Hiển thị label trực quan

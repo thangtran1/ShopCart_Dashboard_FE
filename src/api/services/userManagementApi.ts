@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
 // ========== FUNCTIONS ==========
@@ -124,25 +125,12 @@ const transformUser = (user: any): User => ({
   updatedAt: user.updatedAt,
 });
 
-// ========== API ENDPOINTS ==========
-export enum UserManagementApi {
-  GetAll = "/user",
-  Create = "/user",
-  GetById = "/user/:id",
-  Update = "/user/:id",
-  Delete = "/user",
-  SoftDelete = "/user/soft-delete",
-  Restore = "/user/restore",
-  BulkUpdateStatus = "/user/bulk/status",
-  AdminUpdateUserPassword = "/user/admin/:id/password",
-}
-
 // ========== API CALLS ==========
 
 // Get all users with pagination and filters
 export const getUsers = async (params?: QueryUserParams) => {
   const response = await apiClient.get({
-    url: UserManagementApi.GetAll,
+    url: API_URL.USER.GetAll,
     params,
   });
 
@@ -163,7 +151,7 @@ export const getUsers = async (params?: QueryUserParams) => {
 // Get user by ID
 export const getUserById = async (id: string): Promise<User> => {
   const response = await apiClient.get({
-    url: UserManagementApi.GetById.replace(":id", id),
+    url: API_URL.USER.GetById.replace(":id", id),
   });
   return transformUser(response.data.data);
 };
@@ -171,7 +159,7 @@ export const getUserById = async (id: string): Promise<User> => {
 // Create new user
 export const createUser = async (data: CreateUserReq) => {
   const response = await apiClient.post<any>({
-    url: UserManagementApi.Create,
+    url: API_URL.USER.Create,
     data,
   });
 
@@ -195,7 +183,7 @@ export const bulkCreateUsers = async (file: File) => {
   formData.append("file", file);
 
   const response = await apiClient.post<any>({
-    url: "/user/bulk-create",
+    url: API_URL.USER.BulkCreate,
     data: formData,
     headers: {
       "Content-Type": "multipart/form-data",
@@ -208,7 +196,7 @@ export const bulkCreateUsers = async (file: File) => {
 // Update user
 export const updateUser = async (id: string, data: UpdateUserReq) => {
   const response = await apiClient.put<any>({
-    url: UserManagementApi.Update.replace(":id", id),
+    url: API_URL.USER.Update.replace(":id", id),
     data,
   });
 
@@ -229,7 +217,7 @@ export const updateUser = async (id: string, data: UpdateUserReq) => {
 // Delete one or many users
 export const deleteUser = async (ids: string | string[]) => {
   return await apiClient.delete({
-    url: UserManagementApi.Delete,
+    url: API_URL.USER.Delete,
     data: { ids },
   });
 };
@@ -237,7 +225,7 @@ export const deleteUser = async (ids: string | string[]) => {
 // Bulk update status
 export const bulkUpdateUserStatus = async (ids: string[], status: string) => {
   return await apiClient.patch({
-    url: UserManagementApi.BulkUpdateStatus,
+    url: API_URL.USER.BulkUpdateStatus,
     data: { ids, status },
   });
 };
@@ -245,7 +233,7 @@ export const bulkUpdateUserStatus = async (ids: string[], status: string) => {
 // Soft delete users
 export const softDeleteUser = async (ids: string | string[]) => {
   return await apiClient.delete({
-    url: UserManagementApi.SoftDelete,
+    url: API_URL.USER.SoftDelete,
     data: { ids },
   });
 };
@@ -253,7 +241,7 @@ export const softDeleteUser = async (ids: string | string[]) => {
 // Restore users
 export const restoreUser = async (ids: string | string[]) => {
   return await apiClient.patch({
-    url: UserManagementApi.Restore,
+    url: API_URL.USER.Restore,
     data: { ids },
   });
 };
@@ -264,7 +252,7 @@ export const adminUpdateUserPassword = async (
   data: AdminUpdateUserPasswordReq
 ) => {
   return await apiClient.patch({
-    url: UserManagementApi.AdminUpdateUserPassword.replace(":id", id),
+    url: API_URL.USER.AdminUpdateUserPassword.replace(":id", id),
     data,
   });
 };

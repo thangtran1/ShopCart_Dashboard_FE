@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
 export interface ListBackupsParams {
@@ -8,73 +9,49 @@ export interface ListBackupsParams {
   pageSize?: number;
 }
 export const databaseAdmin = {
-  // 1. Lấy thông tin cơ sở dữ liệu
   getDatabaseInfo: async () => {
-    const response = await apiClient.get({
-      url: "/database/info",
-    });
+    const response = await apiClient.get({ url: API_URL.DATABASE.INFO });
     return response.data;
   },
 
-  // 2. Tạo bản sao lưu thông tin dữ liệu trong database
   backupDatabase: async () => {
-    const response = await apiClient.post({
-      url: "/database/backup",
-    });
+    const response = await apiClient.post({ url: API_URL.DATABASE.BACKUP });
     return response.data;
   },
-  // 3. Khôi phục thông tin dữ liệu trong database
+
   restoreDatabase: async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-
     const response = await apiClient.post({
-      url: "/database/restore",
+      url: API_URL.DATABASE.RESTORE,
       data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      headers: { "Content-Type": "multipart/form-data" },
     });
-
     return response.data;
   },
-  // 4. Xóa thông tin dữ liệu trong database
+
   deleteDatabase: async () => {
-    const response = await apiClient.delete({
-      url: "/database/delete",
-    });
+    const response = await apiClient.delete({ url: API_URL.DATABASE.DELETE });
     return response.data;
   },
 
-  // 5. Lấy danh sách bản sao lưu
   listBackups: async (params?: ListBackupsParams) => {
-    const response = await apiClient.get({
-      url: "/database/backups",
-      params,
-    });
+    const response = await apiClient.get({ url: API_URL.DATABASE.BACKUPS, params });
     return response.data;
   },
 
-  // 6. Xóa bản sao lưu
   deleteBackup: async (filename: string) => {
-    const response = await apiClient.delete({
-      url: `/database/backups/${filename}`,
-    });
-    return response.data;
-  },
-  // 7. Tải file backup
-  downloadBackupJson: async (filename: string) => {
-    const response = await apiClient.get({
-      url: `/database/backups/download-json/${filename}`,
-    });
+    const response = await apiClient.delete({ url: API_URL.DATABASE.BACKUP_DELETE(filename) });
     return response.data;
   },
 
-  // 8. Xem nội dung file backup
+  downloadBackupJson: async (filename: string) => {
+    const response = await apiClient.get({ url: API_URL.DATABASE.BACKUP_DOWNLOAD_JSON(filename) });
+    return response.data;
+  },
+
   viewBackup: async (filename: string) => {
-    const response = await apiClient.get({
-      url: `/database/backups/view/${filename}`,
-    });
+    const response = await apiClient.get({ url: API_URL.DATABASE.BACKUP_VIEW(filename) });
     return response.data;
   },
 };

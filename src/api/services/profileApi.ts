@@ -1,5 +1,6 @@
 import { BasicStatus } from "@/types/enum";
 import apiClient from "../apiClient";
+import { API_URL } from "@/router/routes/api.route";
 
 // ========== INTERFACES ==========
 export interface UserProfile {
@@ -49,21 +50,9 @@ export interface UpdateSystemSettingsReq {
   systemDescription?: string;
 }
 
-// ========== API ENDPOINTS ==========
-export enum ProfileApi {
-  GetProfile = "/user/profile",
-  UpdateProfile = "/user/profile",
-  AdminChangePassword = "/user/admin/change-password",
-  GetSystemSettings = "/system/settings",
-  UpdateSystemSettings = "/system/settings",
-  GetDefaultLanguage = "/system/default-language",
-}
-
-// ========== API CALLS ==========
-
 // Get user profile
 export const getUserProfile = async (): Promise<UserProfile> => {
-  const response = await apiClient.get({ url: ProfileApi.GetProfile });
+  const response = await apiClient.get({ url: API_URL.PROFILE.GetProfile });
   return response.data.data;
 };
 
@@ -72,7 +61,7 @@ export const updateUserProfile = async (
   data: UpdateProfileReq
 ): Promise<UserProfile> => {
   const response = await apiClient.patch({
-    url: ProfileApi.UpdateProfile,
+    url: API_URL.PROFILE.UpdateProfile,
     data,
   });
   return response.data.data;
@@ -84,7 +73,7 @@ export const changePassword = async (data: {
   newPassword: string;
 }): Promise<void> => {
   await apiClient.patch({
-    url: "/user/profile/password",
+    url: API_URL.PROFILE.ChangePassword,
     data,
   });
 };
@@ -92,7 +81,7 @@ export const changePassword = async (data: {
 // Admin change password
 export const adminChangePassword = async (data: AdminChangePasswordReq) => {
   const response = await apiClient.patch({
-    url: ProfileApi.AdminChangePassword,
+    url: API_URL.PROFILE.AdminChangePassword,
     data,
   });
   return response.data;
@@ -100,7 +89,7 @@ export const adminChangePassword = async (data: AdminChangePasswordReq) => {
 
 // Get system settings
 export const getSystemSettings = async (): Promise<SystemSettings> => {
-  const response = await apiClient.get({ url: ProfileApi.GetSystemSettings });
+  const response = await apiClient.get({ url: API_URL.PROFILE.GetSystemSettings });
   return response.data.data;
 };
 
@@ -109,7 +98,7 @@ export const updateSystemSettings = async (
   data: UpdateSystemSettingsReq
 ): Promise<SystemSettings> => {
   const response = await apiClient.put({
-    url: ProfileApi.UpdateSystemSettings,
+    url: API_URL.PROFILE.UpdateSystemSettings,
     data,
   });
   return response.data.data;
@@ -117,7 +106,7 @@ export const updateSystemSettings = async (
 
 // Get default language
 export const getDefaultLanguage = async (): Promise<string> => {
-  const response = await apiClient.get({ url: ProfileApi.GetDefaultLanguage });
+  const response = await apiClient.get({ url: API_URL.PROFILE.GetDefaultLanguage });
   return response.data.data.defaultLanguage;
 };
 
@@ -127,7 +116,7 @@ export const uploadAvatar = async (file: File): Promise<string> => {
   formData.append("avatar", file);
 
   const response = await apiClient.post({
-    url: "/user/upload-avatar",
+    url: API_URL.PROFILE.UploadAvatar,
     data: formData,
     headers: { "Content-Type": "multipart/form-data" },
   });

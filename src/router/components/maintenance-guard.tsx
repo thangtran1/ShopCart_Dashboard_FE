@@ -1,5 +1,5 @@
+import { maintenanceApi } from "@/api/services/maintenanceApi";
 import { ReactNode, useEffect, useState } from "react";
-import maintenanceApi from "@/api/services/maintenanceApi";
 import { useLocation } from "react-router";
 
 interface MaintenanceGuardProps {

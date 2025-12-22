@@ -1,6 +1,7 @@
 import apiClient from "../apiClient";
 
 import type { UserInfo, UserToken } from "#/entity";
+import { API_URL } from "@/router/routes/api.route";
 
 export interface SignInReq {
   email: string;
@@ -46,29 +47,33 @@ export interface ResetPasswordRes {
 }
 //  forgot Password
 
-export enum UserApi {
-  Login = "/auth/login",
-  ForgotPassword = "/auth/forgot-password",
-  VerifyOtp = "/auth/verify-otp",
-  ResetPassword = "/auth/reset-password",
-  Logout = "/auth/logout",
-}
-
 const login = (data: SignInReq) =>
-  apiClient.post<SignInRes>({ url: UserApi.Login, data });
+  apiClient.post<SignInRes>({
+    url: API_URL.AUTH.LOGIN,
+    data,
+  });
 
 const forgotPassword = (data: ForgotPasswordReq) =>
-  apiClient.post<ForgotPasswordRes>({ url: UserApi.ForgotPassword, data });
+  apiClient.post<ForgotPasswordRes>({
+    url: API_URL.AUTH.FORGOT_PASSWORD,
+    data,
+  });
 
 const verifyOtp = (data: VerifyOtpReq) =>
-  apiClient.post<VerifyOtpRes>({ url: UserApi.VerifyOtp, data });
+  apiClient.post<VerifyOtpRes>({
+    url: API_URL.AUTH.VERIFY_OTP,
+    data,
+  });
 
 const resetPassword = (data: ResetPasswordReq) =>
-  apiClient.post<ResetPasswordRes>({ url: UserApi.ResetPassword, data });
+  apiClient.post<ResetPasswordRes>({
+    url: API_URL.AUTH.RESET_PASSWORD,
+    data,
+  });
 
 const logout = () =>
   apiClient.post<{ data: { success: boolean; message: string } }>({
-    url: UserApi.Logout,
+    url: API_URL.AUTH.LOGOUT,
   });
 
 export default {

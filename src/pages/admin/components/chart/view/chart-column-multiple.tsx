@@ -7,14 +7,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/ui/select";
-import {
-  ResponseStats,
-  StatsPeriod,
-  statsStatusUser,
-} from "@/api/services/chartApt";
 import { useTranslation } from "react-i18next";
 import { Card, CardHeader, CardTitle } from "@/ui/card";
 import { CardContent } from "@/ui/card";
+import { ResponseStats, StatsPeriod, statsService } from "@/api/services/chartApi";
 
 export default function ChartColumnActiveInactive() {
   const { t } = useTranslation();
@@ -27,7 +23,7 @@ export default function ChartColumnActiveInactive() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await statsStatusUser.getStatusUserStats(period);
+        const response = await statsService.user(period);
         setStatusUserStats(response);
       } catch (error) {
         console.error(error);

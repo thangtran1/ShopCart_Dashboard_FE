@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Chart, useChart } from "@/components/admin/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
 import { useTranslation } from "react-i18next";
-import { ResponseStats, statsMaintenance } from "@/api/services/chartApt";
+import { ResponseStats, statsService } from "@/api/services/chartApi";
 
 export default function MaintenanceChart() {
   const { t } = useTranslation();
@@ -13,7 +13,7 @@ export default function MaintenanceChart() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const response = await statsMaintenance.getMaintenanceStats();
+        const response = await statsService.maintenance();
         setStats(response);
       } catch (error) {
         console.error("Error fetching maintenance stats:", error);

@@ -1,5 +1,6 @@
 import { AuthSessionStatus, BasicStatus } from "@/types/enum";
 import apiClient from "../apiClient";
+import { API_URL } from "@/router/routes/api.route";
 export interface ActivityLog {
   id: string;
   ip?: string;
@@ -31,7 +32,6 @@ export interface AuthSessionListResponse {
   };
 }
 
-
 export interface Pagination {
   page: number;
   limit: number;
@@ -40,54 +40,29 @@ export interface Pagination {
   onPageChange: (page: number, pageSize?: number) => void;
 }
 
-export enum ActivityLogApi {
-  GetById = "/activity-log/:id",
-  GetAdmin = "/activity-log/admin",
-  GetAll = "/activity-log/sessions/all",
-}
-
 // Lấy lịch sử hoạt động của user
 export const detailActivityLogForUser = async (userId: string) => {
-  return await apiClient.get<{
-    data: {
-      success: boolean;
-      message: string;
-      data: ActivityLog[];
-    };
-  }>({
-    url: ActivityLogApi.GetById.replace(":id", userId),
+  return await apiClient.get<{ data: { success: boolean; message: string; data: ActivityLog[] } }>({
+    url: API_URL.ACTIVITY_LOG.GET_BY_ID(userId),
   });
 };
 
 // Lấy lịch sử hoạt động của admin
 export const getActivityLogsAdmin = async () => {
-  return await apiClient.get<{
-    data: {
-      success: boolean;
-      message: string;
-      data: ActivityLog[];
-    };
-  }>({
-    url: ActivityLogApi.GetAdmin,
+  return await apiClient.get<{ data: { success: boolean; message: string; data: ActivityLog[] } }>({
+    url: API_URL.ACTIVITY_LOG.GET_ADMIN,
   });
 };
-
-
 
 // Admin API Services
 export const getAllAuthSessions = {
   getAll: async (
     page: number = 1,
     limit: number = 20,
-    options: {
-      keyword?: string;
-      sessionStatus?: AuthSessionStatus;
-      from?: string;
-      to?: string;
-    }
+    options: { keyword?: string; sessionStatus?: AuthSessionStatus; from?: string; to?: string }
   ): Promise<AuthSessionListResponse> => {
     const response = await apiClient.get({
-      url: ActivityLogApi.GetAll,
+      url: API_URL.ACTIVITY_LOG.GET_ALL_SESSIONS,
       params: { page, limit, ...(options || {}) },
     });
     return response.data;

@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
 export const getStatusConfig = (status: MaintenanceStatus) => {
@@ -134,55 +135,54 @@ export interface MaintenanceStatusResponse {
   };
 }
 
-const maintenanceApi = {
+export const maintenanceApi = {
   getList: (params?: MaintenanceFilter) =>
     apiClient.get<MaintenanceListResponse>({
-      url: "/maintenance",
+      url: API_URL.MAINTENANCE.BASE,
       params,
     }),
 
   getById: (id: string) =>
     apiClient.get<MaintenanceResponse>({
-      url: `/maintenance/${id}`,
+      url: API_URL.MAINTENANCE.BY_ID(id),
     }),
 
   create: (data: CreateMaintenanceDto) =>
     apiClient.post<MaintenanceResponse>({
-      url: "/maintenance",
+      url: API_URL.MAINTENANCE.BASE,
       data,
     }),
 
   update: (id: string, data: UpdateMaintenanceDto) =>
     apiClient.patch<MaintenanceResponse>({
-      url: `/maintenance/${id}`,
+      url: API_URL.MAINTENANCE.BY_ID(id),
       data,
     }),
 
   remove: (ids: string | string[]) =>
     apiClient.delete<MaintenanceResponse>({
-      url: `/maintenance`,
+      url: API_URL.MAINTENANCE.BASE,
       data: { ids: Array.isArray(ids) ? ids : [ids] },
     }),
 
   startNow: (id: string) =>
     apiClient.post<MaintenanceResponse>({
-      url: `/maintenance/${id}/start`,
+      url: API_URL.MAINTENANCE.START(id),
     }),
 
   stop: (id: string) =>
     apiClient.post<MaintenanceResponse>({
-      url: `/maintenance/${id}/stop`,
+      url: API_URL.MAINTENANCE.STOP(id),
     }),
 
   cancel: (id: string) =>
     apiClient.post<MaintenanceResponse>({
-      url: `/maintenance/${id}/cancel`,
+      url: API_URL.MAINTENANCE.CANCEL(id),
     }),
 
   getCurrentStatus: () =>
     apiClient.get<MaintenanceStatusResponse>({
-      url: "/maintenance/current-status",
+      url: API_URL.MAINTENANCE.CURRENT_STATUS,
     }),
 };
 
-export default maintenanceApi;

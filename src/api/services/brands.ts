@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 import { BrandStatus } from "@/types/enum";
 export interface CreateBrandDto {
@@ -42,112 +43,50 @@ export interface BrandListResponse {
 }
 
 export const brandService = {
-  create: async (
-    data: CreateBrandDto
-  ): Promise<{ success: boolean; message: string; data: Brand }> => {
-    const response = await apiClient.post({
-      url: "/brands",
-      data,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand;
-    };
+  create: async (data: CreateBrandDto) => {
+    const response = await apiClient.post({ url: API_URL.BRAND.CREATE, data });
+    return response.data;
   },
 
-  getActive: async (
-  ): Promise<{ success: boolean; message: string; data: Brand[] }> => {
-    const response = await apiClient.get({
-      url: "/brands/active",
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand[];
-    };
+  getActive: async () => {
+    const response = await apiClient.get({ url: API_URL.BRAND.GET_ACTIVE });
+    return response.data;
   },
 
   getAllBrands: async (
     page: number = 1,
     limit: number = 20,
-    options: {
-      search?: string;
-      status?: BrandStatus;
-      isFeatured?: boolean;
-    }
+    options: { search?: string; status?: BrandStatus; isFeatured?: boolean } = {}
   ): Promise<BrandListResponse> => {
     const response = await apiClient.get({
-      url: "/brands",
-      params: { page, limit, ...(options || {}) },
+      url: API_URL.BRAND.GET_ALL,
+      params: { page, limit, ...options },
     });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: {
-        data: Brand[];
-        pagination: {
-          total: number;
-          page: number;
-          limit: number;
-          totalPages: number;
-        };
-      };
-    };
+    return response.data;
   },
 
-  getBrandBySlug: async (slug: string): Promise<{ success: boolean; message: string; data: Brand }> => {
-    const response = await apiClient.get({
-      url: `/brands/slug/${slug}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand;
-    };
+  getBrandBySlug: async (slug: string) => {
+    const response = await apiClient.get({ url: API_URL.BRAND.GET_BY_SLUG(slug) });
+    return response.data;
   },
 
-  getBrandById: async (id: string): Promise<{ success: boolean; message: string; data: Brand }> => {
-    const response = await apiClient.get({
-      url: `/brands/${id}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand;
-    };
+  getBrandById: async (id: string) => {
+    const response = await apiClient.get({ url: API_URL.BRAND.GET_BY_ID(id) });
+    return response.data;
   },
 
-  getBrandsFeatured: async (): Promise<{ success: boolean; message: string; data: Brand[] }> => {
-    const response = await apiClient.get({
-      url: `/brands/featured`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand[];
-    };
+  getBrandsFeatured: async () => {
+    const response = await apiClient.get({ url: API_URL.BRAND.GET_FEATURED });
+    return response.data;
   },
 
-  updateBrand: async (id: string, data: CreateBrandDto): Promise<{ success: boolean; message: string; data: Brand }> => {
-    const response = await apiClient.patch({
-      url: `/brands/${id}`,
-      data,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Brand;
-    };
+  updateBrand: async (id: string, data: CreateBrandDto) => {
+    const response = await apiClient.patch({ url: API_URL.BRAND.UPDATE(id), data });
+    return response.data;
   },
 
-  deleteBrand: async (id: string): Promise<{ success: boolean; message: string }> => {
-    const response = await apiClient.delete({
-      url: `/brands/${id}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-    };
+  deleteBrand: async (id: string) => {
+    const response = await apiClient.delete({ url: API_URL.BRAND.DELETE(id) });
+    return response.data;
   },
 };

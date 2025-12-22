@@ -11,11 +11,7 @@ import {
 
 import { Loader2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import {
-  ResponseStats,
-  statsActivityLog,
-  StatsPeriod,
-} from "@/api/services/chartApt";
+import { ResponseStats, StatsPeriod, statsService } from "@/api/services/chartApi";
 
 export default function UserActivityChart() {
   const { t } = useTranslation();
@@ -30,7 +26,7 @@ export default function UserActivityChart() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const response = await statsActivityLog.getActivityStats(period);
+        const response = await statsService.activityLog(period);
         let data = response;
 
         if (period === StatsPeriod.DAY) {

@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 import { NotificationType } from "@/types/enum";
 export interface CreateNotificationDto {
@@ -48,14 +49,10 @@ export const notificationAdminService = {
     data: CreateNotificationDto
   ): Promise<{ success: boolean; message: string; data: Notification }> => {
     const response = await apiClient.post({
-      url: "/notifications",
+      url: API_URL.NOTIFICATIONS.USER.BASE,
       data,
     });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Notification;
-    };
+    return response.data;
   },
 
   getAll: async (
@@ -69,7 +66,7 @@ export const notificationAdminService = {
     }
   ): Promise<NotificationListResponse> => {
     const response = await apiClient.get({
-      url: "/notifications/admin",
+      url: API_URL.NOTIFICATIONS.ADMIN.BASE,
       params: { page, limit, ...(options || {}) },
     });
     return response.data;
@@ -77,7 +74,7 @@ export const notificationAdminService = {
 
   getById: async (id: string): Promise<Notification> => {
     const response = await apiClient.get({
-      url: `/notifications/admin/${id}`,
+      url: API_URL.NOTIFICATIONS.ADMIN.BY_ID(id),
     });
     return response.data;
   },
@@ -87,7 +84,7 @@ export const notificationAdminService = {
     data: Partial<CreateNotificationDto>
   ): Promise<Notification> => {
     const response = await apiClient.put({
-      url: `/notifications/admin/${id}`,
+      url: API_URL.NOTIFICATIONS.ADMIN.BY_ID(id),
       data,
     });
     return response.data;
@@ -95,7 +92,7 @@ export const notificationAdminService = {
 
   delete: async (id: string): Promise<{ message: string }> => {
     const response = await apiClient.delete({
-      url: `/notifications/admin/${id}`,
+      url: API_URL.NOTIFICATIONS.ADMIN.BY_ID(id),
     });
     return response.data;
   },
@@ -103,31 +100,29 @@ export const notificationAdminService = {
 
 // User API Services
 export const notificationUserService = {
-  // Lấy thông báo với trạng thái đã đọc
   getAll: async (
     page: number = 1,
     limit: number = 20
   ): Promise<NotificationListResponse> => {
     const response = await apiClient.get({
-      url: "/notifications",
+      url: API_URL.NOTIFICATIONS.USER.BASE,
       params: { page, limit },
     });
     return response.data;
   },
 
-  // Số lượng thông báo chưa đọc
   getUnreadCount: async (): Promise<UnreadCountResponse> => {
     const response = await apiClient.get({
-      url: "/notifications/unread-count",
+      url: API_URL.NOTIFICATIONS.USER.UNREAD_COUNT,
     });
     return response.data;
   },
 
-  // Đánh dấu đã đọc
   markAsRead: async (id: string): Promise<{ message: string }> => {
     const response = await apiClient.put({
-      url: `/notifications/${id}/mark-read`,
+      url: API_URL.NOTIFICATIONS.USER.MARK_READ(id),
     });
     return response.data;
   },
 };
+

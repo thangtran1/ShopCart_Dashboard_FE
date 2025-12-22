@@ -1,8 +1,3 @@
-import {
-  ResponseStats,
-  statsStatusUser,
-  StatsPeriod,
-} from "@/api/services/chartApt";
 import TotalCard from "../../../dashboard/workbench/total-card";
 import {
   Select,
@@ -13,6 +8,7 @@ import {
 } from "@/ui/select";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import { ResponseStats, StatsPeriod, statsService } from "@/api/services/chartApi";
 export default function StatusUserChart() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState<StatsPeriod>(StatsPeriod.MONTH);
@@ -24,7 +20,7 @@ export default function StatusUserChart() {
   useEffect(() => {
     const fetchStatusUserStats = async () => {
       try {
-        const response = await statsStatusUser.getStatusUserStats(period);
+        const response = await statsService.user(period);
         setStatusUserStats(response);
       } catch (error) {
         console.error("Error fetching status user stats:", error);

@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 export interface CreateFeedbackDto {
   fullName: string;
@@ -34,7 +35,7 @@ export const feedbackService = {
     data: CreateFeedbackDto
   ): Promise<{ success: boolean; message: string; data: Feedback }> => {
     const response = await apiClient.post({
-      url: "/feedback",
+      url: API_URL.FEEDBACK.CREATE,
       data,
     });
     return response.data as {
@@ -47,14 +48,10 @@ export const feedbackService = {
   getAll: async (
     page: number = 1,
     limit: number = 20,
-    options: {
-      search?: string;
-      startDate?: string;
-      endDate?: string;
-    }
+    options: { search?: string; startDate?: string; endDate?: string }
   ): Promise<FeedbackListResponse> => {
     const response = await apiClient.get({
-      url: "/feedback/admin",
+      url: API_URL.FEEDBACK.GET_ALL,
       params: { page, limit, ...(options || {}) },
     });
     return response.data;
@@ -62,14 +59,14 @@ export const feedbackService = {
 
   getById: async (id: string): Promise<Feedback> => {
     const response = await apiClient.get({
-      url: `/feedback/admin/${id}`,
+      url: API_URL.FEEDBACK.GET_BY_ID(id),
     });
     return response.data.data;
   },
 
   delete: async (id: string): Promise<{ message: string }> => {
     const response = await apiClient.delete({
-      url: `/feedback/admin/${id}`,
+      url: API_URL.FEEDBACK.DELETE(id),
     });
     return response.data;
   },

@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 import { CategoryStatus } from "@/types/enum";
 export interface CreateCategoryDto {
@@ -38,101 +39,45 @@ export interface CategoryListResponse {
 }
 
 export const categoryService = {
-  create: async (
-    data: CreateCategoryDto
-  ): Promise<{ success: boolean; message: string; data: Category }> => {
-    const response = await apiClient.post({
-      url: "/categories",
-      data,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Category;
-    };
+  create: async (data: CreateCategoryDto) => {
+    const response = await apiClient.post({ url: API_URL.CATEGORY.CREATE, data });
+    return response.data;
   },
 
-  getActive: async (
-  ): Promise<{ success: boolean; message: string; data: Category[] }> => {
-    const response = await apiClient.get({
-      url: "/categories/active",
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-    data: Category[];
-    };
-  },
-
-  getCategoryBySlug: async (slug: string): Promise<{ success: boolean; message: string; data: Category }> => {
-    const response = await apiClient.get({
-      url: `/categories/slug/${slug}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Category;
-    };
+  getActive: async () => {
+    const response = await apiClient.get({ url: API_URL.CATEGORY.GET_ACTIVE });
+    return response.data;
   },
 
   getAllCategories: async (
     page: number = 1,
     limit: number = 20,
-    options: {
-      search?: string;
-      status?: CategoryStatus;
-      isFeatured?: boolean;
-    }
+    options: { search?: string; status?: CategoryStatus; isFeatured?: boolean } = {}
   ): Promise<CategoryListResponse> => {
     const response = await apiClient.get({
-      url: "/categories",
-      params: { page, limit, ...(options || {}) },
+      url: API_URL.CATEGORY.GET_ALL,
+      params: { page, limit, ...options },
     });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: {
-        data: Category[];
-        pagination: {
-          total: number;
-          page: number;
-          limit: number;
-          totalPages: number;
-        };
-      };
-    };
+    return response.data;
   },
 
-  getCategoryById: async (id: string): Promise<{ success: boolean; message: string; data: Category }> => {
-    const response = await apiClient.get({
-      url: `/categories/${id}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Category;
-    };
+  getCategoryBySlug: async (slug: string) => {
+    const response = await apiClient.get({ url: API_URL.CATEGORY.GET_BY_SLUG(slug) });
+    return response.data;
   },
 
-  updateCategory: async (id: string, data: CreateCategoryDto): Promise<{ success: boolean; message: string; data: Category }> => {
-    const response = await apiClient.patch({
-      url: `/categories/${id}`,
-      data,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-      data: Category;
-    };
+  getCategoryById: async (id: string) => {
+    const response = await apiClient.get({ url: API_URL.CATEGORY.GET_BY_ID(id) });
+    return response.data;
   },
 
-  deleteCategory: async (id: string): Promise<{ success: boolean; message: string }> => {
-    const response = await apiClient.delete({
-      url: `/categories/${id}`,
-    });
-    return response.data as {
-      success: boolean;
-      message: string;
-    };
+  updateCategory: async (id: string, data: CreateCategoryDto) => {
+    const response = await apiClient.patch({ url: API_URL.CATEGORY.UPDATE(id), data });
+    return response.data;
+  },
+
+  deleteCategory: async (id: string) => {
+    const response = await apiClient.delete({ url: API_URL.CATEGORY.DELETE(id) });
+    return response.data;
   },
 };

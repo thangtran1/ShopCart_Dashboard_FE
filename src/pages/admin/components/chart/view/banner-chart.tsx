@@ -11,9 +11,9 @@ import {
 import { useTranslation } from "react-i18next";
 import {
   ResponseStats,
-  statsBanner,
+  statsService,
   StatsPeriod,
-} from "@/api/services/chartApt";
+} from "@/api/services/chartApi";
 
 export default function BannerChart() {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ export default function BannerChart() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await statsBanner.getBannerStats(period);
+        const response = await statsService.banner(period);
         let data = response;
 
         // 🎯 Hiển thị label trực quan

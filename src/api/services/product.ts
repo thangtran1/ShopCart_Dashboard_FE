@@ -1,3 +1,4 @@
+import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 import { ProductStatus } from "@/types/enum";
 
@@ -8,19 +9,16 @@ export interface ProductImageDto {
   alt?: string;
   sortOrder?: number;
 }
-
 export interface CategoryProductDto {
   _id: string;
   name: string;
   slug?: string;
 }
-
 export interface BrandProductDto {
   _id: string;
   name: string;
   slug?: string;
 }
-
 export interface ReviewReplyProductDto {
   _id: string;
   comment: string;
@@ -31,7 +29,6 @@ export interface ReviewReplyProductDto {
   createdAt?: string;
   updatedAt?: string;
 }
-
 export interface ReviewProductDto {
   _id: string;
   rating: number;
@@ -43,13 +40,11 @@ export interface ReviewProductDto {
   createdAt?: string;
   updatedAt?: string;
 }
-
 export interface DimensionsDto {
   length: number;
   width: number;
   height: number;
 }
-
 export interface CreateProductDto {
   name: string;
   productType?: string
@@ -75,7 +70,6 @@ export interface CreateProductDto {
   tags?: string[];
   sortOrder?: number;
 }
-
 export interface Product {
   _id: string;
   name: string;
@@ -110,7 +104,6 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
 }
-
 export interface ProductListResponse {
   success: boolean;
   message: string;
@@ -124,13 +117,11 @@ export interface ProductListResponse {
     };
   };
 }
-
 export interface CreateReviewDto {
   rating: number;
   comment: string;
   images?: string[];
 }
-
 export interface ReplyReviewDto {
   comment: string;
 }
@@ -139,32 +130,32 @@ export interface ReplyReviewDto {
 
 export const productService = {
   create: async (data: CreateProductDto): Promise<{ success: boolean; message: string; data: Product }> => {
-    const response = await apiClient.post({ url: "/products", data });
+    const response = await apiClient.post({ url: API_URL.PRODUCT.CREATE, data });
     return response.data as { success: boolean; message: string; data: Product };
   },
 
   getProductsByFeatured: async (): Promise<{ success: boolean; message: string; data: Product[] }> => {
-    const response = await apiClient.get({ url: "/products/featured" });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.FEATURED });
     return response.data as { success: boolean; message: string; data: Product[] };
   },
 
   getProductsByNew: async (): Promise<{ success: boolean; message: string; data: Product[] }> => {
-    const response = await apiClient.get({ url: "/products/new" });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.NEW });
     return response.data as { success: boolean; message: string; data: Product[] };
   },
 
   getProductsByBestSeller: async (): Promise<{ success: boolean; message: string; data: Product[] }> => {
-    const response = await apiClient.get({ url: "/products/best-sellers" });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.BEST_SELLERS });
     return response.data as { success: boolean; message: string; data: Product[] };
   },
 
   getProductsByDeal: async (): Promise<{ success: boolean; message: string; data: Product[] }> => {
-    const response = await apiClient.get({ url: "/products/deals" });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.DEALS });
     return response.data as { success: boolean; message: string; data: Product[] };
   },
 
   updateProduct: async (id: string, data: CreateProductDto): Promise<{ success: boolean; message: string; data: Product }> => {
-    const response = await apiClient.patch({ url: `/products/${id}`, data });
+    const response = await apiClient.patch({ url: API_URL.PRODUCT.BY_ID(id), data });
     return response.data as { success: boolean; message: string; data: Product };
   },
 
@@ -173,7 +164,7 @@ export const productService = {
     limit: number = 20,
     options: { search?: string; status?: ProductStatus; isFeatured?: boolean, productType?: string }
   ): Promise<ProductListResponse> => {
-    const response = await apiClient.get({ url: "/products", params: { page, limit, ...(options || {}) } });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.GET_ALL, params: { page, limit, ...(options || {}) } });
     return response.data as ProductListResponse;
   },
 
@@ -181,7 +172,7 @@ export const productService = {
     options?: { productType?: string } 
   ): Promise<{ success: boolean; message: string; data: Product[] }> => {
     const response = await apiClient.get({
-      url: "/products/active",
+      url: API_URL.PRODUCT.GET_ACTIVE,
       params: options || {},
     });
     return response.data as {
@@ -192,12 +183,12 @@ export const productService = {
   },
 
   getProductById: async (id: string): Promise<{ success: boolean; message: string; data: Product }> => {
-    const response = await apiClient.get({ url: `/products/${id}` });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.BY_ID(id) });
     return response.data as { success: boolean; message: string; data: Product };
   },
 
   getProductBySlug: async (slug: string): Promise<{ success: boolean; message: string; data: Product }> => {
-    const response = await apiClient.get({ url: `/products/slug/${slug}` });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.BY_SLUG(slug) });
     return response.data as { success: boolean; message: string; data: Product };
   },
 
@@ -207,7 +198,7 @@ export const productService = {
     categoryId: string,
     options: { search?: string; status?: ProductStatus; isFeatured?: boolean }
   ): Promise<ProductListResponse> => {
-    const response = await apiClient.get({ url: `/products/category/${categoryId}`, params: { page, limit, ...(options || {}), categoryId } });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.BY_CATEGORY(categoryId), params: { page, limit, ...(options || {}), categoryId } });
     return response.data as ProductListResponse;
   },
 
@@ -217,32 +208,32 @@ export const productService = {
     brandId: string,
     options: { search?: string; status?: ProductStatus; isFeatured?: boolean }
   ): Promise<ProductListResponse> => {
-    const response = await apiClient.get({ url: `/products/brand/${brandId}`, params: { page, limit, ...(options || {}), brandId } });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.BY_BRAND(brandId), params: { page, limit, ...(options || {}), brandId } });
     return response.data as ProductListResponse;
   },
 
   getProductByRelated: async (productId: string): Promise<{ success: boolean; message: string; data: Product[] }> => {
-    const response = await apiClient.get({ url: `/products/${productId}/related`, params: { productId } });
+    const response = await apiClient.get({ url: API_URL.PRODUCT.RELATED(productId), params: { productId } });
     return response.data as { success: boolean; message: string; data: Product[] };
   },
 
   deleteProduct: async (id: string): Promise<{ success: boolean; message: string }> => {
-    const response = await apiClient.delete({ url: `/products/${id}` });
+    const response = await apiClient.delete({ url: API_URL.PRODUCT.BY_ID(id) });
     return response.data as { success: boolean; message: string };
   },
 
   addReview: async (productId: string, data: CreateReviewDto): Promise<{ success: boolean; message: string; data: any }> => {
-    const response = await apiClient.post({ url: `/products/${productId}/reviews`, data });
+    const response = await apiClient.post({ url: API_URL.PRODUCT.REVIEWS(productId), data });
     return response.data as { success: boolean; message: string; data: ReviewProductDto };
   },
 
   replyToReview: async (productId: string, reviewId: string, data: ReplyReviewDto): Promise<{ success: boolean; message: string; data: any }> => {
-    const response = await apiClient.post({ url: `/products/${productId}/reviews/${reviewId}/reply`, data });
+    const response = await apiClient.post({ url: API_URL.PRODUCT.REVIEW_REPLY(productId, reviewId), data });
     return response.data as { success: boolean; message: string; data: ReviewProductDto };
   },
 
   deleteReview: async (productId: string, reviewId: string): Promise<{ success: boolean; message: string }> => {
-    const response = await apiClient.delete({ url: `/products/${productId}/reviews/${reviewId}` });
+    const response = await apiClient.delete({ url: API_URL.PRODUCT.REVIEW_DELETE(productId, reviewId) });
     return response.data as { success: boolean; message: string };
   },
 };
