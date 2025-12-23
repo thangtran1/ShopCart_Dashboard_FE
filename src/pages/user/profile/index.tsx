@@ -10,6 +10,7 @@ import SecurityTab from "./components/SecurityTab";
 import { useTranslation } from "react-i18next";
 import { uploadAvatar, updateUserProfile } from "@/api/services/profileApi";
 import { toast } from "sonner";
+import DashboardProfile from "./components/DashboardProfileTab";
 
 export default function UserProfile() {
   const { t } = useTranslation();
@@ -94,6 +95,16 @@ export default function UserProfile() {
         </span>
       ),
       children: <SecurityTab />,
+    },
+    {
+      key: "TEST",
+      label: (
+        <span className="flex items-center gap-2">
+          <Icon icon="lucide:shield" className="h-4 w-4" />
+          {t("profile.security")}
+        </span>
+      ),
+      children: <DashboardProfile />,
     },
   ];
 

@@ -1,0 +1,166 @@
+import type { ReactNode } from "react"
+import {
+  HomeOutlined,
+  SearchOutlined,
+  HeartOutlined,
+  UserOutlined,
+  SettingOutlined,
+  ShopOutlined,
+  FileTextOutlined,
+  MailOutlined,
+  SafetyOutlined,
+  LogoutOutlined,
+  TagOutlined,
+  HistoryOutlined,
+  EnvironmentOutlined,
+  LinkOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons"
+import { DiscountContent } from "../components/tab-content/discount-content"
+import { HistoryContent } from "../components/tab-content/history-content"
+import { MemberContent } from "../components/tab-content/member-content"
+import { AddressContent, StudentContent, LinkedContent, WarrantyContent, PreferencesContent, StoreContent, PolicyContent, SupportContent, TermsContent } from "../components/tab-content/other-content"
+import { OverviewContent } from "../components/tab-content/overview-content"
+import InforContent from "../components/tab-content/infor-content"
+
+export type TabKey =
+  | "overview"
+  | "member"
+  | "discount"
+  | "history"
+  | "address"
+  | "infor"
+  | "student"
+  | "linked"
+  | "warranty"
+  | "preferences"
+  | "store"
+  | "policy"
+  | "support"
+  | "terms"
+  | "logout"
+
+export interface TabConfig {
+  key: TabKey
+  label: string
+  icon: ReactNode
+  component: ReactNode
+  showInTopTabs?: boolean
+  showInSidebar?: boolean
+}
+
+export const tabsConfig: TabConfig[] = [
+  {
+    key: "overview",
+    label: "Tổng quan",
+    icon: <HomeOutlined />,
+    component: <OverviewContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "member",
+    label: "Hạng thành viên",
+    icon: <HeartOutlined />,
+    component: <MemberContent />,
+    showInTopTabs: true,
+    showInSidebar: true,
+  },
+  {
+    key: "discount",
+    label: "Mã giảm giá",
+    icon: <TagOutlined />,
+    component: <DiscountContent />,
+    showInTopTabs: true,
+  },
+  {
+    key: "history",
+    label: "Lịch sử mua hàng",
+    icon: <HistoryOutlined />,
+    component: <HistoryContent />,
+    showInTopTabs: true,
+    showInSidebar: true,
+  },
+  {
+    key: "address",
+    label: "Số địa chỉ",
+    icon: <EnvironmentOutlined />,
+    component: <AddressContent />,
+    showInTopTabs: true,
+  },
+  {
+    key: "infor",
+    label: "Thông tin tài khoản",
+    icon: <InfoCircleOutlined />,
+    component: <InforContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "student",
+    label: "S-Student & S-Teacher",
+    icon: <UserOutlined />,
+    component: <StudentContent />,
+    showInTopTabs: true,
+    showInSidebar: true,
+  },
+  {
+    key: "linked",
+    label: "Liên kết tài khoản",
+    icon: <LinkOutlined />,
+    component: <LinkedContent />,
+    showInTopTabs: true,
+    showInSidebar: true,
+  },
+  {
+    key: "warranty",
+    label: "Tra cứu bảo hành",
+    icon: <SearchOutlined />,
+    component: <WarrantyContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "preferences",
+    label: "Ưu đãi S-Student và S-Teacher",
+    icon: <SettingOutlined />,
+    component: <PreferencesContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "store",
+    label: "Tìm kiếm cửa hàng",
+    icon: <ShopOutlined />,
+    component: <StoreContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "policy",
+    label: "Chính sách bảo hành",
+    icon: <FileTextOutlined />,
+    component: <PolicyContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "support",
+    label: "Góp ý - Phản hồi - Hỗ trợ",
+    icon: <MailOutlined />,
+    component: <SupportContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "terms",
+    label: "Điều khoản sử dụng",
+    icon: <SafetyOutlined />,
+    component: <TermsContent />,
+    showInSidebar: true,
+  },
+  {
+    key: "logout",
+    label: "Đăng xuất",
+    icon: <LogoutOutlined />,
+    component: <div className="p-6 rounded-lg">Đăng xuất...</div>,
+    showInSidebar: true,
+  },
+]
+
+export const getTopTabs = () => tabsConfig.filter((tab) => tab.showInTopTabs)
+export const getSidebarTabs = () => tabsConfig.filter((tab) => tab.showInSidebar)
+export const getTabByKey = (key: TabKey) => tabsConfig.find((tab) => tab.key === key)
