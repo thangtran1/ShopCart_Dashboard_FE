@@ -51,16 +51,15 @@ const OrdersComponent = ({ orders }: { orders: Order[] }) => {
                   <TableCell>
                     {order?.status && (
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          order.status === "paid"
-                            ? "bg-success text-white"
-                            : "bg-warning text-white"
-                        }`}
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === "paid"
+                          ? "bg-success text-white"
+                          : "bg-warning text-white"
+                          }`}
                       >
                         {order.status === "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
                       </span>
                     )}
-                  </TableCell>  
+                  </TableCell>
                   <TableCell
                     onClick={(event) => {
                       event.stopPropagation();

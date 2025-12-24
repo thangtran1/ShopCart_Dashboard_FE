@@ -48,16 +48,6 @@ export function OverviewContent() {
       price: "22.990.000đ",
       originalPrice: "25.990.000đ",
     },
-    {
-      name: "Samsung Galaxy S24 Plus 12GB 256GB",
-      price: "16.190.000đ",
-      originalPrice: "18.990.000đ",
-    },
-    {
-      name: "Xiaomi Redmi Note 14 6GB 128GB",
-      price: "4.390.000đ",
-      originalPrice: "4.990.000đ",
-    },
   ];
 
   return (
@@ -89,9 +79,9 @@ export function OverviewContent() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3">
         {/* Recent Orders */}
-        <div className="col-span-2 rounded-lg shadow-sm p-6">
+        <div className="col-span-2 rounded-lg shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Đơn hàng gần đây</h2>
           </div>
@@ -140,7 +130,7 @@ export function OverviewContent() {
         </div>
 
         {/* Your Benefits */}
-        <div className=" rounded-lg shadow-sm p-6">
+        <div className=" rounded-lg shadow-sm">
           <h2 className="text-lg font-semibold mb-4">Ưu đãi của bạn</h2>
           <div className="border border-border rounded-lg p-4">
             <h3 className="font-medium mb-2">[EMAIL] ƯU ĐÃI KHÁCH HÀNG...</h3>
@@ -163,14 +153,14 @@ export function OverviewContent() {
       </div>
 
       {/* Favorite Products */}
-      <div className="rounded-lg shadow-sm p-6">
+      <div className="rounded-lg shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">Sản phẩm yêu thích</h2>
           <button className="text-blue-600 text-sm hover:underline">
             Xem tất cả →
           </button>
         </div>
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {favoriteProducts.map((product, index) => (
             <div
               key={index}
@@ -195,13 +185,9 @@ export function OverviewContent() {
       </div>
 
       {/* Promotions */}
-      <div className="rounded-lg shadow-sm p-6">
+      <div className="rounded-lg shadow-sm">
         <h2 className="text-lg font-semibold mb-4">Chương trình nổi bật</h2>
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-gradient-to-r from-pink-100 to-pink-50 rounded-lg p-6 flex items-center justify-center">
-            <span className="text-4xl">🎓</span>
-            <span className="ml-3 font-semibold">S-Student & S-Teacher</span>
-          </div>
           <div className="bg-gradient-to-r from-purple-900 to-purple-700 rounded-lg p-6 flex items-center justify-center text-foreground">
             <span className="text-4xl">💻</span>
             <span className="ml-3 font-semibold">Đặc quyền Online</span>

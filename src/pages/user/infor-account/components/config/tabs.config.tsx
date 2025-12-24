@@ -17,10 +17,9 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons"
 import { OverviewContent } from "../tab-content/overview-content"
-import { MemberContent } from "../tab-content/member-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
-import { AddressContent, LinkedContent, PolicyContent, PreferencesContent, StoreContent, StudentContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import { PolicyContent, StoreContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
 
 export type TabKey =
@@ -47,6 +46,7 @@ export interface TabConfig {
   component: ReactNode
   showInTopTabs?: boolean
   showInSidebar?: boolean
+  sidebarKey?: TabKey;
 }
 
 export const tabsConfig: TabConfig[] = [
@@ -55,14 +55,6 @@ export const tabsConfig: TabConfig[] = [
     label: "Tổng quan",
     icon: <HomeOutlined />,
     component: <OverviewContent />,
-    showInSidebar: true,
-  },
-  {
-    key: "member",
-    label: "Hạng thành viên",
-    icon: <HeartOutlined />,
-    component: <MemberContent />,
-    showInTopTabs: true,
     showInSidebar: true,
   },
   {
@@ -84,8 +76,9 @@ export const tabsConfig: TabConfig[] = [
     key: "address",
     label: "Số địa chỉ",
     icon: <EnvironmentOutlined />,
-    component: <AddressContent />,
+    component: <InforContent />,
     showInTopTabs: true,
+    sidebarKey: "infor"
   },
   {
     key: "infor",
@@ -95,33 +88,18 @@ export const tabsConfig: TabConfig[] = [
     showInSidebar: true,
   },
   {
-    key: "student",
-    label: "S-Student & S-Teacher",
-    icon: <UserOutlined />,
-    component: <StudentContent />,
-    showInTopTabs: true,
-    showInSidebar: true,
-  },
-  {
     key: "linked",
     label: "Liên kết tài khoản",
     icon: <LinkOutlined />,
-    component: <LinkedContent />,
+    component: <InforContent />,
     showInTopTabs: true,
-    showInSidebar: true,
+    sidebarKey: "infor"
   },
   {
     key: "warranty",
     label: "Tra cứu bảo hành",
     icon: <SearchOutlined />,
     component: <WarrantyContent />,
-    showInSidebar: true,
-  },
-  {
-    key: "preferences",
-    label: "Ưu đãi S-Student và S-Teacher",
-    icon: <SettingOutlined />,
-    component: <PreferencesContent />,
     showInSidebar: true,
   },
   {
@@ -156,7 +134,7 @@ export const tabsConfig: TabConfig[] = [
     key: "logout",
     label: "Đăng xuất",
     icon: <LogoutOutlined />,
-    component: <div className="p-6 rounded-lg">Đăng xuất...</div>,
+    component: <div>Đăng xuất...</div>,
     showInSidebar: true,
   },
 ]

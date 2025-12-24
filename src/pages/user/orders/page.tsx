@@ -6,8 +6,10 @@ import useStore from "@/store/store";
 import Title from "@/ui/title";
 import { useUserInfo } from "@/store/userStore";
 import NoAccess from "@/components/user/NoAccess";
-
-const OrdersPage = () => {
+interface OrdersPageProps {
+  hideTitle?: boolean;
+}
+const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
   const orders = useStore((state) => state.orders);
   const userInfo = useUserInfo();
 
@@ -17,9 +19,11 @@ const OrdersPage = () => {
         <NoAccess details="Vui lòng đăng nhập để xem danh sách đơn hàng của bạn và theo dõi trạng thái mua sắm." />
       ) : orders?.length ? (
         <>
-          <div className="flex items-center gap-2 pb-3">
-            <Title>Danh sách đơn hàng</Title>
-          </div>
+          {!hideTitle && (
+            <div className="flex items-center gap-2 pb-3">
+              <Title>Danh sách đơn hàng</Title>
+            </div>
+          )}
 
           <Card className="w-full">
             <CardContent>

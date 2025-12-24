@@ -12,7 +12,7 @@ function PageContent() {
   const topTabItems = getTopTabs().map((tab) => ({
     key: tab.key,
     label: (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         {tab.icon}
         <span>{tab.label}</span>
       </div>
@@ -25,25 +25,21 @@ function PageContent() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Top Tabs */}
-      <div className="border-b">
-        <div className="">
-          <Tabs
-            activeKey={activeTab}
-            onChange={(key) => setActiveTab(key as TabKey)}
-            items={topTabItems}
-            className="top-tabs"
-          />
-        </div>
+      <div className="border-t mt-4">
+        <Tabs
+          activeKey={activeTab}
+          onChange={(key) => setActiveTab(key as TabKey)}
+          items={topTabItems}
+        />
       </div>
 
-      {/* Main Content Area */}
       <div className="mx-auto py-6">
-        <div className="flex gap-2">
+        <div className="flex gap-4">
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          {/* Content Area - Dynamic rendering from config */}
-          <div className="flex-1">{currentTab?.component}</div>
+          <div className="flex-1 transition-all duration-300">
+            {currentTab?.component}
+          </div>
         </div>
       </div>
     </div>

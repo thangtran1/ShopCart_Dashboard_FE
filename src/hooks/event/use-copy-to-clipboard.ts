@@ -22,7 +22,7 @@ export default function useCopyToClipboard(): ReturnType {
     try {
       await navigator.clipboard.writeText(text);
       setCopiedText(text);
-      toast.success("Copied!");
+      toast.success(`Copied: ${text}`);
       return true;
     } catch (error) {
       console.warn("Copy failed", error);

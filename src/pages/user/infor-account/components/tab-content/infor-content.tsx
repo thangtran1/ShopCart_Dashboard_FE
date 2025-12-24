@@ -1,17 +1,15 @@
 import { useState } from "react";
-import { Drawer, Button, Input, Radio, Divider, Tag } from "antd";
+import { Drawer, Button, Input, Radio, Divider, Tag, Form } from "antd";
 import { toast } from "sonner";
 import { Label } from "@/ui/label";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { Badge } from "@/ui/badge";
+import { useMutation } from "@tanstack/react-query";
+import { changePassword } from "@/api/services/profileApi";
 
 export default function InforContent() {
-  const [user, setUser] = useState({
-    fullName: "Lê Hồng Quang",
-    phone: "0389215396",
-    email: "kimochi2023@gmail.com",
-    gender: "-",
-    birthday: "11/11/2000",
-    defaultAddress: "Admin123@, Phường Nguyễn Thị Minh Khai, Thành phố Bắc Kạn",
-  });
+  const { profile } = useUserProfile();
+  const [form] = Form.useForm();
 
   const [addresses, setAddresses] = useState([
     {
@@ -34,10 +32,6 @@ export default function InforContent() {
     },
   ]);
 
-  const [passwordInfo] = useState({
-    lastUpdated: "11/12/2024 14:42",
-  });
-
   const [linkedAccounts, setLinkedAccounts] = useState({
     google: true,
     zalo: false,
@@ -49,42 +43,57 @@ export default function InforContent() {
   >("updateUser");
 
   const [formData, setFormData] = useState<any>({});
-  const [editingId, setEditingId] = useState<number | null>(null);
 
   const openDrawer = (type: typeof drawerType, data?: any) => {
     setDrawerType(type);
     setFormData(data || {});
-    setEditingId(data?.id || null);
     setDrawerVisible(true);
   };
 
   const closeDrawer = () => {
     setDrawerVisible(false);
     setFormData({});
-    setEditingId(null);
   };
 
-  const handleSave = () => {
+
+  const { mutateAsync: submitChangePassword, isPending } = useMutation({
+    mutationFn: (data: { currentPassword: string; newPassword: string }) =>
+      changePassword({
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      }),
+    onSuccess: () => {
+      form.resetFields();
+      toast.success("Đổi mật khẩu thành công");
+      closeDrawer();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Có lỗi khi đổi mật khẩu");
+    },
+  });
+
+
+  const handleSave = async () => {
     if (drawerType === "updateUser") {
-      setUser({ ...user, ...formData });
       toast.success("Cập nhật thông tin thành công");
     }
 
     if (drawerType === "updatePassword") {
-      toast.success("Đổi mật khẩu thành công");
+      try {
+        const values = await form.validateFields();
+        await submitChangePassword(values);
+      } catch (err) {
+        console.log("Validation failed", err);
+        return;
+      }
     }
 
+
     if (drawerType === "addAddress") {
-      setAddresses([...addresses, { ...formData, id: Date.now() }]);
       toast.success("Thêm địa chỉ thành công");
     }
 
     if (drawerType === "updateAddress") {
-      setAddresses(
-        addresses.map((item) =>
-          item.id === editingId ? { ...item, ...formData } : item
-        )
-      );
       toast.success("Cập nhật địa chỉ thành công");
     }
 
@@ -115,8 +124,8 @@ export default function InforContent() {
     },
   };
   return (
-    <div className="space-y-6 p-5">
-      <div className="rounded-xl border shadow-sm bg-background p-6">
+    <div className="space-y-6">
+      <div className="rounded-xl border shadow-sm bg-background p-4">
         {/* ===== Header ===== */}
         <div className="flex justify-between items-start mb-5">
           <div>
@@ -131,7 +140,7 @@ export default function InforContent() {
           <Button
             type="link"
             danger
-            onClick={() => openDrawer("updateUser", user)}
+            onClick={() => openDrawer("updateUser", profile)}
           >
             Cập nhật
           </Button>
@@ -142,29 +151,41 @@ export default function InforContent() {
           <div>
             <p className="text-muted-foreground">Họ và tên</p>
             <p className="font-medium text-foreground mt-0.5">
-              {user.fullName}
+              {profile?.name}
             </p>
           </div>
 
           <div>
             <p className="text-muted-foreground">Số điện thoại</p>
-            <p className="font-medium text-foreground mt-0.5">{user.phone}</p>
+            <p className="font-medium text-foreground mt-0.5">{profile?.phone}</p>
           </div>
 
           <div>
-            <p className="text-muted-foreground">Giới tính</p>
-            <p className="font-medium text-foreground mt-0.5">{user.gender}</p>
+            <p className="text-muted-foreground">Vai trò</p>
+            <p className="font-medium text-foreground mt-0.5">{profile?.role}</p>
           </div>
 
           <div>
             <p className="text-muted-foreground">Email</p>
-            <p className="font-medium text-foreground mt-0.5">{user.email}</p>
+            <p className="font-medium text-foreground mt-0.5">{profile?.email}</p>
+          </div>
+
+          <div>
+            <p className="text-muted-foreground">Bio</p>
+            <p className="font-medium text-foreground mt-0.5">{profile?.bio}</p>
+          </div>
+
+          <div>
+            <p className="text-muted-foreground mb-2">Trạng thái</p>
+            <Badge variant={'success'} className="uppercase">{profile?.status}</Badge>
           </div>
 
           <div>
             <p className="text-muted-foreground">Ngày sinh</p>
             <p className="font-medium text-foreground mt-0.5">
-              {user.birthday}
+              {profile?.dateOfBirth
+                ? new Date(profile.dateOfBirth).toLocaleDateString("vi-VN")
+                : "-"}
             </p>
           </div>
 
@@ -172,7 +193,7 @@ export default function InforContent() {
           <div className="md:col-span-2">
             <p className="text-muted-foreground">Địa chỉ mặc định</p>
             <p className="font-medium text-foreground mt-0.5 leading-relaxed">
-              {user.defaultAddress}
+              {profile?.address}
             </p>
           </div>
         </div>
@@ -232,9 +253,6 @@ export default function InforContent() {
         <div className="flex justify-between items-center">
           <div>
             <h2 className="font-semibold text-lg">Mật khẩu</h2>
-            <p className="text-xs text-foreground mt-1">
-              Cập nhật lần cuối: {passwordInfo.lastUpdated}
-            </p>
           </div>
           <Button
             type="link"
@@ -329,6 +347,7 @@ export default function InforContent() {
               size="large"
               type="primary"
               className="flex-1"
+              loading={isPending}
               onClick={handleSave}
             >
               Lưu thay đổi
@@ -338,34 +357,42 @@ export default function InforContent() {
       >
         <div className="!space-y-4">
           {drawerType === "updatePassword" ? (
-            <>
-              <div className="space-y-1">
-                <Label className="text-md font-medium text-foreground">
-                  Mật khẩu hiện tại
-                </Label>
-                <Input.Password
-                  size="large"
-                  placeholder="Nhập mật khẩu hiện tại"
-                />
-              </div>
+            <Form form={form} layout="vertical">
+              <Form.Item
+                label="Mật khẩu hiện tại"
+                name="currentPassword"
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu hiện tại" }]}
+              >
+                <Input.Password size="large" placeholder="Nhập mật khẩu hiện tại" />
+              </Form.Item>
 
-              <div className="space-y-1">
-                <Label className="text-md font-medium text-foreground">
-                  Mật khẩu mới
-                </Label>
+              <Form.Item
+                label="Mật khẩu mới"
+                name="newPassword"
+                rules={[{ required: true, message: "Vui lòng nhập mật khẩu mới" }]}
+              >
                 <Input.Password size="large" placeholder="Nhập mật khẩu mới" />
-              </div>
+              </Form.Item>
 
-              <div className="space-y-1">
-                <Label className="text-md font-medium text-foreground">
-                  Nhập lại mật khẩu mới
-                </Label>
-                <Input.Password
-                  size="large"
-                  placeholder="Nhập lại mật khẩu mới"
-                />
-              </div>
-            </>
+              <Form.Item
+                label="Nhập lại mật khẩu mới"
+                name="confirmPassword"
+                dependencies={['newPassword']}
+                rules={[
+                  { required: true, message: "Vui lòng xác nhận mật khẩu mới" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('newPassword') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Mật khẩu xác nhận không khớp'));
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password size="large" placeholder="Nhập lại mật khẩu mới" />
+              </Form.Item>
+            </Form>
           ) : (
             <>
               <div className="space-y-1">
