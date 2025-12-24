@@ -34,6 +34,7 @@ import Help from "@/pages/user/public/help";
 import NewsPage from "@/pages/user/news/page";
 import NewSlugDetail from "@/pages/user/news/[slug]/page";
 import DetailBrand from "@/pages/user/brand/[slug]/page";
+import InforAccount from "@/pages/user/infor-account";
 
 const { VITE_APP_ADMIN: HOMEPAGE, VITE_API_URL_MAINTENANCE: MAIN_APP } =
   import.meta.env;
@@ -127,6 +128,10 @@ export default function Router() {
       {
         path: "ho-so",
         children: [{ index: true, element: <UserProfile /> }],
+      },
+      {
+        path: "infor-account",
+        children: [{ index: true, element: <InforAccount /> }],
       },
       {
         path: "all-news",

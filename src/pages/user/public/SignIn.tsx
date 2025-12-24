@@ -8,6 +8,7 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import userApi from "@/api/services/userApi";
 import { useTranslation } from "react-i18next";
 import { Button } from "antd";
+import Logo from "@/ui/logo";
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -104,6 +105,15 @@ const SignIn = () => {
                   <Shield className="w-4 h-4" />
                 </Button>
               )}
+
+              {/* Truy cập Tmember */}
+              <Button
+                onClick={() => router.push("/infor-account")}
+                className="w-full !border-none !flex !justify-between items-center"
+              >
+                <span>Truy cập Tmember</span>
+                <Logo iconClassName="w-6 h-6" hideText />
+              </Button>
 
               {/* Hồ sơ */}
               <Button

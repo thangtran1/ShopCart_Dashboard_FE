@@ -16,12 +16,12 @@ import {
   LinkOutlined,
   InfoCircleOutlined,
 } from "@ant-design/icons"
-import { DiscountContent } from "../components/tab-content/discount-content"
-import { HistoryContent } from "../components/tab-content/history-content"
-import { MemberContent } from "../components/tab-content/member-content"
-import { AddressContent, StudentContent, LinkedContent, WarrantyContent, PreferencesContent, StoreContent, PolicyContent, SupportContent, TermsContent } from "../components/tab-content/other-content"
-import { OverviewContent } from "../components/tab-content/overview-content"
-import InforContent from "../components/tab-content/infor-content"
+import { OverviewContent } from "../tab-content/overview-content"
+import { MemberContent } from "../tab-content/member-content"
+import { DiscountContent } from "../tab-content/discount-content"
+import { HistoryContent } from "../tab-content/history-content"
+import { AddressContent, LinkedContent, PolicyContent, PreferencesContent, StoreContent, StudentContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import InforContent from "../tab-content/infor-content"
 
 export type TabKey =
   | "overview"

@@ -2,9 +2,9 @@
 
 import { Suspense, useState } from "react"
 import { Tabs } from "antd"
-import { getTabByKey, getTopTabs, TabKey } from "../dashboardProfile/config/tabs.config"
-import { Header } from "../dashboardProfile/components/header"
-import { Sidebar } from "../dashboardProfile/components/sidebar"
+import { getTabByKey, getTopTabs, TabKey } from "./components/config/tabs.config"
+import { Header } from "./components/header"
+import { Sidebar } from "./components/sidebar"
 
 function PageContent() {
   const [activeTab, setActiveTab] = useState<TabKey>("overview")
@@ -50,7 +50,7 @@ function PageContent() {
   )
 }
 
-export default function DashboardProfile() {
+export default function InforAccount() {
   return (
     <Suspense fallback={null}>
       <PageContent />

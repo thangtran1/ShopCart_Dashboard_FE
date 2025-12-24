@@ -5,12 +5,11 @@ import { useSearchParams } from "react-router";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Separator } from "@/ui/separator";
 import { Icon } from "@/components/icon";
-import PersonalInfoTab from "./components/PersonalInfoTab";
-import SecurityTab from "./components/SecurityTab";
 import { useTranslation } from "react-i18next";
 import { uploadAvatar, updateUserProfile } from "@/api/services/profileApi";
 import { toast } from "sonner";
-import DashboardProfile from "./components/DashboardProfileTab";
+import PersonalInfoTab from "./components/PersonalInfoTab";
+import SecurityTab from "./components/SecurityTab";
 
 export default function UserProfile() {
   const { t } = useTranslation();
@@ -64,7 +63,7 @@ export default function UserProfile() {
   // Error state
   if (error) {
     return (
-      <Card className="max-w-md mx-auto text-center">
+      <Card className="mx-auto text-center">
         <div className="text-5xl mb-4">⚠️</div>
         <h3 className="text-xl font-bold mb-2">{t("profile.error")}</h3>
         <p className="text-muted-foreground mb-4">{error}</p>
@@ -96,16 +95,6 @@ export default function UserProfile() {
       ),
       children: <SecurityTab />,
     },
-    {
-      key: "TEST",
-      label: (
-        <span className="flex items-center gap-2">
-          <Icon icon="lucide:shield" className="h-4 w-4" />
-          {t("profile.security")}
-        </span>
-      ),
-      children: <DashboardProfile />,
-    },
   ];
 
   return (
@@ -119,13 +108,13 @@ export default function UserProfile() {
             customRequest={({ file }) => handleAvatarUpload(file as File)}
             accept="image/*"
           >
-             <Button
-                shape="circle"
-                size="middle"
-                icon={<CameraOutlined />}
-                className="absolute -bottom-6 right-6 shadow-lg bg-blue-500 border-blue-500 text-white hover:bg-blue-600"
-                loading={isUploading}
-              />
+            <Button
+              shape="circle"
+              size="middle"
+              icon={<CameraOutlined />}
+              className="absolute -bottom-6 right-6 shadow-lg bg-blue-500 border-blue-500 text-white hover:bg-blue-600"
+              loading={isUploading}
+            />
           </Upload>
         </div>
 
