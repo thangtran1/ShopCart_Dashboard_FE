@@ -19,7 +19,7 @@ import {
 import { OverviewContent } from "../tab-content/overview-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
-import { PolicyContent, StoreContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import { SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
 
 export type TabKey =
@@ -103,20 +103,6 @@ export const tabsConfig: TabConfig[] = [
     showInSidebar: true,
   },
   {
-    key: "store",
-    label: "Tìm kiếm cửa hàng",
-    icon: <ShopOutlined />,
-    component: <StoreContent />,
-    showInSidebar: true,
-  },
-  {
-    key: "policy",
-    label: "Chính sách bảo hành",
-    icon: <FileTextOutlined />,
-    component: <PolicyContent />,
-    showInSidebar: true,
-  },
-  {
     key: "support",
     label: "Góp ý - Phản hồi - Hỗ trợ",
     icon: <MailOutlined />,
@@ -134,7 +120,7 @@ export const tabsConfig: TabConfig[] = [
     key: "logout",
     label: "Đăng xuất",
     icon: <LogoutOutlined />,
-    component: <div>Đăng xuất...</div>,
+    component: <></>,
     showInSidebar: true,
   },
 ]
