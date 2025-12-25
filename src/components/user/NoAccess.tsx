@@ -25,7 +25,7 @@ const NoAccess = ({
   const { setLoginState } = useLoginStateContext();
 
   return (
-    <div className="mx-auto max-w-lg">
+    <div className="mx-auto">
       <Card className="w-full p-5">
         <CardHeader className="flex items-center flex-col">
           <Logo />
