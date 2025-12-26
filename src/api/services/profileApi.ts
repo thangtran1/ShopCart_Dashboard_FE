@@ -11,6 +11,7 @@ export interface UserProfile {
   status: BasicStatus;
   bio?: string;
   phone?: string;
+  providers?:  string[];
   address?: string;
   dateOfBirth?: string;
   avatar?: string;
