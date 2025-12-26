@@ -1,4 +1,4 @@
-import { PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, EditOutlined, ToolOutlined } from "@ant-design/icons";
 import { Button, Tag } from "antd";
 
 interface Address {
@@ -29,24 +29,34 @@ export default function AddressSection({ onAdd, onEdit }: AddressSectionProps) {
   ];
 
   return (
-    <div className="rounded-xl border p-5 shadow-sm space-y-2">
-      {/* Header */}
+    <div className="rounded-xl border p-5 shadow-sm space-y-2 relative overflow-hidden bg-white dark:bg-muted">
+      {/* 1. Coming Soon Overlay - XÓA ĐOẠN NÀY KHI LÀM THẬT */}
+      <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/60 backdrop-blur-[1px]">
+        <div className="bg-white dark:bg-muted border border-dashed border-error/50 px-6 py-4 rounded-lg shadow-lg flex flex-col items-center">
+          <ToolOutlined className="text-2xl text-error mb-2 dark:text-yellow-400 animate-bounce" />
+          <span className="font-bold text-error tracking-tighter text-lg">COMING SOON</span>
+          <p className="text-[11px] text-gray-500">Tính năng đang phát triển</p>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Sổ địa chỉ</h2>
-
-        <Button type="primary" icon={<PlusCircleOutlined />} onClick={onAdd}>
+        <Button
+          type="primary"
+          icon={<PlusCircleOutlined />}
+          onClick={onAdd}
+          className="z-10"
+        >
           Thêm địa chỉ
         </Button>
       </div>
 
-      {/* Address list */}
       <div className="space-y-0">
         {addresses.map((item, idx) => (
           <div
             key={item.id}
-            className={`transition pb-4 pt-4 ${
-              idx < addresses.length - 1 ? "border-b border-error/40" : ""
-            }`}
+            className={`transition pb-4 pt-4 ${idx < addresses.length - 1 ? "border-b border-error/40" : ""
+              }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -63,7 +73,6 @@ export default function AddressSection({ onAdd, onEdit }: AddressSectionProps) {
               </Button>
             </div>
 
-            {/* Address */}
             <p className="text-sm text-gray-600 mt-2 leading-relaxed">
               {item.address}
             </p>
