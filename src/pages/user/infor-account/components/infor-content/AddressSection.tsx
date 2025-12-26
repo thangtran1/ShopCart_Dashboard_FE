@@ -18,42 +18,36 @@ export default function AddressSection({ onAdd, onEdit }: AddressSectionProps) {
     {
       id: 1,
       label: "Nhà",
-      address:
-        "Admin123@, Thị trấn Núi Sập, Huyện Thoại Sơn, An Giang",
+      address: "Admin123@, Thị trấn Núi Sập, Huyện Thoại Sơn, An Giang",
       isDefault: true,
     },
     {
       id: 2,
       label: "Văn phòng",
-      address:
-        "123 Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, TP.HCM",
+      address: "123 Nguyễn Trãi, Phường Nguyễn Cư Trinh, Quận 1, TP.HCM",
     },
   ];
 
   return (
-    <div className="rounded-xl border p-5 shadow-sm space-y-4">
-
+    <div className="rounded-xl border p-5 shadow-sm space-y-2">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Sổ địa chỉ</h2>
 
-        <Button
-          type="primary"
-          icon={<PlusCircleOutlined />}
-          onClick={onAdd}
-        >
+        <Button type="primary" icon={<PlusCircleOutlined />} onClick={onAdd}>
           Thêm địa chỉ
         </Button>
       </div>
 
       {/* Address list */}
-      <div className="space-y-3">
-        {addresses.map((item) => (
+      <div className="space-y-0">
+        {addresses.map((item, idx) => (
           <div
             key={item.id}
-            className="rounded-lg border p-4 hover:border-primary/50 transition"
+            className={`transition pb-4 pt-4 ${
+              idx < addresses.length - 1 ? "border-b border-error/40" : ""
+            }`}
           >
-            {/* Top */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{item.label}</span>

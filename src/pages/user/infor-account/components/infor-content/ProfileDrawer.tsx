@@ -109,7 +109,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
   return (
     <Drawer
       open={open}
-      width={440}
+      width={350}
       closable={false}
       onClose={onClose}
       title={

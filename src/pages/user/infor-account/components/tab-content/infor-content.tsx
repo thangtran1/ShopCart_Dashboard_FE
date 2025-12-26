@@ -13,7 +13,6 @@ export type DrawerType =
   | "updatePassword";
 
 export default function ProfilePage() {
-  // 🔥 API GET PROFILE – gọi 1 lần ở đây
   const { profile } = useUserProfile();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
