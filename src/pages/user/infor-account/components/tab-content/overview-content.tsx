@@ -89,8 +89,8 @@ export function OverviewContent() {
         </div>
 
         <div className="border-y py-4 overflow-x-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {favoriteProduct?.slice(0, 3).map((item: any) => (
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {favoriteProduct?.slice(0, 4).map((item: any) => (
               <ProductCard key={item._id} product={item} />
             ))}
           </div>

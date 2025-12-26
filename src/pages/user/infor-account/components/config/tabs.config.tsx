@@ -2,11 +2,6 @@ import type { ReactNode } from "react"
 import {
   HomeOutlined,
   SearchOutlined,
-  HeartOutlined,
-  UserOutlined,
-  SettingOutlined,
-  ShopOutlined,
-  FileTextOutlined,
   MailOutlined,
   SafetyOutlined,
   LogoutOutlined,
@@ -19,7 +14,7 @@ import {
 import { OverviewContent } from "../tab-content/overview-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
-import { SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import {  SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
 
 export type TabKey =

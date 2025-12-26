@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs } from "antd";
 import OrdersPage from "@/pages/user/orders/page";
+import { Tabs, Select, Typography } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
+
+const { Title } = Typography;
 
 export function HistoryContent() {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -17,19 +20,38 @@ export function HistoryContent() {
   ];
 
   return (
-    <div className="rounded-lg shadow-sm">
-      <h2 className="text-2xl font-semibold mb-2">Lịch sử mua hàng</h2>
+    <div className="rounded-lg shadow-sm space-y-6">
+      <Title level={2} className="!text-2xl !font-semibold">
+        Lịch sử mua hàng
+      </Title>
 
-      <Tabs
-        activeKey={activeTab}
-        onChange={setActiveTab}
-        items={statusTabs.map((tab) => ({ key: tab.key, label: tab.label }))}
-        className="mb-6"
-        type="line"
-        size="middle"
-      />
+      <div className="hidden lg:block">
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+          items={statusTabs.map((tab) => ({
+            key: tab.key,
+            label: tab.label,
+          }))}
+          type="line"
+          size="middle"
+          className="mb-6"
+        />
+      </div>
 
-      <OrdersPage hideTitle />
+      <div className="lg:hidden">
+        <Select
+          value={activeTab}
+          onChange={setActiveTab}
+          className="w-full"
+          options={statusTabs.map((tab) => ({
+            label: tab.label,
+            value: tab.key,
+          }))}
+          suffixIcon={<MenuOutlined />}
+        />
+      </div>
+        <OrdersPage hideTitle />
     </div>
   );
 }
