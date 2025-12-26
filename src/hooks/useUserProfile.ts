@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { getUserProfile, UserProfile } from "@/api/services/profileApi";
 import { useUserActions, useUserToken } from "@/store/userStore";
 
 export const useUserProfile = () => {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const { setUserInfo } = useUserActions();
   const { accessToken, refreshToken } = useUserToken();
   const transformUserData = (profileData: UserProfile) => ({
@@ -25,53 +25,41 @@ export const useUserProfile = () => {
     updatedAt: profileData.updatedAt,
   });
 
-  const fetchProfile = async () => {
-    if (!accessToken || !refreshToken) {
-      return;
-    }
+  const {
+    data: profile,
+    error,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["profile"], // Query Key quan trọng để quản lý cache
+    queryFn: getUserProfile,
+    enabled: !!accessToken && !!refreshToken, // Chỉ gọi khi có token
+    staleTime: 1000 * 60 * 5, // Dữ liệu được coi là mới trong 5 phút
+  });
 
-    try {
-      setError(null);
-      const profileData = await getUserProfile();
-      setProfile(profileData);
-      setUserInfo(transformUserData(profileData));
-    } catch (err: any) {
-      setError(err.message || "Lỗi khi tải thông tin profile");
+  useEffect(() => {
+    if (profile) {
+      setUserInfo(transformUserData(profile));
     }
-  };
+  }, [profile, setUserInfo]);
 
   const updateProfile = (updatedProfile: UserProfile) => {
-    setProfile(updatedProfile);
-    setUserInfo(transformUserData(updatedProfile));
+    queryClient.setQueryData(["profile"], updatedProfile);
   };
 
   useEffect(() => {
-    fetchProfile();
-
-    // Listen for profile update events
     const handleProfileUpdate = (event: CustomEvent) => {
-      const updatedProfile = event.detail;
-      setProfile(updatedProfile);
-      setUserInfo(transformUserData(updatedProfile));
+      updateProfile(event.detail);
     };
-
-    window.addEventListener(
-      "profileUpdated",
-      handleProfileUpdate as EventListener
-    );
-
-    return () => {
-      window.removeEventListener(
-        "profileUpdated",
-        handleProfileUpdate as EventListener
-      );
-    };
-  }, []);
+    window.addEventListener("profileUpdated", handleProfileUpdate as EventListener);
+    return () => window.removeEventListener("profileUpdated", handleProfileUpdate as EventListener);
+  }, [queryClient]);
 
   return {
     profile,
-    error,
-    refetch: fetchProfile,
+    error: error ? (error as any).message : null,
+    isLoading,
+    refetch,
     updateProfile,
   };
 };
