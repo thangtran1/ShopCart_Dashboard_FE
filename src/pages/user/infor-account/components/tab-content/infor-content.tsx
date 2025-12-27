@@ -5,6 +5,7 @@ import LinkedAccountSection from "../infor-content/LinkedAccountSection";
 import PasswordSection from "../infor-content/PasswordSection";
 import ProfileDrawer from "../infor-content/ProfileDrawer";
 import UserInfoSection from "../infor-content/UserInfoSection";
+import { useAddressActions } from "@/hooks/useAddresses";
 
 export type DrawerType =
   | "updateUser"
@@ -14,7 +15,7 @@ export type DrawerType =
 
 export default function ProfilePage() {
   const { profile } = useUserProfile();
-
+  const { addresses, isFetching, deleteAddress } = useAddressActions();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerType, setDrawerType] = useState<DrawerType>("updateUser");
   const [drawerData, setDrawerData] = useState<any>(null);
@@ -35,8 +36,11 @@ export default function ProfilePage() {
       <UserInfoSection profile={profile} onEdit={() => openDrawer("updateUser", profile)} />
 
       <AddressSection
+        addresses={addresses}     // Danh sách từ API
+        isFetching={isFetching}   // Trạng thái loading
         onAdd={() => openDrawer("addAddress")}
         onEdit={(address) => openDrawer("updateAddress", address)}
+        onDelete={deleteAddress}  // Truyền hàm xóa trực tiếp
       />
 
       <PasswordSection onChange={() => openDrawer("updatePassword")} />

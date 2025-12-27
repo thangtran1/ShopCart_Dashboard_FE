@@ -11,6 +11,7 @@ const FEEDBACK_PREFIX = "/feedback";
 const AUTH_PREFIX = "/auth";
 const SYSTEM_PREFIX = "/system";
 const PRODUCT_PREFIX = "/products"
+const ADDRESSES_PREFIX = "/addresses"
 export const API_URL = {
   BANNER: {
     CREATE: `${BANNER_PREFIX}`,
@@ -164,5 +165,14 @@ export const API_URL = {
   
     REVIEW_DELETE: (productId: string, reviewId: string) =>
       `${PRODUCT_PREFIX}/${productId}/reviews/${reviewId}`,
-  }
+  },
+
+  ADDRESSES: {
+      CREATE: `${ADDRESSES_PREFIX}`,
+      GET_ALL_USER: `${ADDRESSES_PREFIX}`,
+      GET_ALL_ADMIN: `${ADDRESSES_PREFIX}`,
+      UPDATE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+      DELETE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+      DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+    },
 };

@@ -10,6 +10,11 @@ export enum ResultEnum {
   TIMEOUT = 401,
 }
 
+export enum AddressType {
+  HOME = 1,   // Nhà riêng
+  OFFICE = 2, // Văn phòng
+}
+
 export enum BrandStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
