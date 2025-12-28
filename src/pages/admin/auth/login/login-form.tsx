@@ -55,7 +55,7 @@ export function LoginForm() {
 
   if (token.accessToken) {
     if (userInfo.loginCount === 1) {
-      return <Navigate to="/ho-so" replace />;
+      return <Navigate to="/infor-account" replace />;
     }
     if (userInfo.role === "user") return <Navigate to="/" replace />;
     return <Navigate to={HOMEPAGE} replace />;

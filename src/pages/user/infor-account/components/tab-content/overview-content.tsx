@@ -1,43 +1,73 @@
 "use client";
 
 import { useCopyToClipboard } from "@/hooks";
+import { useAddressActions } from "@/hooks/useAddresses"; // Thêm hook địa chỉ
+import { useUserProfile } from "@/hooks/useUserProfile"; // Thêm hook profile
 import OrdersPage from "@/pages/user/orders/page";
 import ProductCard from "@/pages/user/public/ProductCard";
 import useStore from "@/store/store";
 import { Badge } from "@/ui/badge";
 import SeeMore from "@/ui/see-more";
 import { Button } from "antd";
+import { Link } from "react-router";
+import { toast } from "sonner";
 
 export function OverviewContent() {
   const { copyFn } = useCopyToClipboard();
   const { favoriteProduct } = useStore();
 
+  const { profile } = useUserProfile();
+  const { addresses, isFetching } = useAddressActions();
+
+  const reminders = [];
+
+  const missingFields = [];
+  if (!profile?.dateOfBirth) missingFields.push("ngày sinh");
+
+  if (missingFields.length > 0) {
+    reminders.push({
+      key: "user-info",
+      icon: "ℹ️",
+      message: `Vui lòng cập nhật ${missingFields.join(", ")} để nhận thêm ưu đãi đặc quyền.`,
+      btnText: "Cập nhật ngay",
+      link: "/profile", // Chuyển hướng sang trang profile
+      colorClass: "bg-blue-50 border-blue-200 text-blue-600"
+    });
+  }
+
+  // Check địa chỉ
+  if (!isFetching && addresses?.length === 0) {
+    reminders.push({
+      key: "address-info",
+      icon: "📍",
+      message: "Bạn chưa có địa chỉ nhận hàng. Thêm địa chỉ để đặt hàng nhanh hơn!",
+      btnText: "Thêm ngay",
+      link: "/profile",
+      colorClass: "bg-amber-50 border-amber-200 text-amber-600"
+    });
+  }
+
   return (
     <div className="space-y-6">
       <div className="space-y-3">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-blue-600 text-lg">ℹ️</div>
-            <span className="text-sm text-gray-700">
-              Đăng ký S-Student/ S-Teacher để nhận thêm ưu đãi lên đến 600k/sản
-              phẩm
-            </span>
+        {reminders.map((item) => (
+          <div key={item.key} className={`${item.colorClass} border rounded-lg p-4 flex items-center justify-between`}>
+            <div className="flex items-center gap-3">
+              <div className="text-lg">{item.icon}</div>
+              <span className="text-sm text-gray-700 font-medium">
+                {item.message}
+              </span>
+            </div>
+            {/* <Link to={item.link}> */}
+            <button
+              onClick={() => toast.warning("Tính năng đang được phát triển 🛠️")}
+              className="text-inherit cursor-pointer text-sm font-bold hover:underline flex items-center gap-1"
+            >
+              {item.btnText}
+            </button>
+            {/* </Link> */}
           </div>
-          <button className="text-blue-600 text-sm font-medium hover:underline">
-            Đăng ký ngay
-          </button>
-        </div>
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="text-blue-600 text-lg">ℹ️</div>
-            <span className="text-sm text-gray-700">
-              Đăng ký S-Business để nhận ưu đãi đặc quyền!
-            </span>
-          </div>
-          <button className="text-blue-600 text-sm font-medium hover:underline">
-            Đăng ký ngay
-          </button>
-        </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
@@ -56,20 +86,21 @@ export function OverviewContent() {
             <h3 className="font-medium mb-2 truncate">
               [EMAIL] ƯU ĐÃI KHÁCH HÀNG...
             </h3>
-            <p className="text-sm text-foreground mb-2">
-              Giảm giá: <span className="font-medium">0đ</span>
-            </p>
-            <p className="text-sm text-foreground mb-2">
-              HSD: <span className="font-medium">03/01/2028</span>
-            </p>
+            <div className="space-y-1">
+              <p className="text-sm text-foreground">
+                Giảm giá: <span className="font-medium">0đ</span>
+              </p>
+              <p className="text-sm text-foreground">
+                HSD: <span className="font-medium">03/01/2028</span>
+              </p>
+            </div>
 
-            {/* Badge + Button */}
             <div className="flex flex-col md:flex-col lg:flex-row lg:items-center gap-2 mt-3">
-              <Badge variant={"success"} className="w-full lg:w-auto">
+              <Badge variant={"success"} className="w-full lg:w-auto text-center justify-center py-1">
                 EMAIL_DGFBG15
               </Badge>
               <Button
-                className="w-full md:w-full lg:w-auto"
+                className="w-full lg:w-auto"
                 onClick={() => copyFn("EMAIL_DGFBG15")}
               >
                 Sao chép
@@ -82,7 +113,6 @@ export function OverviewContent() {
       <div className="w-full">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold">Sản phẩm yêu thích</h2>
-
           {favoriteProduct && favoriteProduct.length > 3 && (
             <SeeMore to="/wishlist">Xem tất cả</SeeMore>
           )}
@@ -90,7 +120,7 @@ export function OverviewContent() {
 
         <div className="border-y py-4 overflow-x-auto">
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {favoriteProduct?.slice(0, 4).map((item: any) => (
+            {favoriteProduct?.slice(0, 3).map((item: any) => (
               <ProductCard key={item._id} product={item} />
             ))}
           </div>

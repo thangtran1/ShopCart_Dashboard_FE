@@ -248,11 +248,10 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
 
             {type === "addAddress" && (
               <span
-                className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                  isMaxAddress
-                    ? "bg-red-100 text-red-600"
-                    : "bg-green-100 text-green-600"
-                }`}
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${isMaxAddress
+                  ? "bg-red-100 text-red-600"
+                  : "bg-green-100 text-green-600"
+                  }`}
               >
                 {currentCount}/10 địa chỉ
               </span>
@@ -431,33 +430,41 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             <Form.Item
               label="Mật khẩu hiện tại"
               name="currentPassword"
-              rules={[{ required: true }]}
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu hiện tại" }]}
             >
-              <Input.Password size="large" />
+              <Input.Password size="large" placeholder="Nhập mật khẩu cũ của bạn" />
             </Form.Item>
+
             <Form.Item
               label="Mật khẩu mới"
               name="newPassword"
-              rules={[{ required: true }]}
+              extra={<span className="text-[12px] text-muted-foreground">Mật khẩu phải từ 8-20 ký tự, bao gồm chữ và số.</span>}
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu mới" },
+                { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự" }
+              ]}
             >
-              <Input.Password size="large" />
+              <Input.Password size="large" placeholder="Thiết lập mật khẩu mới" />
             </Form.Item>
+
             <Form.Item
               label="Xác nhận mật khẩu"
               name="confirmPassword"
               dependencies={["newPassword"]}
+              extra={<span className="text-[12px] text-muted-foreground">Nhập lại chính xác mật khẩu mới bên trên.</span>}
               rules={[
-                { required: true },
+                { required: true, message: "Vui lòng xác nhận mật khẩu" },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
-                    if (!value || getFieldValue("newPassword") === value)
+                    if (!value || getFieldValue("newPassword") === value) {
                       return Promise.resolve();
-                    return Promise.reject(new Error("Mật khẩu không khớp"));
+                    }
+                    return Promise.reject(new Error("Mật khẩu xác nhận không khớp"));
                   },
                 }),
               ]}
             >
-              <Input.Password size="large" />
+              <Input.Password size="large" placeholder="Nhập lại mật khẩu mới" />
             </Form.Item>
           </div>
         )}
