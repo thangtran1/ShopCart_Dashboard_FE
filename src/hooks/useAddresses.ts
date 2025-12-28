@@ -50,6 +50,18 @@ export const useAddressActions = (onClose?: () => void) => {
     onError: (err: any) => toast.error(err?.message || "Xóa thất bại"),
   });
 
+   // 4. DELETE ADMIN
+   const { mutateAsync: deleteAddressAdmin, isPending: isAdminDeleting } = useMutation({
+    mutationFn: (id: string) => addressService.deleteAddressAdmin(id),
+    onSuccess: (res) => {
+      if (res.success) {
+        toast.success("Admin Xóa địa chỉ thành công");
+        queryClient.invalidateQueries({ queryKey: ["addresses"] });
+      }
+    },
+    onError: (err: any) => toast.error(err?.message || "Xóa thất bại"),
+  });
+
   return {
     addresses: addressData?.data || [],
     isFetching,
@@ -58,6 +70,8 @@ export const useAddressActions = (onClose?: () => void) => {
     updateAddress,
     isUpdating,
     deleteAddress,
-    isDeleting
+    isDeleting,
+    deleteAddressAdmin,
+    isAdminDeleting
   };
 };

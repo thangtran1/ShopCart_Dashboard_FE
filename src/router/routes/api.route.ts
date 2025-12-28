@@ -171,8 +171,9 @@ export const API_URL = {
       CREATE: `${ADDRESSES_PREFIX}`,
       GET_ALL_USER: `${ADDRESSES_PREFIX}`,
       GET_ALL_ADMIN: `${ADDRESSES_PREFIX}`,
+      GET_BY_ID_ADMIN: (id: string) =>  `${ADDRESSES_PREFIX}/admin/user/${id}`,
       UPDATE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
       DELETE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
-      DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+      DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/admin/${id}`,
     },
 };

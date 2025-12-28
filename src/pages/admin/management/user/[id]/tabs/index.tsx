@@ -9,6 +9,7 @@ import {
   ActivityLog,
   detailActivityLogForUser,
 } from "@/api/services/activity-logApi";
+import Address from "./address";
 
 export default function UserDetailTabs({ userId }: { userId: string }) {
   const { t } = useTranslation();
@@ -51,6 +52,16 @@ export default function UserDetailTabs({ userId }: { userId: string }) {
           }
         />
       ),
+    },
+    {
+      key: "address",
+      label: (
+        <span className="flex items-center gap-2">
+          <Icon icon="lucide:map-pin" className="h-4 w-4" />
+          {t("management.user.address")}
+        </span>
+      ),
+      children: <Address userId={userId} />,
     },
   ];
 

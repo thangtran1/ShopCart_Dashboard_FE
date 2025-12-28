@@ -75,6 +75,14 @@ export const addressService = {
     return response.data;
   },
 
+  getByIdUserForAdmin: async (userId: string, page: number = 1, limit: number = 20) => {
+    const response = await apiClient.get({
+      url: API_URL.ADDRESSES.GET_BY_ID_ADMIN(userId),
+      params: { page, limit },
+    });
+    return response.data;
+  },
+
   updateAddress: async (id: string, data: CreateAddressDto) => {
     const response = await apiClient.patch({ url: API_URL.ADDRESSES.UPDATE(id), data });
     return response.data;
