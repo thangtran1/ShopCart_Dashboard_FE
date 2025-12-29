@@ -7,6 +7,7 @@ export interface UserProfile {
   _id: string;
   email: string;
   name: string;
+  gender?: string;
   role: string;
   status: BasicStatus;
   bio?: string;
@@ -25,6 +26,7 @@ export interface UserProfile {
 export interface UpdateProfileReq {
   name?: string;
   bio?: string;
+  gender?: string
   phone?: string;
   address?: string;
   dateOfBirth?: string;

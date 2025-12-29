@@ -9,7 +9,7 @@ import {
   Radio,
 } from "antd";
 import { Label } from "@/ui/label";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   changePassword,
   UpdateProfileReq,
@@ -17,7 +17,7 @@ import {
 } from "@/api/services/profileApi";
 import { toast } from "sonner";
 import dayjs from "dayjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { locationApi } from "@/api/services/provinceApi";
 import {
   AddressListResponse,
@@ -57,14 +57,14 @@ const drawerTitleMap: Record<DrawerType, { title: string; desc: string }> = {
 export default function ProfileDrawer({ open, type, data, onClose }: Props) {
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
-
+  const [loading, setLoading] = useState(false);
   const watchProvinceId = Form.useWatch("province_id", form);
   const watchDistrictId = Form.useWatch("district_id", form);
   const { data: addresses } = useQuery<AddressListResponse>({
     queryKey: ["addresses"],
     queryFn: () => addressService.getAll(),
   });
-
+  const addressList = addresses?.data ?? [];
   const currentCount = addresses?.data?.length || 0;
   const isMaxAddress = currentCount >= 10;
 
@@ -95,11 +95,13 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
       return;
     }
     if (type === "updateUser" && data) {
+      const currentDefaultId = addresses?.data?.find((a) => a.is_default)?._id;
+
       form.setFieldsValue({
         ...data,
         dateOfBirth: data.dateOfBirth ? dayjs(data.dateOfBirth) : undefined,
+        address_id: currentDefaultId,
       });
-      return;
     }
 
     if (type === "updateAddress" && data) {
@@ -111,7 +113,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
         ward_id: data.ward_id ? Number(data.ward_id) : undefined,
       });
     }
-  }, [open, type, data, form]);
+  }, [open, type, data, form, addresses?.data]);
 
   // 2. Xử lý (Tỉnh -> Huyện -> Xã)
   const handleProvinceChange = () => {
@@ -122,52 +124,52 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
     form.setFieldsValue({ ward_id: undefined });
   };
 
-  const { mutateAsync: updateProfile, isPending: isUpdatingProfile } =
-    useMutation({
-      mutationFn: (values: UpdateProfileReq) => updateUserProfile(values),
-      onSuccess: () => {
-        toast.success("Cập nhật thông tin thành công");
-        queryClient.invalidateQueries({ queryKey: ["profile"] });
-        onClose();
-      },
-      onError: (error: any) =>
-        toast.error(error?.message || "Cập nhật thất bại"),
-    });
-
-  const { mutateAsync: updatePass, isPending: isUpdatingPass } = useMutation({
-    mutationFn: changePassword,
-    onSuccess: () => {
-      toast.success("Đổi mật khẩu thành công");
-      onClose();
-    },
-    onError: (err: any) => toast.error(err?.message || "Đổi mật khẩu thất bại"),
-  });
-
-  const { mutateAsync: saveAddress, isPending: isSavingAddr } = useMutation({
-    mutationFn: (payload: any) =>
-      type === "addAddress"
-        ? addressService.create(payload)
-        : addressService.updateAddress(data._id, payload),
-    onSuccess: () => {
-      toast.success(
-        type === "addAddress"
-          ? "Thêm địa chỉ thành công"
-          : "Cập nhật thành công"
-      );
-      queryClient.invalidateQueries({ queryKey: ["addresses"] });
-      onClose();
-    },
-    onError: (err: any) => {
-      const errorMsg = err?.response?.data?.message || "Thao tác thất bại";
-      toast.error(errorMsg);
-    },
-  });
-
   // 4. Xử lý Submit chung
   const handleSubmit = async () => {
     try {
       const values = await form.validateFields();
-      if (type === "addAddress" || type === "updateAddress") {
+      setLoading(true);
+
+      if (type === "updateUser") {
+        const tasks = [];
+        const updatePayload: Partial<UpdateProfileReq> = {};
+      
+        const fields: (keyof UpdateProfileReq)[] = ["name", "phone", "bio", "gender"];
+        fields.forEach((field) => {
+          if (values[field] !== data[field]) {
+            updatePayload[field] = values[field] || "";
+          }
+        });
+      
+        if (values.dateOfBirth && (!data.dateOfBirth || !dayjs(values.dateOfBirth).isSame(dayjs(data.dateOfBirth), "day"))) {
+          updatePayload.dateOfBirth = values.dateOfBirth.format("YYYY-MM-DD");
+        }
+      
+        if (Object.keys(updatePayload).length > 0) {
+          tasks.push(updateUserProfile(updatePayload as UpdateProfileReq));
+        }
+      
+        // 2. Chỉ update địa chỉ nếu người dùng THỰC SỰ chọn một địa chỉ mới
+        const currentDefaultId = addresses?.data?.find((a) => a.is_default)?._id;
+        
+        // Điều kiện: Có chọn ID mới VÀ ID đó khác với ID mặc định hiện tại
+        if (values.address_id && values.address_id !== currentDefaultId) {
+          tasks.push(
+            addressService.updateAddress(values.address_id, {
+              is_default: true,
+            } as any)
+          );
+        }
+      
+        if (tasks.length === 0) {
+          toast.info("Không có thông tin nào thay đổi");
+          setLoading(false);
+          return onClose();
+        }
+      
+        await Promise.all(tasks);
+        toast.success("Cập nhật thông tin thành công");
+      } else if (type === "addAddress" || type === "updateAddress") {
         const pName = provinces.find(
           (p) => String(p.province_id) === String(values.province_id)
         )?.province_name;
@@ -186,50 +188,37 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
           ward_id: +values.ward_id,
           full_address: `${values.address}, ${wName}, ${dName}, ${pName}`,
         };
-        await saveAddress(payload);
-      }
-      if (type === "updatePassword") {
-        await updatePass({
+
+        if (type === "addAddress") {
+          await addressService.create(payload);
+          toast.success("Thêm địa chỉ thành công");
+        } else {
+          await addressService.updateAddress(data._id, payload);
+          toast.success("Cập nhật địa chỉ thành công");
+        }
+      } else if (type === "updatePassword") {
+        await changePassword({
           currentPassword: values.currentPassword,
           newPassword: values.newPassword,
         });
-        return;
+        toast.success("Đổi mật khẩu thành công");
       }
-      if (type === "updateUser") {
-        const updatePayload: Partial<UpdateProfileReq> = {};
 
-        // So sánh các trường thông thường
-        const fields: (keyof UpdateProfileReq)[] = [
-          "name",
-          "phone",
-          "address",
-          "bio",
-        ];
-        fields.forEach((field) => {
-          if (values[field] !== data[field]) {
-            updatePayload[field] = values[field];
-          }
-        });
-
-        // So sánh ngày sinh (Dayjs)
-        const isDateChanged =
-          values.dateOfBirth &&
-          (!data.dateOfBirth ||
-            !dayjs(values.dateOfBirth).isSame(dayjs(data.dateOfBirth), "day"));
-
-        if (isDateChanged) {
-          updatePayload.dateOfBirth = values.dateOfBirth.format("YYYY-MM-DD");
-        }
-
-        if (Object.keys(updatePayload).length === 0) {
-          toast.info("Không có thông tin nào thay đổi");
-          return onClose();
-        }
-
-        await updateProfile(updatePayload as UpdateProfileReq);
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+      onClose();
+    } catch (error: any) {
+      if (error?.errorFields) {
+        console.log("Validation failed:", error);
+      } else {
+        const errorMsg =
+          error?.response?.data?.message ||
+          error?.message ||
+          "Thao tác thất bại";
+        toast.error(errorMsg);
       }
-    } catch (error) {
-      console.error("Validate failed:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -248,10 +237,11 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
 
             {type === "addAddress" && (
               <span
-                className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${isMaxAddress
-                  ? "bg-red-100 text-red-600"
-                  : "bg-green-100 text-green-600"
-                  }`}
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  isMaxAddress
+                    ? "bg-red-100 text-red-600"
+                    : "bg-green-100 text-green-600"
+                }`}
               >
                 {currentCount}/10 địa chỉ
               </span>
@@ -283,7 +273,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             size="large"
             type="primary"
             className="flex-1"
-            loading={isUpdatingProfile || isUpdatingPass || isSavingAddr}
+            loading={loading}
             onClick={handleSubmit}
             disabled={type === "addAddress" && isMaxAddress}
           >
@@ -395,7 +385,11 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
               <Input size="large" />
             </Form.Item>
 
-            <Form.Item label="Giới tính" name="gender">
+            <Form.Item
+              label="Giới tính"
+              name="gender"
+              rules={[{ required: true, message: "Vui lòng chọn giới tính" }]}
+            >
               <Select size="large" placeholder="Chọn giới tính">
                 <Option value="male">Nam</Option>
                 <Option value="female">Nữ</Option>
@@ -417,11 +411,69 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
               <Input size="large" placeholder="Giới thiệu ngắn" />
             </Form.Item>
 
-            <Form.Item label="Địa chỉ mặc định" name="address">
-              <Select size="large">
-                <Option value={data?.address}>{data?.address}</Option>
-              </Select>
-            </Form.Item>
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center justify-between mb-2">
+                <Label className="font-semibold text-primary">
+                  Địa chỉ giao hàng mặc định
+                </Label>
+                <Badge variant="outline" className="text-xs">
+                  Sổ địa chỉ
+                </Badge>
+              </div>
+
+              {/* Nếu CÓ địa chỉ → hiện Select */}
+              {currentCount > 0 ? (
+                <Form.Item
+                  name="address_id"
+                  help="Địa chỉ này sẽ được dùng làm mặc định khi giao hàng"
+                >
+                  <Select
+                    size="large"
+                    placeholder="Chọn địa chỉ từ sổ địa chỉ"
+                    className="w-full"
+                    optionLabelProp="label"
+                  >
+                    {addressList.map((addr: any) => (
+                      <Select.Option
+                        key={addr._id}
+                        value={addr._id}
+                        label={addr.full_address}
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium line-clamp-2">
+                              {addr.full_address}
+                            </span>
+
+                            {addr.is_default && (
+                              <span className="text-[11px] text-muted-foreground mt-0.5">
+                                Đang là địa chỉ mặc định
+                              </span>
+                            )}
+                          </div>
+
+                          {addr.is_default && (
+                            <Badge
+                              variant="secondary"
+                              className="shrink-0 text-[10px]"
+                            >
+                              Mặc định
+                            </Badge>
+                          )}
+                        </div>
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              ) : (
+                <div className="mt-3 rounded-lg border border-dashed bg-muted/40 p-4">
+                  <p className="text-xs text-muted-foreground italic">
+                    Bạn chưa có địa chỉ nào trong sổ địa chỉ. Vui lòng thêm địa
+                    chỉ ở mục <b>“Sổ địa chỉ”</b> để sử dụng tính năng này.
+                  </p>
+                </div>
+              )}
+            </div>
           </>
         )}
 
@@ -430,28 +482,44 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             <Form.Item
               label="Mật khẩu hiện tại"
               name="currentPassword"
-              rules={[{ required: true, message: "Vui lòng nhập mật khẩu hiện tại" }]}
+              rules={[
+                { required: true, message: "Vui lòng nhập mật khẩu hiện tại" },
+              ]}
             >
-              <Input.Password size="large" placeholder="Nhập mật khẩu cũ của bạn" />
+              <Input.Password
+                size="large"
+                placeholder="Nhập mật khẩu cũ của bạn"
+              />
             </Form.Item>
 
             <Form.Item
               label="Mật khẩu mới"
               name="newPassword"
-              extra={<span className="text-[12px] text-muted-foreground">Mật khẩu phải từ 8-20 ký tự, bao gồm chữ và số.</span>}
+              extra={
+                <span className="text-[12px] text-muted-foreground">
+                  Mật khẩu phải từ 8-20 ký tự, bao gồm chữ và số.
+                </span>
+              }
               rules={[
                 { required: true, message: "Vui lòng nhập mật khẩu mới" },
-                { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự" }
+                { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự" },
               ]}
             >
-              <Input.Password size="large" placeholder="Thiết lập mật khẩu mới" />
+              <Input.Password
+                size="large"
+                placeholder="Thiết lập mật khẩu mới"
+              />
             </Form.Item>
 
             <Form.Item
               label="Xác nhận mật khẩu"
               name="confirmPassword"
               dependencies={["newPassword"]}
-              extra={<span className="text-[12px] text-muted-foreground">Nhập lại chính xác mật khẩu mới bên trên.</span>}
+              extra={
+                <span className="text-[12px] text-muted-foreground">
+                  Nhập lại chính xác mật khẩu mới bên trên.
+                </span>
+              }
               rules={[
                 { required: true, message: "Vui lòng xác nhận mật khẩu" },
                 ({ getFieldValue }) => ({
@@ -459,12 +527,17 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                     if (!value || getFieldValue("newPassword") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error("Mật khẩu xác nhận không khớp"));
+                    return Promise.reject(
+                      new Error("Mật khẩu xác nhận không khớp")
+                    );
                   },
                 }),
               ]}
             >
-              <Input.Password size="large" placeholder="Nhập lại mật khẩu mới" />
+              <Input.Password
+                size="large"
+                placeholder="Nhập lại mật khẩu mới"
+              />
             </Form.Item>
           </div>
         )}

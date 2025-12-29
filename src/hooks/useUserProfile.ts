@@ -10,6 +10,7 @@ export const useUserProfile = () => {
   const transformUserData = (profileData: UserProfile) => ({
     id: profileData._id,
     email: profileData.email,
+    gender: profileData.gender,
     username: profileData.name,
     avatar: profileData.avatar,
     role: profileData.role,

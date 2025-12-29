@@ -38,6 +38,9 @@ export default function ProfilePage() {
   const missingInfo = [];
   if (!profile?.dateOfBirth) missingInfo.push("ngày sinh");
   if (!profile?.phone) missingInfo.push("số điện thoại");
+  if (profile?.gender === undefined || profile?.gender === null || profile?.gender === "") {
+    missingInfo.push("giới tính");
+  }
 
   if (missingInfo.length > 0) {
     reminders.push({
@@ -87,6 +90,7 @@ export default function ProfilePage() {
 
       {/* CÁC SECTION THÔNG TIN */}
       <UserInfoSection
+        addresses={addresses}
         profile={profile}
         onEdit={() => openDrawer("updateUser", profile)}
       />

@@ -1,62 +1,75 @@
 import { Button } from "antd";
-import { Badge } from "@/ui/badge";
 import { EditOutlined } from "@ant-design/icons";
+import { Gender } from "@/types/enum";
+import { Badge } from "@/ui/badge";
 
-export default function UserInfoSection({ profile, onEdit }: any) {
+export default function UserInfoSection({ profile, onEdit, addresses }: any) {
+  const defaultAddress = addresses?.find((addr: any) => addr.is_default === true);
+
+  const genderConfigs: Record<string, { label: string; variant: any }> = {
+    [Gender.MALE]: { label: "Nam", variant: "info" },
+    [Gender.FEMALE]: { label: "Nữ", variant: "destructive" },
+    [Gender.OTHER]: { label: "Khác", variant: "secondary" },
+  };
+
   return (
-    <div className="rounded-xl border p-5 shadow-sm space-y-4">
-      {/* Header */}
-      <div className="flex justify-between">
+    <div className="rounded-2xl border p-4 shadow-sm">
+      <div className="flex justify-between items-center mb-2">
         <div>
-          <h2 className="text-lg font-semibold">Thông tin cá nhân</h2>
-          <p className="text-sm text-muted-foreground">Quản lý hồ sơ</p>
+          <h2 className="text-xl font-bold text-foreground mb-1">Thông tin cá nhân</h2>
+          <p className="text-sm text-muted-foreground">Quản lý hồ sơ cá nhân của bạn</p>
         </div>
-
-        <Button type="link" icon={<EditOutlined />} onClick={onEdit}>
+        <Button
+          type="text"
+          danger
+          icon={<EditOutlined />}
+          onClick={onEdit}
+          className="flex items-center font-medium"
+        >
           Cập nhật
         </Button>
       </div>
 
-      {/* Content */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 text-sm">
-        <Info label="Họ và tên" value={profile?.name} />
-        <Info label="Số điện thoại" value={profile?.phone} />
-        <Info label="Email" value={profile?.email} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-4">
+        <InfoItem label="Họ và tên" value={profile?.name} />
+        <InfoItem label="Số điện thoại" value={profile?.phone} />
 
-        <div>
-          <p className="text-muted-foreground">Vai trò</p>
-          <Badge variant="secondary" className="uppercase mt-1">
-            {profile?.role}
-          </Badge>
-        </div>
+        <InfoItem label="Giới tính">
+          {profile?.gender && genderConfigs[profile.gender] && (
+            <Badge variant={genderConfigs[profile.gender].variant} className="uppercase text-[10px]">
+              {genderConfigs[profile.gender].label}
+            </Badge>
+          )}
+        </InfoItem>
 
-        <Info label="Bio" value={profile?.bio || "Chưa cập nhật"} />
+        <InfoItem label="Email" value={profile?.email} />
 
-        <div>
-          <p className="text-muted-foreground mb-2">Trạng thái</p>
-          <Badge variant="success" className="uppercase">
-            {profile?.status || "ACTIVE"}
-          </Badge>
-        </div>
-
-        <Info
+        <InfoItem
           label="Ngày sinh"
           value={
             profile?.dateOfBirth
               ? new Date(profile.dateOfBirth).toLocaleDateString("vi-VN")
-              : "-"
+              : undefined
           }
         />
+
+        <InfoItem label="Địa chỉ mặc định" value={defaultAddress?.full_address} />
       </div>
     </div>
   );
 }
 
-function Info({ label, value }: { label: string; value?: string }) {
+function InfoItem({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
+  const fallback = <span className="text-muted-foreground/60 italic font-normal">Chưa cập nhật</span>;
+
   return (
-    <div>
-      <p className="text-muted-foreground">{label}</p>
-      <p className="font-medium text-foreground mt-0.5">{value || "-"}</p>
+    <div className="border-b border-border pb-2 flex flex-col sm:flex-row sm:justify-between sm:items-end min-h-[50px]">
+      <p className="text-muted-foreground text-sm mb-1 sm:mb-0 whitespace-nowrap">
+        {label}:
+      </p>
+      <div className="text-foreground font-medium text-sm text-left sm:text-right break-words max-w-full sm:max-w-[300px]">
+        {children || (value ? value : fallback)}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Address } from "@/api/services/addressesApi";
-import { PlusOutlined, HomeOutlined, BankOutlined, DownOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  HomeOutlined,
+  BankOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 import { Button, Popconfirm, Skeleton, Empty } from "antd";
 import { Badge } from "@/ui/badge";
 
@@ -34,20 +39,27 @@ export default function AddressSection({
 
   return (
     <div className="w-full rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-2xl font-bold">
-            Sổ địa chỉ
-          </h2>
-          <p className="text-muted-foreground text-sm mt-1">Quản lý các địa điểm nhận hàng của bạn</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold">Sổ địa chỉ</h2>
+          <p className="text-muted-foreground text-sm">
+            Quản lý các địa điểm nhận hàng của bạn
+          </p>
         </div>
+
         <Button
           type="primary"
           danger
           shape="round"
-          size="large"
+          size="middle"
           icon={<PlusOutlined />}
-          className="shadow-md shadow-red-100 hover:scale-105 transition-transform border-none flex items-center"
+          className="
+      w-full sm:w-auto
+      shadow-md shadow-red-100
+      hover:scale-105 transition-transform
+      border-none
+      flex items-center justify-center
+    "
           onClick={onAdd}
         >
           Thêm địa chỉ
@@ -55,12 +67,14 @@ export default function AddressSection({
       </div>
 
       {addresses.length === 0 ? (
-        <div className="
+        <div
+          className="
           py-16 flex flex-col items-center justify-center 
           bg-zinc-50/50 dark:bg-zinc-900/30 
           rounded-[2rem] border-1 border-dashed border-border
           transition-all duration-300
-        ">
+        "
+        >
           <Empty
             className="!mb-4"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -94,9 +108,7 @@ export default function AddressSection({
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     {item.is_default && (
-                      <Badge variant={'info'}>
-                        Mặc định
-                      </Badge>
+                      <Badge variant={"info"}>Mặc định</Badge>
                     )}
                     {item.type === 1 ? (
                       <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400 text-xs font-medium border border-orange-100 dark:border-orange-900/50">
@@ -116,7 +128,9 @@ export default function AddressSection({
                   </h3>
 
                   <div className="flex items-center gap-3 text-muted-foreground font-semibold">
-                    <span className="text-foreground">{item.member_id.name}</span>
+                    <span className="text-foreground">
+                      {item.member_id.name}
+                    </span>
                     <span className="w-1 h-1 bg-gray-300 rounded-full" />
                     <span className="flex items-center gap-1">
                       {item.member_id.phone}
@@ -137,7 +151,11 @@ export default function AddressSection({
                     cancelText="Hủy"
                     okButtonProps={{ danger: true, className: "rounded-lg" }}
                   >
-                    <Button type="text" size="small" className="!text-red-600 transition-colors">
+                    <Button
+                      type="text"
+                      size="small"
+                      className="!text-red-600 transition-colors"
+                    >
                       Xóa
                     </Button>
                   </Popconfirm>
@@ -168,7 +186,9 @@ export default function AddressSection({
                 "
               >
                 <span className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-600 group-hover:text-foreground transition-colors">
-                  {isExpanded ? "Thu gọn" : `Xem thêm (${addresses.length - 4})`}
+                  {isExpanded
+                    ? "Thu gọn"
+                    : `Xem thêm (${addresses.length - 4})`}
                 </span>
 
                 <div
