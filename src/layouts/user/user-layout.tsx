@@ -12,7 +12,6 @@ import LocalePicker from "@/components/common/locale-picker";
 import Footer from "@/pages/user/public/footer";
 
 import SettingButton from "../dashboard/components/setting-button";
-import NoticeButton from "../dashboard/components/notice";
 import Header from "@/components/user/Header";
 
 export default function UserLayout() {
@@ -32,7 +31,6 @@ export default function UserLayout() {
 
           <div className="flex items-center">
             <LocalePicker />
-            <NoticeButton />
             <SettingButton />
           </div>
         </div>
