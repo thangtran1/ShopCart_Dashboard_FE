@@ -115,14 +115,6 @@ const SignIn = () => {
                 <Logo iconClassName="w-6 h-6" hideText />
               </Button>
 
-              {/* Hồ sơ */}
-              <Button
-                onClick={() => router.push("/ho-so")}
-                className="w-full !border-none !flex !justify-between items-center px-4"
-              >
-                <span>Hồ sơ</span>
-                <UserCircle className="w-4 h-4 !text-foreground hover:!text-primary" />
-              </Button>
 
               {/* Logout */}
               <Button

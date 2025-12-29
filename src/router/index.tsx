@@ -14,7 +14,6 @@ import GitHubSuccess from "@/pages/admin/auth/login/pages/github-success";
 import GitHubError from "@/pages/admin/auth/login/pages/github-error";
 import UserHomePage from "@/pages/user";
 import UserLayout from "@/layouts/user/user-layout";
-import UserProfile from "@/pages/user/profile";
 import ProtectedRoute from "./components/protected-route";
 import MaintenanceGuard from "./components/maintenance-guard";
 import { LoginProvider } from "@/pages/admin/auth/login/providers/login-provider";
@@ -125,10 +124,6 @@ export default function Router() {
     ),
     children: [
       { index: true, element: <UserHomePage /> },
-      {
-        path: "ho-so",
-        children: [{ index: true, element: <UserProfile /> }],
-      },
       {
         path: "infor-account",
         children: [{ index: true, element: <InforAccount /> }],
