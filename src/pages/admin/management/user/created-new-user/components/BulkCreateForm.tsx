@@ -48,7 +48,6 @@ export default function BulkCreateForm() {
       role: String(row.role || "user").toLowerCase(),
       status: String(row.status || "active").toLowerCase(),
       phone: String(row.phone || "").trim(),
-      address: String(row.address || "").trim(),
       bio: String(row.bio || "").trim(),
       isValid: true,
       error: "",
@@ -243,7 +242,6 @@ export default function BulkCreateForm() {
         role: user.role,
         status: user.status,
         phone: user.phone || "",
-        address: user.address || "",
         bio: user.bio || "",
       }));
 

@@ -119,7 +119,7 @@ export const API_URL = {
     Delete: `${USER_PREFIX}`,
     SoftDelete: `${USER_PREFIX}/soft-delete`,
     Restore: `${USER_PREFIX}/restore`,
-    BulkCreate: `${USER_PREFIX}/bulk/bulk-create`,
+    BulkCreate: `${USER_PREFIX}/bulk-create`,
     BulkUpdateStatus: `${USER_PREFIX}/bulk/status`,
     AdminUpdateUserPassword: `${USER_PREFIX}/admin/:id/password`,
   },

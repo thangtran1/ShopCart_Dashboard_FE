@@ -17,7 +17,6 @@ export const useUserProfile = () => {
     status: profileData.status,
     phone: profileData.phone,
     dateOfBirth: profileData.dateOfBirth,
-    address: profileData.address,
     bio: profileData.bio,
     lastLoginAt: profileData.lastLoginAt,
     loginCount: profileData.loginCount,

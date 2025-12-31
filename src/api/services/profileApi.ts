@@ -13,7 +13,6 @@ export interface UserProfile {
   bio?: string;
   phone?: string;
   providers?:  string[];
-  address?: string;
   dateOfBirth?: string;
   avatar?: string;
   loginCount: number;
@@ -28,7 +27,6 @@ export interface UpdateProfileReq {
   bio?: string;
   gender?: string
   phone?: string;
-  address?: string;
   dateOfBirth?: string;
   avatar?: string;
 }
