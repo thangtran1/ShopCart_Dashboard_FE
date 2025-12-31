@@ -18,7 +18,6 @@ import {
 import { toast } from "sonner";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { locationApi } from "@/api/services/provinceApi";
 import {
   AddressListResponse,
   addressService,
@@ -26,6 +25,7 @@ import {
 } from "@/api/services/addressesApi";
 import { AddressType } from "@/types/enum";
 import { Badge } from "@/ui/badge";
+import { useLocation } from "@/hooks/useLocation";
 
 const { Option } = Select;
 
@@ -68,27 +68,10 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
   const currentCount = addresses?.data?.length || 0;
   const isMaxAddress = currentCount >= 10;
 
-  const { data: provinces = [] } = useQuery({
-    queryKey: ["provinces"],
-    queryFn: locationApi.getProvinces,
-    staleTime: Infinity, // Cache vĩnh viễn trong phiên làm việc
-    enabled: open && (type === "addAddress" || type === "updateAddress"),
-  });
-
-  const { data: districts = [] } = useQuery({
-    queryKey: ["districts", watchProvinceId],
-    queryFn: () => locationApi.getDistricts(String(watchProvinceId)),
-    enabled: !!watchProvinceId && open,
-    staleTime: Infinity,
-  });
-
-  const { data: wards = [] } = useQuery({
-    queryKey: ["wards", watchDistrictId || data?.district_id],
-    queryFn: () =>
-      locationApi.getWards(String(watchDistrictId || data?.district_id)),
-    enabled: !!(watchDistrictId || data?.district_id) && open,
-    staleTime: Infinity,
-  });
+  const { provinces, districts, wards } = useLocation(
+    watchProvinceId,
+    watchDistrictId
+  );
   useEffect(() => {
     if (!open) {
       form.resetFields();
@@ -107,10 +90,10 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
     if (type === "updateAddress" && data) {
       form.setFieldsValue({
         ...data,
-        // Ép tất cả về Number để đảm bảo khớp với value của Select Option
-        province_id: data.province_id ? Number(data.province_id) : undefined,
-        district_id: data.district_id ? Number(data.district_id) : undefined,
-        ward_id: data.ward_id ? Number(data.ward_id) : undefined,
+        // Chuyển sang String để khớp với ID từ API Esgoo
+        province_id: data.province_id ? String(data.province_id) : undefined,
+        district_id: data.district_id ? String(data.district_id) : undefined,
+        ward_id: data.ward_id ? String(data.ward_id) : undefined,
       });
     }
   }, [open, type, data, form, addresses?.data]);
@@ -133,25 +116,30 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
       if (type === "updateUser") {
         const tasks = [];
         const updatePayload: Partial<UpdateProfileReq> = {};
-      
         const fields: (keyof UpdateProfileReq)[] = ["name", "phone", "bio", "gender"];
         fields.forEach((field) => {
           if (values[field] !== data[field]) {
             updatePayload[field] = values[field] || "";
           }
         });
-      
-        if (values.dateOfBirth && (!data.dateOfBirth || !dayjs(values.dateOfBirth).isSame(dayjs(data.dateOfBirth), "day"))) {
+
+        if (
+          values.dateOfBirth &&
+          (!data.dateOfBirth ||
+            !dayjs(values.dateOfBirth).isSame(dayjs(data.dateOfBirth), "day"))
+        ) {
           updatePayload.dateOfBirth = values.dateOfBirth.format("YYYY-MM-DD");
         }
-      
+
         if (Object.keys(updatePayload).length > 0) {
           tasks.push(updateUserProfile(updatePayload as UpdateProfileReq));
         }
-      
+
         // 2. Chỉ update địa chỉ nếu người dùng THỰC SỰ chọn một địa chỉ mới
-        const currentDefaultId = addresses?.data?.find((a) => a.is_default)?._id;
-        
+        const currentDefaultId = addresses?.data?.find(
+          (a) => a.is_default
+        )?._id;
+
         // Điều kiện: Có chọn ID mới VÀ ID đó khác với ID mặc định hiện tại
         if (values.address_id && values.address_id !== currentDefaultId) {
           tasks.push(
@@ -160,13 +148,13 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             } as any)
           );
         }
-      
+
         if (tasks.length === 0) {
           toast.info("Không có thông tin nào thay đổi");
           setLoading(false);
           return onClose();
         }
-      
+
         await Promise.all(tasks);
         toast.success("Cập nhật thông tin thành công");
       } else if (type === "addAddress" || type === "updateAddress") {
@@ -183,7 +171,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
         const payload: CreateAddressDto = {
           ...values,
           type: +values.type,
-          province_id: +values.province_id,
+          province_id: +values.province_id, // Ép về số trước khi gửi API backend
           district_id: +values.district_id,
           ward_id: +values.ward_id,
           full_address: `${values.address}, ${wName}, ${dName}, ${pName}`,
@@ -308,8 +296,9 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                   onChange={handleProvinceChange}
                 >
                   {provinces.map((p) => (
-                    // Ép p.province_id về Number ở đây
-                    <Option key={p.province_id} value={Number(p.province_id)}>
+                    <Option key={p.province_id} value={p.province_id}>
+                      {" "}
+                      {/* Bỏ Number() */}
                       {p.province_name}
                     </Option>
                   ))}
@@ -324,9 +313,12 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                   size="large"
                   placeholder="Chọn huyện"
                   onChange={handleDistrictChange}
+                  disabled={!watchProvinceId} // Nên thêm để tránh user chọn nhầm
                 >
                   {districts.map((d) => (
-                    <Option key={d.district_id} value={Number(d.district_id)}>
+                    <Option key={d.district_id} value={d.district_id}>
+                      {" "}
+                      {/* Bỏ Number() */}
                       {d.district_name}
                     </Option>
                   ))}
@@ -337,9 +329,15 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             <div className="space-y-1">
               <Label>Phường/Xã</Label>
               <Form.Item name="ward_id" rules={[{ required: true }]}>
-                <Select size="large" placeholder="Chọn xã">
+                <Select
+                  size="large"
+                  placeholder="Chọn xã"
+                  disabled={!watchDistrictId}
+                >
                   {wards.map((w) => (
-                    <Option key={w.ward_id} value={Number(w.ward_id)}>
+                    <Option key={w.ward_id} value={w.ward_id}>
+                      {" "}
+                      {/* Bỏ Number() */}
                       {w.ward_name}
                     </Option>
                   ))}

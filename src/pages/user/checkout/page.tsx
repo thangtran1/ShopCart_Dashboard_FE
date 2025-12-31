@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
@@ -9,33 +9,19 @@ import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Separator } from "@/ui/separator";
 import { Textarea } from "@/ui/textarea";
 import useStore from "@/store/store";
-import {
-  CreditCard,
-  Truck,
-  Shield,
-  CheckCircle,
-} from "lucide-react";
+import { CreditCard, Truck, Shield, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useRouter } from "@/router/hooks";
-import {
-  District,
-  locationApi,
-  Province,
-  Ward,
-} from "@/api/services/provinceApi";
 import {} from "antd";
 
 import { Typography, Select } from "antd";
 import SelectPayment from "./components/SelectPayment";
+import { useLocation } from "@/hooks/useLocation";
 const { Title } = Typography;
 const { Option } = Select;
 
 const CheckoutPage = () => {
-  const [provinces, setProvinces] = useState<Province[]>([]);
-  const [districts, setDistricts] = useState<District[]>([]);
-  const [wards, setWards] = useState<Ward[]>([]);
-
   const navigate = useRouter();
   const { getTotalPrice, getSubTotalPrice, resetCart, addOrder } = useStore();
   const groupedItems = useStore((state) => state.getGroupedItems());
@@ -62,6 +48,10 @@ const CheckoutPage = () => {
     expiryDate: "",
     cvv: "",
   });
+  const { provinces, districts, wards } = useLocation(
+    formData.state,
+    formData.district
+  );
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -73,10 +63,21 @@ const CheckoutPage = () => {
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => {
+      const newData = { ...prev, [name]: value };
+
+      // Nếu đổi Tỉnh -> Reset Huyện và Xã
+      if (name === "state") {
+        newData.district = "";
+        newData.city = "";
+      }
+      // Nếu đổi Huyện -> Reset Xã
+      if (name === "district") {
+        newData.city = "";
+      }
+
+      return newData;
+    });
   };
 
   const handleCardInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,75 +159,52 @@ const CheckoutPage = () => {
   };
 
   const handlePlaceOrder = async () => {
-    // Validate form thông tin khách hàng
-    const requiredFields = [
-      "firstName",
-      "lastName",
-      "email",
-      "phone",
-      "address",
-      "city",
-      "state",
-      "zipCode",
-    ];
-    const missingFields = requiredFields.filter(
-      (field) => !formData[field as keyof typeof formData]
-    );
-
-    if (missingFields.length > 0) {
-      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
+    // 1. Validate nhanh
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      address,
+      state,
+      district,
+      city,
+    } = formData;
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phone ||
+      !address ||
+      !state ||
+      !district ||
+      !city
+    ) {
+      toast.error("Vui lòng nhập đầy đủ địa chỉ giao hàng!");
       return;
     }
 
-    // Nếu thanh toán bằng thẻ, validate thông tin thẻ
-    if (paymentMethod === "card") {
-      if (!validateCardData()) {
-        return;
-      }
-    }
+    // 2. Validate thẻ nếu là card
+    if (paymentMethod === "card" && !validateCardData()) return;
 
     setLoading(true);
     try {
+      // Giả lập API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       const orderNumber = crypto.randomUUID().slice(0, 8).toUpperCase();
 
-      if (paymentMethod === "card") {
-        // Simulate thanh toán thẻ tín dụng
-        toast.info("Đang xử lý thanh toán...");
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Ở đây bạn có thể map ID địa chỉ sang Tên để lưu vào DB cho đẹp
+      // Ví dụ: const finalData = { ...formData, stateName: provinces.find(...)?.name }
 
-        // Simulate: 90% thành công, 10% thất bại (demo)
-        const isPaymentSuccess = Math.random() > 0.1;
-
-        if (!isPaymentSuccess) {
-          toast.error(
-            "Thanh toán thất bại! Vui lòng kiểm tra lại thông tin thẻ hoặc thử lại sau."
-          );
-          setLoading(false);
-          return;
-        }
-
-        // Lưu order vào store trước khi reset cart
-        addOrder(orderNumber, formData, paymentMethod);
-
-        toast.success("Thanh toán thành công!");
-        resetCart();
-        navigate.push(`/success?orderNumber=${orderNumber}&payment=card`);
-      } else {
-        // COD - Thanh toán khi nhận hàng
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Lưu order vào store trước khi reset cart
-        addOrder(orderNumber, formData, paymentMethod);
-
-        toast.success(
-          "Đặt hàng thành công! Vui lòng chuẩn bị tiền mặt khi nhận hàng."
-        );
-        resetCart();
-        navigate.push(`/success?orderNumber=${orderNumber}&payment=cod`);
-      }
+      addOrder(orderNumber, formData, paymentMethod);
+      toast.success("Đặt hàng thành công!");
+      resetCart();
+      navigate.push(
+        `/success?orderNumber=${orderNumber}&payment=${paymentMethod}`
+      );
     } catch (error) {
-      console.error("Error placing order:", error);
-      toast.error("Có lỗi xảy ra khi đặt hàng!");
+      toast.error("Lỗi hệ thống, vui lòng thử lại!");
     } finally {
       setLoading(false);
     }
@@ -235,47 +213,6 @@ const CheckoutPage = () => {
   if (groupedItems.length === 0) {
     return null; // Will redirect in useEffect
   }
-
-  useEffect(() => {
-    const fetchProvinces = async () => {
-      try {
-        const data = await locationApi.getProvinces();
-        setProvinces(data);
-      } catch (error) {
-        console.error("Error fetching provinces:", error);
-      }
-    };
-    fetchProvinces();
-  }, []);
-  useEffect(() => {
-    if (formData.state) {
-      const fetchDistricts = async () => {
-        try {
-          const data = await locationApi.getDistricts(formData.state);
-          setDistricts(data);
-          setFormData((prev) => ({ ...prev, district: "", city: "" }));
-          setWards([]);
-        } catch (error) {
-          console.error("Error fetching districts:", error);
-        }
-      };
-      fetchDistricts();
-    }
-  }, [formData.state]);
-  useEffect(() => {
-    if (formData.district) {
-      const fetchWards = async () => {
-        try {
-          const data = await locationApi.getWards(formData.district);
-          setWards(data);
-          setFormData((prev) => ({ ...prev, city: "" }));
-        } catch (error) {
-          console.error("Error fetching wards:", error);
-        }
-      };
-      fetchWards();
-    }
-  }, [formData.district]);
 
   return (
     <div className="min-h-screen pb-5">
@@ -449,12 +386,12 @@ const CheckoutPage = () => {
                     <Label htmlFor="state">Tỉnh/Thành *</Label>
                     <Select
                       id="state"
-                      value={formData.state || undefined} 
+                      value={formData.state || undefined}
                       onChange={(value) => handleSelectChange("state", value)}
                       placeholder="Chọn Tỉnh/Thành"
                       className="w-full"
-                      dropdownClassName="border border-border rounded-md shadow-md"
-                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
+                      showSearch // Thêm dòng này
+                      optionFilterProp="children" // Hỗ trợ tìm kiếm theo tên
                     >
                       {provinces.map((p) => (
                         <Option key={p.province_id} value={p.province_id}>
@@ -469,15 +406,13 @@ const CheckoutPage = () => {
                     <Label htmlFor="district">Quận/Huyện *</Label>
                     <Select
                       id="district"
-                      value={formData.district || undefined} 
+                      value={formData.district || undefined}
                       onChange={(value) =>
                         handleSelectChange("district", value)
                       }
                       placeholder="Chọn Quận/Huyện"
                       className="w-full"
-                      dropdownClassName="border border-border rounded-md shadow-md"
-                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
-                      disabled={!districts.length}
+                      disabled={!provinces.length || !formData.state}
                     >
                       {districts.map((d) => (
                         <Option key={d.district_id} value={d.district_id}>
@@ -492,16 +427,15 @@ const CheckoutPage = () => {
                     <Label htmlFor="city">Phường/Xã *</Label>
                     <Select
                       id="city"
-                      value={formData.city || undefined} 
+                      value={formData.city || undefined}
                       onChange={(value) => handleSelectChange("city", value)}
                       placeholder="Chọn Phường/Xã"
                       className="w-full"
-                      dropdownClassName="border border-border rounded-md shadow-md"
-                      dropdownStyle={{ maxHeight: 400, overflowY: "auto" }}
-                      disabled={!wards.length}
+                      disabled={!districts.length || !formData.district}
                     >
                       {wards.map((w) => (
-                        <Option key={w.ward_id} value={w.ward_name}>
+                        // Khuyên dùng ward_id để đồng bộ, nếu backend cần name thì map lại lúc submit
+                        <Option key={w.ward_id} value={w.ward_id}>
                           {w.ward_name}
                         </Option>
                       ))}
