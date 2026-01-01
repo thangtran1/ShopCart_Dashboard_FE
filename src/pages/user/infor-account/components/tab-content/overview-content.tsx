@@ -35,6 +35,17 @@ export function OverviewContent() {
     });
   }
 
+  if (!profile?.phone) {
+    reminders.push({
+      key: "phone-info",
+      icon: "ℹ️",
+      message: `Vui lòng cập nhật số điện thoại để nhận thêm ưu đãi đặc quyền.`,
+      btnText: "Cập nhật ngay",
+      link: "/profile", // Chuyển hướng sang trang profile
+      colorClass: "bg-blue-50 border-blue-200 text-blue-600",
+    });
+  }
+
   // Check địa chỉ
   if (!isFetching && addresses?.length === 0) {
     reminders.push({
@@ -48,10 +59,10 @@ export function OverviewContent() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="space-y-3">
         {reminders.map((item) => (
-          <div key={item.key} className={`${item.colorClass} border rounded-lg p-4 flex items-center justify-between`}>
+          <div key={item.key} className={`${item.colorClass} border mb-4 rounded-lg p-4 flex items-center justify-between`}>
             <div className="flex items-center gap-3">
               <div className="text-lg">{item.icon}</div>
               <span className="text-sm text-gray-700 font-medium">
@@ -72,16 +83,16 @@ export function OverviewContent() {
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         {/* Recent Orders */}
-        <div className="col-span-1 lg:col-span-2 rounded-lg shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="col-span-1 lg:col-span-2">
+          <div className="flex items-center justify-between mb-2">
             <h2 className="text-lg font-semibold">Đơn hàng gần đây</h2>
           </div>
           <OrdersPage hideTitle />
         </div>
 
         {/* Your Benefits */}
-        <div className="rounded-lg shadow-sm lg:col-span-1">
-          <h2 className="text-lg font-semibold mb-4">Ưu đãi của bạn</h2>
+        <div className="lg:col-span-1">
+          <h2 className="text-lg font-semibold mb-2">Ưu đãi của bạn</h2>
           <div className="border border-border rounded-lg p-4">
             <h3 className="font-medium mb-2 truncate">
               [EMAIL] ƯU ĐÃI KHÁCH HÀNG...
@@ -110,7 +121,7 @@ export function OverviewContent() {
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full mt-6">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-semibold">Sản phẩm yêu thích</h2>
           {favoriteProduct && favoriteProduct.length > 3 && (

@@ -66,12 +66,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div>
       <div className="space-y-3">
         {reminders.map((item) => (
           <div
             key={item.key}
-            className={`${item.color} border rounded-lg p-4 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-500`}
+            className={`${item.color} border mb-4 rounded-lg p-4 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-500`}
           >
             <div className="flex items-center gap-3">
               <div className="text-lg">{item.icon}</div>
@@ -89,31 +89,33 @@ export default function ProfilePage() {
       </div>
 
       {/* CÁC SECTION THÔNG TIN */}
-      <UserInfoSection
-        addresses={addresses}
-        profile={profile}
-        onEdit={() => openDrawer("updateUser", profile)}
-      />
+      <div className="space-y-6">
+        <UserInfoSection
+          addresses={addresses}
+          profile={profile}
+          onEdit={() => openDrawer("updateUser", profile)}
+        />
 
-      <AddressSection
-        addresses={addresses}
-        isFetching={isFetching}
-        onAdd={() => openDrawer("addAddress")}
-        onEdit={(address) => openDrawer("updateAddress", address)}
-        onDelete={deleteAddress}
-      />
+        <AddressSection
+          addresses={addresses}
+          isFetching={isFetching}
+          onAdd={() => openDrawer("addAddress")}
+          onEdit={(address) => openDrawer("updateAddress", address)}
+          onDelete={deleteAddress}
+        />
 
-      <PasswordSection onChange={() => openDrawer("updatePassword")} />
+        <PasswordSection onChange={() => openDrawer("updatePassword")} />
 
-      <LinkedAccountSection />
+        <LinkedAccountSection />
 
-      {/* DRAWER TỔNG */}
-      <ProfileDrawer
-        open={drawerOpen}
-        type={drawerType}
-        data={drawerData}
-        onClose={closeDrawer}
-      />
+        {/* DRAWER TỔNG */}
+        <ProfileDrawer
+          open={drawerOpen}
+          type={drawerType}
+          data={drawerData}
+          onClose={closeDrawer}
+        />
+      </div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export function WarrantyContent() {
   ];
 
   return (
-    <div className="shadow-sm space-y-6">
+    <div className="space-y-6">
       <Title level={3} className="!text-xl !font-semibold">
         Tra cứu bảo hành
       </Title>
@@ -72,6 +72,6 @@ export function SupportContent() {
 
 export function TermsContent() {
   return (
-   <TermsPage />
+    <TermsPage />
   );
 }

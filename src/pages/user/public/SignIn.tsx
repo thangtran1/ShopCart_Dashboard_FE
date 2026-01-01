@@ -78,7 +78,7 @@ const SignIn = () => {
             className={`absolute right-0 mt-0 w-[320px] origin-top-right transition-all duration-300 ease-out z-50 ${dropdownOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
               }`}
           >
-            <div className="bg-background/95 backdrop-blur-xl rounded-[24px] border border-border shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-hidden">
+            <div className="bg-background backdrop-blur-xl rounded-[24px] border border-border shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-hidden">
               <div className="p-4 flex items-center gap-3 bg-muted/30">
                 <div className="w-10 h-10 rounded-xl overflow-hidden ring-1 ring-border">
                   {profile?.avatar ? (

@@ -42,12 +42,7 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     <>
       <aside className="flex-shrink-0">
         <div
-          className={`
-          h-full rounded-lg shadow-sm
-          transition-all duration-300
-          w-12
-          ${collapsed ? "md:w-14" : "md:w-64"}
-        `}
+          className={`h-full transition-all duration-300 w-12 ${collapsed ? "md:w-14" : "md:w-64"}`}
         >
           {/* TOGGLE – DESKTOP */}
           <div className="hidden md:flex justify-end px-2 py-2">

@@ -16,7 +16,7 @@ import { Icon } from "@/components/icon";
 const ProductCard = ({ product }: { product: any }) => {
   return (
     <div className="text-sm border rounded-2xl border-border group">
-      <div className="bg-card overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+      <div className="overflow-hidden hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
         <div className="relative aspect-square group overflow-hidden bg-background rounded-t-2xl">
           {product?.images && (
             <Link to={`/product/${product?.slug}`}>
