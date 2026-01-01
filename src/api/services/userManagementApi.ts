@@ -34,7 +34,6 @@ export interface User {
   avatar?: string;
   phone?: string;
   dateOfBirth?: string;
-  address?: string;
   bio?: string;
   lastLoginAt?: string;
   loginCount?: number;
@@ -63,7 +62,6 @@ export interface CreateUserReq {
   avatar?: string;
   phone?: string;
   dateOfBirth?: string;
-  address?: string;
   bio?: string;
 }
 
@@ -75,7 +73,6 @@ export interface UpdateUserReq {
   avatar?: string;
   phone?: string;
   dateOfBirth?: string;
-  address?: string;
   bio?: string;
 }
 
@@ -116,7 +113,6 @@ const transformUser = (user: any): User => ({
   avatar: user.avatar,
   phone: user.phone,
   dateOfBirth: user.dateOfBirth,
-  address: user.address,
   bio: user.bio,
   lastLoginAt: user.lastLoginAt,
   loginCount: user.loginCount,

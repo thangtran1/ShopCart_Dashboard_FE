@@ -91,7 +91,6 @@ export default function PersonalInfoTab({
     const changed =
       values.name !== profile.name ||
       values.phone !== profile.phone ||
-      values.address !== profile.address ||
       values.bio !== profile.bio ||
       (values.dateOfBirth &&
         !dayjs(values.dateOfBirth).isSame(dayjs(profile.dateOfBirth), "day"));
@@ -176,10 +175,6 @@ export default function PersonalInfoTab({
             </Form.Item>
           </Col>
         </Row>
-
-        <Form.Item name="address" label={t("profile.address")}>
-          <Input size="large" prefix={<HomeOutlined />} />
-        </Form.Item>
 
         <Form.Item name="bio" label={t("profile.bio")}>
           <TextArea size="large" rows={4} />

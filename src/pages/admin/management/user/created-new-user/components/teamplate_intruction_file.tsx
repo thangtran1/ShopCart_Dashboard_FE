@@ -6,7 +6,6 @@ export const templateData = [
     role: "user",
     status: "active",
     phone: "0123456789",
-    address: "Hà Nội",
     bio: "Mô tả ngắn về người dùng",
   },
   {
@@ -16,7 +15,6 @@ export const templateData = [
     role: "moderator",
     status: "active",
     phone: "0987654321",
-    address: "TP.HCM",
     bio: "Mô tả ngắn về người dùng",
   },
 ];
@@ -54,11 +52,6 @@ export const instructionData = [
     field: "phone",
     description: "Số điện thoại (tùy chọn)",
     example: "0123456789",
-  },
-  {
-    field: "address",
-    description: "Địa chỉ (tùy chọn)",
-    example: "Hà Nội",
   },
   {
     field: "bio",

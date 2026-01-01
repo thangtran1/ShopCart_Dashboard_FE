@@ -156,10 +156,6 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
         <Input size="large" placeholder={t("management.user.phone")} />
       </Form.Item>
 
-      <Form.Item name="address" label={t("management.user.address")}>
-        <Input size="large" placeholder={t("management.user.address")} />
-      </Form.Item>
-
       <Form.Item name="bio" label={t("management.user.bio")}>
         <Input.TextArea rows={3} placeholder={t("management.user.bio")} />
       </Form.Item>

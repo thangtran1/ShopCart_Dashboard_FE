@@ -212,26 +212,6 @@ export default function UserInformation({ userId }: { userId: string }) {
             </Form.Item>
 
             <Form.Item
-              name="address"
-              label={t("management.user.user-detail.address")}
-              rules={[
-                {
-                  required: true,
-                  message: t("management.user.user-detail.address-required"),
-                },
-              ]}
-            >
-              <Input
-                size="large"
-                prefix={<EnvironmentOutlined />}
-                placeholder={t(
-                  "management.user.user-detail.address-placeholder"
-                )}
-                className="rounded-lg"
-              />
-            </Form.Item>
-
-            <Form.Item
               name="role"
               label={t("management.user.user-detail.role")}
               rules={[
