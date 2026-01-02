@@ -55,12 +55,10 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
               <Mail className="w-4 h-4 text-muted-foreground" />
               {order.customerEmail}
             </p>
-            {order.customerPhone && (
-              <p className="text-foreground flex items-center gap-2 text-sm">
-                <Phone className="w-4 h-4 text-muted-foreground" />
-                {order.customerPhone}
-              </p>
-            )}
+            <p className="text-foreground flex items-center gap-2 text-sm">
+              <Phone className="w-4 h-4 text-muted-foreground" />
+              {order.shippingAddress?.phone}
+            </p>
           </div>
 
           {/* Thông tin đơn hàng */}
@@ -75,7 +73,7 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </p>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <Calendar className="w-4 h-4 text-muted-foreground" />
-              {order.orderDate && new Date(order.orderDate).toLocaleString("vi-VN")}
+              {order.createdAt && new Date(order.createdAt).toLocaleString("vi-VN")}
             </p>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">Trạng thái:</span>
@@ -94,7 +92,7 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
                   <Truck className="w-4 h-4 text-amber-500" />
                 )}
                 <span>
-                  {order.paymentMethod === "card" ? "Thẻ tín dụng/ghi nợ" : "Thanh toán khi nhận hàng"}
+                  {order.paymentMethod === "CARD" ? "Đã thay toán bằng thẻ tín dụng/ghi nợ" : "Thanh toán khi nhận hàng"}
                 </span>
               </p>
             )}
@@ -111,11 +109,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             <p className="text-foreground text-sm">
               {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.state}, {order.shippingAddress.zipCode}
             </p>
-            {order.notes && (
-              <p className="text-muted-foreground text-sm italic">
-                Ghi chú: {order.notes}
-              </p>
-            )}
+            <p className="text-muted-foreground text-sm italic">
+              Ghi chú: {order.shippingAddress.notes}
+            </p>
           </div>
         )}
 
@@ -134,11 +130,11 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
               <TableRow key={index}>
                 <TableCell className="flex items-center gap-3 text-foreground">
                   <img
-                    src={item.product.image}
-                    alt={item?.product?.name}
+                    src={item.image}
+                    alt={item.name}
                     className="w-14 h-14 border rounded-md object-cover"
                   />
-                  <span className="font-medium">{item.product?.name}</span>
+                  <span className="font-medium">{item.name}</span>
                 </TableCell>
 
                 <TableCell className="text-foreground">{item.quantity}</TableCell>

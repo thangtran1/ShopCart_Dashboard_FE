@@ -2,11 +2,11 @@
 import { Product } from "@/types";
 import { cn } from "@/lib/utils";
 import { ShoppingBag } from "lucide-react";
-import useStore from "@/store/store";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import QuantityButtons from "@/components/user/QuantityButtons";
 import { toast } from "sonner";
 import { Button } from "@/ui/button";
+import { useCart } from "@/hooks/useCart";
 
 interface Props {
   product: Product;
@@ -14,16 +14,21 @@ interface Props {
 }
 
 const AddToCartButton = ({ product, className }: Props) => {
-  const { addItem, getItemCount } = useStore();
-  const itemCount = getItemCount(product?._id);
+  const { items, addToCart } = useCart();
+  const currentItem = items.find((item: any) => item.product._id === product._id);
+  const itemCount = currentItem ? currentItem.quantity : 0;
   const isOutOfStock = product?.stock === 0;
 
-  const handleAddToCart = () => {
-    if ((product?.stock as number) > itemCount) {
-      addItem(product);
-      toast.success(
-        `${product?.name?.substring(0, 12)}... added successfully!`
-      );
+  const handleAddToCart = async () => {
+    if (product.stock > itemCount) {
+      try {
+        await addToCart({ productId: product._id, quantity: 1 });
+        toast.success(
+          `${product?.name?.substring(0, 12)}... added successfully!`
+        );
+      } catch (error) {
+        toast.error("Vui lòng đăng nhập để thực hiện");
+      }
     } else {
       toast.error("Can not add more than available stock");
     }

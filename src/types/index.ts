@@ -38,7 +38,7 @@ export interface Product {
   images?: Image[];
   category?: Category;
   brand?: Brand;
-  stock?: number;
+  stock: number;
   isNew?: boolean;
   isFeatured?: boolean;
   specifications?: string[];
@@ -54,6 +54,9 @@ export interface ShippingAddress {
   city: string;
   state: string;
   zipCode: string;
+  phone: string
+  notes: string
+  fullName: string
 }
 
 export interface Order {
@@ -69,10 +72,14 @@ export interface Order {
   paymentMethod?: string;
   orderDate: string;
   items: OrderItem[];
+  createdAt?: string
 }
 
 export interface OrderItem {
   product: Product;
   quantity: number;
   price: number;
+  image: string;
+  _id: string;
+  name: string;
 }

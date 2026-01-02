@@ -1,34 +1,57 @@
+"use client";
 import { Product } from "@/types";
-import useStore from "@/store/store";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Button } from "@/ui/button";
+import { useCart } from "@/hooks/useCart";
+import { useState } from "react";
 
 interface Props {
   product: Product;
   className?: string;
 }
+
 const QuantityButtons = ({ product, className }: Props) => {
-  const { addItem, removeItem, getItemCount } = useStore();
-  const itemCount = getItemCount(product?._id);
+  const { items, addToCart, removeItem } = useCart();
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const currentItem = items.find((item: any) => item.product._id === product._id);
+  const itemCount = currentItem ? currentItem.quantity : 0;
+
   const isOutOfStock = product?.stock === 0;
 
-  const handleRemoveProduct = () => {
-    removeItem(product?._id);
-    if (itemCount > 1) {
-      toast.success("Quantity Decreased successfully!");
-    } else {
-      toast.success(`${product?.name?.substring(0, 12)} removed successfully!`);
+  const handleRemoveProduct = async () => {
+    setIsUpdating(true);
+    try {
+      await removeItem(product._id);
+      if (itemCount > 1) {
+        toast.success("Quantity Decreased successfully!");
+      } else {
+        toast.success(
+          `${product?.name?.substring(0, 12)}... removed successfully!`
+        );
+      }
+    } catch (error) {
+      toast.error("Không thể cập nhật giỏ hàng");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
-  const handleAddToCart = () => {
-    if ((product?.stock as number) > itemCount) {
-      addItem(product);
-      toast.success("Quantity Increased successfully!");
+  const handleAddToCart = async () => {
+    if (product.stock > itemCount) {
+      setIsUpdating(true);
+      try {
+        await addToCart({ productId: product._id, quantity: 1 });
+        toast.success("Đã tăng số lượng!");
+      } catch (error) {
+        toast.error("Không thể cập nhật giỏ hàng");
+      } finally {
+        setIsUpdating(false);
+      }
     } else {
-      toast.error("Can not add more than available stock");
+      toast.error("Đã đạt giới hạn tồn kho!");
     }
   };
 
@@ -38,22 +61,29 @@ const QuantityButtons = ({ product, className }: Props) => {
         onClick={handleRemoveProduct}
         variant="outline"
         size="icon"
-        disabled={itemCount === 0 || isOutOfStock}
+        disabled={itemCount === 0 || isOutOfStock || isUpdating}
         className="w-6 h-6 border-[1px] hover:bg-border hover:border-border"
       >
-        <Minus />
+        <Minus className="w-3 h-3" />
       </Button>
-      <span className="font-semibold text-sm w-6 text-center">
-        {itemCount}
-      </span>
+
+      <div className="w-6 flex justify-center">
+        {isUpdating ? (
+          <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />
+        ) : (
+          <span className="font-semibold text-sm text-center">
+            {itemCount}
+          </span>
+        )}
+      </div>
       <Button
         onClick={handleAddToCart}
         variant="outline"
         size="icon"
-        disabled={isOutOfStock}
+        disabled={isOutOfStock || isUpdating}
         className="w-6 h-6 border-[1px] hover:bg-border hover:border-border"
       >
-        <Plus />
+        <Plus className="w-3 h-3" />
       </Button>
     </div>
   );

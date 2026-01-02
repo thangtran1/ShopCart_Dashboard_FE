@@ -3,13 +3,13 @@ import { EyeInvisibleOutlined, EyeOutlined, UserOutlined } from "@ant-design/ico
 import { useState } from "react";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Avatar } from "antd";
-import useStore from "@/store/store";
+import { useOrder } from "@/hooks/useOrder";
 
 export function Header() {
   const { profile } = useUserProfile();
-  const orders = useStore((state) => state.orders);
-
   const [showPhone, setShowPhone] = useState(false);
+  const { orders } = useOrder();
+  const orderCount = orders?.length || 0;
 
   const phone = profile?.phone ?? "";
   const maskedPhone = phone.replace(/^(\d{3})\d+(\d{2})$/, "$1****$2");
@@ -58,7 +58,7 @@ export function Header() {
           <div className="flex flex-col items-start">
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-error/70 text-error font-semibold">
-                {orders?.length}
+                {orderCount}
               </span>
             </div>
             <p className="text-xs text-foreground mt-1">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import { Button } from "@/ui/button";
 import { Input } from "@/ui/input";
@@ -8,23 +8,24 @@ import { Label } from "@/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Separator } from "@/ui/separator";
 import { Textarea } from "@/ui/textarea";
-import useStore from "@/store/store";
-import { CreditCard, Truck, Shield, CheckCircle } from "lucide-react";
+import { CreditCard, Truck, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { useRouter } from "@/router/hooks";
-import {} from "antd";
+import { } from "antd";
 
 import { Typography, Select } from "antd";
 import SelectPayment from "./components/SelectPayment";
 import { useLocation } from "@/hooks/useLocation";
+import { useCart } from "@/hooks/useCart";
+import { useOrder } from "@/hooks/useOrder";
 const { Title } = Typography;
 const { Option } = Select;
 
 const CheckoutPage = () => {
   const navigate = useRouter();
-  const { getTotalPrice, getSubTotalPrice, resetCart, addOrder } = useStore();
-  const groupedItems = useStore((state) => state.getGroupedItems());
+  const { items, totalAmount, clearCart, loading: cartLoading } = useCart();
+  const { placeOrder } = useOrder();
 
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -158,61 +159,54 @@ const CheckoutPage = () => {
     return true;
   };
 
+  const getLocationNames = () => {
+    const provinceName = provinces.find(p => p.province_id === formData.state)?.province_name || "";
+    const districtName = districts.find(d => d.district_id === formData.district)?.district_name || "";
+    const wardName = wards.find(w => w.ward_id === formData.city)?.ward_name || "";
+    return { provinceName, districtName, wardName };
+  };
+
   const handlePlaceOrder = async () => {
-    // 1. Validate nhanh
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      address,
-      state,
-      district,
-      city,
-    } = formData;
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !phone ||
-      !address ||
-      !state ||
-      !district ||
-      !city
-    ) {
-      toast.error("Vui lòng nhập đầy đủ địa chỉ giao hàng!");
+    const { firstName, lastName, phone, address, state, district, city, notes } = formData;
+
+    if (!firstName || !lastName || !phone || !address || !state || !district || !city || !notes) {
+      toast.error("Vui lòng nhập đầy đủ thông tin giao hàng!");
       return;
     }
 
-    // 2. Validate thẻ nếu là card
-    if (paymentMethod === "card" && !validateCardData()) return;
+    const { provinceName, districtName, wardName } = getLocationNames();
 
-    setLoading(true);
+
+    const orderData = {
+      shippingAddress: {
+        fullName: `${firstName} ${lastName}`,
+        phone: phone,
+        address: `${address}, ${wardName}, ${districtName}, ${provinceName}`,
+        city: provinceName,
+        notes: notes
+      },
+      paymentMethod: paymentMethod.toUpperCase(),
+    };
+
     try {
-      // Giả lập API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = await placeOrder(orderData);
 
-      const orderNumber = crypto.randomUUID().slice(0, 8).toUpperCase();
-
-      // Ở đây bạn có thể map ID địa chỉ sang Tên để lưu vào DB cho đẹp
-      // Ví dụ: const finalData = { ...formData, stateName: provinces.find(...)?.name }
-
-      addOrder(orderNumber, formData, paymentMethod);
-      toast.success("Đặt hàng thành công!");
-      resetCart();
-      navigate.push(
-        `/success?orderNumber=${orderNumber}&payment=${paymentMethod}`
-      );
-    } catch (error) {
-      toast.error("Lỗi hệ thống, vui lòng thử lại!");
-    } finally {
-      setLoading(false);
+      if (result) {
+        toast.success("Đặt hàng thành công!");
+        await clearCart();
+        navigate.push(`/success?orderNumber=${result._id}`);
+      }
+    } catch (error: any) {
+      toast.error("Lỗi đặt hàng, vui lòng thử lại!");
     }
   };
-
-  if (groupedItems.length === 0) {
-    return null; // Will redirect in useEffect
-  }
+  useEffect(() => {
+    if (!cartLoading && items.length === 0) {
+      navigate.push("/cart");
+    }
+  }, [items, cartLoading, navigate]);
+  if (cartLoading) return <div className="p-20 text-center">Đang tải giỏ hàng...</div>;
+  if (items.length === 0) return null;
 
   return (
     <div className="min-h-screen pb-5">
@@ -230,7 +224,7 @@ const CheckoutPage = () => {
 
               <div className="space-y-4 border border-border rounded-lg p-4">
                 <div className="space-y-2">
-                  {groupedItems.map(({ product, quantity }) => (
+                  {items.map(({ product, quantity }) => (
                     <div
                       key={product._id}
                       className="flex items-center gap-3 p-2 border border-border rounded-lg hover:shadow-md transition-shadow"
@@ -264,13 +258,11 @@ const CheckoutPage = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Tạm tính:</span>
-                    <PriceFormatter amount={getSubTotalPrice()} />
+                    comming soom ...
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Giảm giá:</span>
-                    <PriceFormatter
-                      amount={getSubTotalPrice() - getTotalPrice()}
-                    />
+                    comming soom ...
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Phí vận chuyển:</span>
@@ -279,10 +271,7 @@ const CheckoutPage = () => {
                   <Separator />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Tổng cộng:</span>
-                    <PriceFormatter
-                      amount={getTotalPrice()}
-                      className="text-lg font-bold"
-                    />
+                    <PriceFormatter amount={totalAmount} className="text-lg font-bold" />
                   </div>
                 </div>
 
@@ -482,11 +471,10 @@ const CheckoutPage = () => {
                   onValueChange={setPaymentMethod}
                 >
                   <div
-                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${
-                      paymentMethod === "card"
-                        ? "border-primary bg-primary/5"
-                        : ""
-                    }`}
+                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${paymentMethod === "card"
+                      ? "border-primary bg-primary/5"
+                      : ""
+                      }`}
                   >
                     <RadioGroupItem value="card" id="card" />
                     <Label
@@ -498,11 +486,10 @@ const CheckoutPage = () => {
                     </Label>
                   </div>
                   <div
-                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${
-                      paymentMethod === "cod"
-                        ? "border-primary bg-primary/5"
-                        : ""
-                    }`}
+                    className={`flex items-center space-x-2 p-4 border rounded-lg transition-colors ${paymentMethod === "cod"
+                      ? "border-primary bg-primary/5"
+                      : ""
+                      }`}
                   >
                     <RadioGroupItem value="cod" id="cod" />
                     <Label
@@ -630,18 +617,7 @@ const CheckoutPage = () => {
                     </div>
                   ) : (
                     <div className="flex text-foreground cursor-pointer items-center gap-2">
-                      {paymentMethod === "card" ? (
-                        <>
-                          Thanh Toán -{" "}
-                          <PriceFormatter amount={getTotalPrice()} />
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle className="w-5 h-5" />
-                          Đặt Hàng (COD) -{" "}
-                          <PriceFormatter amount={getTotalPrice()} />
-                        </>
-                      )}
+                      Thanh toán
                     </div>
                   )}
                 </Button>

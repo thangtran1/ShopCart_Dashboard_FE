@@ -1,6 +1,5 @@
 "use client";
 
-import { Order } from "@/types";
 import { TableBody, TableCell, TableRow } from "@/ui/table";
 import {
   Tooltip,
@@ -15,30 +14,30 @@ import { useState } from "react";
 import OrderDetailDialog from "./OrderDetailDialog";
 import { toast } from "sonner";
 
-const OrdersComponent = ({ orders }: { orders: Order[] }) => {
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const handleDelete = () => {
-    toast.error("Xóa đơn hàng chưa được hỗ trợ");
-  };
+const OrdersComponent = ({ orders }: { orders: any[] }) => {
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   return (
     <>
       <TableBody>
         <TooltipProvider>
-          {orders.map((order) => (
-            <Tooltip key={order?.orderNumber}>
+          {orders.map((order) => {
+            return <Tooltip key={order?._id}>
               <TooltipTrigger asChild>
                 <TableRow
-                  className="cursor-pointer hover:bg-border h-12"
+                  className="cursor-pointer hover:bg-muted/50 h-12"
                   onClick={() => setSelectedOrder(order)}
                 >
                   <TableCell className="font-medium">
-                    {order.orderNumber?.slice(-10) ?? "N/A"}...
+                    {order._id?.slice(-8).toUpperCase() ?? "N/A"}
                   </TableCell>
+
                   <TableCell className="hidden md:table-cell">
-                    {order?.orderDate &&
-                      dayjs(order.orderDate).format("DD/MM/YYYY HH:mm")}
+                    {order?.createdAt &&
+                      dayjs(order.createdAt).format("DD/MM/YYYY HH:mm")}
                   </TableCell>
-                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>
+                    {order.shippingAddress?.fullName}
+                  </TableCell>
                   <TableCell className="hidden sm:table-cell">
                     {order.customerEmail}
                   </TableCell>
@@ -49,21 +48,23 @@ const OrdersComponent = ({ orders }: { orders: Order[] }) => {
                     />
                   </TableCell>
                   <TableCell>
-                    {order?.status && (
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === "paid"
-                          ? "bg-success text-white"
-                          : "bg-warning text-white"
-                          }`}
-                      >
-                        {order.status === "paid" ? "Đã thanh toán" : "Chờ thanh toán"}
-                      </span>
-                    )}
+                    <span
+                      className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${order.status === "processing" || order.status === "pending"
+                        ? "bg-amber-100 text-amber-700"
+                        : order.status === "delivered"
+                          ? "bg-green-100 text-green-700"
+                          : "bg-slate-100 text-slate-700"
+                        }`}
+                    >
+                      {order.status === "pending" ? "Chờ xử lý" :
+                        order.status === "processing" ? "Đang xử lý" :
+                          order.status === "delivered" ? "Đã giao" : order.status}
+                    </span>
                   </TableCell>
                   <TableCell
                     onClick={(event) => {
                       event.stopPropagation();
-                      handleDelete();
+                      toast.error("Vui lòng liên hệ hỗ trợ để hủy đơn hàng");
                     }}
                     className="flex items-center justify-center group"
                   >
@@ -78,7 +79,7 @@ const OrdersComponent = ({ orders }: { orders: Order[] }) => {
                 <p>Xem chi tiết đơn hàng</p>
               </TooltipContent>
             </Tooltip>
-          ))}
+          })}
         </TooltipProvider>
       </TableBody>
       <OrderDetailDialog

@@ -12,6 +12,9 @@ const AUTH_PREFIX = "/auth";
 const SYSTEM_PREFIX = "/system";
 const PRODUCT_PREFIX = "/products"
 const ADDRESSES_PREFIX = "/addresses"
+const CARTS_PREFIX = "/cart"
+const ORDERS_PREFIX = "/orders"
+
 export const API_URL = {
   BANNER: {
     CREATE: `${BANNER_PREFIX}`,
@@ -175,5 +178,17 @@ export const API_URL = {
       UPDATE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
       DELETE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
       DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/admin/${id}`,
+    },
+
+    CART: {
+      GET: `${CARTS_PREFIX}`,
+      ADD: `${CARTS_PREFIX}/add`,
+      CLEAR: `${CARTS_PREFIX}/clear`,
+      REMOVE_PRODUCT: (productId: string) => `${CARTS_PREFIX}/product/${productId}`,
+    },
+    ORDERS: {
+      CREATE: `${ORDERS_PREFIX}`,
+      GET_MY_ORDERS: `${ORDERS_PREFIX}/my-orders`,
+      GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
     },
 };

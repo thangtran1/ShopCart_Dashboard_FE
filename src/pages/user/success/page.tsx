@@ -1,22 +1,14 @@
 "use client";
 
-import useStore from "@/store/store";
 import { useSearchParams } from "react-router";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { motion } from "framer-motion";
 import { Check, Package, CreditCard, Truck, Wallet } from "lucide-react";
 
 const SuccessPageContent = () => {
-  const { resetCart } = useStore();
   const [searchParams] = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const paymentMethod = searchParams.get("payment") || "cod";
-
-  useEffect(() => {
-    if (orderNumber) {
-      resetCart();
-    }
-  }, [orderNumber, resetCart]);
 
   const getPaymentInfo = () => {
     if (paymentMethod === "card") {

@@ -1,15 +1,14 @@
 "use client";
 
 import { useCopyToClipboard } from "@/hooks";
-import { useAddressActions } from "@/hooks/useAddresses"; // Thêm hook địa chỉ
-import { useUserProfile } from "@/hooks/useUserProfile"; // Thêm hook profile
+import { useAddressActions } from "@/hooks/useAddresses";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import OrdersPage from "@/pages/user/orders/page";
 import ProductCard from "@/pages/user/public/ProductCard";
 import useStore from "@/store/store";
 import { Badge } from "@/ui/badge";
 import SeeMore from "@/ui/see-more";
 import { Button } from "antd";
-import { Link } from "react-router";
 import { toast } from "sonner";
 
 export function OverviewContent() {
