@@ -185,6 +185,7 @@ export const API_URL = {
       ADD: `${CARTS_PREFIX}/add`,
       CLEAR: `${CARTS_PREFIX}/clear`,
       REMOVE_PRODUCT: (productId: string) => `${CARTS_PREFIX}/product/${productId}`,
+      DECREASE_PRODUCT: (productId: string) => `${CARTS_PREFIX}/decrease-quantity/${productId}`,
     },
     ORDERS: {
       CREATE: `${ORDERS_PREFIX}`,

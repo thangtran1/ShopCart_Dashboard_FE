@@ -50,13 +50,12 @@ const CartPage = () => {
       setIsProcessing(null);
     }
   };
-  
   const handleCheckout = () => {
     navigate.push("/checkout");
   };
 
   const subTotal = totalAmount;
-  const shippingFee = 0; 
+  const shippingFee = 0;
   const finalTotal = subTotal + shippingFee;
 
   if (!userToken?.accessToken) return <NoAccess />;
@@ -75,18 +74,29 @@ const CartPage = () => {
   if (items.length === 0) return <EmptyCart />;
 
   return (
-    <div className="pb-6">
-      <div className="flex items-end gap-3 mb-6">
-        <Title>Giỏ hàng của bạn</Title>
-        <Badge
-          count={items.length}
-          style={{ backgroundColor: "#1677ff" }}
-          offset={[8, -4]}
-        >
-          <span className="text-muted-foreground ml-1">
-            ( {items.length} sản phẩm )
-          </span>
-        </Badge>
+    <div>
+      <div className="flex items-center justify-between pb-6">
+        <div className="flex items-center gap-4">
+          <Badge
+            count={items.length}
+            showZero
+            color="#1677ff"
+            offset={[-2, 2]}
+          >
+            <div className="p-3 bg-primary/10 rounded-xl transition-colors hover:bg-primary/20">
+              <ShoppingCartOutlined className="text-2xl text-primary" />
+            </div>
+          </Badge>
+
+          <div>
+            <Title className="text-2xl font-bold tracking-tight mb-0.5">
+              Giỏ hàng của bạn
+            </Title>
+            <p className="text-sm text-muted-foreground">
+              Xem lại các sản phẩm đã chọn và tiến hành thanh toán đơn hàng của bạn
+            </p>
+          </div>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-4">
@@ -99,11 +109,10 @@ const CartPage = () => {
               return (
                 <div
                   key={product?._id}
-                  className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${
-                    isItemLoading
-                      ? "opacity-50 pointer-events-none"
-                      : "hover:bg-muted/50"
-                  }`}
+                  className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${isItemLoading
+                    ? "opacity-50 pointer-events-none"
+                    : "hover:bg-muted/50"
+                    }`}
                 >
                   <div className="relative border rounded-xl overflow-hidden shrink-0 shadow-sm mx-auto sm:mx-0">
                     <img
@@ -264,21 +273,19 @@ const CartPage = () => {
               </p>
             </div>
             <Button
-                type="primary"
-                size="large"
-                block
-                className="h-14 font-bold text-lg rounded-xl shadow-lg shadow-blue-100 uppercase tracking-widest hover:scale-[1.02] transition"
-                onClick={handleCheckout}
-              >
-                Tiến hành đặt hàng
-              </Button>
-              
-              <div className="flex items-center justify-center gap-4 grayscale">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4" alt="visa" />
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-6" alt="master" />
-              </div>
+              type="primary"
+              size="large"
+              block
+              className="h-14 font-bold text-lg rounded-xl shadow-lg shadow-blue-100 uppercase tracking-widest hover:scale-[1.02] transition"
+              onClick={handleCheckout}
+            >
+              Tiến hành đặt hàng
+            </Button>
+            <div className="flex items-center justify-center gap-4 grayscale">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" className="h-4" alt="visa" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" className="h-6" alt="master" />
+            </div>
           </div>
-         
         </div>
       </div>
     </div>

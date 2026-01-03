@@ -9,7 +9,7 @@ import Title from "@/ui/title";
 import { useUserInfo } from "@/store/userStore";
 import NoAccess from "@/components/user/NoAccess";
 import { useOrder } from "@/hooks/useOrder";
-import { Loader2 } from "lucide-react";
+import { Loader2, ShoppingBag } from "lucide-react";
 
 interface OrdersPageProps {
   hideTitle?: boolean;
@@ -18,7 +18,6 @@ interface OrdersPageProps {
 const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
   const userInfo = useUserInfo();
   const { orders, loading, fetchMyOrders } = useOrder();
-console.log(orders)
   useEffect(() => {
     if (userInfo?.id) {
       fetchMyOrders();
@@ -33,44 +32,50 @@ console.log(orders)
 
   if (loading && !orders?.length) {
     return (
-      <div className="flex h-[400px] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2">Đang tải danh sách đơn hàng...</span>
+      <div className="flex h-[450px] flex-col items-center justify-center gap-4">
+        <Loader2 className="h-10 w-10 animate-spin text-primary/80" />
+        <p className="text-muted-foreground animate-pulse font-medium">
+          Đang tải danh sách đơn hàng...
+        </p>
       </div>
     );
   }
 
   return (
-    <>
+    <div>
       {orders?.length ? (
         <>
           {!hideTitle && (
-            <div className="flex items-center gap-2 pb-3">
-              <Title>Danh sách đơn hàng</Title>
+            <div className="flex items-center justify-between pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <ShoppingBag className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <Title className="text-2xl font-bold tracking-tight">Danh sách đơn hàng</Title>
+                  <p className="text-sm text-muted-foreground">
+                    Quản lý và theo dõi trạng thái các đơn hàng của bạn
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
-          <Card className="w-full">
-            <CardContent>
-              <ScrollArea>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Số đơn hàng</TableHead>
-                      <TableHead className="hidden md:table-cell">
-                        Ngày đặt
-                      </TableHead>
-                      <TableHead>Tên người đặt</TableHead>
-                      <TableHead className="hidden sm:table-cell">
-                        Email
-                      </TableHead>
-                      <TableHead className="hidden sm:table-cell">Tạm tính</TableHead>
-                      <TableHead className="hidden lg:table-cell text-center">Khuyến mãi</TableHead>
-                      <TableHead>Tổng thanh toán</TableHead>
-                      <TableHead>Trạng thái</TableHead>
-                      <TableHead className="text-center">
-                        Hành động
-                      </TableHead>
+          <Card className="w-full shadow-lg border-none">
+            <CardContent className="p-0">
+              <ScrollArea className="h-[500px] w-full rounded-md border">
+                <Table className="relative w-full border-collapse">
+                  <TableHeader className="sticky top-0 z-30 bg-secondary shadow-sm">
+                    <TableRow className="hover:bg-transparent border-b-2">
+                      <TableHead className="font-bold h-12">Mã đơn hàng</TableHead>
+                      <TableHead className="hidden md:table-cell font-bold">Ngày đặt</TableHead>
+                      <TableHead className="font-bold">Người đặt</TableHead>
+                      <TableHead className="hidden sm:table-cell font-bold">Email</TableHead>
+                      <TableHead className="hidden sm:table-cell font-bold text-right">Tạm tính</TableHead>
+                      <TableHead className="hidden lg:table-cell text-center font-bold">Giảm giá</TableHead>
+                      <TableHead className="font-bold text-right">Tổng cộng</TableHead>
+                      <TableHead className="text-center font-bold">Trạng thái</TableHead>
+                      <TableHead className="text-center font-bold">Thao tác</TableHead>
                     </TableRow>
                   </TableHeader>
 
@@ -82,12 +87,14 @@ console.log(orders)
           </Card>
         </>
       ) : (
-        <NoAccess
-          hidden
-          details="Bạn chưa có đơn hàng nào. Hãy mua sắm để tạo đơn hàng đầu tiên!"
-        />
+        <div className="min-h-[500px] flex items-center justify-center">
+          <NoAccess
+            hidden
+            details="Bạn chưa có đơn hàng nào. Hãy mua sắm để tạo đơn hàng đầu tiên!"
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

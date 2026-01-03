@@ -13,7 +13,7 @@ interface Props {
 }
 
 const QuantityButtons = ({ product, className }: Props) => {
-  const { items, addToCart, removeItem } = useCart();
+  const { items, addToCart, decreaseItem } = useCart();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const currentItem = items.find((item: any) => item.product._id === product._id);
@@ -21,10 +21,10 @@ const QuantityButtons = ({ product, className }: Props) => {
 
   const isOutOfStock = product?.stock === 0;
 
-  const handleRemoveProduct = async () => {
+  const handleDecreaseProduct = async () => {
     setIsUpdating(true);
     try {
-      await removeItem(product._id);
+      await decreaseItem(product._id);
       if (itemCount > 1) {
         toast.success("Quantity Decreased successfully!");
       } else {
@@ -58,7 +58,7 @@ const QuantityButtons = ({ product, className }: Props) => {
   return (
     <div className={cn("flex items-center gap-1 pb-1 text-base", className)}>
       <Button
-        onClick={handleRemoveProduct}
+        onClick={handleDecreaseProduct}
         variant="outline"
         size="icon"
         disabled={itemCount === 0 || isOutOfStock || isUpdating}

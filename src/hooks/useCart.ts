@@ -38,6 +38,19 @@ export const useCart = () => {
     }
   });
 
+  // 3. Mutation: giảm SL sản phẩm
+  const decreaseMutation = useMutation({
+    mutationFn: (productId: string) => cartService.decreaseItem(productId),
+    onSuccess: (response) => {
+      const updatedItems = response?.items || response.items;
+      queryClient.setQueryData(["cart"], updatedItems);
+    },
+    onError: (error) => {
+      console.error("Lỗi khi giảm SL sản phẩm:", error);
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+    }
+  });
+
   // 4. Mutation: Làm trống giỏ hàng (MỚI BỔ SUNG)
   const clearMutation = useMutation({
     mutationFn: () => cartService.clearCart(),
@@ -61,6 +74,7 @@ export const useCart = () => {
     loading,
     addToCart: addMutation.mutateAsync,
     removeItem: removeMutation.mutateAsync,
+    decreaseItem: decreaseMutation.mutateAsync,
     clearCart: clearMutation.mutateAsync,
     totalAmount,
   };

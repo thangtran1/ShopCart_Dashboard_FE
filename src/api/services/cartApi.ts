@@ -34,7 +34,7 @@ export const cartService = {
       return response.data.data;
     },
   
-    // Xóa sản phẩm
+    // Xóa 1 sản phẩm trong giỏ hàng
     removeItem: async (productId: string): Promise<CartResponse> => {
       const response = await apiClient.delete({ 
         url: API_URL.CART.REMOVE_PRODUCT(productId) 
@@ -47,4 +47,13 @@ export const cartService = {
       const response = await apiClient.delete({ url: API_URL.CART.CLEAR });
       return response.data.data;
     },
+
+    // giảm 1 sản phẩm trong quantity
+    decreaseItem: async (productId: string): Promise<CartResponse> => {
+      const response = await apiClient.patch({ 
+        url: API_URL.CART.DECREASE_PRODUCT(productId) 
+      });
+      return response.data.data;
+    },
+
   };
