@@ -1,12 +1,13 @@
 "use client";
 import { Product } from "@/types";
 import { cn } from "@/lib/utils";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Loader2 } from "lucide-react"; // Thêm Loader2
 import PriceFormatter from "@/components/user/PriceFormatter";
 import QuantityButtons from "@/components/user/QuantityButtons";
 import { toast } from "sonner";
 import { Button } from "@/ui/button";
 import { useCart } from "@/hooks/useCart";
+import { useState } from "react";
 
 interface Props {
   product: Product;
@@ -15,12 +16,15 @@ interface Props {
 
 const AddToCartButton = ({ product, className }: Props) => {
   const { items, addToCart } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+
   const currentItem = items.find((item: any) => item.product._id === product._id);
   const itemCount = currentItem ? currentItem.quantity : 0;
   const isOutOfStock = product?.stock === 0;
 
   const handleAddToCart = async () => {
     if (product.stock > itemCount) {
+      setIsLoading(true); 
       try {
         await addToCart({ productId: product._id, quantity: 1 });
         toast.success(
@@ -28,11 +32,14 @@ const AddToCartButton = ({ product, className }: Props) => {
         );
       } catch (error) {
         toast.error("Vui lòng đăng nhập để thực hiện");
+      } finally {
+        setIsLoading(false);
       }
     } else {
       toast.error("Can not add more than available stock");
     }
   };
+
   return (
     <div className="h-12 flex items-center">
       {itemCount ? (
@@ -51,13 +58,23 @@ const AddToCartButton = ({ product, className }: Props) => {
       ) : (
         <Button
           onClick={handleAddToCart}
-          disabled={isOutOfStock}
+          disabled={isOutOfStock || isLoading}
           className={cn(
-            "shadow-none text-foreground font-semibold hover:bg-primary/80 cursor-pointer",
+            "w-full shadow-none text-foreground font-semibold hover:bg-primary/80 cursor-pointer",
             className
           )}
         >
-          <ShoppingBag /> {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Adding...
+            </>
+          ) : (
+            <>
+              <ShoppingBag className="mr-2 h-4 w-4" /> 
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+            </>
+          )}
         </Button>
       )}
     </div>

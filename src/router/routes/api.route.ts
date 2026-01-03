@@ -14,7 +14,7 @@ const PRODUCT_PREFIX = "/products"
 const ADDRESSES_PREFIX = "/addresses"
 const CARTS_PREFIX = "/cart"
 const ORDERS_PREFIX = "/orders"
-
+const  COUPONS_PREFIX  =  "/coupons"
 export const API_URL = {
   BANNER: {
     CREATE: `${BANNER_PREFIX}`,
@@ -191,4 +191,8 @@ export const API_URL = {
       GET_MY_ORDERS: `${ORDERS_PREFIX}/my-orders`,
       GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
     },
+    COUPONS: {
+      AVAILABLE: `${COUPONS_PREFIX}/available`,
+       VALIDATE: `${COUPONS_PREFIX}/validate`,
+    }
 };

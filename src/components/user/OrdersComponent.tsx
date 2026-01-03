@@ -13,6 +13,7 @@ import { X } from "lucide-react";
 import { useState } from "react";
 import OrderDetailDialog from "./OrderDetailDialog";
 import { toast } from "sonner";
+import { Badge } from "@/ui/badge";
 
 const OrdersComponent = ({ orders }: { orders: any[] }) => {
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -28,7 +29,7 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                   onClick={() => setSelectedOrder(order)}
                 >
                   <TableCell className="font-medium">
-                    {order._id?.slice(-8).toUpperCase() ?? "N/A"}
+                    <Badge variant={'info'}>{order._id?.slice(-8).toUpperCase() ?? "N/A"}</Badge>
                   </TableCell>
 
                   <TableCell className="hidden md:table-cell">
@@ -43,9 +44,33 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                   </TableCell>
                   <TableCell>
                     <PriceFormatter
-                      amount={order?.totalAmount}
+                      amount={order?.subTotal}
                       className="font-medium"
                     />
+                  </TableCell>
+
+                  <TableCell className="hidden lg:table-cell text-center">
+                    {order.discountAmount ? (
+                      <Badge variant="outline" className="text-blue-500 border-blue-500">
+                        <PriceFormatter
+                      amount={order?.discountAmount}
+                      className="font-medium"
+                    />
+                      </Badge>
+                    ) : (
+                      <span className="text-muted-foreground text-xs">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <PriceFormatter
+                        amount={order?.totalAmount}
+                        className="font-bold text-primary"
+                      />
+                      <span className="text-[9px]  uppercase font-semibold text-muted-foreground">
+                        {order.paymentMethod === 'C OD' ? 'Tiền mặt' : 'Chuyển khoản'}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <span

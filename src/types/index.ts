@@ -52,34 +52,32 @@ export interface Author {
 export interface ShippingAddress {
   address: string;
   city: string;
-  state: string;
-  zipCode: string;
   phone: string
-  notes: string
   fullName: string
 }
 
-export interface Order {
-  _id?: string;
-  orderNumber: string;
+export interface OrderConfig {
+  userId: string
   customerName: string;
   customerEmail: string;
-  customerPhone?: string;
-  shippingAddress?: ShippingAddress;
-  notes?: string;
-  totalAmount: number;
+  items: OrderItem[]
+  orderNumber: string;
+  totalAmount: number; // tổng tiền sau khi giảm
+  subTotal: number // tổng tiền khi chưa giảm
+  discountAmount: number // số tiền giảm
+  couponCode: string // mã giảm giá
+  shippingAddress: ShippingAddress
   status: string;
-  paymentMethod?: string;
-  orderDate: string;
-  items: OrderItem[];
-  createdAt?: string
+  paymentMethod: string;
+  _id: string;
+  createdAt: string;
 }
 
 export interface OrderItem {
-  product: Product;
-  quantity: number;
+  product: string; 
+  name: string;
   price: number;
   image: string;
+  quantity: number;
   _id: string;
-  name: string;
 }

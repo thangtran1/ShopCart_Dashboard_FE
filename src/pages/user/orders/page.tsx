@@ -18,7 +18,7 @@ interface OrdersPageProps {
 const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
   const userInfo = useUserInfo();
   const { orders, loading, fetchMyOrders } = useOrder();
-
+console.log(orders)
   useEffect(() => {
     if (userInfo?.id) {
       fetchMyOrders();
@@ -58,13 +58,15 @@ const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
                     <TableRow>
                       <TableHead>Số đơn hàng</TableHead>
                       <TableHead className="hidden md:table-cell">
-                        Ngày đặt hàng
+                        Ngày đặt
                       </TableHead>
                       <TableHead>Tên người đặt</TableHead>
                       <TableHead className="hidden sm:table-cell">
                         Email
                       </TableHead>
-                      <TableHead>Tổng tiền</TableHead>
+                      <TableHead className="hidden sm:table-cell">Tạm tính</TableHead>
+                      <TableHead className="hidden lg:table-cell text-center">Khuyến mãi</TableHead>
+                      <TableHead>Tổng thanh toán</TableHead>
                       <TableHead>Trạng thái</TableHead>
                       <TableHead className="text-center">
                         Hành động

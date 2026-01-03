@@ -1,41 +1,13 @@
 import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
+import {  OrderConfig, ShippingAddress } from "@/types";
 
-export interface OrderItem {
-  product: string; 
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
-
-export interface OrderConfig {
-  _id: string;
-  orderNumber: string;
-  customerName: string;
-  customerEmail: string;
-  items: OrderItem[];
-  totalAmount: number;
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    address: string;
-    city: string;
-  };
-  status: string;
-  paymentMethod: string;
-  createdAt: string;
-}
 
 export interface CreateOrderRequest {
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    address: string;
-    city: string;
-  };
+  shippingAddress: ShippingAddress;
   paymentMethod: string;
   notes?: string;
+  couponCode?: string
 }
 
 export const orderService = {
