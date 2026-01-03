@@ -53,9 +53,9 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                     {order.discountAmount ? (
                       <Badge variant="outline" className="text-blue-500 border-blue-500">
                         <PriceFormatter
-                      amount={order?.discountAmount}
-                      className="font-medium"
-                    />
+                          amount={order?.discountAmount}
+                          className="font-medium"
+                        />
                       </Badge>
                     ) : (
                       <span className="text-muted-foreground text-xs">-</span>
@@ -72,7 +72,7 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <span
                       className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${order.status === "processing" || order.status === "pending"
                         ? "bg-amber-100 text-amber-700"

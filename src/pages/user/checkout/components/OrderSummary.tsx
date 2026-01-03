@@ -93,15 +93,14 @@ const OrderSummary = ({
         </div>
 
         <Button
-          type="button" 
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             if (!loading) onPlaceOrder();
           }}
           disabled={loading}
-          className={`w-full h-10 text-lg font-semibold mt-4 ${
-            loading ? "cursor-not-allowed opacity-80" : "cursor-pointer"
-          }`}
+          className={`w-full h-10 text-lg font-semibold mt-4 ${loading ? "cursor-not-allowed opacity-80" : "cursor-pointer"
+            }`}
         >
           {loading ? (
             <div className="flex items-center gap-2">
@@ -109,8 +108,8 @@ const OrderSummary = ({
               Đang xử lý...
             </div>
           ) : (
-            paymentMethod === "COD" || paymentMethod === "cod" 
-              ? "Đặt hàng (COD)" 
+            paymentMethod === "COD" || paymentMethod === "cod"
+              ? "Đặt hàng (COD)"
               : "Thanh toán ngay"
           )}
         </Button>

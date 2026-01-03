@@ -71,9 +71,9 @@ const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
                       <TableHead className="hidden md:table-cell font-bold">Ngày đặt</TableHead>
                       <TableHead className="font-bold">Người đặt</TableHead>
                       <TableHead className="hidden sm:table-cell font-bold">Email</TableHead>
-                      <TableHead className="hidden sm:table-cell font-bold text-right">Tạm tính</TableHead>
+                      <TableHead className="hidden sm:table-cell font-bold">Tạm tính</TableHead>
                       <TableHead className="hidden lg:table-cell text-center font-bold">Giảm giá</TableHead>
-                      <TableHead className="font-bold text-right">Tổng cộng</TableHead>
+                      <TableHead className="font-bold">Tổng cộng</TableHead>
                       <TableHead className="text-center font-bold">Trạng thái</TableHead>
                       <TableHead className="text-center font-bold">Thao tác</TableHead>
                     </TableRow>

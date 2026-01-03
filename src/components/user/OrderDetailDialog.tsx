@@ -72,13 +72,12 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </p>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">Trạng thái đơn:</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${
-                order.status === "pending" ? "bg-amber-100 text-amber-700 border border-amber-200" : 
-                order.status === "delivered" ? "bg-green-100 text-green-700 border border-green-200" : 
-                "bg-blue-100 text-blue-700 border border-blue-200"
-              }`}>
-                {order.status === "pending" ? "Chờ xử lý" : 
-                 order.status === "delivered" ? "Đã giao hàng" : order.status}
+              <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${order.status === "pending" ? "bg-amber-100 text-amber-700 border border-amber-200" :
+                  order.status === "delivered" ? "bg-green-100 text-green-700 border border-green-200" :
+                    "bg-blue-100 text-blue-700 border border-blue-200"
+                }`}>
+                {order.status === "pending" ? "Chờ xử lý" :
+                  order.status === "delivered" ? "Đã giao hàng" : order.status}
               </span>
             </div>
             <div className="text-foreground flex items-center gap-2 text-sm">
