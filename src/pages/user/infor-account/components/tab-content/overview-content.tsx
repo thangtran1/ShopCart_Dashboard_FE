@@ -82,41 +82,11 @@ export function OverviewContent() {
 
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         {/* Recent Orders */}
-        <div className="col-span-1 lg:col-span-2">
-          <div className="flex items-center justify-between mb-2">
+        <div className="col-span-1 lg:col-span-3">
+          <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Đơn hàng gần đây</h2>
           </div>
           <OrdersPage hideTitle />
-        </div>
-
-        {/* Your Benefits */}
-        <div className="lg:col-span-1">
-          <h2 className="text-lg font-semibold mb-2">Ưu đãi của bạn</h2>
-          <div className="border border-border rounded-lg p-4">
-            <h3 className="font-medium mb-2 truncate">
-              [EMAIL] ƯU ĐÃI KHÁCH HÀNG...
-            </h3>
-            <div className="space-y-1">
-              <p className="text-sm text-foreground">
-                Giảm giá: <span className="font-medium">0đ</span>
-              </p>
-              <p className="text-sm text-foreground">
-                HSD: <span className="font-medium">03/01/2028</span>
-              </p>
-            </div>
-
-            <div className="flex flex-col md:flex-col lg:flex-row lg:items-center gap-2 mt-3">
-              <Badge variant={"success"} className="w-full lg:w-auto text-center justify-center py-1">
-                EMAIL_DGFBG15
-              </Badge>
-              <Button
-                className="w-full lg:w-auto"
-                onClick={() => copyFn("EMAIL_DGFBG15")}
-              >
-                Sao chép
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
 
