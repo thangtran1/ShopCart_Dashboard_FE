@@ -20,11 +20,32 @@ export const useOrder = () => {
     },
   });
 
+  // 3. Mutation Hủy đơn hàng
+  const cancelOrderMutation = useMutation({
+    mutationFn: (id: string) => orderService.cancelOrders(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+
+  // 4. Mutation Thay đổi trạng thái (Admin)
+  const updateStatusMutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) => 
+      orderService.updateOrderStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin_orders"] });
+    },
+  });
+
   return { 
     orders, 
-    loading: loadingOrders || placeOrderMutation.isPending, 
+    loading: loadingOrders || placeOrderMutation.isPending || cancelOrderMutation.isPending, 
     isPlacingOrder: placeOrderMutation.isPending,
+    isUpdatingStatus: updateStatusMutation.isPending,
     fetchMyOrders, 
-    placeOrder: placeOrderMutation.mutateAsync 
+    placeOrder: placeOrderMutation.mutateAsync,
+    cancelOrder: cancelOrderMutation.mutateAsync, 
+    updateStatus: updateStatusMutation.mutateAsync
   };
 };

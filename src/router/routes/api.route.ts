@@ -191,6 +191,8 @@ export const API_URL = {
       CREATE: `${ORDERS_PREFIX}`,
       GET_MY_ORDERS: `${ORDERS_PREFIX}/my-orders`,
       GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
+      CANCEL_STATUS_PENDING: (id: string) => `${ORDERS_PREFIX}/${id}/cancel`,
+      UPDATE_ORDER_STATUS: (id: string) => `${ORDERS_PREFIX}/${id}/status`,
     },
     COUPONS: {
       AVAILABLE: `${COUPONS_PREFIX}/available`,

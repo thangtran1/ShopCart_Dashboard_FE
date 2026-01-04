@@ -68,11 +68,11 @@ const OrdersPage = ({ hideTitle }: OrdersPageProps) => {
                   <TableHeader className="sticky top-0 z-30 bg-secondary shadow-sm">
                     <TableRow className="hover:bg-transparent border-b-2">
                       <TableHead className="font-bold h-12">Mã đơn hàng</TableHead>
-                      <TableHead className="hidden md:table-cell font-bold">Ngày đặt</TableHead>
+                      <TableHead className="font-bold">Ngày đặt</TableHead>
                       <TableHead className="font-bold">Người đặt</TableHead>
-                      <TableHead className="hidden sm:table-cell font-bold">Email</TableHead>
-                      <TableHead className="hidden sm:table-cell font-bold">Tạm tính</TableHead>
-                      <TableHead className="hidden lg:table-cell text-center font-bold">Giảm giá</TableHead>
+                      <TableHead className="sm:table-cell font-bold">Email</TableHead>
+                      <TableHead className="sm:table-cell font-bold">Tạm tính</TableHead>
+                      <TableHead className="lg:table-cell text-center font-bold">Giảm giá</TableHead>
                       <TableHead className="font-bold">Tổng cộng</TableHead>
                       <TableHead className="text-center font-bold">Trạng thái</TableHead>
                       <TableHead className="text-center font-bold">Thao tác</TableHead>

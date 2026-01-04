@@ -31,4 +31,21 @@ export const orderService = {
       const response = await apiClient.get({ url: API_URL.ORDERS.GET_BY_ID(id) });
       return response.data.data;
     },
+
+    // Hủy đơn hàng (User)
+    cancelOrders: async (id: string): Promise<OrderConfig> => {
+      const response = await apiClient.post({ 
+        url: API_URL.ORDERS.CANCEL_STATUS_PENDING(id) 
+      });
+      return response.data.data;
+    },
+
+    // API Admin cập nhật trạng thái - ĐÃ SỬA LỖI Ở ĐÂY
+    updateOrderStatus: async (id: string, status: string) => {
+      const response = await apiClient.post({
+        url: API_URL.ORDERS.UPDATE_ORDER_STATUS(id),
+        data: { status }
+      });
+      return response.data;
+    },
   };

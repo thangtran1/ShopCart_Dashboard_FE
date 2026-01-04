@@ -12,6 +12,7 @@ import {
 } from "@/ui/table";
 import PriceFormatter from "./PriceFormatter";
 import { CreditCard, Truck, MapPin, Phone, Mail, User, Calendar, Package, Tag, Receipt } from "lucide-react";
+import { ORDER_STATUS_MAP } from "@/types/enum";
 
 interface OrderDetailsDialogProps {
   order: any | null;
@@ -72,13 +73,17 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </p>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">Trạng thái đơn:</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${order.status === "pending" ? "bg-amber-100 text-amber-700 border border-amber-200" :
-                  order.status === "delivered" ? "bg-green-100 text-green-700 border border-green-200" :
-                    "bg-blue-100 text-blue-700 border border-blue-200"
-                }`}>
-                {order.status === "pending" ? "Chờ xử lý" :
-                  order.status === "delivered" ? "Đã giao hàng" : order.status}
-              </span>
+              {(() => {
+                const config = ORDER_STATUS_MAP[order.status] || {
+                  label: order.status,
+                  className: "bg-slate-100 text-slate-700 border-slate-200"
+                };
+                return (
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${config.className}`}>
+                    {config.label}
+                  </span>
+                );
+              })()}
             </div>
             <div className="text-foreground flex items-center gap-2 text-sm">
               {order.paymentMethod === "CARD" ? (
