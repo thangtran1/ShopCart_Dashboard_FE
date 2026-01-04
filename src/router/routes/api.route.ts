@@ -196,6 +196,11 @@ export const API_URL = {
     },
     COUPONS: {
       AVAILABLE: `${COUPONS_PREFIX}/available`,
-       VALIDATE: `${COUPONS_PREFIX}/validate`,
-    }
+      VALIDATE: `${COUPONS_PREFIX}/validate`,
+      ADMIN_ALL: `${COUPONS_PREFIX}/admin/all`,
+      GET_DETAIL: (id: string) => `${COUPONS_PREFIX}/${id}`,
+      CREATE: `${COUPONS_PREFIX}`,
+      UPDATE: (id: string) => `${COUPONS_PREFIX}/${id}`,
+      DELETE: (id: string) => `${COUPONS_PREFIX}/${id}`,
+  }
 };

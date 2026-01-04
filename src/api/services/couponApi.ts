@@ -16,6 +16,16 @@ export interface Coupon {
   isActive: boolean;
 }
 
+export interface CouponResponse {
+  success: true
+  data: Coupon[];
+  pagination: {
+    totalItems: number;
+    totalPages: number;
+    currentPage: number;
+  };
+}
+
 export const couponService = {
   getAvailableCoupons: async (): Promise<Coupon[]> => {
     const response = await apiClient.get({
@@ -30,5 +40,47 @@ export const couponService = {
       params: { code, amount },
     });
     return response.data;
+  },
+
+  // Lấy tất cả coupon (có phân trang & search)
+  getAllCouponsAdmin: async (page = 1, limit = 10, search = ""): Promise<CouponResponse> => {
+    const response = await apiClient.get({
+      url: API_URL.COUPONS.ADMIN_ALL,
+      params: { page, limit, search },
+    });
+    return response.data;
+  },
+
+  // Lấy chi tiết 1 coupon để sửa
+  getCouponDetail: async (id: string): Promise<Coupon> => {
+    const response = await apiClient.get({
+      url: API_URL.COUPONS.GET_DETAIL(id),
+    });
+    return response.data.data;
+  },
+
+  // Tạo mới coupon
+  createCoupon: async (data: Partial<Coupon>): Promise<Coupon> => {
+    const response = await apiClient.post({
+      url: API_URL.COUPONS.CREATE,
+      data: data,
+    });
+    return response.data.data;
+  },
+
+  // Cập nhật coupon
+  updateCoupon: async (id: string, data: Partial<Coupon>): Promise<Coupon> => {
+    const response = await apiClient.put({
+      url: API_URL.COUPONS.UPDATE(id),
+      data: data,
+    });
+    return response.data.data;
+  },
+
+  // Xóa coupon
+  deleteCoupon: async (id: string): Promise<void> => {
+    await apiClient.delete({
+      url: API_URL.COUPONS.DELETE(id),
+    });
   },
 };
