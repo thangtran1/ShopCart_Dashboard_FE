@@ -1,51 +1,88 @@
 import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
-import {  OrderConfig, ShippingAddress } from "@/types";
-
+import { OrderConfig, ShippingAddress } from "@/types";
 
 export interface CreateOrderRequest {
   shippingAddress: ShippingAddress;
   paymentMethod: string;
   notes?: string;
-  couponCode?: string
+  couponCode?: string;
+}
+
+// Interface cho việc cập nhật đơn hàng (Admin)
+export interface UpdateOrderAdminRequest {
+  status?: string;
+  customerName?: string;
+  shippingAddress?: Partial<ShippingAddress>;
+}
+
+export interface AdminOrderQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+  paymentMethod?: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export const orderService = {
-    // Tạo đơn hàng mới (Checkout)
-    createOrder: async (orderData: CreateOrderRequest): Promise<OrderConfig> => {
-      const response = await apiClient.post({ 
-        url: API_URL.ORDERS.CREATE, 
-        data: orderData 
-      });
-      return response.data.data;
-    },
-  
-    // Lấy lịch sử đơn hàng của tôi
-    getMyOrders: async (): Promise<OrderConfig[]> => {
-      const response = await apiClient.get({ url: API_URL.ORDERS.GET_MY_ORDERS });
-      return response.data.data;
-    },
-  
-    // Lấy chi tiết một đơn hàng theo ID
-    getOrderDetail: async (id: string): Promise<OrderConfig> => {
-      const response = await apiClient.get({ url: API_URL.ORDERS.GET_BY_ID(id) });
-      return response.data.data;
-    },
+  // ==========================================
+  //                USER ACTIONS
+  // ==========================================
 
-    // Hủy đơn hàng (User)
-    cancelOrders: async (id: string): Promise<OrderConfig> => {
-      const response = await apiClient.post({ 
-        url: API_URL.ORDERS.CANCEL_STATUS_PENDING(id) 
-      });
-      return response.data.data;
-    },
+  createOrder: async (orderData: CreateOrderRequest): Promise<OrderConfig> => {
+    const response = await apiClient.post({ 
+      url: API_URL.ORDERS.CREATE, 
+      data: orderData 
+    });
+    return response.data.data;
+  },
 
-    // API Admin cập nhật trạng thái - ĐÃ SỬA LỖI Ở ĐÂY
-    updateOrderStatus: async (id: string, status: string) => {
-      const response = await apiClient.post({
-        url: API_URL.ORDERS.UPDATE_ORDER_STATUS(id),
-        data: { status }
-      });
-      return response.data;
-    },
-  };
+  getMyOrders: async (): Promise<OrderConfig[]> => {
+    const response = await apiClient.get({ url: API_URL.ORDERS.GET_MY_ORDERS });
+    return response.data.data;
+  },
+
+  getOrderDetail: async (id: string): Promise<OrderConfig> => {
+    const response = await apiClient.get({ url: API_URL.ORDERS.GET_BY_ID(id) });
+    return response.data.data;
+  },
+
+  cancelOrders: async (id: string): Promise<OrderConfig> => {
+    const response = await apiClient.post({ 
+      url: API_URL.ORDERS.CANCEL_STATUS_PENDING(id) 
+    });
+    return response.data.data;
+  },
+
+  // ==========================================
+  //                ADMIN ACTIONS
+  // ==========================================
+
+  // 1. Lấy tất cả đơn hàng (Admin) kèm phân trang/filter
+  getAllOrdersAdmin: async (params: AdminOrderQuery) => {
+    const response = await apiClient.get({ 
+      url: API_URL.ORDERS.ADMIN_GET_ALL,
+      params // Tự động chuyển object thành query string (?page=1&limit=10...)
+    });
+    return response.data; // Trả về cả { data, pagination }
+  },
+
+  // 2. API Gộp: Cập nhật thông tin đơn hàng hoặc trạng thái (Admin)
+  // Bạn có thể gửi { status: 'shipped' } hoặc gửi cả cụm dữ liệu
+  updateOrderAdmin: async (id: string, updateData: UpdateOrderAdminRequest): Promise<OrderConfig> => {
+    const response = await apiClient.patch({
+      url: API_URL.ORDERS.ADMIN_UPDATE(id),
+      data: updateData
+    });
+    return response.data.data;
+  },
+
+  // 3. Xóa đơn hàng (Admin - Soft Delete)
+  deleteOrderAdmin: async (id: string): Promise<void> => {
+    await apiClient.delete({ 
+      url: API_URL.ORDERS.ADMIN_DELETE(id) 
+    });
+  },
+};

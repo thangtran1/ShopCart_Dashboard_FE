@@ -4,43 +4,43 @@ import { Suspense, lazy } from "react";
 import { Outlet } from "react-router";
 import type { AppRouteObject } from "#/router";
 
-const CatalogManagement = lazy(
-  () => import("@/pages/admin/catalog/index")
+const OrdersManagement = lazy(
+  () => import("@/pages/admin/orders/index")
 );
 
-const catalog: AppRouteObject = {
-  order: 3,
-  path: "catalog",
+const coupons: AppRouteObject = {
+  order: 4,
+  path: "orders-manager",
   element: (
     <Suspense fallback={<LineLoading />}>
       <Outlet />
     </Suspense>
   ),
   meta: {
-    label: "siderbar-labels.catalog",
+    label: "Quản lý đơn hàng",
     icon: (
       <Icon
-        icon="solar:tag-bold-duotone"
+        icon="solar:clipboard-bold-duotone"
         className="ant-menu-item-icon"
         size={24}
       />
     ),
-    key: "/catalog",
+    key: "/orders-manager",
   },
   children: [
     {
       index: true,
       element: (
         <Suspense fallback={<LineLoading />}>
-          <CatalogManagement />
+          <OrdersManagement />
         </Suspense>
       ),
       meta: {
-        label: "siderbar-labels.catalog-management",
-        key: "/catalog",
+        label: "Đơn hàng",
+        key: "/orders-manager",
       },
     },
   ],
 };
 
-export default catalog;
+export default coupons;

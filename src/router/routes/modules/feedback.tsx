@@ -19,11 +19,11 @@ const feedback: AppRouteObject = {
   meta: {
     label: "siderbar-labels.feedback",
     icon: (
-      <Icon
-        icon="solar:bell-bold-duotone"
-        className="ant-menu-item-icon"
-        size="24"
-      />
+<Icon
+  icon="solar:lightbulb-bold-duotone"
+  className="ant-menu-item-icon"
+  size={24}
+/>
     ),
     key: "/feedback",
   },

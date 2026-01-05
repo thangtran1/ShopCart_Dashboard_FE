@@ -25,10 +25,10 @@ const maintenance: AppRouteObject = {
     label: "siderbar-labels.maintenance",
     icon: (
       <Icon
-        icon="local:ic-management"
-        className="ant-menu-item-icon"
-        size="24"
-      />
+      icon="solar:shield-bold-duotone"
+      className="ant-menu-item-icon"
+      size={24}
+    />
     ),
     key: "/maintenance",
   },

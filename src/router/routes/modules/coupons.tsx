@@ -20,9 +20,9 @@ const coupons: AppRouteObject = {
     label: "Quản lý giảm giá",
     icon: (
       <Icon
-        icon="solar:box-bold-duotone"
+        icon="solar:ticket-bold-duotone"
         className="ant-menu-item-icon"
-        size="24"
+        size={24}
       />
     ),
     key: "/coupons",

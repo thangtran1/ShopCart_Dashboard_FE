@@ -1,26 +1,48 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateOrderRequest, orderService } from '@/api/services/orderApi';
+import { 
+  CreateOrderRequest, 
+  orderService, 
+  AdminOrderQuery, 
+  UpdateOrderAdminRequest 
+} from '@/api/services/orderApi';
 
-export const useOrder = () => {
+export const useOrder = (adminParams?: AdminOrderQuery) => {
   const queryClient = useQueryClient();
 
-  // 1. Lấy danh sách đơn hàng của tôi
+  // ==========================================
+  //                USER QUERIES
+  // ==========================================
+
+  // 1. Lấy danh sách đơn hàng cá nhân
   const { data: orders = [], isLoading: loadingOrders, refetch: fetchMyOrders } = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", "me"],
     queryFn: () => orderService.getMyOrders(),
-    enabled: true,
   });
 
-  // 2. Mutation đặt hàng
+  // ==========================================
+  //                ADMIN QUERIES
+  // ==========================================
+
+  // 2. Lấy danh sách toàn bộ đơn hàng (Cho Admin)
+  const { data: adminOrdersData, isLoading: loadingAdminOrders } = useQuery({
+    queryKey: ["orders", "admin", adminParams], // queryKey chứa params để tự động refetch khi filter thay đổi
+    queryFn: () => orderService.getAllOrdersAdmin(adminParams || {}),
+    enabled: !!adminParams, // Chỉ chạy khi có truyền params (thường ở trang Admin)
+  });
+
+  // ==========================================
+  //                MUTATIONS
+  // ==========================================
+
+  // 3. Đặt hàng
   const placeOrderMutation = useMutation({
     mutationFn: (orderData: CreateOrderRequest) => orderService.createOrder(orderData),
     onSuccess: () => {
-      // Làm mới danh sách đơn hàng trong cache sau khi đặt hàng thành công
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["orders", "me"] });
     },
   });
 
-  // 3. Mutation Hủy đơn hàng
+  // 4. Hủy đơn hàng (User)
   const cancelOrderMutation = useMutation({
     mutationFn: (id: string) => orderService.cancelOrders(id),
     onSuccess: () => {
@@ -28,24 +50,41 @@ export const useOrder = () => {
     },
   });
 
-  // 4. Mutation Thay đổi trạng thái (Admin)
-  const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) => 
-      orderService.updateOrderStatus(id, status),
+  // 5. Cập nhật đơn hàng gộp (Admin: Status, Address, Name...)
+  const updateOrderAdminMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateOrderAdminRequest }) => 
+      orderService.updateOrderAdmin(id, data),
     onSuccess: () => {
+      // Làm mới cả cache của user và admin để dữ liệu đồng bộ
       queryClient.invalidateQueries({ queryKey: ["orders"] });
-      queryClient.invalidateQueries({ queryKey: ["admin_orders"] });
+    },
+  });
+
+  // 6. Xóa đơn hàng (Admin)
+  const deleteOrderMutation = useMutation({
+    mutationFn: (id: string) => orderService.deleteOrderAdmin(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders", "admin"] });
     },
   });
 
   return { 
+    // Data
     orders, 
-    loading: loadingOrders || placeOrderMutation.isPending || cancelOrderMutation.isPending, 
+    adminOrders: adminOrdersData?.data || [],
+    pagination: adminOrdersData?.pagination,
+    
+    // Loading states
+    loading: loadingOrders || loadingAdminOrders,
     isPlacingOrder: placeOrderMutation.isPending,
-    isUpdatingStatus: updateStatusMutation.isPending,
+    isUpdating: updateOrderAdminMutation.isPending,
+    isDeleting: deleteOrderMutation.isPending,
+
+    // Actions
     fetchMyOrders, 
     placeOrder: placeOrderMutation.mutateAsync,
     cancelOrder: cancelOrderMutation.mutateAsync, 
-    updateStatus: updateStatusMutation.mutateAsync
+    updateOrderAdmin: updateOrderAdminMutation.mutateAsync, // Dùng hàm gộp mới
+    deleteOrder: deleteOrderMutation.mutateAsync
   };
 };
