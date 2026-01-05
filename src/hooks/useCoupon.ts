@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { couponService } from "@/api/services/couponApi";
+import { couponService, ICouponFilters } from "@/api/services/couponApi";
 import { toast } from "sonner"; 
 
 export const useCoupon = () => {
@@ -27,11 +27,12 @@ export const useCoupon = () => {
 
   // 1. Lấy tất cả mã giảm giá cho Admin (có phân trang/search)
   const fetchAdminCoupons = useCallback(
-    async (page = 1, limit = 10, search = "") => {
+    async (filters: ICouponFilters) => {
       setLoading(true);
+      setError(null);
       try {
-        const res = await couponService.getAllCouponsAdmin(page, limit, search);
-        return res;
+        const res = await couponService.getAllCouponsAdmin(filters);
+        return res; 
       } catch (err) {
         console.error("Lỗi lấy danh sách admin:", err);
         return null;

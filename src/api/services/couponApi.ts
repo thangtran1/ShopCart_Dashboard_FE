@@ -20,10 +20,20 @@ export interface CouponResponse {
   success: true
   data: Coupon[];
   pagination: {
+    total: number
     totalItems: number;
     totalPages: number;
     currentPage: number;
   };
+}
+
+export interface ICouponFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  isActive?: boolean | string;
+  discountType?: 'fixed' | 'percentage' | '';
+  status?: 'active' | 'expired' | 'outOfStock' | '';
 }
 
 export const couponService = {
@@ -43,11 +53,21 @@ export const couponService = {
   },
 
   // Lấy tất cả coupon (có phân trang & search)
-  getAllCouponsAdmin: async (page = 1, limit = 10, search = ""): Promise<CouponResponse> => {
+  getAllCouponsAdmin: async (filters: ICouponFilters): Promise<CouponResponse> => {
+    const { page = 1, limit = 10, search = "", isActive, discountType, status } = filters;
+  
     const response = await apiClient.get({
       url: API_URL.COUPONS.ADMIN_ALL,
-      params: { page, limit, search },
+      params: { 
+        page, 
+        limit, 
+        search,
+        ...(isActive !== undefined && { isActive }),
+        ...(discountType && { discountType }),
+        ...(status && { status }),
+      },
     });
+  
     return response.data;
   },
 
