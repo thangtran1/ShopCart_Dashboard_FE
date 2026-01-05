@@ -10,7 +10,7 @@ import {
   MapPin,
   Phone,
   Package,
-  CreditCard
+  CreditCard,
 } from "lucide-react";
 import { useOrder } from "@/hooks/useOrder";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -20,7 +20,7 @@ const statusColor: Record<string, string> = {
   processing: "blue",
   shipped: "cyan",
   delivered: "green",
-  cancelled: "red"
+  cancelled: "red",
 };
 
 export default function OrdersModal({ open, onClose, order }: any) {
@@ -33,7 +33,7 @@ export default function OrdersModal({ open, onClose, order }: any) {
       setFormData({
         customerName: order.customerName,
         status: order.status,
-        shippingAddress: { ...order.shippingAddress }
+        shippingAddress: { ...order.shippingAddress },
       });
     }
   }, [order, open]);
@@ -141,23 +141,14 @@ export default function OrdersModal({ open, onClose, order }: any) {
                   size="large"
                   className="w-full mt-2"
                   value={formData.status}
-                  onChange={(v) =>
-                    setFormData({ ...formData, status: v })
-                  }
+                  onChange={(v) => setFormData({ ...formData, status: v })}
+                  getPopupContainer={(trigger) => trigger.parentNode}
                 >
                   <Select.Option value="pending">Chờ duyệt</Select.Option>
-                  <Select.Option value="processing">
-                    Đang đóng gói
-                  </Select.Option>
-                  <Select.Option value="shipped">
-                    Đang giao hàng
-                  </Select.Option>
-                  <Select.Option value="delivered">
-                    Hoàn thành
-                  </Select.Option>
-                  <Select.Option value="cancelled">
-                    Hủy đơn
-                  </Select.Option>
+                  <Select.Option value="processing">Đang xử lý</Select.Option>
+                  <Select.Option value="shipped">Đang giao</Select.Option>
+                  <Select.Option value="delivered">Đã giao</Select.Option>
+                  <Select.Option value="cancelled">Hủy đơn</Select.Option>
                 </Select>
               </div>
 
@@ -174,8 +165,8 @@ export default function OrdersModal({ open, onClose, order }: any) {
                       ...formData,
                       shippingAddress: {
                         ...formData.shippingAddress,
-                        fullName: e.target.value
-                      }
+                        fullName: e.target.value,
+                      },
                     })
                   }
                 />
@@ -188,8 +179,8 @@ export default function OrdersModal({ open, onClose, order }: any) {
                       ...formData,
                       shippingAddress: {
                         ...formData.shippingAddress,
-                        phone: e.target.value
-                      }
+                        phone: e.target.value,
+                      },
                     })
                   }
                 />
@@ -203,8 +194,8 @@ export default function OrdersModal({ open, onClose, order }: any) {
                       ...formData,
                       shippingAddress: {
                         ...formData.shippingAddress,
-                        address: e.target.value
-                      }
+                        address: e.target.value,
+                      },
                     })
                   }
                 />
