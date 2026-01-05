@@ -112,9 +112,11 @@ export enum Gender {
 export enum OrderStatus {
   PENDING = "pending",
   PROCESSING = "processing",
+  SHIPPED = 'shipped',
   DELIVERED = "delivered",
   CANCELLED = "cancelled",
 }
+
 
 export const ORDER_STATUS_MAP: Record<string, { label: string; className: string }> = {
   [OrderStatus.PENDING]: { 
@@ -125,6 +127,10 @@ export const ORDER_STATUS_MAP: Record<string, { label: string; className: string
     label: "Đang xử lý", 
     className: "bg-blue-100 text-blue-700",
   },
+  [OrderStatus.SHIPPED]: { 
+    label: "Đang giao", 
+    className: "bg-red-100 text-red-700",
+  },
   [OrderStatus.DELIVERED]: { 
     label: "Đã giao hàng", 
     className: "bg-green-100 text-green-700",
@@ -132,5 +138,5 @@ export const ORDER_STATUS_MAP: Record<string, { label: string; className: string
   [OrderStatus.CANCELLED]: { 
     label: "Đã hủy", 
     className: "bg-red-100 text-red-700",
-  },
+  }
 };

@@ -39,8 +39,12 @@ export const orderService = {
     return response.data.data;
   },
 
-  getMyOrders: async (): Promise<OrderConfig[]> => {
-    const response = await apiClient.get({ url: API_URL.ORDERS.GET_MY_ORDERS });
+  getMyOrders: async (status?: string): Promise<OrderConfig[]> => {
+    const response = await apiClient.get({ 
+      url: API_URL.ORDERS.GET_MY_ORDERS,
+      // Nếu status là 'all' thì không gửi, ngược lại thì gửi ?status=...
+      params: status && status !== "all" ? { status } : {} 
+    });
     return response.data.data;
   },
 

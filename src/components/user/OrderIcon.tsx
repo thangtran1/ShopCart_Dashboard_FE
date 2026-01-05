@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { useOrder } from "@/hooks/useOrder";
 
 const OrderIcon = () => {
-  const { orders } = useOrder();
+  const { orders } = useOrder('all');
   const orderCount = orders?.length || 0;
   return (
     <Link to="/orders" className="group relative !text-foreground hover:!text-primary transition-colors">

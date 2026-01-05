@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Label } from "@/ui/label";
 import { Button, Input, Select, Divider, message, Tag } from "antd";
-import { Dialog, DialogContent } from "@/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/ui/dialog";
 import {
   ShoppingBag,
   User,
@@ -55,22 +55,26 @@ export default function OrdersModal({ open, onClose, order }: any) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl">
-        <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-foreground flex justify-between items-center">
+      <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-white">
+
+        <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-black italic tracking-wide">
+            <DialogTitle className="text-2xl">
               ORDER DETAILS
-            </h2>
-            <p className="text-[11px] opacity-80 tracking-[0.25em] mt-1">
+            </DialogTitle>
+            <DialogDescription >
+              Chi tiết thông tin sản phẩm và địa chỉ giao hàng của đơn hàng {order.orderNumber}
+            </DialogDescription>
+            <p className="text-[11px] opacity-80 tracking-[0.25em] mt-1 uppercase font-medium">
               MÃ ĐƠN: {order.orderNumber}
             </p>
           </div>
 
           <div className="flex flex-col items-end gap-2">
-            <Tag color={statusColor[order.status]} className="!text-xs">
+            <Tag color={statusColor[order.status]} className="!text-xs border-none font-bold uppercase">
               {order.status.toUpperCase()}
             </Tag>
-            <div className="flex items-center gap-1 text-xs opacity-90">
+            <div className="flex items-center gap-1 text-xs opacity-90 font-medium">
               <CreditCard size={14} />
               {order.paymentMethod}
             </div>
