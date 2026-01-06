@@ -47,7 +47,7 @@ const Footer = () => {
       <FooterTop />
 
       {/* Floating Social Buttons */}
-      <div className="fixed bottom-16 left-6 flex flex-col gap-2 z-50">
+      {/* <div className="fixed bottom-16 left-6 flex flex-col gap-2 z-50">
         <a
           href="https://facebook.com"
           className="w-12 h-12 rounded-full !bg-primary flex items-center justify-center shadow-lg"
@@ -64,7 +64,7 @@ const Footer = () => {
         >
           <MessageCircleMore size={20} className="text-white" />
         </a>
-      </div>
+      </div> */}
 
       {/* Footer Content */}
       <div className={`${contentWrapper} py-8 px-4 sm:px-6 lg:px-0 border-t mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-16`}>
