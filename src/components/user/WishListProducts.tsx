@@ -5,7 +5,7 @@ import { useState } from "react";
 import {
   DeleteOutlined,
   LoadingOutlined,
-  HeartOutlined
+  HeartOutlined,
 } from "@ant-design/icons";
 import { Button, Popconfirm, Badge } from "antd";
 import { Link, useNavigate } from "react-router";
@@ -39,36 +39,44 @@ const WishListProducts = () => {
     return (
       <div className="flex flex-col justify-center items-center h-96 gap-4">
         <HeartOutlined className="text-5xl text-rose-400 opacity-50" />
-        <p className="text-muted-foreground font-medium">Danh sách yêu thích của bạn đang trống</p>
-        <Button type="primary" onClick={() => navigate("/shop")}>Khám phá ngay</Button>
+        <p className="text-muted-foreground font-medium">
+          Danh sách yêu thích của bạn đang trống
+        </p>
+        <Button type="primary" onClick={() => navigate("/shop")}>
+          Khám phá ngay
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="py-2">
-      <div className="flex items-center justify-between pb-6">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between">
+        {/* Left */}
+        <div className="flex items-start gap-4">
           <Badge
             count={favoriteProduct.length}
             showZero
             color="#f43f5e"
             offset={[-2, 2]}
           >
-            <div className="p-3 bg-rose-50 rounded-xl transition-colors hover:bg-rose-100">
+            <div className="p-3 rounded-xl border border-primary/40 transition-colors hover:bg-muted-foreground">
               <HeartOutlined className="text-2xl text-rose-500" />
             </div>
           </Badge>
 
           <div>
-            <Title className="text-2xl font-bold tracking-tight mb-0.5">
+            <Title className="text-xl sm:text-2xl font-bold tracking-tight mb-0.5">
               Danh sách yêu thích
             </Title>
-            <p className="text-sm text-muted-foreground">
-              Xem lại các sản phẩm bạn đã quan tâm và thêm chúng vào giỏ hàng để mua sắm
+            <p className="text-sm text-muted-foreground max-w-[420px]">
+              Xem lại các sản phẩm bạn đã quan tâm và thêm chúng vào giỏ hàng để
+              mua sắm
             </p>
           </div>
         </div>
+
+        {/* Right */}
         <Popconfirm
           title="Làm trống danh sách"
           description="Bạn có chắc chắn muốn xóa tất cả sản phẩm yêu thích?"
@@ -84,7 +92,7 @@ const WishListProducts = () => {
             type="text"
             danger
             icon={<DeleteOutlined />}
-            className="font-bold"
+            className="font-bold self-start sm:self-auto"
           >
             Xóa toàn bộ yêu thích
           </Button>
@@ -93,15 +101,18 @@ const WishListProducts = () => {
 
       <div className="grid grid-cols-1 gap-4">
         <div className="space-y-4">
-          <div className="rounded-xl border shadow-sm overflow-hidden bg-white">
+          <div className="rounded-xl border shadow-sm overflow-hidden">
             {favoriteProduct.map((product: Product) => {
               const isItemLoading = isProcessing === product._id;
 
               return (
                 <div
                   key={product?._id}
-                  className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${isItemLoading ? "opacity-50 pointer-events-none" : "hover:bg-muted/30"
-                    }`}
+                  className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${
+                    isItemLoading
+                      ? "opacity-50 pointer-events-none"
+                      : "hover:bg-muted/30"
+                  }`}
                 >
                   <div className="relative border rounded-xl overflow-hidden shrink-0 shadow-sm mx-auto sm:mx-0">
                     <img
@@ -153,7 +164,13 @@ const WishListProducts = () => {
                           type="text"
                           danger
                           size="small"
-                          icon={isItemLoading ? <LoadingOutlined /> : <DeleteOutlined />}
+                          icon={
+                            isItemLoading ? (
+                              <LoadingOutlined />
+                            ) : (
+                              <DeleteOutlined />
+                            )
+                          }
                           className="text-xs sm:text-sm font-medium"
                         >
                           Xóa
@@ -173,8 +190,17 @@ const WishListProducts = () => {
                       />
                     </div>
 
-                    <Link to={`/product/${product.slug}`} className="hidden md:block">
-                      <Button size="small" type="link" className="text-xs italic">Xem chi tiết</Button>
+                    <Link
+                      to={`/product/${product.slug}`}
+                      className="hidden md:block"
+                    >
+                      <Button
+                        size="small"
+                        type="link"
+                        className="text-xs italic"
+                      >
+                        Xem chi tiết
+                      </Button>
                     </Link>
                   </div>
                 </div>
