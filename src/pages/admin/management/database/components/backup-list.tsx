@@ -183,7 +183,6 @@ export default function BackupList({
         loading={loading}
         pagination={pagination}
         onPageChange={onPageChange}
-        scroll={{ x: 800, y: 500 }}
       />
       <CustomConfirmModal
         visible={isModalVisible}

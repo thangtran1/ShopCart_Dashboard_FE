@@ -528,7 +528,6 @@ export default function BrandsManagement() {
               total: total,
             }}
             onPageChange={handlePageChange}
-            scroll={{ x: 1000 }}
           />
         </motion.div>
       )}

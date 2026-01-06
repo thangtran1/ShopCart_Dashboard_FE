@@ -169,7 +169,6 @@ export default function NewUserTable({
       loading={loading}
       pagination={pagination}
       onPageChange={onPageChange}
-      scroll={{ x: 800, y: 500 }}
     />
   );
 }

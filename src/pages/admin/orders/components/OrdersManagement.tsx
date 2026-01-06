@@ -121,7 +121,7 @@ export default function OrdersManagement() {
       {
         title: "SẢN PHẨM",
         key: "items",
-        width: 280,
+        width: 220,
         render: (_, record) => (
           <Popover
             content={
@@ -163,11 +163,13 @@ export default function OrdersManagement() {
                 ))}
               </Avatar.Group>
               <div className="flex flex-col min-w-0">
-                <span className="text-[11px] font-semibold truncate w-[140px]">
+                <span className="text-[11px] font-semibold truncate w-[150px]">
                   {record.items[0]?.name}
                 </span>
-                <span className="text-[10px] text-indigo-500 font-bold">
-                  Xem thêm {record.items?.length - 1} món...
+                <span className="text-[10px] text-indigo-500 font-bold truncate w-[140px]">
+                  {record.items?.length > 3
+                    ? `Xem thêm ${record.items.length - 1} món`
+                    : null}
                 </span>
               </div>
             </div>
@@ -196,25 +198,26 @@ export default function OrdersManagement() {
       {
         title: "THANH TOÁN",
         key: "total",
-        width: 150,
-        render: (_, record) => (
-          <div className="flex flex-col">
-            <span className="font-black text-primary/80 text-sm">
-              {record.totalAmount?.toLocaleString()}đ
-            </span>
-            <Tag
-              color={record.paymentMethod === "ONLINE" ? "blue" : "green"}
-              className="text-[9px] w-fit font-bold uppercase mt-1"
-            >
-              {record.paymentMethod === "ONLINE" ? (
-                <CreditCardOutlined />
-              ) : (
-                <WalletOutlined />
-              )}{" "}
-              {record.paymentMethod}
-            </Tag>
-          </div>
-        ),
+        width: 160,
+        render: (_, record) => {
+          const isOnline = record.paymentMethod === "ONLINE";
+      
+          return (
+            <div className="flex flex-col gap-1">
+              <span className="font-extrabold text-[15px] text-primary leading-none">
+                {record.totalAmount?.toLocaleString()}đ
+              </span>
+      
+              <Tag
+                color={isOnline ? "green" : "orange"}
+                icon={isOnline ? <CreditCardOutlined /> : <WalletOutlined />}
+                className="!px-2 text-center !py-[2px] !text-[9px] !font-bold !uppercase !rounded-full w-fit"
+              >
+                {isOnline ? "ONLINE" : "COD"}
+              </Tag>
+            </div>
+          );
+        },
       },
       {
         title: "TRẠNG THÁI",
@@ -357,7 +360,6 @@ export default function OrdersManagement() {
         onPageChange={(p, l) =>
           setFilters((prev) => ({ ...prev, page: p, limit: l || prev.limit }))
         }
-        scroll={{ x: 1200 }}
       />
 
       <OrdersModal

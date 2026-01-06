@@ -452,7 +452,6 @@ export default function CategoriesManagement() {
               total: total,
             }}
             onPageChange={handlePageChange}
-            scroll={{ x: 900 }}
           />
         </motion.div>
       )}
