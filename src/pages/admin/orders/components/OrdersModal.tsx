@@ -19,7 +19,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useOrder } from "@/hooks/useOrder";
-import { CheckOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, EnvironmentOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Badge } from "@/ui/badge";
 import { toast } from "sonner";
 import { statusConfig } from "./OrdersManagement";
@@ -43,7 +43,6 @@ export default function OrdersModal({ open, onClose, order }: any) {
   useEffect(() => {
     if (order && open) {
       setFormData({
-        customerName: order.customerName,
         status: order.status,
         shippingAddress: { ...order.shippingAddress },
       });
@@ -81,7 +80,7 @@ export default function OrdersModal({ open, onClose, order }: any) {
   };
 
   if (!formData) return null;
- 
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-background">
@@ -288,6 +287,25 @@ export default function OrdersModal({ open, onClose, order }: any) {
                         shippingAddress: {
                           ...formData.shippingAddress,
                           phone: e.target.value,
+                        },
+                      })
+                    }
+                  />
+
+                  <Input
+                    size="large"
+                    placeholder="Thành phố"
+                    prefix={
+                      <EnvironmentOutlined size={14} className="text-muted-foreground" />
+                    }
+                    className="rounded-xl border-border"
+                    value={formData.shippingAddress.city}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          city: e.target.value,
                         },
                       })
                     }

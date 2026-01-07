@@ -12,7 +12,6 @@ export interface CreateOrderRequest {
 // Interface cho việc cập nhật đơn hàng (Admin)
 export interface UpdateOrderAdminRequest {
   status?: string;
-  customerName?: string;
   shippingAddress?: Partial<IShippingAddress>;
 }
 

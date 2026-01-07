@@ -59,7 +59,6 @@ export interface IShippingAddress {
 
 export interface OrderConfig {
   userId: string
-  customerName: string;
   customerEmail: string;
   items: OrderItem[]
   orderNumber: string;

@@ -183,9 +183,9 @@ export default function OrdersManagement() {
         width: 200,
         render: (_, record) => (
           <div className="flex flex-col gap-0.5">
-            <div className="flex items-center gap-1 text-xs font-bold uppercase text-foreground">
-              <User size={12} className="text-indigo-400" />{" "}
-              {record.customerName}
+            <div className="flex items-center gap-1 text-[12px] font-bold uppercase text-foreground">
+              <User size={16} className="text-primary" />{" "}
+              {record.shippingAddress?.fullName}
             </div>
             <span className="text-[11px] text-foreground">
               {record.shippingAddress?.phone}
