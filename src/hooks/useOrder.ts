@@ -5,19 +5,23 @@ import {
   AdminOrderQuery, 
   UpdateOrderAdminRequest 
 } from '@/api/services/orderApi';
+import { useUserToken } from "@/store/userStore";
 
 export const useOrder = (param?: string | AdminOrderQuery) => {
   const queryClient = useQueryClient();
-
+  const token = useUserToken();
   const isObject = typeof param === 'object' && param !== null;
   const userStatus = isObject ? undefined : (param as string);
   const adminParams = isObject ? (param as AdminOrderQuery) : undefined;
 
 
   const { data: orders = [], isLoading: loadingOrders, refetch: fetchMyOrders } = useQuery({
-    queryKey: ["orders", "me", userStatus || 'all'], 
-    queryFn: () => orderService.getMyOrders(userStatus),
-    enabled: !isObject 
+    queryKey: ["orders", "me", userStatus || 'all', token?.accessToken], 
+    queryFn: async () => {
+      if (!token?.accessToken) return [];
+      return orderService.getMyOrders(userStatus);
+    },
+    enabled: !isObject && !!token?.accessToken 
   });
 
   const { data: adminOrdersData, isLoading: loadingAdminOrders } = useQuery({
