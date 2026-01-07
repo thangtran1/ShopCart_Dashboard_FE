@@ -13,7 +13,7 @@ const MaintenanceGuard = ({
   redirectUrl,
   delayMs = 1000,
 }: MaintenanceGuardProps) => {
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   const location = useLocation();
   const pathname = location.pathname;

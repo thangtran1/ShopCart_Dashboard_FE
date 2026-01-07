@@ -15,7 +15,6 @@ import {
   EditOutlined,
   CloseOutlined,
   PhoneOutlined,
-  EnvironmentOutlined,
 } from "@ant-design/icons";
 import { Separator } from "@/ui/separator";
 import {
@@ -118,9 +117,8 @@ export default function UserInformation({ userId }: { userId: string }) {
               <Text type="secondary">{userData?.email}</Text>
               <div className="mt-1 flex gap-2">
                 <div
-                  className={`capitalize rounded-md px-2 py-1 text-sm border ${
-                    statusColor[userData?.status as UserStatus]
-                  }`}
+                  className={`capitalize rounded-md px-2 py-1 text-sm border ${statusColor[userData?.status as UserStatus]
+                    }`}
                 >
                   {userData?.status}
                 </div>

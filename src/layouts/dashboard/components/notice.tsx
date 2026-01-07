@@ -7,7 +7,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/vi";
 import { notificationUserService } from "@/api/services/notificationApi";
 import { NotificationType } from "@/types/enum";
-import { useTranslation } from "react-i18next";
 import { Notification } from "@/types/entity";
 import { useUserToken } from "@/store/userStore";
 
@@ -15,7 +14,6 @@ dayjs.extend(relativeTime);
 dayjs.locale("vi");
 
 export default function NoticeContent() {
-  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useUserToken();

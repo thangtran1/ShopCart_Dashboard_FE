@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Modal, Button, Space, Typography } from "antd"; // Đảm bảo dùng Title từ antd cho đồng bộ
+import { Modal, Button, Typography } from "antd"; // Đảm bảo dùng Title từ antd cho đồng bộ
 import {
   CheckCircleOutlined,
   CreditCardOutlined,
@@ -60,7 +60,7 @@ const paymentMethods = [
 
 export default function SelectPayment({ method, onChange }: SelectPaymentProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   // State tạm thời để người dùng "chọn" trong modal trước khi nhấn "Xác nhận"
   const [tempSelected, setTempSelected] = useState<any>(method);
 

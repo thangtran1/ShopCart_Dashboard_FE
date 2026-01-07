@@ -1,5 +1,4 @@
 import { Button, Input, DatePicker, Select } from "antd";
-const { Search } = Input;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 import { SearchOutlined } from "@ant-design/icons";

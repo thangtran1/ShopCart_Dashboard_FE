@@ -1,4 +1,4 @@
-import { Card, Table, Alert, Button, Divider } from "antd";
+import { Card, Alert, Button, Divider } from "antd";
 import { Icon } from "@/components/icon";
 import { PreviewUser } from "@/types/entity";
 import { useTranslation } from "react-i18next";
@@ -63,13 +63,12 @@ export default function PreviewCard({
       key: "role",
       render: (role: string) => (
         <span
-          className={`px-2 py-1 rounded text-xs font-medium ${
-            role === "admin"
+          className={`px-2 py-1 rounded text-xs font-medium ${role === "admin"
               ? "bg-red-100 text-red-800"
               : role === "moderator"
-              ? "bg-blue-100 text-blue-800"
-              : "bg-gray-100 text-gray-800"
-          }`}
+                ? "bg-blue-100 text-blue-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
         >
           {role}
         </span>
@@ -81,13 +80,12 @@ export default function PreviewCard({
       key: "status",
       render: (status: string) => (
         <span
-          className={`px-2 py-1 rounded text-xs font-medium ${
-            status === "active"
+          className={`px-2 py-1 rounded text-xs font-medium ${status === "active"
               ? "bg-green-100 text-green-800"
               : status === "inactive"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-red-100 text-red-800"
-          }`}
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-red-100 text-red-800"
+            }`}
         >
           {status}
         </span>
@@ -155,17 +153,15 @@ export default function PreviewCard({
         </div>
 
         <div
-          className={`border rounded-lg p-4 ${
-            canProceed
+          className={`border rounded-lg p-4 ${canProceed
               ? "bg-green-50 border-green-200"
               : "bg-gray-50 border-gray-200"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-3">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                canProceed ? "bg-success" : "bg-muted-foreground"
-              }`}
+              className={`w-10 h-10 rounded-full flex items-center justify-center ${canProceed ? "bg-success" : "bg-muted-foreground"
+                }`}
             >
               <Icon
                 icon="lucide:check-circle"
@@ -174,16 +170,14 @@ export default function PreviewCard({
             </div>
             <div>
               <div
-                className={`text-2xl font-bold ${
-                  canProceed ? "text-green-800" : "text-gray-700"
-                }`}
+                className={`text-2xl font-bold ${canProceed ? "text-green-800" : "text-gray-700"
+                  }`}
               >
                 {validUsers.length}
               </div>
               <div
-                className={`text-sm ${
-                  canProceed ? "text-green-600" : "text-gray-500"
-                }`}
+                className={`text-sm ${canProceed ? "text-green-600" : "text-gray-500"
+                  }`}
               >
                 {t("management.user.valid")}
               </div>
@@ -192,17 +186,15 @@ export default function PreviewCard({
         </div>
 
         <div
-          className={`border rounded-lg p-4 ${
-            invalidUsers.length > 0
+          className={`border rounded-lg p-4 ${invalidUsers.length > 0
               ? "bg-red-50 border-red-200"
               : "bg-gray-50 border-gray-200"
-          }`}
+            }`}
         >
           <div className="flex items-center gap-3">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                invalidUsers.length > 0 ? "bg-error" : "bg-muted-foreground"
-              }`}
+              className={`w-10 h-10 rounded-full flex items-center justify-center ${invalidUsers.length > 0 ? "bg-error" : "bg-muted-foreground"
+                }`}
             >
               <Icon
                 icon="lucide:x-circle"
@@ -211,16 +203,14 @@ export default function PreviewCard({
             </div>
             <div>
               <div
-                className={`text-2xl font-bold ${
-                  invalidUsers.length > 0 ? "text-red-800" : "text-gray-700"
-                }`}
+                className={`text-2xl font-bold ${invalidUsers.length > 0 ? "text-red-800" : "text-gray-700"
+                  }`}
               >
                 {invalidUsers.length}
               </div>
               <div
-                className={`text-sm ${
-                  invalidUsers.length > 0 ? "text-red-600" : "text-gray-500"
-                }`}
+                className={`text-sm ${invalidUsers.length > 0 ? "text-red-600" : "text-gray-500"
+                  }`}
               >
                 {t("management.user.error")}
               </div>
@@ -276,12 +266,11 @@ export default function PreviewCard({
           className="min-w-[140px]"
         >
           {!canProceed
-            ? `${t("management.user.cannot-create")} (${
-                invalidUsers.length
-              } ${t("management.user.error")})`
+            ? `${t("management.user.cannot-create")} (${invalidUsers.length
+            } ${t("management.user.error")})`
             : `${t("management.user.creates")} ${users.length} ${t(
-                "management.user.users"
-              )}`}
+              "management.user.users"
+            )}`}
         </Button>
       </div>
     </Card>
