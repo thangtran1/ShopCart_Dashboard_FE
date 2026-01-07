@@ -2,8 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Label } from "@/ui/label";
-import { Button, Input, Select, Divider, message } from "antd";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/ui/dialog";
+import { Button, Input, Select, Divider } from "antd";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/ui/dialog";
 import {
   ShoppingBag,
   User,
@@ -14,8 +19,10 @@ import {
   Clock,
 } from "lucide-react";
 import { useOrder } from "@/hooks/useOrder";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Badge } from "@/ui/badge";
+import { toast } from "sonner";
+import { statusConfig } from "./OrdersManagement";
 
 const statusVariant: Record<
   string,
@@ -43,25 +50,42 @@ export default function OrdersModal({ open, onClose, order }: any) {
     }
   }, [order, open]);
 
+  const getDisabledOptions = (currentStatus: string, targetStatus: string) => {
+    if (currentStatus === "delivered" || currentStatus === "cancelled") {
+      return currentStatus !== targetStatus;
+    }
+
+    if (currentStatus === targetStatus) return false;
+
+    const flow: Record<string, string[]> = {
+      pending: ["processing", "cancelled"],
+      processing: ["shipped", "cancelled"],
+      shipped: ["delivered", "cancelled"],
+    };
+
+    const allowed = flow[currentStatus] || [];
+    return !allowed.includes(targetStatus);
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       await updateOrderAdmin({ id: order._id, data: formData });
-      message.success("Cập nhật đơn hàng thành công");
+      toast.success("Cập nhật đơn hàng thành công");
       onClose();
-    } catch {
-      message.error("Cập nhật thất bại");
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
   };
 
   if (!formData) return null;
-
+ 
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-background">
-        <div className="p-6 border-b border-border flex justify-between items-center">
+        <div className="p-6 border-b flex justify-between items-center bg-primary/5 border-primary/40">
           <div>
             <DialogTitle className="text-2xl font-black tracking-tight text-foreground">
               ORDER DETAILS
@@ -79,23 +103,30 @@ export default function OrdersModal({ open, onClose, order }: any) {
           <div className="w-3/5 border-r border-border px-6 overflow-y-auto bg-secondary/10">
             <div className="flex gap-10 justify-center mb-6 p-4 bg-background rounded-2xl border border-border shadow-sm">
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-bold text-foreground uppercase">Mã đơn hàng</span>
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Mã đơn hàng
+                </span>
                 <span className="text-sm font-mono font-bold flex items-center gap-1 text-primary">
                   <Hash size={14} /> {order.orderNumber}
                 </span>
               </div>
               <div className="w-[1px] bg-border" />
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-bold text-foreground uppercase">Thanh toán</span>
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Thanh toán
+                </span>
                 <span className="text-sm font-bold flex items-center text-muted-foreground gap-1">
                   <CreditCard size={14} /> {order.paymentMethod}
                 </span>
               </div>
               <div className="w-[1px] bg-border" />
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-bold text-foreground uppercase">Ngày đặt</span>
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Ngày đặt
+                </span>
                 <span className="text-sm font-bold flex items-center text-muted-foreground gap-1">
-                  <Clock size={14} /> {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+                  <Clock size={14} />{" "}
+                  {new Date(order.createdAt).toLocaleDateString("vi-VN")}
                 </span>
               </div>
             </div>
@@ -156,45 +187,89 @@ export default function OrdersModal({ open, onClose, order }: any) {
           </div>
 
           <div className="w-2/5 px-6 flex flex-col justify-between bg-background">
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div>
-                <Label className="text-xs mb-2 font-black uppercase text-primary tracking-widest">
+                <Label className="text-[10px] mb-2 font-bold uppercase text-primary tracking-[0.2em] flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary" />
                   Cập nhật trạng thái
                 </Label>
                 <Select
                   size="large"
-                  className="w-full mt-3"
+                  className="w-full custom-status-select"
                   value={formData.status}
                   onChange={(v) => setFormData({ ...formData, status: v })}
                   getPopupContainer={(trigger) => trigger.parentNode}
+                  variant="outlined"
+                  dropdownStyle={{
+                    borderRadius: "12px",
+                    padding: "2px",
+                  }}
                 >
-                  <Select.Option value="pending">Chờ duyệt</Select.Option>
-                  <Select.Option value="processing">Đang xử lý</Select.Option>
-                  <Select.Option value="shipped">Đang giao hàng</Select.Option>
-                  <Select.Option value="delivered">Đã hoàn thành</Select.Option>
-                  <Select.Option value="cancelled">Hủy đơn hàng</Select.Option>
+                  {Object.entries(statusConfig).map(([key, cfg]) => {
+                    const isDisabled = getDisabledOptions(order.status, key);
+
+                    return (
+                      <Select.Option
+                        key={key}
+                        value={key}
+                        disabled={isDisabled}
+                      >
+                        <div
+                          className={`flex items-center justify-between py-1 ${
+                            isDisabled ? "opacity-40 grayscale-[0.5]" : ""
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{
+                                backgroundColor: cfg.color,
+                                filter: isDisabled ? "contrast(0.5)" : "none",
+                              }}
+                            />
+                            <span
+                              className={`text-sm ${
+                                isDisabled
+                                  ? "font-normal text-gray-400"
+                                  : "font-semibold"
+                              }`}
+                            >
+                              {cfg.label}
+                            </span>
+                          </div>
+                          {formData.status === key && !isDisabled && (
+                            <CheckOutlined className="text-xs !text-primary" />
+                          )}
+                        </div>
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </div>
-
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-2">
-                   <MapPin size={16} className="text-primary" />
-                   <Label className="font-black uppercase text-xs tracking-widest text-foreground">
-                     Thông tin giao hàng
-                   </Label>
+                  <MapPin size={16} className="text-primary" />
+                  <Label className="font-black uppercase text-xs tracking-widest text-foreground">
+                    Thông tin giao hàng
+                  </Label>
                 </div>
 
                 <div className="space-y-3">
                   <Input
                     size="large"
                     placeholder="Tên người nhận"
-                    prefix={<User size={14} className="text-muted-foreground" />}
+                    prefix={
+                      <User size={14} className="text-muted-foreground" />
+                    }
                     className="rounded-xl border-border"
                     value={formData.shippingAddress.fullName}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        shippingAddress: { ...formData.shippingAddress, fullName: e.target.value },
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          fullName: e.target.value,
+                        },
                       })
                     }
                   />
@@ -202,13 +277,18 @@ export default function OrdersModal({ open, onClose, order }: any) {
                   <Input
                     size="large"
                     placeholder="Số điện thoại"
-                    prefix={<Phone size={14} className="text-muted-foreground" />}
+                    prefix={
+                      <Phone size={14} className="text-muted-foreground" />
+                    }
                     className="rounded-xl border-border"
                     value={formData.shippingAddress.phone}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        shippingAddress: { ...formData.shippingAddress, phone: e.target.value },
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          phone: e.target.value,
+                        },
                       })
                     }
                   />
@@ -222,7 +302,10 @@ export default function OrdersModal({ open, onClose, order }: any) {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        shippingAddress: { ...formData.shippingAddress, address: e.target.value },
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          address: e.target.value,
+                        },
                       })
                     }
                   />
@@ -241,12 +324,11 @@ export default function OrdersModal({ open, onClose, order }: any) {
               )}
             </div>
 
-            {/* Actions */}
             <div className="flex gap-3 pt-6 mb-6">
-              <Button 
-                block 
-                size="large" 
-                className="rounded-xl font-bold h-12" 
+              <Button
+                block
+                size="large"
+                className="rounded-xl font-bold h-12"
                 onClick={onClose}
               >
                 Đóng

@@ -1,9 +1,9 @@
 import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
-import { OrderConfig, ShippingAddress } from "@/types";
+import { OrderConfig, IShippingAddress } from "@/types";
 
 export interface CreateOrderRequest {
-  shippingAddress: ShippingAddress;
+  shippingAddress: IShippingAddress;
   paymentMethod: string;
   notes?: string;
   couponCode?: string;
@@ -13,7 +13,7 @@ export interface CreateOrderRequest {
 export interface UpdateOrderAdminRequest {
   status?: string;
   customerName?: string;
-  shippingAddress?: Partial<ShippingAddress>;
+  shippingAddress?: Partial<IShippingAddress>;
 }
 
 export interface AdminOrderQuery {

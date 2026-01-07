@@ -49,11 +49,12 @@ export interface Author {
   image?: Image;
 }
 
-export interface ShippingAddress {
+export interface IShippingAddress {
   address: string;
   city: string;
   phone: string
   fullName: string
+  notes?: string;
 }
 
 export interface OrderConfig {
@@ -66,7 +67,7 @@ export interface OrderConfig {
   subTotal: number // tổng tiền khi chưa giảm
   discountAmount: number // số tiền giảm
   couponCode: string // mã giảm giá
-  shippingAddress: ShippingAddress
+  shippingAddress: IShippingAddress
   status: string;
   paymentMethod: string;
   _id: string;

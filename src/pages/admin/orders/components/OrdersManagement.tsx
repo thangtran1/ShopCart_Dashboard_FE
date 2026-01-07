@@ -8,7 +8,6 @@ import {
   Tooltip,
   Tag,
   Select,
-  message,
   Popover,
   List,
   Avatar,
@@ -19,6 +18,7 @@ import {
   CreditCardOutlined,
   WalletOutlined,
   InfoCircleOutlined,
+  CheckOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
@@ -30,6 +30,7 @@ import { ShoppingBag, User } from "lucide-react";
 import { CardTitle } from "@/ui/card";
 import { AdminOrderQuery } from "@/api/services/orderApi";
 import { Separator } from "@/ui/separator";
+import { toast } from "sonner";
 
 interface StatusConfigItem {
   color: string;
@@ -44,6 +45,14 @@ const initialFilters: AdminOrderQuery = {
   paymentMethod: "",
 };
 
+export const statusConfig: Record<string, StatusConfigItem> = {
+  pending: { color: "orange", label: "CHỜ DUYỆT" },
+  processing: { color: "blue", label: "ĐANG XỬ LÝ" },
+  shipped: { color: "cyan", label: "ĐANG GIAO" },
+  delivered: { color: "green", label: "ĐÃ GIAO" },
+  cancelled: { color: "red", label: "ĐÃ HỦY" },
+};
+
 export default function OrdersManagement() {
   const [filters, setFilters] = useState<AdminOrderQuery>(initialFilters);
   const { adminOrders, pagination, loading, deleteOrder, updateOrderAdmin } =
@@ -52,20 +61,12 @@ export default function OrdersManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<any | null>(null);
 
-  const statusConfig: Record<string, StatusConfigItem> = {
-    pending: { color: "orange", label: "CHỜ DUYỆT" },
-    processing: { color: "blue", label: "ĐANG XỬ LÝ" },
-    shipped: { color: "cyan", label: "ĐANG GIAO" },
-    delivered: { color: "green", label: "ĐÃ GIAO" },
-    cancelled: { color: "red", label: "ĐÃ HỦY" },
-  };
-
   const handleUpdateStatusQuickly = async (id: string, newStatus: string) => {
     try {
       await updateOrderAdmin({ id, data: { status: newStatus } });
-      message.success("Đã cập nhật trạng thái đơn hàng!");
+      toast.success("Đã cập nhật trạng thái đơn hàng!");
     } catch (error) {
-      message.error("Không thể cập nhật trạng thái.");
+      toast.error("Không thể cập nhật trạng thái.");
     }
   };
 
@@ -228,62 +229,33 @@ export default function OrdersManagement() {
           return (
             <Select
               value={status}
-              size="small"
+              size="middle"
               disabled={isFinal}
-              variant="borderless"
-              style={{ width: "100%" }}
-              suffixIcon={
-                !isFinal && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                )
-              }
+              variant="outlined" 
+              className="w-full min-w-[140px]"
               onChange={(val) => handleUpdateStatusQuickly(record._id, val)}
+              labelInValue={false}
             >
               {Object.entries(statusConfig).map(([key, cfg]) => {
                 const isDisabled = getDisabledOptions(status, key);
-                const isCurrent = status === key;
-
                 return (
                   <Select.Option key={key} value={key} disabled={isDisabled}>
-                    <div className="flex items-center gap-2 py-1">
-                      <Tag
-                        color={cfg.color}
-                        className={`
-                    m-0 font-bold text-[10px] px-3 py-1 rounded-full uppercase
-                    ${
-                      isCurrent
-                        ? "bg-white/10 ring-1 ring-primary/50 shadow-sm"
-                        : ""
-                    }
-                    ${
-                      isDisabled && !isCurrent
-                        ? "opacity-30 blur-[0.2px]"
-                        : "shadow-sm"
-                    }
-                    transition-all duration-200
-                  `}
-                      >
-                        {cfg.label}
-                      </Tag>
-
-                      {isCurrent && (
-                        <span className="text-[10px] font-bold text-primary/80 uppercase tracking-tight">
-                          Hiện tại
-                        </span>
-                      )}
-
-                      {!isDisabled && !isCurrent && (
-                        <span className="text-[10px] font-semibold text-green-500 uppercase tracking-tight">
-                          → Chọn tiếp
-                        </span>
-                      )}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span 
+                          className="w-2 h-2 rounded-full" 
+                          style={{ backgroundColor: cfg.color }} 
+                        />
+                        <span className="text-sm">{cfg.label}</span>
+                      </div>
+                      {status === key && <CheckOutlined className="text-[10px] !text-primary" />}
                     </div>
                   </Select.Option>
                 );
               })}
             </Select>
           );
-        },
+        }
       },
       {
         title: "THAO TÁC",
