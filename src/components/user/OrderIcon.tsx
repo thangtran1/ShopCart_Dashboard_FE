@@ -2,10 +2,13 @@
 import { Package } from "lucide-react";
 import { Link } from "react-router";
 import { useOrder } from "@/hooks/useOrder";
+import { useUserToken } from "@/store/userStore";
 
 const OrderIcon = () => {
+  const token = useUserToken();
   const { orders } = useOrder('all');
-  const orderCount = orders?.length || 0;
+  const orderCount = token?.accessToken ? (orders?.length || 0) : 0;
+
   return (
     <Link to="/orders" className="group relative !text-foreground hover:!text-primary transition-colors">
       <Package className="w-5 h-5 cursor-pointer" />

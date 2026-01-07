@@ -1,9 +1,7 @@
 import {
-  Table,
   Tag,
   Avatar,
   Checkbox,
-  Pagination,
   Tooltip,
   Button,
   Popconfirm,
@@ -169,7 +167,6 @@ export default function NewUserTable({
       loading={loading}
       pagination={pagination}
       onPageChange={onPageChange}
-      scroll={{ x: 800, y: 500 }}
     />
   );
 }

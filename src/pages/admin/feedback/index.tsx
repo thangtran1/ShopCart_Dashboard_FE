@@ -309,7 +309,6 @@ const FeedbackManagement: React.FC = () => {
             loading={loading}
             pagination={pagination}
             onPageChange={onPageChange}
-            scroll={{ y: 500, x: 1100 }}
             onRowClick={(record) => handleViewDetail(record)} // click row mở modal
           />
 

@@ -726,7 +726,6 @@ export default function ProductsManagement() {
               total: total,
             }}
             onPageChange={handlePageChange}
-            scroll={{ x: 1200 }}
           // onRowClick={(record) => handleViewProduct(record)}
           />
         </motion.div>

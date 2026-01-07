@@ -248,7 +248,6 @@ export default function PreviewCard({
           loading={loading}
           pagination={pagination}
           onPageChange={handlePageChange}
-          scroll={{ x: 800, y: 500 }}
         />
       </div>
 

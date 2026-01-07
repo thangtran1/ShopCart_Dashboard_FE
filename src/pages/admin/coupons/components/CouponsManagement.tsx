@@ -309,7 +309,6 @@ export default function CouponsManagement() {
                 limit: l || prev.limit,
               }));
             }}
-            scroll={{ x: 800, y: 500 }}
           />
         </div>
       </div>

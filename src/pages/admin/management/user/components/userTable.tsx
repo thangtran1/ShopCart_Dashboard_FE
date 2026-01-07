@@ -188,7 +188,6 @@ export default function UserTable({
       loading={loading}
       pagination={pagination}
       onPageChange={onPageChange}
-      scroll={{ x: 800, y: 500 }}
     />
   );
 }

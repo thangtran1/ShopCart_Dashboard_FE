@@ -383,7 +383,6 @@ export default function MaintenanceTable({
         loading={loading}
         pagination={pagination}
         onPageChange={onPageChange}
-        scroll={{ x: 1000, y: 600 }}
       />
     </div>
   );

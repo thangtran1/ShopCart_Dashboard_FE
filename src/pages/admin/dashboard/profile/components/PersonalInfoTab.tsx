@@ -13,7 +13,6 @@ import {
   UserOutlined,
   MailOutlined,
   PhoneOutlined,
-  HomeOutlined,
   CameraOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -31,7 +30,7 @@ import { FullPageLoading } from "@/components/common/loading";
 const { TextArea } = Input;
 
 interface PersonalInfoTabProps {
-  profile: UserProfile | null;
+  profile: UserProfile | null | undefined; 
   onProfileUpdate: (profile: UserProfile) => void;
 }
 

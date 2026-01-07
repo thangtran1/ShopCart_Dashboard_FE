@@ -168,7 +168,6 @@ const AuthSessionManagement: React.FC = () => {
           loading={loading}
           pagination={pagination}
           onPageChange={onPageChange}
-          scroll={{ y: 500, x: 600 }}
         />
       </div>
     </div>

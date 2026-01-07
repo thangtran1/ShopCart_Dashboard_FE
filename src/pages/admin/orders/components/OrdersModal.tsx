@@ -2,25 +2,37 @@
 
 import { useState, useEffect } from "react";
 import { Label } from "@/ui/label";
-import { Button, Input, Select, Divider, message, Tag } from "antd";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/ui/dialog";
+import { Button, Input, Select, Divider } from "antd";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/ui/dialog";
 import {
   ShoppingBag,
   User,
   MapPin,
   Phone,
-  Package,
   CreditCard,
+  Hash,
+  Clock,
 } from "lucide-react";
 import { useOrder } from "@/hooks/useOrder";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, EnvironmentOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Badge } from "@/ui/badge";
+import { toast } from "sonner";
+import { statusConfig } from "./OrdersManagement";
 
-const statusColor: Record<string, string> = {
-  pending: "gold",
-  processing: "blue",
-  shipped: "cyan",
-  delivered: "green",
-  cancelled: "red",
+const statusVariant: Record<
+  string,
+  "warning" | "info" | "secondary" | "success" | "destructive"
+> = {
+  pending: "warning",
+  processing: "info",
+  shipped: "secondary",
+  delivered: "success",
+  cancelled: "destructive",
 };
 
 export default function OrdersModal({ open, onClose, order }: any) {
@@ -31,21 +43,37 @@ export default function OrdersModal({ open, onClose, order }: any) {
   useEffect(() => {
     if (order && open) {
       setFormData({
-        customerName: order.customerName,
         status: order.status,
         shippingAddress: { ...order.shippingAddress },
       });
     }
   }, [order, open]);
 
+  const getDisabledOptions = (currentStatus: string, targetStatus: string) => {
+    if (currentStatus === "delivered" || currentStatus === "cancelled") {
+      return currentStatus !== targetStatus;
+    }
+
+    if (currentStatus === targetStatus) return false;
+
+    const flow: Record<string, string[]> = {
+      pending: ["processing", "cancelled"],
+      processing: ["shipped", "cancelled"],
+      shipped: ["delivered", "cancelled"],
+    };
+
+    const allowed = flow[currentStatus] || [];
+    return !allowed.includes(targetStatus);
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       await updateOrderAdmin({ id: order._id, data: formData });
-      message.success("Cập nhật đơn hàng thành công");
+      toast.success("Cập nhật đơn hàng thành công");
       onClose();
-    } catch {
-      message.error("Cập nhật thất bại");
+    } catch (e) {
+      console.log(e);
     } finally {
       setLoading(false);
     }
@@ -55,181 +83,283 @@ export default function OrdersModal({ open, onClose, order }: any) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-white">
-
-        <div className="px-6 py-5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white flex justify-between items-center">
+      <DialogContent className="!max-w-5xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-background">
+        <div className="p-6 border-b flex justify-between items-center bg-primary/5 border-primary/40">
           <div>
-            <DialogTitle className="text-2xl">
+            <DialogTitle className="text-2xl font-black tracking-tight text-foreground">
               ORDER DETAILS
             </DialogTitle>
-            <DialogDescription >
-              Chi tiết thông tin sản phẩm và địa chỉ giao hàng của đơn hàng {order.orderNumber}
+            <DialogDescription className="text-muted-foreground mt-1 text-sm">
+              Quản lý trạng thái và thông tin giao nhận đơn hàng.
             </DialogDescription>
-            <p className="text-[11px] opacity-80 tracking-[0.25em] mt-1 uppercase font-medium">
-              MÃ ĐƠN: {order.orderNumber}
-            </p>
           </div>
-
-          <div className="flex flex-col items-end gap-2">
-            <Tag color={statusColor[order.status]} className="!text-xs border-none font-bold uppercase">
-              {order.status.toUpperCase()}
-            </Tag>
-            <div className="flex items-center gap-1 text-xs opacity-90 font-medium">
-              <CreditCard size={14} />
-              {order.paymentMethod}
-            </div>
-          </div>
+          <Badge variant={statusVariant[order.status]}>
+            {order.status.toUpperCase()}
+          </Badge>
         </div>
 
         <div className="flex h-[620px]">
-          <div className="w-3/5 border-r border-border p-6 overflow-y-auto">
+          <div className="w-3/5 border-r border-border px-6 overflow-y-auto bg-secondary/10">
+            <div className="flex gap-10 justify-center mb-6 p-4 bg-background rounded-2xl border border-border shadow-sm">
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Mã đơn hàng
+                </span>
+                <span className="text-sm font-mono font-bold flex items-center gap-1 text-primary">
+                  <Hash size={14} /> {order.orderNumber}
+                </span>
+              </div>
+              <div className="w-[1px] bg-border" />
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Thanh toán
+                </span>
+                <span className="text-sm font-bold flex items-center text-muted-foreground gap-1">
+                  <CreditCard size={14} /> {order.paymentMethod}
+                </span>
+              </div>
+              <div className="w-[1px] bg-border" />
+              <div className="flex flex-col gap-1">
+                <span className="text-[10px] font-bold text-foreground uppercase">
+                  Ngày đặt
+                </span>
+                <span className="text-sm font-bold flex items-center text-muted-foreground gap-1">
+                  <Clock size={14} />{" "}
+                  {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                </span>
+              </div>
+            </div>
+
             <h3 className="text-xs text-foreground font-black uppercase tracking-widest mb-5 flex items-center gap-2">
-              <ShoppingBag size={14} /> Sản phẩm
+              <ShoppingBag size={14} /> Danh sách sản phẩm
             </h3>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {order.items?.map((item: any, i: number) => (
                 <div
                   key={i}
-                  className="flex gap-4 p-4 rounded-2xl border border-border hover:shadow-md transition"
+                  className="flex gap-4 p-3 rounded-2xl bg-background border border-border hover:border-primary/50 transition-all group"
                 >
                   <img
                     src={item.image}
-                    className="w-16 h-16 rounded-xl object-cover ring-1 ring-border"
+                    alt=""
+                    className="w-16 h-16 rounded-xl object-cover group-hover:scale-105 transition-transform"
                   />
-
-                  <div className="flex-1">
-                    <p className="text-sm text-foreground font-bold line-clamp-1">
+                  <div className="flex-1 flex flex-col justify-center">
+                    <p className="text-sm text-foreground font-bold line-clamp-1 italic">
                       {item.name}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
-                      SL: {item.quantity} × {item.price.toLocaleString()}đ
+                      {item.quantity} sản phẩm × {item.price.toLocaleString()}đ
                     </p>
                   </div>
-
-                  <div className="text-sm font-black text-indigo-600">
+                  <div className="flex items-center text-sm font-black text-foreground">
                     {(item.price * item.quantity).toLocaleString()}đ
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 text-foreground p-5 rounded-2xl border border-border">
-              <div className="flex justify-between text-sm">
+            <div className="my-6 bg-background p-6 rounded-3xl border border-border shadow-sm space-y-3">
+              <div className="flex justify-between text-sm text-foreground">
                 <span>Tạm tính</span>
                 <span>{order.subTotal?.toLocaleString()}đ</span>
               </div>
-              <div className="flex justify-between text-sm mt-2">
-                <span>Giảm giá</span>
-                <span className="text-red-500">
-                  -{order.discountAmount?.toLocaleString()}đ
-                </span>
+              <div className="flex justify-between text-sm text-foreground">
+                <span>Phí vận chuyển</span>
+                <span>0đ</span>
               </div>
-
-              <Divider className="my-3" />
-
-              <div className="flex justify-between text-xl font-black text-success/70 italic">
-                <span>TỔNG</span>
-                <span>{order.totalAmount?.toLocaleString()}đ</span>
+              {order.discountAmount > 0 && (
+                <div className="flex justify-between text-sm text-red-500 font-medium">
+                  <span>Khuyến mãi</span>
+                  <span>-{order.discountAmount?.toLocaleString()}đ</span>
+                </div>
+              )}
+              <Divider className="my-2" />
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-foreground">TỔNG CỘNG</span>
+                <span className="text-2xl font-black text-primary tracking-tighter">
+                  {order.totalAmount?.toLocaleString()}đ
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="w-2/5 p-6 flex flex-col justify-between">
+          <div className="w-2/5 px-6 flex flex-col justify-between bg-background">
             <div className="space-y-6">
               <div>
-                <Label className="text-[10px] mb-2 font-black uppercase tracking-widest text-success/50">
-                  Trạng thái đơn hàng
+                <Label className="text-[10px] mb-2 font-bold uppercase text-primary tracking-[0.2em] flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-primary" />
+                  Cập nhật trạng thái
                 </Label>
                 <Select
                   size="large"
-                  className="w-full mt-2"
+                  className="w-full custom-status-select"
                   value={formData.status}
                   onChange={(v) => setFormData({ ...formData, status: v })}
                   getPopupContainer={(trigger) => trigger.parentNode}
+                  variant="outlined"
+                  dropdownStyle={{
+                    borderRadius: "12px",
+                    padding: "2px",
+                  }}
                 >
-                  <Select.Option value="pending">Chờ duyệt</Select.Option>
-                  <Select.Option value="processing">Đang xử lý</Select.Option>
-                  <Select.Option value="shipped">Đang giao</Select.Option>
-                  <Select.Option value="delivered">Đã giao</Select.Option>
-                  <Select.Option value="cancelled">Hủy đơn</Select.Option>
+                  {Object.entries(statusConfig).map(([key, cfg]) => {
+                    const isDisabled = getDisabledOptions(order.status, key);
+
+                    return (
+                      <Select.Option
+                        key={key}
+                        value={key}
+                        disabled={isDisabled}
+                      >
+                        <div
+                          className={`flex items-center justify-between py-1 ${
+                            isDisabled ? "opacity-40 grayscale-[0.5]" : ""
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span
+                              className="w-2 h-2 rounded-full"
+                              style={{
+                                backgroundColor: cfg.color,
+                                filter: isDisabled ? "contrast(0.5)" : "none",
+                              }}
+                            />
+                            <span
+                              className={`text-sm ${
+                                isDisabled
+                                  ? "font-normal text-gray-400"
+                                  : "font-semibold"
+                              }`}
+                            >
+                              {cfg.label}
+                            </span>
+                          </div>
+                          {formData.status === key && !isDisabled && (
+                            <CheckOutlined className="text-xs !text-primary" />
+                          )}
+                        </div>
+                      </Select.Option>
+                    );
+                  })}
                 </Select>
               </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <MapPin size={16} className="text-primary" />
+                  <Label className="font-black uppercase text-xs tracking-widest text-foreground">
+                    Thông tin giao hàng
+                  </Label>
+                </div>
 
-              <div className="p-5 text-foreground rounded-2xl border border-border space-y-3">
-                <Label className="text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
-                  <MapPin size={12} /> Địa chỉ giao hàng
-                </Label>
+                <div className="space-y-3">
+                  <Input
+                    size="large"
+                    placeholder="Tên người nhận"
+                    prefix={
+                      <User size={14} className="text-muted-foreground" />
+                    }
+                    className="rounded-xl border-border"
+                    value={formData.shippingAddress.fullName}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          fullName: e.target.value,
+                        },
+                      })
+                    }
+                  />
 
-                <Input
-                  prefix={<User size={14} />}
-                  value={formData.shippingAddress.fullName}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      shippingAddress: {
-                        ...formData.shippingAddress,
-                        fullName: e.target.value,
-                      },
-                    })
-                  }
-                />
+                  <Input
+                    size="large"
+                    placeholder="Số điện thoại"
+                    prefix={
+                      <Phone size={14} className="text-muted-foreground" />
+                    }
+                    className="rounded-xl border-border"
+                    value={formData.shippingAddress.phone}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          phone: e.target.value,
+                        },
+                      })
+                    }
+                  />
 
-                <Input
-                  prefix={<Phone size={14} />}
-                  value={formData.shippingAddress.phone}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      shippingAddress: {
-                        ...formData.shippingAddress,
-                        phone: e.target.value,
-                      },
-                    })
-                  }
-                />
+                  <Input
+                    size="large"
+                    placeholder="Thành phố"
+                    prefix={
+                      <EnvironmentOutlined size={14} className="text-muted-foreground" />
+                    }
+                    className="rounded-xl border-border"
+                    value={formData.shippingAddress.city}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          city: e.target.value,
+                        },
+                      })
+                    }
+                  />
 
-                <Input.TextArea
-                  rows={3}
-                  placeholder="Số nhà, tên đường..."
-                  value={formData.shippingAddress.address}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      shippingAddress: {
-                        ...formData.shippingAddress,
-                        address: e.target.value,
-                      },
-                    })
-                  }
-                />
+                  <Input.TextArea
+                    size="large"
+                    rows={3}
+                    placeholder="Địa chỉ chi tiết..."
+                    className="rounded-xl border-border"
+                    value={formData.shippingAddress.address}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        shippingAddress: {
+                          ...formData.shippingAddress,
+                          address: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
               </div>
 
               {order.shippingAddress?.notes && (
-                <div className="p-4 rounded-xl border border-dashed border-indigo-300 bg-indigo-50">
-                  <p className="text-[10px] font-bold uppercase mb-1 flex items-center gap-1">
+                <div className="p-4 rounded-xl border border-dashed border-primary/50">
+                  <p className="text-foreground text-[12px] font-bold uppercase mb-1 flex items-center gap-1">
                     <InfoCircleOutlined /> Ghi chú khách hàng
                   </p>
-                  <p className="text-sm italic">
+                  <p className="text-sm text-muted-foreground">
                     “{order.shippingAddress.notes}”
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="flex gap-3 pt-4">
-              <Button block size="large" danger onClick={onClose}>
-                Hủy
+            <div className="flex gap-3 pt-6 mb-6">
+              <Button
+                block
+                size="large"
+                className="rounded-xl font-bold h-12"
+                onClick={onClose}
+              >
+                Đóng
               </Button>
               <Button
                 block
                 size="large"
                 type="primary"
                 loading={loading}
-                icon={<Package size={16} />}
                 onClick={handleSubmit}
+                className="rounded-xl font-bold h-12 shadow-lg shadow-primary/20"
               >
-                Lưu thay đổi
+                Lưu cập nhật
               </Button>
             </div>
           </div>

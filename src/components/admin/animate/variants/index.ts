@@ -17,7 +17,7 @@ export * from "./path";
 export * from "./rotate";
 export * from "./scale";
 export * from "./slide";
-export * from "./transition";
+// export * from "./transition";
 export * from "./zoom";
 
 export function getVariant(variant = "slideInUp") {

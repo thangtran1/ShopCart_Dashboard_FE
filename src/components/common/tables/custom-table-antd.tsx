@@ -6,7 +6,6 @@ interface TableAntdProps {
   loading?: boolean;
   pagination?: { page: number; limit: number; total: number };
   onPageChange: (page: number, pageSize?: number) => void;
-  scroll?: any;
   onRowClick?: (record: any) => void;
   onRowHover?: (record: any) => void;
 }
@@ -17,7 +16,6 @@ const TableAntd: React.FC<TableAntdProps> = ({
   loading,
   pagination,
   onPageChange,
-  scroll,
   onRowClick,
   onRowHover,
 }) => {
@@ -47,7 +45,7 @@ const TableAntd: React.FC<TableAntdProps> = ({
         rowKey="id"
         loading={loading}
         pagination={false} // tắt pagination mặc định
-        scroll={scroll}
+        scroll={{ x: 800, y: 500 }}
         onRow={(record) => ({
           onClick: () => onRowClick?.(record),    // click row
           onMouseEnter: () => onRowHover?.(record), // hover row (nếu muốn)

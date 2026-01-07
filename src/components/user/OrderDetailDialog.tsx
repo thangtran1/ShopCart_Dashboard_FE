@@ -50,7 +50,7 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </h3>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <User className="w-4 h-4 text-muted-foreground" />
-              <span className="font-medium">{order.shippingAddress?.fullName || order.customerName}</span>
+              <span className="font-medium">{order.shippingAddress?.fullName}</span>
             </p>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <Mail className="w-4 h-4 text-muted-foreground" />
