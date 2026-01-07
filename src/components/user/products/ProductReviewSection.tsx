@@ -183,7 +183,6 @@ export default function ProductReviewSection({ product }: any) {
   const user = useUserInfo();
   const isLogged = Boolean(accessToken);
   const isAdmin = user?.role === "admin";
-  const userId = user?.id || "";
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");

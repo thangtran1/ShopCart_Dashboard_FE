@@ -1,9 +1,7 @@
 import {
-  Table,
   Tag,
   Avatar,
   Checkbox,
-  Pagination,
   Tooltip,
   Button,
   Popconfirm,
