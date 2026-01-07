@@ -1,4 +1,4 @@
-import { ChevronUp, Facebook, Github, Linkedin, MessageCircleMore, Slack, Youtube } from "lucide-react";
+import { ChevronUp, Facebook, Github, Linkedin, Slack, Youtube } from "lucide-react";
 import FooterTop from "./footer-top";
 import Logo from "@/ui/logo";
 import { Button, Input } from "antd";
