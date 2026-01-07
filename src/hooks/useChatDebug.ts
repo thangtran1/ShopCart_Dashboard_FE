@@ -3,7 +3,19 @@ import { io, Socket } from "socket.io-client";
 import { useUserToken } from "@/store/userStore";
 import { ChatMessage, Conversation, CurrentUser } from "@/types/entity";
 
-export const useChatDebug = (currentUser: CurrentUser) => {
+interface UseChatDebugReturn {
+  socket: Socket | null;
+  messages: ChatMessage[];
+  conversations: Conversation[];
+  isConnected: boolean;
+  onlineUsers: string[];
+  selectedUserId: string | null;
+  sendMessage: (content: string, recipientId?: string) => void;
+  selectUser: (userId: string) => void;
+  connectionCount: number;
+}
+
+export const useChatDebug = (currentUser: CurrentUser): UseChatDebugReturn => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversations, setConversations] = useState<

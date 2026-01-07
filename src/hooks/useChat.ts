@@ -3,7 +3,18 @@ import { io, Socket } from "socket.io-client";
 import { useUserToken } from "@/store/userStore";
 import { ChatMessage, Conversation, CurrentUser } from "@/types/entity";
 
-export const useChat = (currentUser: CurrentUser | null) => {
+interface UseChatReturn {
+  socket: Socket | null;
+  messages: ChatMessage[];
+  conversations: any[]; 
+  isConnected: boolean;
+  onlineUsers: string[];
+  selectedUserId: string | null;
+  sendMessage: (content: string, recipientId?: string) => void;
+  selectUser: (userId: string) => void;
+}
+
+export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [conversations, setConversations] = useState<
