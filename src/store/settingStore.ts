@@ -26,7 +26,7 @@ const useSettingStore = create<SettingStore>()(
     (set) => ({
       settings: {
         themeColorPresets: ThemeColorPresets.Default,
-        themeMode: ThemeMode.Light,
+        themeMode: ThemeMode.Dark,
         themeLayout: ThemeLayout.Vertical,
         themeStretch: false,
         fontFamily: FontFamilyPreset.openSans,

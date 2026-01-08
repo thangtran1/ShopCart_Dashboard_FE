@@ -22,8 +22,12 @@ export const useCart = () => {
 
   // 2. Mutation: Thêm sản phẩm
   const addMutation = useMutation({
-    mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
-      cartService.addToCart({ productId, quantity }),
+    mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
+      if (!token?.accessToken) {
+        return { items: [] }; 
+      }
+      return cartService.addToCart({ productId, quantity });
+    },
     onSuccess: (response) => {
       const updatedItems = response?.items || [];
       queryClient.setQueryData(cartKey, updatedItems);
