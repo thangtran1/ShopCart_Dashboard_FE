@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import * as XLSX from "xlsx";
 import { bulkCreateUsers } from "@/api/services/userManagementApi";
 import StepIndicator from "./StepIndicator";
 import UploadCard from "./UploadCard";
@@ -20,21 +19,18 @@ export default function BulkCreateForm() {
   const [result, setResult] = useState<BulkResult | null>(null);
   const [step, setStep] = useState<"upload" | "preview" | "result">("upload");
 
-  const downloadTemplate = () => {
-    // Tạo workbook và worksheet
+  const downloadTemplate = useCallback(async () => {
+    const XLSX = await import("xlsx");
     const wb = XLSX.utils.book_new();
 
-    // Sheet dữ liệu
     const ws = XLSX.utils.json_to_sheet(templateData);
     XLSX.utils.book_append_sheet(wb, ws, "Users");
 
-    // Sheet hướng dẫn
     const instructionWs = XLSX.utils.json_to_sheet(instructionData);
     XLSX.utils.book_append_sheet(wb, instructionWs, "Hướng dẫn");
 
-    // Tạo file Excel và download
     XLSX.writeFile(wb, "user_template.xlsx");
-  };
+  }, []);
 
   const validateUserData = (row: any, rowNumber: number): PreviewUser => {
     // Chuyển đổi tất cả giá trị thành string để tránh lỗi type
@@ -98,216 +94,82 @@ export default function BulkCreateForm() {
     return user;
   };
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = useCallback(async (file: File) => {
+    const XLSX = await import("xlsx");
+    setUploading(true);
+    setPreviewUsers([]);
+    setResult(null);
+
     try {
-      setUploading(true);
-      setPreviewUsers([]);
-      setResult(null);
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data, { type: "array", cellDates: true });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-      // Đọc file và parse data
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = e.target?.result;
-          if (!data) {
-            toast.error(t("management.user.cannot-read-file"));
-            setUploading(false);
-            return;
-          }
+      if (!worksheet) {
+        toast.error(t("management.user.cannot-read-sheet"));
+        return;
+      }
 
-          let workbook;
-          try {
-            workbook = XLSX.read(data, {
-              type: "array",
-              cellDates: true,
-              cellNF: false,
-              cellText: false,
-            });
-          } catch (xlsxError) {
-            toast.error(t("management.user.invalid-excel-file"));
-            setUploading(false);
-            return;
-          }
+      // Lấy thẳng JSON object (Dòng 1 làm Key)
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
 
-          if (!workbook.SheetNames || workbook.SheetNames.length === 0) {
-            toast.error(t("management.user.no-sheet-found"));
-            setUploading(false);
-            return;
-          }
+      if (jsonData.length === 0) {
+        toast.error(t("management.user.no-data-or-only-header"));
+        return;
+      }
 
-          const sheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[sheetName];
+      const previewData: PreviewUser[] = jsonData.map((row: any, index: number) =>
+        validateUserData(row, index + 2)
+      );
 
-          if (!worksheet) {
-            toast.error(t("management.user.cannot-read-sheet"));
-            setUploading(false);
-            return;
-          }
-
-          let jsonData;
-          try {
-            jsonData = XLSX.utils.sheet_to_json(worksheet, {
-              header: 1, // Đọc dưới dạng array
-              defval: "", // Giá trị mặc định cho cell trống
-              blankrows: false, // Bỏ qua dòng trống
-            });
-          } catch (jsonError) {
-            toast.error(t("management.user.cannot-convert-data"));
-            setUploading(false);
-            return;
-          }
-
-          if (!jsonData || jsonData.length < 2) {
-            // Ít nhất phải có header + 1 dòng data
-            toast.error(t("management.user.no-data-or-only-header"));
-            setUploading(false);
-            return;
-          }
-
-          // Lấy header (dòng đầu tiên)
-          const headers = jsonData[0] as string[];
-          const dataRows = jsonData.slice(1); // Bỏ header
-
-          // Chuyển đổi từ array sang object
-          const objectData = dataRows.map((row: unknown) => {
-            const rowArray = row as any[];
-            const obj: any = {};
-            headers.forEach((header, index) => {
-              obj[header] = rowArray[index] || "";
-            });
-            return obj;
-          });
-
-          // Validate và tạo preview
-          const previewData: PreviewUser[] = objectData.map(
-            (row: any, index: number) => {
-              const validated = validateUserData(row, index + 2); // +2 vì Excel bắt đầu từ 1 và có header
-              return validated;
-            }
-          );
-
-          if (previewData.length === 0) {
-            toast.error(t("management.user.no-valid-data-to-process"));
-            setUploading(false);
-            return;
-          }
-          setPreviewUsers(previewData);
-          setStep("preview");
-          toast.success(
-            t("management.user.loaded-users-from-file", {
-              count: previewData.length,
-            })
-          );
-        } catch (error) {
-          throw error;
-        } finally {
-          setUploading(false);
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    } catch (error: any) {
-      throw error;
+      setPreviewUsers(previewData);
+      setStep("preview");
+      toast.success(t("management.user.loaded-users-from-file", { count: previewData.length }));
+    } catch (error) {
+      toast.error(t("management.user.invalid-excel-file"));
     } finally {
       setUploading(false);
     }
-  };
+  }, [t]);
 
-  const handleCreateUsers = async () => {
-    // Kiểm tra tất cả user phải hợp lệ
+  const handleCreateUsers = useCallback(async () => {
     const invalidUsers = previewUsers.filter((user) => !user.isValid);
-
     if (invalidUsers.length > 0) {
-      toast.error(
-        t("management.user.cannot-create-users-because-of-errors", {
-          count: invalidUsers.length,
-        })
-      );
+      toast.error(t("management.user.cannot-create-users-because-of-errors", { count: invalidUsers.length }));
       return;
     }
 
-    if (previewUsers.length === 0) {
-      toast.error(t("management.user.no-users-to-create"));
-      return;
-    }
-
+    setCreating(true);
     try {
-      setCreating(true);
-
-      // Tạo file Excel từ tất cả users (vì đã validate hết rồi)
-      const userData = previewUsers.map((user) => ({
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        role: user.role,
-        status: user.status,
-        phone: user.phone || "",
-        bio: user.bio || "",
+      const XLSX = await import("xlsx");
+      const userData = previewUsers.map(({ name, email, password, role, status, phone, bio }) => ({
+        name, email, password, role, status, phone: phone || "", bio: bio || ""
       }));
 
-      let wb, ws, excelBuffer, blob, file;
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(userData);
+      XLSX.utils.book_append_sheet(wb, ws, "Users");
 
-      try {
-        wb = XLSX.utils.book_new();
-        ws = XLSX.utils.json_to_sheet(userData);
-        XLSX.utils.book_append_sheet(wb, ws, "Users");
-
-        excelBuffer = XLSX.write(wb, {
-          bookType: "xlsx",
-          type: "array",
-          compression: true,
-        });
-
-        blob = new Blob([excelBuffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-
-        file = new File([blob], "users.xlsx", { type: blob.type });
-      } catch (excelError) {
-        toast.error(t("management.user.error-creating-excel-file"));
-        setCreating(false);
-        return;
-      }
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const file = new File([excelBuffer], "users.xlsx", { 
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+      });
 
       const response = await bulkCreateUsers(file);
 
       if (response.data.success) {
-        const bulkResult: BulkResult = {
-          successCount: response.data.data.successCount,
-          errorCount: response.data.data.errorCount,
-          errors: response.data.data.errors,
-        };
-
-        setResult(bulkResult);
+        setResult(response.data.data);
         setStep("result");
-
-        if (bulkResult.successCount > 0) {
-          toast.success(
-            t("management.user.bulk-create-success", {
-              count: bulkResult.successCount,
-            })
-          );
-        }
-
-        if (bulkResult.errorCount > 0) {
-          toast.warning(
-            t("management.user.bulk-create-partial-success", {
-              success: bulkResult.successCount,
-              error: bulkResult.errorCount,
-            })
-          );
-        }
+        toast.success(t("management.user.bulk-create-success", { count: response.data.data.successCount }));
       } else {
-        toast.error(
-          response.data.message || t("management.user.bulk-create-failed")
-        );
+        toast.error(response.data.message || t("management.user.bulk-create-failed"));
       }
     } catch (error) {
-      throw error;
+      toast.error("Lỗi hệ thống khi xử lý dữ liệu");
     } finally {
       setCreating(false);
     }
-  };
+  }, [previewUsers, t]);
 
   const handleReset = () => {
     setStep("upload");
