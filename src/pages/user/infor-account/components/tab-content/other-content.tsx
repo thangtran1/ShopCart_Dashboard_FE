@@ -1,8 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Tabs, Select, Typography } from "antd";
-import { LaptopOutlined, ClockCircleOutlined, CheckCircleOutlined, CheckOutlined } from "@ant-design/icons";
+import { Tabs, Select, Typography, Badge } from "antd";
+import {
+  LaptopOutlined,
+  ClockCircleOutlined,
+  CheckCircleOutlined,
+  CheckOutlined,
+  SafetyCertificateOutlined,
+} from "@ant-design/icons";
 import Contact from "@/pages/user/contact";
 import TermsPage from "@/pages/user/public/terms";
 
@@ -23,13 +29,26 @@ export function WarrantyContent() {
   ];
 
   return (
-    <div className="space-y-6">
-      <Title level={3} className="!text-xl !font-semibold">
-        Tra cứu bảo hành
-      </Title>
-      <Paragraph className="text-sm text-muted-foreground">
-        Theo dõi tình trạng bảo hành sản phẩm
-      </Paragraph>
+    <div>
+      <div className="flex items-start gap-2">
+        <Badge showZero color="#f43f5e" offset={[-2, 2]}>
+          <div className="p-3 rounded-xl border border-primary/20 bg-primary/5 transition-all hover:scale-105">
+            <SafetyCertificateOutlined className="text-2xl text-emerald-600" />
+          </div>
+        </Badge>
+
+        <div>
+          <Title
+            level={3}
+            className="!text-xl !font-bold tracking-tight !mb-0.5"
+          >
+            Tra cứu bảo hành
+          </Title>
+          <Paragraph className="text-sm text-muted-foreground mb-0">
+            Theo dõi tình trạng và thời hạn bảo hành của các thiết bị đã mua
+          </Paragraph>
+        </div>
+      </div>
 
       <div className="hidden lg:block">
         <Tabs
@@ -52,7 +71,7 @@ export function WarrantyContent() {
       </div>
 
       {warranties.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12 text-center">
+        <div className="flex flex-col items-center justify-center py-6 text-center">
           <img src={EMPTY_IMG} alt="empty" className="w-48 mb-4" />
           <p className="text-base font-medium mb-2">Bạn chưa có đơn bảo hành</p>
           <a href="/" className="text-sm text-red-600 hover:underline">
@@ -65,13 +84,9 @@ export function WarrantyContent() {
 }
 
 export function SupportContent() {
-  return (
-    <Contact />
-  );
+  return <Contact />;
 }
 
 export function TermsContent() {
-  return (
-    <TermsPage />
-  );
+  return <TermsPage />;
 }

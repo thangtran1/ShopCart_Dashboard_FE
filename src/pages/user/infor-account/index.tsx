@@ -22,7 +22,7 @@ function PageContent() {
   const currentTab = getTabByKey(activeTab)
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       <Header />
 
       <div className="border-t mt-4">
