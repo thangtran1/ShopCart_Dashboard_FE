@@ -3,10 +3,11 @@
 import { Product } from "@/types";
 import { useNavigate } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Loader2, Package, LayoutGrid } from "lucide-react";
+import { Package, LayoutGrid } from "lucide-react";
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useMemo, useState } from "react";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 interface Props {
   brands: any[];
@@ -194,14 +195,10 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 min-h-80 space-y-4 text-center rounded-lg shadow-sm border">
-            <motion.div
-              className="flex items-center space-x-2 text-primary"
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-              <Loader2 className="w-6 h-6 animate-spin" />
-              <span className="font-medium">Đang tải sản phẩm...</span>
-            </motion.div>
+            <PageLoading
+              height={300}
+              text="Đang tải sản phẩm..."
+              />
           </div>
         ) : filteredProducts.length > 0 ? (
           <motion.div

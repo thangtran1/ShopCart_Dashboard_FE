@@ -13,6 +13,7 @@ import { Button, Input, Select, Popconfirm, Tag, Tooltip, Space } from "antd";
 import { PlusCircleOutlined, EyeOutlined, EditOutlined, DeleteOutlined, StarFilled, FireOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const { Option } = Select;
 
@@ -736,10 +737,10 @@ export default function ProductsManagement() {
         <>
           {loading ? (
             <div className="flex items-center justify-center h-64">
-              <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-                <span className="text-muted-foreground">Đang tải sản phẩm...</span>
-              </div>
+              <PageLoading
+              height={300}
+              text="Đang tải sản phẩm..."
+              />
             </div>
           ) : (
             <motion.div

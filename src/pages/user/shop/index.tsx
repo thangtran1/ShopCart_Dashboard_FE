@@ -6,12 +6,12 @@ import Title from "@/ui/title";
 import CategoryList from "@/components/user/shop/CategoryList";
 import BrandList from "@/components/user/shop/BrandList";
 import PriceList from "@/components/user/shop/PriceList";
-import { Loader2 } from "lucide-react";
 import ProductCard from "@/pages/user/public/ProductCard";
 import NoProductAvailable from "../public/NoProductAvailable";
 import { brandService } from "@/api/services/brands";
 import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -164,10 +164,10 @@ const Shop = () => {
           >
             {loading ? (
               <div className="p-20 flex flex-col gap-2 items-center justify-center">
-                <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                <p className="font-semibold tracking-wide text-base">
-                  Đang tải phẩm . . .
-                </p>
+                <PageLoading
+                  height={300}
+                  text="Đang tải sản phẩm..."
+                  />
               </div>
             ) : products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 py-2">

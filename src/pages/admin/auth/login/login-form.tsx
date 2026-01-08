@@ -38,7 +38,7 @@ export function LoginForm() {
 
   const form = useForm<SignInReq>({
     defaultValues: {
-      email: "thangtrandz04@gmail.com",
+      email: "user1@ktv.com",
       password: "123123",
     },
   });

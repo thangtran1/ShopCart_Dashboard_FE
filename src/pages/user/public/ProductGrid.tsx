@@ -3,13 +3,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2 } from "lucide-react";
 import HomeTabbar from "./HomeTabbar";
 import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { useTranslation } from "react-i18next";
 import ServiceFeatures from "./ServiceFeatures";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const extractProducts = async (apiCall: () => Promise<any>): Promise<any[]> => {
   const res = await apiCall();
@@ -98,13 +98,10 @@ const ProductGrid = () => {
       />
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center rounded-lg w-full mt-10">
-          <Loader2
-            className="h-10 w-10 animate-spin text-primary relative z-10"
-            style={{ animationDuration: "0.8s" }}
-          />
-          <span>Đang tải sản phẩm...</span>
-        </div>
+        <PageLoading
+        height={300}
+        text="Đang tải sản phẩm..."
+      />
       ) : products.length ? (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
