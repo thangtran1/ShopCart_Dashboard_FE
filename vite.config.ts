@@ -11,8 +11,7 @@ export default defineConfig(({ mode }) => {
   const isProduction = mode === "production";
 
   // Set default environment variables
-  process.env.VITE_API_URL =
-    process.env.VITE_API_URL || "http://localhost:5000";
+  process.env.VITE_API_URL = process.env.VITE_API_URL || "http://localhost:5000";
 
   return {
     base,
@@ -30,9 +29,11 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       tsconfigPaths(),
 
+      // Chỉ chạy visualizer khi build ở local để kiểm tra dung lượng
       isProduction &&
         visualizer({
-          open: true,
+          open: false, // Để false để không tự bật trình duyệt khi build trên Vercel
+          filename: "stats.html",
           gzipSize: true,
           brotliSize: true,
           template: "treemap",
@@ -62,27 +63,16 @@ export default defineConfig(({ mode }) => {
     build: {
       target: "esnext",
       minify: "esbuild",
-      sourcemap: !isProduction,
       cssCodeSplit: true,
-      chunkSizeWarningLimit: 1500,
+      chunkSizeWarningLimit: 1700,
       rollupOptions: {
         output: {
           manualChunks: {
             "vendor-core": ["react", "react-dom", "react-router"],
-            "vendor-ui": [
-              "antd",
-              "@ant-design/icons",
-              "@ant-design/cssinjs",
-              "styled-components",
-            ],
-            "vendor-utils": [
-              "axios",
-              "dayjs",
-              "i18next",
-              "zustand",
-              "@iconify/react",
-            ],
+            "vendor-ui": ["antd", "@ant-design/icons", "@ant-design/cssinjs", "styled-components"],
             "vendor-charts": ["apexcharts", "react-apexcharts"],
+            "vendor-utils": ["axios", "dayjs", "i18next", "zustand", "@iconify/react"],
+            "vendor-excel": ["xlsx"],
             "vendor-socket": ["socket.io-client"],
           },
         },
@@ -109,3 +99,6 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
+
+    
+    
