@@ -1,8 +1,8 @@
 "use client";
 
-import { Avatar, Pagination } from "antd";
-import { ClockCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { Avatar, Pagination, Skeleton } from "antd";
+import { ClockCircleOutlined, UserOutlined, FireOutlined } from "@ant-design/icons";
+import { useState, useEffect, useMemo } from "react";
 import { Badge } from "@/ui/badge";
 import {
   Breadcrumb,
@@ -13,18 +13,50 @@ import {
   BreadcrumbSeparator,
 } from "@/ui/breadcrumb";
 import { Link } from "react-router";
-import { fakeBlogDetail } from "@/constants/fakeData";
+import { useNews } from "@/hooks/useNews";
+import { INews } from "@/api/services/newsApi";
 
 export default function NewsPage() {
+  const { refreshNews, loading } = useNews();
+  const [allNews, setAllNews] = useState<INews[]>([]);
+  console.log(allNews)
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 3;
+  const pageSize = 5;
 
-  const allNews = fakeBlogDetail;
-  const featuredNews = fakeBlogDetail.filter((b) => b.isFeatured);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await refreshNews()
+      if (res && res.data) {
+        setAllNews(res.data);
+      }
+    };
+    fetchData();
+  }, [refreshNews]);
+
+  // Tin nổi bật (3 bài có views cao nhất)
+  const featuredNews = useMemo(() => {
+    return [...allNews].sort((a, b) => b.views - a.views).slice(0, 3);
+  }, [allNews]);
+
+  const trendingNews = useMemo(() => {
+    return [...allNews].sort((a, b) => b.views - a.views).slice(0, 10);
+  }, [allNews]);
 
   const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedNews = allNews.slice(startIndex, endIndex);
+  const paginatedNews = allNews.slice(startIndex, startIndex + pageSize);
+
+  if (loading && allNews.length === 0) {
+    return (
+      <div className="space-y-4">
+        <Skeleton active/>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Skeleton.Button active block style={{ height: 200 }} />
+          <Skeleton.Button active block style={{ height: 200 }} />
+          <Skeleton.Button active block style={{ height: 200 }} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -34,100 +66,101 @@ export default function NewsPage() {
             <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
-
           <BreadcrumbItem>
             <BreadcrumbPage>Tin tức</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <h2 className="text-2xl font-bold my-2"> TIN TỨC</h2>
+      <h2 className="text-2xl font-bold my-4 flex items-center gap-2">
+         TIN TỨC MỚI NHẤT
+      </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
-        {featuredNews.slice(0, 3).map((news) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {featuredNews.map((news) => (
           <Link
             key={news._id}
             to={`/all-news/${news.slug}`}
-            className="group relative border border-success/20 h-[200px] overflow-hidden rounded-xl shadow-md cursor-pointer"
+            className="group relative border border-success/20 h-[220px] overflow-hidden rounded-xl shadow-md"
           >
             <img
-              src={news.image.url}
-              alt={news.image.alt}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              src={news.thumbnail}
+              alt={news.title}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-              {news.category && (
-                <div className="mb-2 inline-block rounded bg-primary px-2 py-0.5 text-xs font-medium">
-                  {news.category.name}
-                </div>
-              )}
-              <h3 className="mb-2 line-clamp-2 text-lg font-semibold leading-snug">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-foreground">
+              <Badge className="mb-2 bg-primary border-none text-foreground">
+                {news.category}
+              </Badge>
+              <h3 className="mb-2 line-clamp-2 text-lg text-white font-semibold leading-snug group-hover:text-muted-foreground transition-colors">
                 {news.title}
               </h3>
-              <div className="flex items-center gap-4 text-xs text-white/80">
-                <div className="flex items-center gap-1">
-                  <UserOutlined />
-                  <span>{news.author.name}</span>
-                </div>
-                <div className="flex items-center gap-1">
+              <div className="flex items-center gap-4 text-xs text-white/70">
+                <span className="flex items-center gap-1">
                   <ClockCircleOutlined />
-                  <span>{news.publishedAt}</span>
-                </div>
+                  {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                </span>
+                <span>{news.views} lượt xem</span>
               </div>
             </div>
           </Link>
         ))}
       </div>
-      <div className="flex flex-col lg:flex-row gap-2">
-        <div className="flex-1 flex flex-col gap-2">
+
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 flex flex-col gap-4">
           {paginatedNews.map((news) => (
             <article
               key={news._id}
-              className="group rounded-xl border border-success/20 bg-muted p-4 transition-shadow hover:shadow-md"
+              className="group rounded-xl border border-border bg-card p-4 transition-all hover:shadow-lg hover:border-primary/30"
             >
               <Link
                 to={`/all-news/${news.slug}`}
-                className="flex flex-col !text-foreground sm:flex-row gap-4"
+                className="flex flex-col sm:flex-row gap-5"
               >
-                <div className="relative border border-success/20 h-[160px] w-full sm:w-[240px] overflow-hidden rounded-lg">
+                <div className="relative h-[180px] w-full sm:w-[260px] flex-shrink-0 overflow-hidden rounded-lg">
                   <img
-                    src={news.image.url}
-                    alt={news.image.alt}
+                    src={news.thumbnail}
+                    alt={news.title}
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
 
-                <div className="flex flex-1 flex-col gap-2">
-                  {news.category && (
-                    <Badge variant={"success"}>{news.category.name}</Badge>
-                  )}
+                <div className="flex flex-1 flex-col gap-3">
+                  <div className="flex justify-between items-start">
+                    <Badge variant="outline" className="text-primary border-primary">
+                      {news.category}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
+                      <ClockCircleOutlined />
+                      {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                    </span>
+                  </div>
 
-                  <h3 className="line-clamp-2 text-lg font-semibold leading-snug group-hover:text-primary">
+                  <h3 className="line-clamp-2 text-xl font-bold group-hover:text-primary transition-colors">
                     {news.title}
                   </h3>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Avatar size="small" src={news.author.avatar} />
-                      <span>{news.author.name}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <ClockCircleOutlined />
-                      <span>{news.publishedAt}</span>
-                    </div>
-                    <span>{news.views} lượt xem</span>
-                  </div>
-
-                  <p className="line-clamp-3 text-sm text-foreground/80">
-                    {news.excerpt}
+                  <p className="line-clamp-2 text-sm text-muted-foreground leading-relaxed">
+                    {news.shortDescription}
                   </p>
+
+                  <div className="mt-auto flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs">
+                      <Avatar size="small" icon={<UserOutlined />} />
+                      <span className="font-medium">Admin</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground italic">
+                      {news.views} lượt xem
+                    </span>
+                  </div>
                 </div>
               </Link>
             </article>
           ))}
 
-          <div className="text-center mt-8">
+          <div className="mt-8 flex justify-center">
             <Pagination
               current={currentPage}
               pageSize={pageSize}
@@ -141,47 +174,47 @@ export default function NewsPage() {
           </div>
         </div>
 
-        <div className="w-full lg:w-80 flex-shrink-0">
-          <div className="sticky top-[100px]">
-            <div className="rounded-xl border border-success/20 bg-muted shadow-sm">
-              <div className="px-4 py-3 border-b border-border">
-                <h3 className="font-semibold text-base">🔥 Xu hướng nổi bật</h3>
-                <p className="text-xs text-muted-foreground">
-                  Bài viết được quan tâm nhiều nhất
-                </p>
+        <aside className="w-full lg:w-80 flex-shrink-0">
+          <div className="sticky top-24 space-y-4">
+            <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+              <div className="px-4 py-4 bg-muted/50 border-b border-border flex items-center gap-2">
+                <FireOutlined className="text-orange-500 text-lg" />
+                <div>
+                  <h3 className="font-bold text-sm uppercase">Xu hướng nổi bật</h3>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Top lượt xem nhiều nhất</p>
+                </div>
               </div>
 
-              <div className="max-h-[500px] overflow-y-auto divide-y divide-border">
-                {allNews.map((news, index) => (
+              <div className="divide-y divide-border">
+                {trendingNews.map((news, index) => (
                   <Link
                     key={news._id}
                     to={`/all-news/${news.slug}`}
-                    className="group block px-4 py-3 transition-colors !text-foreground hover:bg-background rounded"
+                    className="group block px-4 py-4 hover:bg-muted/30 transition-colors"
                   >
-                    <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
-                      <Badge variant="success">{news.category.name}</Badge>
-                      <span className="font-medium text-primary">
-                        #{index + 1}
+                    <div className="flex gap-3">
+                      <span className={`text-xl font-black ${index < 3 ? 'text-primary' : 'text-muted-foreground/30'} italic`}>
+                        {String(index + 1).padStart(2, '0')}
                       </span>
-                    </div>
-
-                    <div className="text-sm font-medium leading-snug line-clamp-2 group-hover:text-primary">
-                      {news.title}
-                    </div>
-
-                    <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <ClockCircleOutlined className="text-foreground" />
-                        {news.publishedAt}
-                      </span>
-                      <span>{news.views} lượt xem</span>
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+                          {news.title}
+                        </h4>
+                        <div className="flex items-center justify-between text-[10px] text-muted-foreground">
+                          <span>{news.category}</span>
+                          <span className="flex items-center gap-0.5">
+                            <ClockCircleOutlined className="scale-75" />
+                            {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))}
               </div>
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   );

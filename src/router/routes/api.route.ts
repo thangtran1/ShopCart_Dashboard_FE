@@ -1,4 +1,4 @@
-const BANNER_PREFIX = '/banners';
+const BANNER_PREFIX = "/banners";
 const BANNER_SETTINGS = `${BANNER_PREFIX}/settings`;
 const ACTIVITY_LOG_PREFIX = "/activity-log";
 const BRAND_PREFIX = "/brands";
@@ -10,11 +10,13 @@ const DATABASE_PREFIX = "/database";
 const FEEDBACK_PREFIX = "/feedback";
 const AUTH_PREFIX = "/auth";
 const SYSTEM_PREFIX = "/system";
-const PRODUCT_PREFIX = "/products"
-const ADDRESSES_PREFIX = "/addresses"
-const CARTS_PREFIX = "/cart"
-const ORDERS_PREFIX = "/orders"
-const  COUPONS_PREFIX  =  "/coupons"
+const PRODUCT_PREFIX = "/products";
+const ADDRESSES_PREFIX = "/addresses";
+const CARTS_PREFIX = "/cart";
+const ORDERS_PREFIX = "/orders";
+const COUPONS_PREFIX = "/coupons";
+const NEWS_PREFIX = "/news";
+
 export const API_URL = {
   BANNER: {
     CREATE: `${BANNER_PREFIX}`,
@@ -70,9 +72,12 @@ export const API_URL = {
     RESTORE: `${DATABASE_PREFIX}/restore`,
     DELETE: `${DATABASE_PREFIX}/delete`,
     BACKUPS: `${DATABASE_PREFIX}/backups`,
-    BACKUP_DOWNLOAD_JSON: (filename: string) => `${DATABASE_PREFIX}/backups/download-json/${filename}`,
-    BACKUP_VIEW: (filename: string) => `${DATABASE_PREFIX}/backups/view/${filename}`,
-    BACKUP_DELETE: (filename: string) => `${DATABASE_PREFIX}/backups/${filename}`,
+    BACKUP_DOWNLOAD_JSON: (filename: string) =>
+      `${DATABASE_PREFIX}/backups/download-json/${filename}`,
+    BACKUP_VIEW: (filename: string) =>
+      `${DATABASE_PREFIX}/backups/view/${filename}`,
+    BACKUP_DELETE: (filename: string) =>
+      `${DATABASE_PREFIX}/backups/${filename}`,
   },
 
   FEEDBACK: {
@@ -142,69 +147,80 @@ export const API_URL = {
     CREATE: `${PRODUCT_PREFIX}`,
     GET_ALL: `${PRODUCT_PREFIX}`,
     GET_ACTIVE: `${PRODUCT_PREFIX}/active`,
-  
+
     FEATURED: `${PRODUCT_PREFIX}/featured`,
     NEW: `${PRODUCT_PREFIX}/new`,
     BEST_SELLERS: `${PRODUCT_PREFIX}/best-sellers`,
     DEALS: `${PRODUCT_PREFIX}/deals`,
-  
+
     BY_ID: (id: string) => `${PRODUCT_PREFIX}/${id}`,
     BY_SLUG: (slug: string) => `${PRODUCT_PREFIX}/slug/${slug}`,
-  
+
     BY_CATEGORY: (categoryId: string) =>
       `${PRODUCT_PREFIX}/category/${categoryId}`,
-  
-    BY_BRAND: (brandId: string) =>
-      `${PRODUCT_PREFIX}/brand/${brandId}`,
-  
-    RELATED: (productId: string) =>
-      `${PRODUCT_PREFIX}/${productId}/related`,
-  
-    REVIEWS: (productId: string) =>
-      `${PRODUCT_PREFIX}/${productId}/reviews`,
-  
+
+    BY_BRAND: (brandId: string) => `${PRODUCT_PREFIX}/brand/${brandId}`,
+
+    RELATED: (productId: string) => `${PRODUCT_PREFIX}/${productId}/related`,
+
+    REVIEWS: (productId: string) => `${PRODUCT_PREFIX}/${productId}/reviews`,
+
     REVIEW_REPLY: (productId: string, reviewId: string) =>
       `${PRODUCT_PREFIX}/${productId}/reviews/${reviewId}/reply`,
-  
+
     REVIEW_DELETE: (productId: string, reviewId: string) =>
       `${PRODUCT_PREFIX}/${productId}/reviews/${reviewId}`,
   },
 
   ADDRESSES: {
-      CREATE: `${ADDRESSES_PREFIX}`,
-      GET_ALL_USER: `${ADDRESSES_PREFIX}`,
-      GET_ALL_ADMIN: `${ADDRESSES_PREFIX}`,
-      GET_BY_ID_ADMIN: (id: string) =>  `${ADDRESSES_PREFIX}/admin/user/${id}`,
-      UPDATE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
-      DELETE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
-      DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/admin/${id}`,
-    },
+    CREATE: `${ADDRESSES_PREFIX}`,
+    GET_ALL_USER: `${ADDRESSES_PREFIX}`,
+    GET_ALL_ADMIN: `${ADDRESSES_PREFIX}`,
+    GET_BY_ID_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/admin/user/${id}`,
+    UPDATE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+    DELETE: (id: string) => `${ADDRESSES_PREFIX}/${id}`,
+    DELETE_ADMIN: (id: string) => `${ADDRESSES_PREFIX}/admin/${id}`,
+  },
 
-    CART: {
-      GET: `${CARTS_PREFIX}`,
-      ADD: `${CARTS_PREFIX}/add`,
-      CLEAR: `${CARTS_PREFIX}/clear`,
-      REMOVE_PRODUCT: (productId: string) => `${CARTS_PREFIX}/product/${productId}`,
-      DECREASE_PRODUCT: (productId: string) => `${CARTS_PREFIX}/decrease-quantity/${productId}`,
-    },
-    ORDERS: {
-      CREATE: `${ORDERS_PREFIX}`,
-      GET_MY_ORDERS: `${ORDERS_PREFIX}/my-orders`,
-      GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
-      CANCEL_STATUS_PENDING: (id: string) => `${ORDERS_PREFIX}/${id}/cancel`,
-      
-      // ADMIN ROUTES
-      ADMIN_GET_ALL: `${ORDERS_PREFIX}/admin/all`,
-      ADMIN_UPDATE: (id: string) => `${ORDERS_PREFIX}/admin/${id}`,
-      ADMIN_DELETE: (id: string) => `${ORDERS_PREFIX}/admin/${id}`,
-    },
-    COUPONS: {
-      AVAILABLE: `${COUPONS_PREFIX}/available`,
-      VALIDATE: `${COUPONS_PREFIX}/validate`,
-      ADMIN_ALL: `${COUPONS_PREFIX}/admin/all`,
-      GET_DETAIL: (id: string) => `${COUPONS_PREFIX}/${id}`,
-      CREATE: `${COUPONS_PREFIX}`,
-      UPDATE: (id: string) => `${COUPONS_PREFIX}/${id}`,
-      DELETE: (id: string) => `${COUPONS_PREFIX}/${id}`,
-  }
+  CART: {
+    GET: `${CARTS_PREFIX}`,
+    ADD: `${CARTS_PREFIX}/add`,
+    CLEAR: `${CARTS_PREFIX}/clear`,
+    REMOVE_PRODUCT: (productId: string) =>
+      `${CARTS_PREFIX}/product/${productId}`,
+    DECREASE_PRODUCT: (productId: string) =>
+      `${CARTS_PREFIX}/decrease-quantity/${productId}`,
+  },
+  ORDERS: {
+    CREATE: `${ORDERS_PREFIX}`,
+    GET_MY_ORDERS: `${ORDERS_PREFIX}/my-orders`,
+    GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
+    CANCEL_STATUS_PENDING: (id: string) => `${ORDERS_PREFIX}/${id}/cancel`,
+
+    // ADMIN ROUTES
+    ADMIN_GET_ALL: `${ORDERS_PREFIX}/admin/all`,
+    ADMIN_UPDATE: (id: string) => `${ORDERS_PREFIX}/admin/${id}`,
+    ADMIN_DELETE: (id: string) => `${ORDERS_PREFIX}/admin/${id}`,
+  },
+  COUPONS: {
+    AVAILABLE: `${COUPONS_PREFIX}/available`,
+    VALIDATE: `${COUPONS_PREFIX}/validate`,
+    ADMIN_ALL: `${COUPONS_PREFIX}/admin/all`,
+    GET_DETAIL: (id: string) => `${COUPONS_PREFIX}/${id}`,
+    CREATE: `${COUPONS_PREFIX}`,
+    UPDATE: (id: string) => `${COUPONS_PREFIX}/${id}`,
+    DELETE: (id: string) => `${COUPONS_PREFIX}/${id}`,
+  },
+  NEWS: {
+    // PUBLIC
+    GET_PUBLIC: (sort?: string) => `${NEWS_PREFIX}${sort ? `?sort=${sort}` : ""}`,
+    GET_DETAIL: (slug: string) => `${NEWS_PREFIX}/${slug}`,
+    
+    // ADMIN
+    GET_ALL_ADMIN: (page: number, limit: number, search?: string) => 
+      `${NEWS_PREFIX}/admin/all?page=${page}&limit=${limit}${search ? `&search=${search}` : ""}`,
+    CREATE: `${NEWS_PREFIX}/admin/news`,
+    UPDATE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,
+    DELETE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,
+  },
 };
