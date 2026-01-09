@@ -61,7 +61,7 @@ export function DiscountContent() {
       <div className="w-full">
         {coupons && coupons.length > 0 ? (
           <ScrollArea>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 overflow-y-auto h-[400px]">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto h-[400px]">
               {coupons.map((voucher) => {
                 const isShipping = voucher.code.toLowerCase().includes("ship");
                 const expiryDate = new Date(

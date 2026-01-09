@@ -6,6 +6,7 @@ import PriceFormatter from "@/components/user/PriceFormatter";
 import VoucherSelector from "./VoucherSelector";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
+import { useUserInfo } from "@/store/userStore";
 
 const { Title } = Typography;
 
@@ -32,6 +33,8 @@ const OrderSummary = ({
   loading,
   paymentMethod,
 }: OrderSummaryProps) => {
+  const userInfo = useUserInfo();
+
   return (
     <div className="lg:sticky lg:top-4 space-y-4">
       <Title level={4}>Tóm Tắt Đơn Hàng</Title>
@@ -60,6 +63,7 @@ const OrderSummary = ({
           orderAmount={totalAmount}
           onSelectCoupon={onSelectCoupon}
           selectedCoupon={selectedCoupon}
+          currentUserId={userInfo?.id || ""}
         />
 
         <Separator className="my-2" />
