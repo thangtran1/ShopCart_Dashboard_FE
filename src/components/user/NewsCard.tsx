@@ -8,7 +8,7 @@ const HomeNewsSection = () => {
   const blogs = fakeBlogDetail.slice(0, 5);
 
   return (
-    <section className="my-8">
+    <section className="mb-6">
       <div className="flex items-center justify-between mb-4">
         <Title className="text-xl font-bold uppercase tracking-wider text-foreground">
           Tin tức
@@ -16,7 +16,7 @@ const HomeNewsSection = () => {
         <SeeMore to="/all-news">Xem thêm</SeeMore>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
         {blogs.map((blog) => (
           <div
             key={blog._id}

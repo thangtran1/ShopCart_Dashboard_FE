@@ -1,6 +1,6 @@
 import UserBannerMarquee from "@/components/user/banner-marquee/user-banner";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Carousel } from "antd";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
 
 const banners = [
@@ -64,9 +64,9 @@ const HomeBannerWithCarousel = () => {
         {/* Prev Button */}
         <button
           onClick={() => carouselRef.current.prev()}
-          className="absolute cursor-pointer top-1/2 left-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
+          className="absolute cursor-pointer top-1/2 left-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full light:bg-white hover:bg-primary/80 shadow-lg transition z-10"
         >
-          <LeftOutlined />
+          <ChevronLeft />
         </button>
 
         {/* Next Button */}
@@ -74,7 +74,7 @@ const HomeBannerWithCarousel = () => {
           onClick={() => carouselRef.current.next()}
           className="absolute cursor-pointer top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
         >
-          <RightOutlined />
+          <ChevronRight />
         </button>
         <UserBannerMarquee />
       </div>
