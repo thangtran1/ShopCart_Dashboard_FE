@@ -46,7 +46,7 @@ const SignIn = () => {
       {!accessToken ? (
         <Link
           to="/login"
-          className="px-5 py-1.5 bg-foreground text-background rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
+          className="bg-foreground text-background rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
         >
           Đăng Nhập
         </Link>
