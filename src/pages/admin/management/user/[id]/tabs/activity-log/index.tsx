@@ -67,7 +67,7 @@ export default function ActivityLogs({ fetchLogsApi }: ActivityLogsProps) {
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       ) : (
-        <div className="scrollbar-none max-h-[calc(100dvh-285px)] overflow-y-auto pr-3">
+        <div className="scrollbar-none max-h-[calc(100dvh-500px)] overflow-y-auto pr-3">
           {sortedDates.map((date) => (
             <div key={date}>
               <div className="!text-base w-fit border border-blue-400 bg-blue-500/20 px-4 py-1 mb-6 rounded-md">

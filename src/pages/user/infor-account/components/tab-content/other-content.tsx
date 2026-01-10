@@ -8,9 +8,16 @@ import {
   CheckCircleOutlined,
   CheckOutlined,
   SafetyCertificateOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import Contact from "@/pages/user/contact";
 import TermsPage from "@/pages/user/public/terms";
+import ActivityLogs from "@/pages/admin/management/user/[id]/tabs/activity-log";
+import {
+  ActivityLog,
+  detailActivityLogForUser,
+} from "@/api/services/activity-logApi";
+import { useUserInfo } from "@/store/userStore";
 
 const { Title, Paragraph } = Typography;
 
@@ -89,4 +96,41 @@ export function SupportContent() {
 
 export function TermsContent() {
   return <TermsPage />;
+}
+
+export function ActivityContent() {
+  const user = useUserInfo();
+  const userId = user?.id;
+  if (!userId) return null;
+
+  return (
+    <div>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div className="flex items-start gap-3">
+          <div className="p-3 rounded-xl border border-primary/20 bg-primary/5 transition-all hover:scale-105">
+            <HistoryOutlined className="text-2xl text-blue-600" />
+          </div>
+
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-0.5">
+              Lịch sử hoạt động
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Xem lại các hoạt động, thay đổi và nhật ký thao tác của tài khoản
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-border bg-card">
+        <ActivityLogs
+          fetchLogsApi={() =>
+            detailActivityLogForUser(userId) as Promise<{
+              data: { success: boolean; message: string; data: ActivityLog[] };
+            }>
+          }
+        />
+      </div>
+    </div>
+  );
 }

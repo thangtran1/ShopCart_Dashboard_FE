@@ -10,11 +10,12 @@ import {
   EnvironmentOutlined,
   LinkOutlined,
   InfoCircleOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons"
 import { OverviewContent } from "../tab-content/overview-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
-import {  SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import {  ActivityContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
 
 export type TabKey =
@@ -22,6 +23,7 @@ export type TabKey =
   | "member"
   | "discount"
   | "history"
+  | "activity"
   | "address"
   | "infor"
   | "student"
@@ -62,9 +64,18 @@ export const tabsConfig: TabConfig[] = [
   {
     key: "history",
     label: "Lịch sử mua hàng",
-    icon: <HistoryOutlined />,
+    icon: <ShoppingOutlined />,
     component: <HistoryContent />,
     showInTopTabs: true,
+    showInSidebar: true,
+  },
+
+  { 
+    key: "activity", 
+    label: "Lịch sử hoạt động",
+    icon: <HistoryOutlined />,
+    component: <ActivityContent />,
+    showInTopTabs: false,
     showInSidebar: true,
   },
   {
