@@ -24,14 +24,42 @@ export function DiscountContent() {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-        {[1, 2, 3, 4].map((i) => (
-          <div
-            key={i}
-            className="h-36 w-full bg-slate-100 animate-pulse rounded-2xl"
-          />
-        ))}
-      </div>
+      <>
+        <div className="mb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-3 w-12 h-12 rounded-xl bg-slate-200 animate-pulse" />
+            <div className="space-y-2">
+              <div className="h-7 w-48 bg-slate-200 animate-pulse rounded-lg" />
+              <div className="h-4 w-92 bg-slate-100 animate-pulse rounded hidden sm:block" />
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div
+              key={i}
+              className="flex items-stretch h-28 w-full border border-border rounded-2xl overflow-hidden"
+            >
+              <div className="w-24 sm:w-28 shrink-0 bg-slate-200 animate-pulse flex flex-col items-center justify-center gap-2">
+                <div className="h-2 w-10 bg-slate-300 rounded" />
+                <div className="h-6 w-14 bg-slate-300 rounded" />
+              </div>
+              <div className="flex-1 p-3 space-y-3">
+                <div className="flex justify-between items-start">
+                  <div className="h-4 w-32 bg-slate-200 animate-pulse rounded" />
+                  <div className="h-6 w-16 bg-slate-100 animate-pulse rounded-full" />
+                </div>
+
+                <div className="h-3 w-20 bg-slate-200 animate-pulse rounded" />
+                <div className="border-t border-dashed border-border pt-2 flex justify-between">
+                  <div className="h-2 w-24 bg-slate-100 animate-pulse rounded" />
+                  <div className="h-2 w-16 bg-slate-100 animate-pulse rounded" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
     );
   }
 
@@ -61,7 +89,7 @@ export function DiscountContent() {
       <div className="w-full">
         {coupons && coupons.length > 0 ? (
           <ScrollArea>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto h-[400px]">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto max-h-[400px]">
               {coupons.map((voucher) => {
                 const isShipping = voucher.code.toLowerCase().includes("ship");
                 const expiryDate = new Date(
@@ -76,10 +104,9 @@ export function DiscountContent() {
                   >
                     <div
                       className={`relative flex flex-col items-center justify-center w-24 sm:w-28 shrink-0 text-white
-                        ${
-                          isShipping
-                            ? "bg-gradient-to-br from-blue-500 to-indigo-600"
-                            : "bg-gradient-to-br from-rose-500 to-red-600"
+                        ${isShipping
+                          ? "bg-gradient-to-br from-blue-500 to-indigo-600"
+                          : "bg-gradient-to-br from-rose-500 to-red-600"
                         }
                       `}
                     >
@@ -106,11 +133,10 @@ export function DiscountContent() {
                       <div className="absolute top-2.5 right-3">
                         <button
                           onClick={() => handleCopy(voucher.code)}
-                          className={`px-3 py-1 rounded-full cursor-pointer text-[10px] font-bold transition-all duration-300 active:scale-90 ${
-                            copiedCode === voucher.code
-                              ? "bg-blue-500 text-white"
-                              : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
-                          }`}
+                          className={`px-3 py-1 rounded-full cursor-pointer text-[10px] font-bold transition-all duration-300 active:scale-90 ${copiedCode === voucher.code
+                            ? "bg-blue-500 text-white"
+                            : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
+                            }`}
                         >
                           {copiedCode === voucher.code ? "Xong" : "Chép mã"}
                         </button>
@@ -131,9 +157,8 @@ export function DiscountContent() {
                             {voucher.code}
                           </span>
                           <span
-                            className={`text-[10px] font-medium ${
-                              isUnlimited ? "text-primary" : "text-warning"
-                            }`}
+                            className={`text-[10px] font-medium ${isUnlimited ? "text-primary" : "text-warning"
+                              }`}
                           >
                             •{" "}
                             {isUnlimited

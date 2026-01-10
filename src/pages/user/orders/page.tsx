@@ -9,8 +9,9 @@ import Title from "@/ui/title";
 import { useUserInfo } from "@/store/userStore";
 import NoAccess from "@/components/user/NoAccess";
 import { useOrder } from "@/hooks/useOrder";
-import { Loader2, ShoppingBag } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { OrderStatus } from "@/types/enum";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
   // Mặc định là 'all'
@@ -67,8 +68,9 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
         <div className="p-0">
           {loading ? (
             <div className="flex h-[450px] flex-col items-center justify-center gap-4">
-              <Loader2 className="h-10 w-10 animate-spin text-primary" />
-              <p className="text-muted-foreground animate-pulse font-medium">Đang cập nhật dữ liệu...</p>
+              <PageLoading
+                text="Đang tải dữ liệu..."
+              />
             </div>
           ) : orders?.length > 0 ? (
             <ScrollArea className="w-full h-[400px]">

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Typography, Timeline, Spin, Empty } from "antd";
+import { Typography, Timeline, Empty } from "antd";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { ActivityLog } from "@/api/services/activity-logApi";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const { Text } = Typography;
 
@@ -57,7 +58,10 @@ export default function ActivityLogs({ fetchLogsApi }: ActivityLogsProps) {
     <div className="bg-card text-card-foreground px-5 pt-5 flex flex-col gap-6 rounded-md border shadow-sm">
       {isLoading ? (
         <div className="flex justify-center items-center h-40">
-          <Spin size="large" />
+          <PageLoading
+            height={300}
+            text="Đang tải lịch sử..."
+          />
         </div>
       ) : logs.length === 0 ? (
         <Empty
