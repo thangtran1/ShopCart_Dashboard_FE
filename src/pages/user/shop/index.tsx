@@ -122,15 +122,15 @@ const Shop = () => {
       <div className="sticky top-0 z-10 mb-5">
         <div className="flex items-center justify-between">
           <Title className="text-lg uppercase tracking-wide">
-            Get the products as your needs
+          Nhận sản phẩm theo nhu cầu của bạn
           </Title>
 
           {(selectedCategory || selectedBrand || selectedPrice) && (
             <button
               onClick={handleResetFilters}
-              className="text-primary underline text-sm mt-2 font-medium"
+              className="text-primary cursor-pointer underline text-sm mt-2 font-medium"
             >
-              Reset Filters
+              Đặt lại bộ lọc
             </button>
           )}
         </div>

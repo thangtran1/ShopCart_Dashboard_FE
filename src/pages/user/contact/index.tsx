@@ -7,10 +7,10 @@ import {
     MessageSquare,
     Globe,
     Facebook,
-    Youtube,
     ArrowRight,
     CheckCircle,
-    Headphones
+    Headphones,
+    MessageCircle
 } from "lucide-react";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
@@ -23,9 +23,9 @@ const { Title, Paragraph, Text } = Typography;
 
 const socialLinks = [
     { icon: Facebook, name: "Facebook", url: "https://www.facebook.com/thang.tran.631808", color: "bg-blue-600" },
-    { icon: Youtube, name: "Youtube", url: "https://youtube.com", color: "bg-red-600" },
+    { icon: MessageCircle, name: "WhatsApp", url: "https://wa.me/+8562096356940", color: "bg-green-500" },
     { icon: Send, name: "Telegram", url: "https://t.me/kai_dev123", color: "bg-sky-500" },
-    { icon: Globe, name: "Website", url: "https://vanthang.io.vn/", color: "bg-primary" },
+    { icon: Globe, name: "Website", url: "https://shop-cart-dashboard-fe.vercel.app/", color: "bg-primary" },
 ];
 
 const quickLinks = [
@@ -230,17 +230,17 @@ export default function Contact() {
                             <Title level={4} className="font-bold mb-4">
                                 Kết Nối Với Chúng Tôi
                             </Title>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-1">
                                 {socialLinks.map(({ icon: Icon, name, url, color }) => (
                                     <a
                                         key={name}
                                         href={url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`flex items-center gap-2 p-3 rounded-lg ${color} text-white hover:opacity-90 transition-all`}
+                                        className={`flex  border border-primary/10 items-center gap-2 p-3 rounded-lg ${color} text-foreground hover:opacity-90 transition-all`}
                                     >
                                         <Icon className="w-5 h-5" />
-                                        <Text className="text-white font-medium text-sm">{name}</Text>
+                                        <Text className="text-foreground font-medium text-sm">{name}</Text>
                                     </a>
                                 ))}
                             </div>

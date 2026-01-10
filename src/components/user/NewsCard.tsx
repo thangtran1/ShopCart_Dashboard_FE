@@ -67,7 +67,7 @@ const HomeNewsSection = () => {
 
             <div className="p-3 flex flex-col flex-1 gap-2">
               <Link to={`/all-news/${blog.slug}`}>
-                <h3 className="text-sm font-bold text-white line-clamp-2 group-hover:text-primary transition-colors min-h-[20px]">
+                <h3 className="text-sm font-bold text-foreground line-clamp-2 group-hover:text-primary transition-colors min-h-[20px]">
                   {blog.title}
                 </h3>
               </Link>

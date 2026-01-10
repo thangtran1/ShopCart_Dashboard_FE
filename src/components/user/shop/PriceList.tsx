@@ -64,9 +64,9 @@ const PriceList = ({ selectedPrice, setSelectedPrice }: Props) => {
       {selectedPrice && (
         <button
           onClick={() => setSelectedPrice(null)}
-          className="text-sm font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary"
+          className="text-sm cursor-pointer font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary"
         >
-          Reset selection
+          Đặt lại lựa chọn
         </button>
       )}
     </div>

@@ -47,15 +47,15 @@ const AddToCartButton = ({ product, className }: Props) => {
   };
 
   return (
-    <div className="h-12 flex items-center">
+    <div className="h-12 w-full flex items-center">
       {itemCount ? (
         <div className="text-sm w-full">
           <div className="flex items-center justify-between">
-            <span className="text-xs mr-5">Quantity</span>
+            <span className="text-xs mr-5">Số lượng</span>
             <QuantityButtons product={product} />
           </div>
           <div className="flex items-center justify-between border-t pt-1">
-            <span className="text-xs font-semibold">Subtotal</span>
+            <span className="text-xs font-semibold">Tổng</span>
             <PriceFormatter
               amount={product?.price ? product?.price * itemCount : 0}
             />
@@ -66,19 +66,19 @@ const AddToCartButton = ({ product, className }: Props) => {
           onClick={handleAddToCart}
           disabled={isOutOfStock || isLoading}
           className={cn(
-            "w-full shadow-none text-foreground font-semibold hover:bg-primary/80 cursor-pointer",
+            "!w-full shadow-none dark:text-foreground font-semibold hover:bg-primary/80 cursor-pointer",
             className
           )}
         >
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Adding...
+              Đang thêm...
             </>
           ) : (
             <>
-              <ShoppingBag className="mr-2 h-4 w-4" /> 
-              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+              <ShoppingBag className="h-4 w-4" /> 
+              {isOutOfStock ? "Hết hàng" : "Thêm vào giỏ"}
             </>
           )}
         </Button>

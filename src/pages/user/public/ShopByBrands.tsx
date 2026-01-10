@@ -8,10 +8,26 @@ import { Skeleton } from "@/ui/skeleton";
 import { Badge } from "@/ui/badge";
 
 const extraData = [
-  { title: "Free Delivery", description: "Free shipping over $100", icon: <Truck size={40} /> },
-  { title: "Free Return", description: "30 days return guarantee", icon: <GitCompareArrows size={40} /> },
-  { title: "Customer Support", description: "Friendly 24/7 customer support", icon: <Headset size={40} /> },
-  { title: "Money Back Guarantee", description: "Quality checked by our team", icon: <ShieldCheck size={40} /> },
+  { 
+    title: "Giao hàng miễn phí", 
+    description: "Miễn phí vận chuyển cho đơn hàng trên $100", 
+    icon: <Truck size={40} /> 
+  },
+  { 
+    title: "Đổi trả miễn phí", 
+    description: "Cam kết đổi trả trong vòng 30 ngày", 
+    icon: <GitCompareArrows size={40} /> 
+  },
+  { 
+    title: "Hỗ trợ khách hàng", 
+    description: "Đội ngũ hỗ trợ thân thiện 24/7", 
+    icon: <Headset size={40} /> 
+  },
+  { 
+    title: "Đảm bảo hoàn tiền", 
+    description: "Chất lượng sản phẩm được kiểm định", 
+    icon: <ShieldCheck size={40} /> 
+  },
 ];
 
 export default function ShopByBrands() {

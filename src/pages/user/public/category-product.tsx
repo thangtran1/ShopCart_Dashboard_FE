@@ -55,7 +55,12 @@ const CategoryProduct = () => {
 
   // Hiển thị danh mục
   const renderCategories = () => (
-    <div className="grid grid-cols-1 border border-border rounded-xl shadow-sm p-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div className="
+      max-h-[450px] overflow-y-auto overflow-x-hidden pr-2
+      flex flex-col gap-2 
+      md:grid md:max-h-none md:overflow-visible md:grid-cols-2 lg:grid-cols-3
+      border border-border rounded-xl shadow-sm p-2
+    ">
       {categories.map((category) => (
         <Link
           key={category._id}
@@ -63,7 +68,7 @@ const CategoryProduct = () => {
           className="
             group flex items-center gap-4 p-4 rounded-xl border border-border
             hover:shadow-md hover:border-primary/30 transition-all duration-300
-            bg-white
+            bg-white shrink-0 /* Đảm bảo item không bị co lại trên mobile */
           "
         >
           {category.image && (

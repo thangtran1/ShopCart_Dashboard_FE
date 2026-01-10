@@ -107,24 +107,27 @@ const ProductCard = ({ product }: { product: any }) => {
           </p>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <p className="font-medium">Kho: </p>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex gap-1 min-w-0 flex-1"> 
+            <p className="font-medium flex-shrink-0">Kho: </p>
             <p
-              className={`${product?.stock === 0 ? "text-error" : "text-success font-semibold"
-                }`}
+              className={`truncate ${ 
+                product?.stock === 0 ? "text-error" : "text-success font-semibold"
+              }`}
+              title={product?.stock + " sản phẩm"}
             >
               {(product?.stock as number) > 0
-                ? product?.stock + " sản phẩm"
+                ? `${product?.stock} sản phẩm`
                 : "Hết hàng"}
             </p>
           </div>
-          <div className="flex gap-3">
-            <span className="flex items-center gap-1">
+
+          <div className="flex gap-3 flex-shrink-0">
+            <span className="flex items-center gap-1 text-xs">
               <Icon icon="solar:eye-bold" className="w-3.5 h-3.5" />
               {product.viewCount || 0}
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 text-xs">
               <Icon icon="solar:cart-check-bold" className="w-3.5 h-3.5" />
               {product.soldCount || 0}
             </span>

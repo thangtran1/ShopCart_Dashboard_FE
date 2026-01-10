@@ -57,9 +57,9 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
         {selectedBrand && (
           <button
             onClick={() => setSelectedBrand(null)}
-            className="text-sm font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary text-left"
+            className="text-sm cursor-pointer font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary text-left"
           >
-            Reset selection
+            Đặt lại lựa chọn
           </button>
         )}
       </RadioGroup>
