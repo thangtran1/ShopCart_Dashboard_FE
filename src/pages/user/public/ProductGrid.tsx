@@ -118,7 +118,7 @@ const ProductGrid = () => {
               </AnimatePresence>
             ))}
           </div>
-          <div className="mt-6 border-t">
+          <div className="mt-6 border-y border-primary/30">
             <ServiceFeatures />
           </div>
         </>
