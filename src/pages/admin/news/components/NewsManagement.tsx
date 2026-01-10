@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNews } from "@/hooks/useNews";
-import { Button, Popconfirm, Tooltip, Avatar } from "antd";
+import { Button, Popconfirm, Tooltip } from "antd";
 import {
   PlusCircleOutlined,
   EditOutlined,
@@ -14,20 +14,14 @@ import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import dayjs from "dayjs";
 
-import NewsModal from "./NewsModal"; // Đảm bảo bạn đổi tên file này
-import NewsFilters from "./NewsFilters"; // Đảm bảo bạn đổi tên file này
+import NewsModal from "./NewsModal"; 
+import NewsFilters from "./NewsFilters";
 import { CardTitle } from "@/ui/card";
 import { Icon } from "@/components/icon";
 import { Separator } from "@/ui/separator";
 import { Badge } from "@/ui/badge";
-import { INews } from "@/api/services/newsApi";
+import { INews, INewsFilters } from "@/api/services/newsApi";
 
-interface INewsFilters {
-  page: number;
-  limit: number;
-  search: string;
-  category?: string;
-}
 
 const initialFilters: INewsFilters = {
   page: 1,
@@ -37,7 +31,6 @@ const initialFilters: INewsFilters = {
 };
 
 export default function NewsManagement() {
-  // Sử dụng hook useNews thay vì useCoupon
   const { fetchAdminNews, deleteNews, loading } = useNews();
 
   const [filters, setFilters] = useState<INewsFilters>(initialFilters);
@@ -48,10 +41,11 @@ export default function NewsManagement() {
   const [editingNews, setEditingNews] = useState<INews | null>(null);
 
   const loadAdminData = useCallback(async () => {
-    const res = await fetchAdminNews(filters.page, filters.limit, filters.search);
+    const res = await fetchAdminNews(filters); 
+    
     if (res && res.success) {
       setDataSource(res.data);
-      setTotal(res.pagination?.total || 0);
+      setTotal(res?.total || 0);
     }
   }, [filters, fetchAdminNews]);
 
@@ -60,7 +54,7 @@ export default function NewsManagement() {
   }, [loadAdminData]);
 
   const handleFilterChange = (key: keyof INewsFilters, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value, page: 1 }));
+    setFilters(prev => ({ ...prev, [key]: value }));
   };
 
   const handleClearFilters = () => {
@@ -126,11 +120,10 @@ export default function NewsManagement() {
         render: (isPublished: boolean) => (
           isPublished ? (
             <Badge variant="success" className="gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               CÔNG KHAI
             </Badge>
           ) : (
-            <Badge variant="secondary">BẢN NHÁP</Badge>
+            <Badge variant="outline">BẢN NHÁP</Badge>
           )
         ),
       },
@@ -140,11 +133,11 @@ export default function NewsManagement() {
         width: 150,
         render: (_, record) => (
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 text-xs text-foreground">
               <EyeOutlined className="text-primary" />
               <span>{record.views?.toLocaleString()} lượt xem</span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] text-slate-400">
+            <div className="flex items-center gap-2 text-[10px] text-foreground">
               <FileTextOutlined />
               <span>{record.tags?.length || 0} thẻ (tags)</span>
             </div>
@@ -161,7 +154,7 @@ export default function NewsManagement() {
             <span className="text-xs font-semibold text-foreground">
               {dayjs(date).format("DD/MM/YYYY")}
             </span>
-            <span className="text-[10px] opacity-70">
+            <span className="text-[10px]">
               {dayjs(date).format("HH:mm")}
             </span>
           </div>
@@ -207,7 +200,7 @@ export default function NewsManagement() {
   );
 
   return (
-    <div className="p-4">
+    <div className="py-4">
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
@@ -239,7 +232,7 @@ export default function NewsManagement() {
           onClearFilters={handleClearFilters}
         />
 
-        <div className="mt-4 bg-card rounded-xl border border-border overflow-hidden">
+        <div className="mt-4 overflow-hidden">
           <TableAntd
             columns={columns}
             data={dataSource}
