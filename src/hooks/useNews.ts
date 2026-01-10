@@ -1,4 +1,4 @@
-import { INews, newsService, NewsPaginationResponse } from "@/api/services/newsApi";
+import { INews, newsService, NewsPaginationResponse, INewsFilters } from "@/api/services/newsApi";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 
@@ -41,11 +41,11 @@ export const useNews = () => {
 
   // 3. Lấy tất cả tin tức cho Admin (Phân trang/Search)
   const fetchAdminNews = useCallback(
-    async (page: number, limit: number, search?: string): Promise<NewsPaginationResponse | null> => {
+    async (filters: INewsFilters): Promise<NewsPaginationResponse | null> => {
       setLoading(true);
       setError(null);
       try {
-        const res = await newsService.getAllAdmin(page, limit, search);
+        const res = await newsService.getAllAdmin(filters);
         return res;
       } catch (err) {
         console.error("Lỗi lấy danh sách admin:", err);

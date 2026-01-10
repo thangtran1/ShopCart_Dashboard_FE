@@ -16,6 +16,15 @@ export interface INews {
   updatedAt: string;
 }
 
+export interface INewsFilters {
+  page: number;
+  limit: number;
+  search: string;
+  category?: string;
+  isPublished?: boolean | string;
+  sort?: string;
+}
+
 export interface NewsResponse<T = any> {
   success: boolean;
   message: string;
@@ -49,13 +58,10 @@ export const newsService = {
   },
 
   // --- ADMIN ---
-  getAllAdmin: async (
-    page: number,
-    limit: number,
-    search?: string
-  ): Promise<NewsPaginationResponse> => {
+  getAllAdmin: async (filters: INewsFilters): Promise<NewsPaginationResponse> => {
     const response = await apiClient.get({
-      url: API_URL.NEWS.GET_ALL_ADMIN(page, limit, search),
+      url: API_URL.NEWS.GET_ALL_ADMIN(),
+      params: filters,
     });
     return response.data;
   },
