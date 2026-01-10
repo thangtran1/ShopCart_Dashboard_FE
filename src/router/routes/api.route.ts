@@ -217,8 +217,7 @@ export const API_URL = {
     GET_DETAIL: (slug: string) => `${NEWS_PREFIX}/${slug}`,
     
     // ADMIN
-    GET_ALL_ADMIN: (page: number, limit: number, search?: string) => 
-      `${NEWS_PREFIX}/admin/all?page=${page}&limit=${limit}${search ? `&search=${search}` : ""}`,
+    GET_ALL_ADMIN: () => `${NEWS_PREFIX}/admin/all`,
     CREATE: `${NEWS_PREFIX}/admin/news`,
     UPDATE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,
     DELETE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,

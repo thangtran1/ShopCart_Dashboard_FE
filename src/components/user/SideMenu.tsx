@@ -22,13 +22,13 @@ const SideMenu: FC<SidebarProps> = ({ isOpen, onClose }) => {
     >
       <div
         ref={sidebarRef}
-        className="min-w-72 max-w-96 bg-background h-screen p-6 border-r border-primary justify-between flex flex-col gap-6"
+        className="min-w-72 max-w-96 bg-background h-screen p-6 border-r border-primary/40 justify-between flex flex-col gap-6"
       >
         <div>
           <div className="flex items-center justify-between gap-5">
             <Logo />
-            <button onClick={onClose} className="hover:text-primary cursor-pointer">
-              <X />
+            <button onClick={onClose} className="hover:text-primary opacity-70 border border-primary/40 rounded-full p-1 cursor-pointer">
+              <X size={20} />
             </button>
           </div>
 
@@ -50,12 +50,12 @@ const SideMenu: FC<SidebarProps> = ({ isOpen, onClose }) => {
             ))}
           </div>
         </div>
-        <div className="mb-10">
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent my-6" />
+        <div className="mb-20">
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent my-6" />
 
           <div className="pt-8 flex flex-col items-start">
             <p className="text-xs font-bold uppercase tracking-widest text-foreground mb-5">
-              Connect with us
+            Kết nối với chúng tôi
             </p>
             <div className="flex justify-start items-center space-x-4">
               <SocialMedia />

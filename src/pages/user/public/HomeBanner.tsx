@@ -61,20 +61,30 @@ const HomeBannerWithCarousel = () => {
           ))}
         </Carousel>
 
-        {/* Prev Button */}
         <button
           onClick={() => carouselRef.current.prev()}
-          className="absolute cursor-pointer top-1/2 left-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full light:bg-white hover:bg-primary/80 shadow-lg transition z-10"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-20 
+             w-7 h-14 flex items-center justify-center
+             backdrop-blur-md
+             border border-l-0 border-primary/40
+             rounded-r-full shadow-lg
+            bg-muted/70 hover:bg-muted
+             transition-all duration-300 group cursor-pointer"
         >
-          <ChevronLeft />
+          <ChevronLeft className="w-6 h-6 -ml-1 group-hover:scale-110 transition-transform" />
         </button>
 
-        {/* Next Button */}
         <button
           onClick={() => carouselRef.current.next()}
-          className="absolute cursor-pointer top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-primary hover:bg-primary/80 shadow-lg transition z-10"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-20 
+             w-7 h-14 flex items-center justify-center
+            backdrop-blur-md
+             border border-r-0 border-primary/20
+             rounded-l-full shadow-lg
+              bg-muted/70 hover:bg-muted
+             transition-all duration-300 group cursor-pointer"
         >
-          <ChevronRight />
+          <ChevronRight className="w-6 h-6 -mr-1 group-hover:scale-110 transition-transform" />
         </button>
         <UserBannerMarquee />
       </div>

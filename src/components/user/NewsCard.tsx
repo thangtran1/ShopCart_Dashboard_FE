@@ -15,7 +15,7 @@ const HomeNewsSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await refreshNews(); 
+      const res = await refreshNews();
       if (res && res.success) {
         setNewsList(res.data.slice(0, 8));
       }

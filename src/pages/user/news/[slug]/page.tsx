@@ -17,6 +17,7 @@ import {
 } from "@/ui/breadcrumb";
 import { INews } from "@/api/services/newsApi";
 import { Badge } from "@/ui/badge";
+import RenderHtml from "@/pages/admin/news/components/render-html";
 
 const NewSlugDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -54,7 +55,6 @@ const NewSlugDetail = () => {
 
   return (
     <div className="mb-6">
-      {/* Breadcrumb */}
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -109,17 +109,11 @@ const NewSlugDetail = () => {
       <div className="text-xl font-medium text-muted-foreground mb-8 italic border-l-4 border-primary pl-4">
         {news.shortDescription}
       </div>
-
-      <div
-        className="prose prose-slate dark:prose-invert max-w-none 
-                   text-foreground text-lg leading-relaxed
-                   [&>p]:mb-4 [&>img]:rounded-xl [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:mt-8"
-        dangerouslySetInnerHTML={{ __html: news.content }}
-      />
+      <RenderHtml content={news.content || ""} />
 
       {news.tags && news.tags.length > 0 && (
-        <div className="mt-6 pt-6 border-t flex items-center gap-2">
-          <span className="text-sm font-bold text-foreground uppercase">
+        <div className="mt-6 pt-6 border-t flex flex-wrap items-center gap-2">
+          <span className="text-sm font-bold text-foreground uppercase mr-1">
             Tags:
           </span>
           {news.tags.map((tag) => (
