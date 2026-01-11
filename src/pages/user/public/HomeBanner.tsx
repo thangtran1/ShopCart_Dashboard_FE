@@ -2,12 +2,16 @@ import UserBannerMarquee from "@/components/user/banner-marquee/user-banner";
 import { Carousel } from "antd";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef } from "react";
+import bannerOne from "@/assets/images/banner/banner2.png";
+import bannerTwo from "@/assets/images/banner/banner3.png";
+import bannerThree from "@/assets/images/banner/banner4.jpg";
+import bannerFour from "@/assets/images/banner/banner5.png";
 
 const banners = [
-  { id: 1, type: "book", imageUrl: "/images/banner/banner2.png" },
-  { id: 2, type: "phone", imageUrl: "/images/banner/banner3.png" },
-  { id: 3, type: "fashion", imageUrl: "/images/banner/banner4.jpg" },
-  { id: 4, type: "home", imageUrl: "/images/banner/banner5.png" },
+  { id: 1, type: "book", imageUrl: bannerOne },
+  { id: 2, type: "phone", imageUrl: bannerTwo },
+  { id: 3, type: "fashion", imageUrl: bannerThree },
+  { id: 4, type: "home", imageUrl: bannerFour },
 ];
 
 const CustomBannerItem = ({ imageUrl, type }: { imageUrl: string; type: string }) => {

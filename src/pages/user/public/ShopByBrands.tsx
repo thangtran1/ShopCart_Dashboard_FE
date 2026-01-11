@@ -8,25 +8,25 @@ import { Skeleton } from "@/ui/skeleton";
 import { Badge } from "@/ui/badge";
 
 const extraData = [
-  { 
-    title: "Giao hàng miễn phí", 
-    description: "Miễn phí vận chuyển cho đơn hàng trên $100", 
-    icon: <Truck size={40} /> 
+  {
+    title: "Giao hàng miễn phí",
+    description: "Miễn phí vận chuyển cho đơn hàng trên $100",
+    icon: <Truck size={40} />
   },
-  { 
-    title: "Đổi trả miễn phí", 
-    description: "Cam kết đổi trả trong vòng 30 ngày", 
-    icon: <GitCompareArrows size={40} /> 
+  {
+    title: "Đổi trả miễn phí",
+    description: "Cam kết đổi trả trong vòng 30 ngày",
+    icon: <GitCompareArrows size={40} />
   },
-  { 
-    title: "Hỗ trợ khách hàng", 
-    description: "Đội ngũ hỗ trợ thân thiện 24/7", 
-    icon: <Headset size={40} /> 
+  {
+    title: "Hỗ trợ khách hàng",
+    description: "Đội ngũ hỗ trợ thân thiện 24/7",
+    icon: <Headset size={40} />
   },
-  { 
-    title: "Đảm bảo hoàn tiền", 
-    description: "Chất lượng sản phẩm được kiểm định", 
-    icon: <ShieldCheck size={40} /> 
+  {
+    title: "Đảm bảo hoàn tiền",
+    description: "Chất lượng sản phẩm được kiểm định",
+    icon: <ShieldCheck size={40} />
   },
 ];
 
@@ -81,7 +81,7 @@ export default function ShopByBrands() {
           className="border relative border-border h-24 rounded-lg flex items-center justify-center hover:shadow-md transition-all duration-300"
         >
           <img
-            src={brand.logo || "/images/brands/brand_1.webp"}
+            src={brand.logo}
             alt={brand.name}
             className="w-28 h-20 object-contain opacity-80 hover:opacity-100 transition"
           />
