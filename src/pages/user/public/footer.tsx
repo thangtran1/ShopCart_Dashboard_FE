@@ -1,5 +1,4 @@
 import { ChevronUp, Facebook, Github, Linkedin, Slack, Youtube } from "lucide-react";
-import FooterTop from "./footer-top";
 import Logo from "@/ui/logo";
 import { Button, Input } from "antd";
 import { Link } from "react-router";
@@ -44,36 +43,11 @@ const Footer = () => {
 
   return (
     <footer className="mx-auto border-t relative">
-      <FooterTop />
-
-      {/* Floating Social Buttons */}
-      {/* <div className="fixed bottom-16 left-6 flex flex-col gap-2 z-50">
-        <a
-          href="https://facebook.com"
-          className="w-12 h-12 rounded-full !bg-primary flex items-center justify-center shadow-lg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Facebook size={20} className="text-white" />
-        </a>
-        <a
-          href="https://zalo.me"
-          className="w-12 h-12 rounded-full !bg-primary flex items-center justify-center shadow-lg"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <MessageCircleMore size={20} className="text-white" />
-        </a>
-      </div> */}
-
-      {/* Footer Content */}
-      <div className={`${contentWrapper} py-8 px-4 sm:px-6 lg:px-0 border-t mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-16`}>
-
-        {/* Logo + Description + Social */}
+      <div className={`${contentWrapper} p-4 sm:px-6 lg:px-0 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-16`}>
         <div className="space-y-3">
           <Logo />
           <p className="text-muted-foreground leading-relaxed">{t("footer.discoverCuratedFurnitureCollections")}</p>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {socialIcons.map((Icon, i) => (
               <div key={i} className="w-10 h-10 rounded-xl border border-border flex items-center justify-center cursor-pointer transition hover:shadow-md">
                 <Icon className="w-5 h-5" />
@@ -82,7 +56,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Quick Links */}
         <div>
           <h3 className="text-lg font-semibold mb-3">{t("footer.quickLinks")}</h3>
           <ul className="space-y-2">
@@ -94,7 +67,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Categories */}
         <div>
           <h3 className="text-lg font-semibold mb-3">{t("footer.categories")}</h3>
           <ul className="space-y-2">
@@ -106,7 +78,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Newsletter */}
         <div className="space-y-3">
           <h3 className="text-lg font-semibold">{t("footer.newsletter")}</h3>
           <p className="text-muted-foreground leading-relaxed">{t("footer.subscribeToOurNewsletter")}</p>
@@ -115,8 +86,6 @@ const Footer = () => {
             <Button type="primary" size="large" className="w-full rounded-lg">{t("footer.subscribe")}</Button>
           </div>
         </div>
-
-        {/* Scroll To Top */}
 
         {scrollPercent > 0 && (
           <button
@@ -144,7 +113,6 @@ const Footer = () => {
 
       </div>
 
-      {/* Footer Bottom */}
       <div className="py-4 border-t text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} <Logo />. All rights reserved.
       </div>

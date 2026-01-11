@@ -76,7 +76,7 @@ const HomeNewsSection = () => {
                 {blog.shortDescription}
               </p>
 
-              <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-auto pt-2 border-t border-border">
+              <div className="flex items-center justify-between text-[10px] text-foreground mt-auto pt-2 border-t border-border">
                 <div className="flex items-center gap-2">
                   <span className="flex items-center gap-1">
                     <ClockCircleOutlined />

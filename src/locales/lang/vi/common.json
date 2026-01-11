@@ -17,15 +17,6 @@
     "gaming": "Game",
     "tablets": "Máy tính bảng"
   },
-  "footerTop": {
-    "visitUs": "Đến với chúng tôi",
-    "callUs": "Liên hệ",
-    "workingHours": "Giờ làm việc",
-    "emailUs": "Email",
-    "newOrleans": "New Orleans, Việt Nam",
-    "phoneNumber": "+84 909 090 090",
-    "monToSat": "Thứ Hai - Thứ Bảy: 08:00 - 17:00"
-  },
   "catalog": {
     "title": "Quản lý Danh mục và thương hiệu",
     "subtitle": "Quản lý danh mục sản phẩm và thương hiệu một cách hiệu quả",
