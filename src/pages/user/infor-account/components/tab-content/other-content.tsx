@@ -1,13 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Tabs, Select, Typography, Badge } from "antd";
+import { useMemo, useState } from "react";
+import { Button, Input } from "antd";
 import {
-  LaptopOutlined,
-  ClockCircleOutlined,
-  CheckCircleOutlined,
-  CheckOutlined,
-  SafetyCertificateOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
 import Contact from "@/pages/user/contact";
@@ -18,72 +13,184 @@ import {
   detailActivityLogForUser,
 } from "@/api/services/activity-logApi";
 import { useUserInfo } from "@/store/userStore";
-
-const { Title, Paragraph } = Typography;
-
-const EMPTY_IMG =
-  "https://cdn-static.smember.com.vn/_next/static/media/empty.f8088c4d.png";
+import { useOrder } from "@/hooks/useOrder";
+import dayjs from "dayjs";
+import {
+  Search,
+  Clock,
+  Calendar,
+  Zap
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/ui/badge";
+import { toast } from "sonner";
 
 export function WarrantyContent() {
   const [activeTab, setActiveTab] = useState<string>("all");
-  const warranties: any[] = [];
+  const [searchQuery, setSearchQuery] = useState("");
+  const { orders, loading } = useOrder("delivered");
 
-  const tabs = [
-    { key: "all", label: "Tất cả", icon: <LaptopOutlined /> },
-    { key: "received", label: "Tiếp nhận", icon: <ClockCircleOutlined /> },
-    { key: "processing", label: "Đang xử lý", icon: <CheckCircleOutlined /> },
-    { key: "done", label: "Hoàn tất", icon: <CheckOutlined /> },
-  ];
+  const allWarrantyItems = useMemo(() => {
+    if (!orders) return [];
+    const items: any[] = [];
+    orders.forEach((order: any) => {
+      order.items.forEach((item: any) => {
+        items.push({
+          ...item,
+          orderNumber: order.orderNumber,
+          deliveredAt: order.updatedAt,
+        });
+      });
+    });
+    return items;
+  }, [orders]);
 
+  const filteredItems = useMemo(() => {
+    const now = dayjs();
+    let result = allWarrantyItems;
+
+    if (activeTab === "active") {
+      result = result.filter(item => item.warrantyExpireDate && dayjs(item.warrantyExpireDate).isAfter(now));
+    } else if (activeTab === "expired") {
+      result = result.filter(item => !item.warrantyExpireDate || dayjs(item.warrantyExpireDate).isBefore(now));
+    }
+
+    if (searchQuery) {
+      result = result.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    }
+
+    return result;
+  }, [allWarrantyItems, activeTab, searchQuery]);
+
+  const handleClick = () => {
+    toast.info("Tính năng đang cập nhật 😅");
+  };
   return (
-    <div>
-      <div className="flex items-start gap-2">
-        <Badge showZero color="#f43f5e" offset={[-2, 2]}>
-          <div className="p-3 rounded-xl border border-primary/20 bg-primary/5 transition-all hover:scale-105">
-            <SafetyCertificateOutlined className="text-2xl text-emerald-600" />
-          </div>
-        </Badge>
+    <div className="text-foreground relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] blur-[120px] rounded-full pointer-events-none" />
 
-        <div>
-          <Title
-            level={3}
-            className="!text-xl !font-bold tracking-tight !mb-0.5"
-          >
-            Tra cứu bảo hành
-          </Title>
-          <Paragraph className="text-sm text-muted-foreground mb-0">
-            Theo dõi tình trạng và thời hạn bảo hành của các thiết bị đã mua
-          </Paragraph>
+      <div className="relative z-10 space-y-6 mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs uppercase tracking-widest">
+              <Zap size={14} fill="currentColor" />
+              Bảo hành điện tử
+            </div>
+            <h1 className="text-4xl font-extrabold  tracking-tight">Tra cứu <span className="text-emerald-500">Bảo hành</span></h1>
+            <p className="text-muted-foreground text-sm">Quản lý và theo dõi thời gian bảo hành các thiết bị của bạn</p>
+          </div>
+
+          <div className="w-full md:w-80">
+            <Input
+              size="large"
+              prefix={<Search size={18} className="text-slate-500 mr-2" />}
+              placeholder="Tìm tên sản phẩm..."
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="flex p-1 backdrop-blur-md rounded-2xl border border-border w-fit">
+          {[
+            { key: "all", label: "Tất cả" },
+            { key: "active", label: "Bảo hành" },
+            { key: "expired", label: "Hết hạn" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex cursor-pointer items-center gap-2 px-6 py-2 rounded-xl text-sm font-bold transition-all ${activeTab === tab.key
+                ? "shadow-lg shadow-emerald-500/20 text-primary"
+                : "text-muted-foreground hover:text-foreground"
+                }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="hidden lg:block">
-        <Tabs
-          activeKey={activeTab}
-          onChange={setActiveTab}
-          items={tabs.map((tab) => ({ key: tab.key, label: tab.label }))}
-          type="line"
-          size="middle"
-          className="mb-6"
-        />
-      </div>
+      <div className="max-h-[50vh] overflow-y-auto pr-2">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab + searchQuery}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 relative z-10"
+          >
+            {filteredItems.map((item, index) => {
+              const now = dayjs();
+              const expireDate = item.warrantyExpireDate ? dayjs(item.warrantyExpireDate) : null;
+              const isExpired = !expireDate || now.isAfter(expireDate);
+              const daysLeft = expireDate ? expireDate.diff(now, 'day') : 0;
 
-      <div className="lg:hidden mb-6">
-        <Select
-          value={activeTab}
-          onChange={setActiveTab}
-          className="w-full"
-          options={tabs.map((tab) => ({ label: tab.label, value: tab.key }))}
-        />
-      </div>
+              return (
+                <motion.div
+                  key={index}
+                  whileHover={{ y: -5 }}
+                  className="border border-border rounded-3xl p-4 flex flex-col justify-between group transition-all duration-300 backdrop-blur-sm"
+                >
+                  <div className="space-y-2">
+                    {/* Ảnh và Tag */}
+                    <div className="flex justify-between items-start">
+                      <div className="w-20 h-20 rounded-2xl overflow-hidden border">
+                        <img
+                          src={item.image}
+                          alt=""
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                      </div>
+                      <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${isExpired ? ' text-muted-foreground border-border' : ' text-foreground border-primary/60'
+                        }`}>
+                        {isExpired ? "Hết bảo hành" : "Còn bảo hành"}
+                      </div>
+                    </div>
 
-      {warranties.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-6 text-center">
-          <img src={EMPTY_IMG} alt="empty" className="w-48 mb-4" />
-          <p className="text-base font-medium mb-2">Bạn chưa có đơn bảo hành</p>
-          <a href="/" className="text-sm text-red-600 hover:underline">
-            Quay về trang chủ
-          </a>
+                    {/* Thông tin sản phẩm */}
+                    <div>
+                      <p >ID: {item.orderNumber?.slice(-8)}</p>
+                      <h3 className=" font-bold text-lg line-clamp-1 group-hover:text-emerald-400 transition-colors">{item.name}</h3>
+                    </div>
+
+                    {/* Thanh tiến trình / Thông số */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-foreground flex items-center gap-1.5"><Calendar size={14} /> Ngày mua:</span>
+                        <span className="text-foreground font-medium">{dayjs(item.deliveredAt).format("DD/MM/YYYY")}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-foreground flex items-center gap-1.5"><Clock size={14} /> Ngày hết hạn:</span>
+                        <span className={`font-bold ${isExpired ? 'text-red-500' : 'text-emerald-400'}`}>
+                          {expireDate ? expireDate.format("DD/MM/YYYY") : "Chưa cập nhật"}
+                        </span>
+                      </div>
+
+                      {!isExpired && (
+                        <Badge variant={'success'} >Thời gian còn lại {daysLeft} ngày</Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex justify-end">
+                    <Button size="large" type="dashed" onClick={handleClick}>
+                      {isExpired ? "Liên hệ hỗ trợ" : "Yêu cầu bảo hành"}
+                    </Button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      {filteredItems.length === 0 && !loading && (
+        <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in duration-500">
+          <div className="w-20 h-20  rounded-full flex items-center justify-center border border-border mb-4">
+            <Search className="text-slate-700" size={32} />
+          </div>
+          <p className="text-slate-500 font-medium">Không tìm thấy thiết bị nào phù hợp</p>
+          <Button type="link" onClick={() => { setActiveTab("all"); setSearchQuery(""); }} className="text-emerald-500 font-bold uppercase text-xs">Xem lại tất cả</Button>
         </div>
       )}
     </div>
@@ -107,7 +214,7 @@ export function ActivityContent() {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
         <div className="flex items-start gap-3">
-          <div className="p-3 rounded-xl border border-primary/20 bg-primary/5 transition-all hover:scale-105">
+          <div className="p-3 rounded-xl border border-primary/20 transition-all hover:scale-105">
             <HistoryOutlined className="text-2xl text-blue-600" />
           </div>
 
@@ -122,7 +229,7 @@ export function ActivityContent() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border bg-card">
+      <div className="rounded-xl border border-border">
         <ActivityLogs
           fetchLogsApi={() =>
             detailActivityLogForUser(userId) as Promise<{

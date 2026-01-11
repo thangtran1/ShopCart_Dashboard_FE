@@ -27,6 +27,19 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
 }) => {
   if (!order) return null;
 
+  const getWarrantyBadge = (expireDate: string | null) => {
+    if (!expireDate) return <span className="text-[10px] text-foreground/80 italic">Không có bảo hành</span>;
+
+    const isExpired = new Date(expireDate) < new Date();
+    return (
+      <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${isExpired
+        ? "bg-red-50 text-red-600 border-red-100"
+        : "bg-green-50 text-green-600 border-green-100"
+        }`}>
+        {isExpired ? "Hết bảo hành" : `Bảo hành đến: ${new Date(expireDate).toLocaleDateString("vi-VN")}`}
+      </span>
+    );
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="!max-w-4xl max-h-[90vh] overflow-y-scroll">
@@ -135,7 +148,17 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
                       alt={item.name}
                       className="w-12 h-12 border rounded-md object-cover bg-white"
                     />
-                    <span className="font-medium text-sm line-clamp-1">{item.name}</span>
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium text-sm line-clamp-1">{item.name}</span>
+                      <div className="flex items-center gap-2">
+                        {getWarrantyBadge(item.warrantyExpireDate)}
+                        {item.warrantyPeriod > 0 && (
+                          <span className="text-[10px] text-foreground/80 italic">
+                            (Gói {item.warrantyPeriod} tháng)
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </TableCell>
                   <TableCell className="text-center text-foreground">x{item.quantity}</TableCell>
                   <TableCell className="text-right text-foreground">
@@ -150,15 +173,15 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
           </Table>
         </div>
 
-        <div className="space-y-2 border-t pt-4">
-          <div className="flex flex-col items-end gap-2 pr-4">
-            <div className="flex justify-between w-full max-w-[250px] text-sm text-muted-foreground">
+        <div className="w-full border-t pt-4 flex justify-end">
+          <div className="space-y-2 flex flex-col items-end gap-2 pr-4">
+            <div className="flex justify-between w-full text-sm text-foreground">
               <span>Tạm tính:</span>
               <PriceFormatter amount={order.subTotal} />
             </div>
 
             {order.discountAmount > 0 && (
-              <div className="flex justify-between w-full max-w-[250px] text-sm text-red-500 italic">
+              <div className="flex justify-between w-full text-sm text-red-500 italic">
                 <span className="flex items-center gap-1">
                   <Tag className="w-3 h-3" /> Giảm giá ({order.couponCode}):
                 </span>
@@ -166,13 +189,13 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
               </div>
             )}
 
-            <div className="flex justify-between w-full max-w-[250px] text-sm text-muted-foreground">
+            <div className="flex justify-between w-full  text-sm text-foreground">
               <span>Phí vận chuyển:</span>
               <span>Miễn phí</span>
             </div>
 
-            <div className="flex justify-between w-full max-w-[300px] items-center border-t pt-2 mt-2">
-              <h3 className="text-md text-foreground font-bold uppercase">Tổng thanh toán:</h3>
+            <div className="flex justify-between w-full items-center border-t pt-2 mt-2">
+              <h3 className="text-md text-foreground font-bold uppercase mr-2">Tổng thanh toán:</h3>
               <PriceFormatter
                 amount={order?.totalAmount}
                 className="text-primary text-2xl font-extrabold"

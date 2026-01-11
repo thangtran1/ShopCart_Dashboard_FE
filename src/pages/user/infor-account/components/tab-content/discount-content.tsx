@@ -138,7 +138,7 @@ export function DiscountContent() {
                             : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
                             }`}
                         >
-                          {copiedCode === voucher.code ? "Xong" : "Chép mã"}
+                          {copiedCode === voucher.code ? "Xong" : "Sao chép"}
                         </button>
                       </div>
 

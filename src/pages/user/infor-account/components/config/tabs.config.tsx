@@ -15,7 +15,7 @@ import {
 import { OverviewContent } from "../tab-content/overview-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
-import {  ActivityContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
+import { ActivityContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
 
 export type TabKey =
@@ -70,8 +70,8 @@ export const tabsConfig: TabConfig[] = [
     showInSidebar: true,
   },
 
-  { 
-    key: "activity", 
+  {
+    key: "activity",
     label: "Lịch sử hoạt động",
     icon: <HistoryOutlined />,
     component: <ActivityContent />,
