@@ -91,7 +91,7 @@ const WishListProducts = () => {
 
       {favoriteProduct.length === 0 ? (
         <EmptyState
-          height="md"
+          height="sm"
           title="Trống"
           description="Sản phẩm được thêm vào danh sách yêu thích sẽ hiện ở đây"
           actionLabel="Khám phá ngay"

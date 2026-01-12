@@ -6,17 +6,19 @@ import OrdersComponent from "@/components/user/OrdersComponent";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { Table, TableHead, TableHeader, TableRow } from "@/ui/table";
 import Title from "@/ui/title";
-import { useUserInfo } from "@/store/userStore";
-import NoAccess from "@/components/user/NoAccess";
+import { useUserToken } from "@/store/userStore";
 import { useOrder } from "@/hooks/useOrder";
 import { ShoppingBag } from "lucide-react";
 import { OrderStatus } from "@/types/enum";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { EmptyState } from "@/components/common/EmptyState";
+import { useRouter } from "@/router/hooks";
 
 const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
+  const router = useRouter();
   // Mặc định là 'all'
   const [currentTab, setCurrentTab] = useState("all");
-  const userInfo = useUserInfo();
+  const userToken = useUserToken();
 
   // Truyền currentTab vào hook để React Query tự động fetch theo status
   const { orders, loading } = useOrder(currentTab);
@@ -30,10 +32,6 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
     { label: "Đã hủy", key: OrderStatus.CANCELLED },
   ];
 
-  if (!userInfo?.id) {
-    return <NoAccess details="Vui lòng đăng nhập để xem danh sách đơn hàng." />;
-  }
-
   return (
     <div className="space-y-4">
       {!hideTitle && (
@@ -42,8 +40,12 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
             <ShoppingBag className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <Title className="text-2xl font-bold tracking-tight">Đơn hàng của tôi</Title>
-            <p className="text-sm text-muted-foreground italic">Quản lý và theo dõi trạng thái đơn hàng</p>
+            <Title className="text-2xl font-bold tracking-tight">
+              Đơn hàng của tôi
+            </Title>
+            <p className="text-sm text-muted-foreground italic">
+              Quản lý và theo dõi trạng thái đơn hàng
+            </p>
           </div>
         </div>
       )}
@@ -66,11 +68,17 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
 
       <div className="w-full overflow-hidden -mt-4">
         <div className="p-0">
-          {loading ? (
+        {!userToken?.accessToken ? (
+            <EmptyState
+              title="Chưa đăng nhập"
+              height="sm"
+              description="Vui lòng đăng nhập để xem danh sách đơn hàng."
+              actionLabel="Đăng nhập ngay"
+              onAction={() => router.push("/login")}
+            />
+          ) : loading ? (
             <div className="flex h-[450px] flex-col items-center justify-center gap-4">
-              <PageLoading
-                text="Đang tải dữ liệu..."
-              />
+              <PageLoading text="Đang tải dữ liệu..." />
             </div>
           ) : orders?.length > 0 ? (
             <ScrollArea className="w-full h-[400px]">
@@ -78,15 +86,27 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
                 <Table className="relative w-full border-collapse">
                   <TableHeader className="sticky top-0 z-30 bg-secondary/95 backdrop-blur-md shadow-sm">
                     <TableRow className="hover:bg-transparent border-b">
-                      <TableHead className="font-bold h-12">Mã đơn hàng</TableHead>
+                      <TableHead className="font-bold h-12">
+                        Mã đơn hàng
+                      </TableHead>
                       <TableHead className="font-bold">Ngày đặt</TableHead>
                       <TableHead className="font-bold">Người đặt</TableHead>
-                      <TableHead className="sm:table-cell font-bold">Email</TableHead>
-                      <TableHead className="sm:table-cell font-bold">Tạm tính</TableHead>
-                      <TableHead className="lg:table-cell text-center font-bold">Giảm giá</TableHead>
+                      <TableHead className="sm:table-cell font-bold">
+                        Email
+                      </TableHead>
+                      <TableHead className="sm:table-cell font-bold">
+                        Tạm tính
+                      </TableHead>
+                      <TableHead className="lg:table-cell text-center font-bold">
+                        Giảm giá
+                      </TableHead>
                       <TableHead className="font-bold">Tổng cộng</TableHead>
-                      <TableHead className="text-center font-bold">Trạng thái</TableHead>
-                      <TableHead className="text-center font-bold">Thao tác</TableHead>
+                      <TableHead className="text-center font-bold">
+                        Trạng thái
+                      </TableHead>
+                      <TableHead className="text-center font-bold">
+                        Thao tác
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <OrdersComponent orders={orders} />
@@ -95,12 +115,13 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
           ) : (
-            <div className="flex items-center justify-center">
-              <NoAccess
-                hidden
-                details={`Không tìm thấy đơn hàng nào trong mục "${STATUS_TABS.find(t => t.key === currentTab)?.label}"`}
-              />
-            </div>
+            <EmptyState
+              title="Trống"
+              height="md"
+              description={`Không tìm thấy đơn hàng nào trong mục "${
+                STATUS_TABS.find((t) => t.key === currentTab)?.label
+              }"`}
+            />
           )}
         </div>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { EmptyState } from "@/components/common/EmptyState";
 import { useAddressActions } from "@/hooks/useAddresses";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import OrdersPage from "@/pages/user/orders/page";
@@ -153,11 +154,11 @@ export function OverviewContent() {
               ))}
             </div>
           ) : (
-            <div className="py-10 text-center">
-              <p className="text-muted-foreground italic">
-                Bạn chưa có sản phẩm yêu thích nào.
-              </p>
-            </div>
+            <EmptyState
+              height="sm"
+              title="Trống"
+              description="Bạn chưa có sản phẩm yêu thích nào."
+            />
           )}
         </div>
       </div>

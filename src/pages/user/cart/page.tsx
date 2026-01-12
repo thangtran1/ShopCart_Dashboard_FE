@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import { useRouter } from "@/router/hooks/use-router";
 import ProductSideMenu from "../public/ProductSideMenu";
 import { useUserToken } from "@/store/userStore";
-import NoAccess from "@/components/user/NoAccess";
 import { useCart } from "@/hooks/useCart";
 import { EmptyState } from "@/components/common/EmptyState";
 import PageLoading from "@/components/common/loading/PageLoading";
@@ -63,8 +62,6 @@ const CartPage = () => {
   const shippingFee = 0;
   const finalTotal = subTotal + shippingFee;
 
-  if (!userToken?.accessToken) return <NoAccess />;
-
   return (
     <div>
       <div className="flex items-center justify-between pb-4">
@@ -86,20 +83,24 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      {loading ? (
-        <PageLoading
-          height={300}
-          text="Đang tải giỏ hàng của bạn..."
+      {!userToken?.accessToken ? (
+        <EmptyState
+          height="sm"
+          title="Chưa đăng nhập"
+          description="Vui lòng đăng nhập để xem giỏ hàng."
+          actionLabel="Đăng nhập ngay"
+          onAction={() => navigate.push("/login")}
         />
+      ) : loading ? (
+        <PageLoading height={300} text="Đang tải giỏ hàng của bạn..." />
       ) : items.length === 0 ? (
         <EmptyState
-          height="md"
-          title="Trống"
+          height="sm"
+          title="Giỏ hàng trống!"
           description="Sản phẩm được thêm vào giỏ hàng của bạn sẽ hiện ở đây"
           actionLabel="Tiếp tục mua sắm"
           onAction={handleGoToShop}
         />
-       
       ) : (
         <div className="grid lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 space-y-4">
