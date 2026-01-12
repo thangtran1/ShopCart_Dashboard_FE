@@ -24,6 +24,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/ui/badge";
 import { toast } from "sonner";
+import { EmptyState } from "@/components/common/EmptyState";
 
 export function WarrantyContent() {
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -185,13 +186,16 @@ export function WarrantyContent() {
         </AnimatePresence>
       </div>
       {filteredItems.length === 0 && !loading && (
-        <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in duration-500">
-          <div className="w-20 h-20  rounded-full flex items-center justify-center border border-border mb-4">
-            <Search className="text-slate-700" size={32} />
-          </div>
-          <p className="text-slate-500 font-medium">Không tìm thấy thiết bị nào phù hợp</p>
-          <Button type="link" onClick={() => { setActiveTab("all"); setSearchQuery(""); }} className="text-emerald-500 font-bold uppercase text-xs">Xem lại tất cả</Button>
-        </div>
+        <EmptyState
+          height="sm"
+          title="Trống"
+          description="Không tìm thấy thiết bị nào phù hợp"
+          actionLabel="Xem lại tất cả"
+          onAction={() => {
+            setActiveTab("all");  
+            setSearchQuery("");  
+          }} 
+        />
       )}
     </div>
   );
@@ -229,7 +233,7 @@ export function ActivityContent() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-border">
+      <div>
         <ActivityLogs
           fetchLogsApi={() =>
             detailActivityLogForUser(userId) as Promise<{

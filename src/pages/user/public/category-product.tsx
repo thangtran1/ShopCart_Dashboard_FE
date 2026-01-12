@@ -4,6 +4,7 @@ import SeeMore from "@/ui/see-more";
 import { Category, categoryService } from "@/api/services/category";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/ui/skeleton";
+import { EmptyState } from "@/components/common/EmptyState";
 
 const CategoryProduct = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -105,9 +106,11 @@ const CategoryProduct = () => {
       {loading || error ? (
         renderSkeleton()
       ) : categories.length === 0 ? (
-        <div className="p-6 text-center border rounded-xl text-muted-foreground">
-          Hiện chưa có danh mục nào để hiển thị
-        </div>
+        <EmptyState
+          height="sm"
+          title="Trống"
+          description="Hiện chưa có danh mục nào để hiển thị"
+        />
       ) : (
         renderCategories()
       )}

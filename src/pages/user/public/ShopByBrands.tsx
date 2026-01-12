@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Brand, brandService } from "@/api/services/brands";
 import { Skeleton } from "@/ui/skeleton";
 import { Badge } from "@/ui/badge";
+import { EmptyState } from "@/components/common/EmptyState";
 
 const extraData = [
   {
@@ -100,13 +101,14 @@ export default function ShopByBrands() {
       </div>
 
       <div className="border border-border p-2 rounded-xl shadow-sm space-y-6">
-        {/* Hiển thị skeleton khi loading hoặc lỗi */}
         {loading || error ? (
           renderSkeleton()
         ) : brands.length === 0 ? (
-          <div className="p-6 text-center border rounded-xl text-muted-foreground">
-            Chưa có thương hiệu nào để hiển thị
-          </div>
+          <EmptyState
+          height="sm"
+          title="Trống"
+          description="Hiện chưa có thương hiệu nào để hiển thị"
+        />
         ) : (
           renderBrands()
         )}

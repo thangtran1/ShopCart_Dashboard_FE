@@ -8,6 +8,7 @@ import PriceFormatter from "@/components/user/PriceFormatter";
 import Title from "@/ui/title";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { useState } from "react";
+import { EmptyState } from "@/components/common/EmptyState";
 
 export function DiscountContent() {
   const { coupons, loading } = useCoupon();
@@ -190,17 +191,11 @@ export function DiscountContent() {
             <ScrollBar orientation="vertical" />
           </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center justify-center py-12 border-2 border-dashed rounded-2xl bg-muted/10">
-            <div className="p-4 bg-muted/20 rounded-full mb-4">
-              <GiftOutlined className="text-4xl text-muted-foreground opacity-20" />
-            </div>
-            <p className="text-muted-foreground font-medium">
-              Hiện không có mã giảm giá nào khả dụng
-            </p>
-            <p className="text-xs text-muted-foreground/60">
-              Hãy quay lại sau bạn nhé!
-            </p>
-          </div>
+          <EmptyState
+            height="sm"
+            title="Trống"
+            description="Hiện không có mã giảm giá nào khả dụng. Hãy quay lại sau bạn nhé!"
+          />
         )}
       </div>
     </div>

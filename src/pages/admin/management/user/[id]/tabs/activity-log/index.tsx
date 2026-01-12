@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { Typography, Timeline, Empty } from "antd";
+import { Typography, Timeline } from "antd";
 import { LoginOutlined, LogoutOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { ActivityLog } from "@/api/services/activity-logApi";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { EmptyState } from "@/components/common/EmptyState";
 
 const { Text } = Typography;
 
@@ -54,22 +55,22 @@ export default function ActivityLogs({ fetchLogsApi }: ActivityLogsProps) {
     dayjs(b).diff(dayjs(a))
   );
 
+  if (logs.length === 0) {
+    return (
+      <EmptyState
+        height="sm"
+        title="Lịch sử trống"
+        description="Chưa có hoạt động nào được ghi lại"
+      />
+    );
+  }
+
   return (
-    <div className="bg-card text-card-foreground px-5 pt-5 flex flex-col gap-6 rounded-md border shadow-sm">
+    <div className="p-4 rounded-xl border border-border">
       {isLoading ? (
         <div className="flex justify-center items-center h-40">
-          <PageLoading
-            height={300}
-            text="Đang tải lịch sử..."
-          />
+          <PageLoading height={300} text="Đang tải lịch sử..." />
         </div>
-      ) : logs.length === 0 ? (
-        <Empty
-          description={
-            <span className="text-foreground/60">Không có hoạt động</span>
-          }
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-        />
       ) : (
         <div className="scrollbar-none max-h-[calc(100dvh-500px)] overflow-y-auto pr-3">
           {sortedDates.map((date) => (
