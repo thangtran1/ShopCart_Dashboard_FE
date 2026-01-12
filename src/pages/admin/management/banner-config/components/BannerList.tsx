@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import EditCreateModal from "./Edit-Create-Modal";
 import { FullPageLoading } from "@/components/common/loading";
-import EmptyState from "./empty-state";
+import { EmptyState } from "@/components/common/EmptyState";
 
 export default function BannerList() {
   const { t } = useTranslation();
@@ -154,8 +154,9 @@ export default function BannerList() {
           <FullPageLoading message={t("management.banner.loading-banner")} />
         ) : banners.length === 0 ? (
           <EmptyState
-            message={t("management.banner.no-banner")}
-            icon="lucide:inbox"
+            height="md"
+            title="Trống"
+            description={t("management.banner.no-banner")}
           />
         ) : (
           <div className="max-h-[650px] overflow-y-auto">

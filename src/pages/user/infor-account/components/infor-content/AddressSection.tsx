@@ -6,8 +6,9 @@ import {
   BankOutlined,
   DownOutlined,
 } from "@ant-design/icons";
-import { Button, Popconfirm, Skeleton, Empty } from "antd";
+import { Button, Popconfirm, Skeleton } from "antd";
 import { Badge } from "@/ui/badge";
+import { EmptyState } from "@/components/common/EmptyState";
 
 interface AddressSectionProps {
   addresses: Address[];
@@ -67,36 +68,13 @@ export default function AddressSection({
       </div>
 
       {addresses.length === 0 ? (
-        <div
-          className="
-          py-16 flex flex-col items-center justify-center 
-          bg-zinc-50/50 dark:bg-zinc-900/30 
-          rounded-[2rem] border-1 border-dashed border-border
-          transition-all duration-300
-        "
-        >
-          <Empty
-            className="!mb-4"
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={
-              <div className="flex flex-col items-center gap-1 mt-2">
-                <span className="text-[13px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                  Trống
-                </span>
-                <span className="text-sm text-muted-foreground font-medium">
-                  Bạn chưa lưu địa chỉ nhận hàng nào
-                </span>
-              </div>
-            }
-          />
-
-          <button
-            onClick={onAdd}
-            className="text-sm font-bold cursor-pointer text-primary/80 hover:text-primary underline-offset-4 hover:underline transition-all"
-          >
-            Tạo địa chỉ đầu tiên ngay
-          </button>
-        </div>
+        <EmptyState
+          height="md"
+          title="Trống"
+          description="Bạn chưa lưu địa chỉ nhận hàng nào"
+          actionLabel="Tạo địa chỉ đầu tiên ngay"
+          onAction={onAdd}
+        />
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2">

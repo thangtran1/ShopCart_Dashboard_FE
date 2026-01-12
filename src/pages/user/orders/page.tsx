@@ -93,7 +93,6 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
                 </Table>
               </div>
               <ScrollBar orientation="horizontal" />
-              <ScrollBar orientation="vertical" />
             </ScrollArea>
           ) : (
             <div className="flex items-center justify-center">

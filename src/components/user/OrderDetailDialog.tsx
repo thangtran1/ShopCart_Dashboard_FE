@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/ui/dialog";
 import {
   Table,
   TableBody,
@@ -11,8 +17,20 @@ import {
   TableRow,
 } from "@/ui/table";
 import PriceFormatter from "./PriceFormatter";
-import { CreditCard, Truck, MapPin, Phone, Mail, User, Calendar, Package, Tag, Receipt } from "lucide-react";
+import {
+  CreditCard,
+  Truck,
+  MapPin,
+  Phone,
+  Mail,
+  User,
+  Calendar,
+  Package,
+  Tag,
+  Receipt,
+} from "lucide-react";
 import { ORDER_STATUS_MAP } from "@/types/enum";
+import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 
 interface OrderDetailsDialogProps {
   order: any | null;
@@ -28,15 +46,25 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
   if (!order) return null;
 
   const getWarrantyBadge = (expireDate: string | null) => {
-    if (!expireDate) return <span className="text-[10px] text-foreground/80 italic">Không có bảo hành</span>;
+    if (!expireDate)
+      return (
+        <span className="text-[10px] text-foreground/80 italic">
+          Không có bảo hành
+        </span>
+      );
 
     const isExpired = new Date(expireDate) < new Date();
     return (
-      <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${isExpired
-        ? "bg-red-50 text-red-600 border-red-100"
-        : "bg-green-50 text-green-600 border-green-100"
-        }`}>
-        {isExpired ? "Hết bảo hành" : `Bảo hành đến: ${new Date(expireDate).toLocaleDateString("vi-VN")}`}
+      <span
+        className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${
+          isExpired
+            ? "bg-red-50 text-red-600 border-red-100"
+            : "bg-green-50 text-green-600 border-green-100"
+        }`}
+      >
+        {isExpired
+          ? "Hết bảo hành"
+          : `Bảo hành đến: ${new Date(expireDate).toLocaleDateString("vi-VN")}`}
       </span>
     );
   };
@@ -49,8 +77,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             Chi tiết đơn hàng – {order.orderNumber}
           </DialogTitle>
 
-          <DialogDescription className="text-sm text-muted-foreground">
-            Thông tin chi tiết về đơn hàng, sản phẩm, người nhận và trạng thái xử lý.
+          <DialogDescription className="text-sm text-left text-muted-foreground">
+            Thông tin chi tiết về đơn hàng, sản phẩm, người nhận và trạng thái
+            xử lý.
           </DialogDescription>
         </DialogHeader>
 
@@ -63,7 +92,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </h3>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <User className="w-4 h-4 text-muted-foreground" />
-              <span className="font-medium">{order.shippingAddress?.fullName}</span>
+              <span className="font-medium">
+                {order.shippingAddress?.fullName}
+              </span>
             </p>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <Mail className="w-4 h-4 text-muted-foreground" />
@@ -82,17 +113,20 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </h3>
             <p className="text-foreground flex items-center gap-2 text-sm">
               <Calendar className="w-4 h-4 text-muted-foreground" />
-              {order.createdAt && new Date(order.createdAt).toLocaleString("vi-VN")}
+              {order.createdAt &&
+                new Date(order.createdAt).toLocaleString("vi-VN")}
             </p>
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground">Trạng thái đơn:</span>
               {(() => {
                 const config = ORDER_STATUS_MAP[order.status] || {
                   label: order.status,
-                  className: "bg-slate-100 text-slate-700 border-slate-200"
+                  className: "bg-slate-100 text-slate-700 border-slate-200",
                 };
                 return (
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${config.className}`}>
+                  <span
+                    className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${config.className}`}
+                  >
                     {config.label}
                   </span>
                 );
@@ -105,7 +139,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
                 <Truck className="w-4 h-4 text-amber-500" />
               )}
               <span className="font-medium">
-                {order.paymentMethod === "CARD" ? "Thanh toán Online (Thẻ)" : "Thanh toán khi nhận hàng (COD)"}
+                {order.paymentMethod === "CARD"
+                  ? "Thanh toán Online (Thẻ)"
+                  : "Thanh toán khi nhận hàng (COD)"}
               </span>
             </div>
           </div>
@@ -129,48 +165,64 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
           </div>
         )}
 
-        <div className="rounded-lg border">
-          <Table>
-            <TableHeader className="bg-muted/50">
-              <TableRow>
-                <TableHead>Sản phẩm</TableHead>
-                <TableHead className="text-center">Số lượng</TableHead>
-                <TableHead className="text-right">Đơn giá</TableHead>
-                <TableHead className="text-right">Thành tiền</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {order.items?.map((item: any, index: number) => (
-                <TableRow key={index}>
-                  <TableCell className="flex items-center gap-3 text-foreground">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-12 h-12 border rounded-md object-cover bg-white"
-                    />
-                    <div className="flex flex-col gap-1">
-                      <span className="font-medium text-sm line-clamp-1">{item.name}</span>
-                      <div className="flex items-center gap-2">
-                        {getWarrantyBadge(item.warrantyExpireDate)}
-                        {item.warrantyPeriod > 0 && (
-                          <span className="text-[10px] text-foreground/80 italic">
-                            (Gói {item.warrantyPeriod} tháng)
+        <div className="w-full rounded-lg border overflow-hidden">
+          <ScrollArea className="w-full max-h-[250px]">
+            <div className="min-w-[1000px]">
+              <Table className="w-full border-collapse">
+                <TableHeader className="sticky top-0 z-10 bg-muted/90 backdrop-blur">
+                  <TableRow>
+                    <TableHead>Sản phẩm</TableHead>
+                    <TableHead className="text-center">Số lượng</TableHead>
+                    <TableHead className="text-right">Đơn giá</TableHead>
+                    <TableHead className="text-right">Thành tiền</TableHead>
+                  </TableRow>
+                </TableHeader>
+
+                <TableBody>
+                  {order.items?.map((item: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell className="flex min-w-[350px] items-center gap-3 text-foreground">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-12 w-12 rounded-md border bg-white object-cover"
+                        />
+
+                        <div className="flex flex-col gap-1">
+                          <span className="text-sm font-medium whitespace-nowrap">
+                            {item.name}
                           </span>
-                        )}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-center text-foreground">x{item.quantity}</TableCell>
-                  <TableCell className="text-right text-foreground">
-                    <PriceFormatter amount={item.price} />
-                  </TableCell>
-                  <TableCell className="text-right text-foreground font-medium">
-                    <PriceFormatter amount={item.price * item.quantity} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+
+                          <div className="flex items-center gap-2 whitespace-nowrap">
+                            {getWarrantyBadge(item.warrantyExpireDate)}
+                            {item.warrantyPeriod > 0 && (
+                              <span className="text-[10px] italic text-foreground/80">
+                                (Gói {item.warrantyPeriod} tháng)
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="text-center text-foreground whitespace-nowrap">
+                        x{item.quantity}
+                      </TableCell>
+
+                      <TableCell className="text-right text-foreground whitespace-nowrap">
+                        <PriceFormatter amount={item.price} />
+                      </TableCell>
+
+                      <TableCell className="text-right text-foreground font-medium whitespace-nowrap">
+                        <PriceFormatter amount={item.price * item.quantity} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
 
         <div className="w-full border-t pt-4 flex justify-end">
@@ -185,7 +237,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
                 <span className="flex items-center gap-1">
                   <Tag className="w-3 h-3" /> Giảm giá ({order.couponCode}):
                 </span>
-                <span>-<PriceFormatter amount={order.discountAmount} /></span>
+                <span>
+                  -<PriceFormatter amount={order.discountAmount} />
+                </span>
               </div>
             )}
 
@@ -195,7 +249,9 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </div>
 
             <div className="flex justify-between w-full items-center border-t pt-2 mt-2">
-              <h3 className="text-md text-foreground font-bold uppercase mr-2">Tổng thanh toán:</h3>
+              <h3 className="text-md text-foreground font-bold uppercase mr-2">
+                Tổng thanh toán:
+              </h3>
               <PriceFormatter
                 amount={order?.totalAmount}
                 className="text-primary text-2xl font-extrabold"

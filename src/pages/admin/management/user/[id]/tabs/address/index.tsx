@@ -1,8 +1,9 @@
 import { addressService } from "@/api/services/addressesApi";
 import { useEffect, useState } from "react";
 import { HomeOutlined, BankOutlined, DownOutlined } from "@ant-design/icons";
-import { Button, Empty, Badge, Popconfirm } from "antd";
+import { Button, Badge, Popconfirm } from "antd";
 import { useAddressActions } from "@/hooks/useAddresses";
+import { EmptyState } from "@/components/common/EmptyState";
 
 interface AddressItem {
     _id: string;
@@ -61,22 +62,11 @@ export default function Address({ userId }: { userId: string }) {
             </div>
 
             {addresses.length === 0 ? (
-                <div className="py-16 flex flex-col items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/30 rounded-[2rem] border-1 border-dashed border-border transition-all duration-300">
-                    <Empty
-                        className="!mb-4"
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        description={
-                            <div className="flex flex-col items-center gap-1 mt-2">
-                                <span className="text-[13px] font-black uppercase tracking-[0.2em] text-zinc-500">
-                                    Trống
-                                </span>
-                                <span className="text-sm text-muted-foreground font-medium">
-                                    Người dùng chưa có địa chỉ nào
-                                </span>
-                            </div>
-                        }
-                    />
-                </div>
+                <EmptyState
+                    height="md" 
+                    title="Trống" 
+                    description="Người dùng chưa có địa chỉ nào" 
+                />
             ) : (
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2">

@@ -9,6 +9,7 @@ import { notificationUserService } from "@/api/services/notificationApi";
 import { NotificationType } from "@/types/enum";
 import { Notification } from "@/types/entity";
 import { useUserToken } from "@/store/userStore";
+import { EmptyState } from "@/components/common/EmptyState";
 
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
@@ -41,19 +42,25 @@ export default function NoticeContent() {
       setNotifications((prev) =>
         prev.map((n) => (n._id === id ? { ...n, isReadByUser: true } : n))
       );
-      toast.success("Đã đánh dấu là đã đọc")
+      toast.success("Đã đánh dấu là đã đọc");
     } catch (error) {
       toast.error("Không thể đánh dấu đọc");
     }
   };
 
   const handleMarkAllAsRead = async () => {
-    const unreadIds = notifications.filter((n) => !n.isReadByUser).map((n) => n._id);
+    const unreadIds = notifications
+      .filter((n) => !n.isReadByUser)
+      .map((n) => n._id);
     if (unreadIds.length === 0) return;
 
     try {
-      await Promise.all(unreadIds.map((id) => notificationUserService.markAsRead(id)));
-      setNotifications((prev) => prev.map((n) => ({ ...n, isReadByUser: true })));
+      await Promise.all(
+        unreadIds.map((id) => notificationUserService.markAsRead(id))
+      );
+      setNotifications((prev) =>
+        prev.map((n) => ({ ...n, isReadByUser: true }))
+      );
       toast.success("Đã đọc tất cả thông báo");
     } catch (error) {
       console.error(error);
@@ -77,7 +84,8 @@ export default function NoticeContent() {
           </button>
         </div>
         <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-widest">
-          Bạn có {notifications.filter(n => !n.isReadByUser).length} tin nhắn chưa đọc
+          Bạn có {notifications.filter((n) => !n.isReadByUser).length} tin nhắn
+          chưa đọc
         </p>
       </div>
 
@@ -93,7 +101,11 @@ export default function NoticeContent() {
       <div className="p-3  border-b border-border">
         <button className="group w-full cursor-pointer py-2.5 px-4  hover:bg-primary border border-border rounded-xl text-xs font-bold transition-all duration-300 shadow-sm flex items-center justify-center gap-2 ">
           Xem tất cả hoạt động
-          <Icon icon="solar:alt-arrow-right-linear" size={16} className="group-hover:translate-x-1 transition-transform" />
+          <Icon
+            icon="solar:alt-arrow-right-linear"
+            size={16}
+            className="group-hover:translate-x-1 transition-transform"
+          />
         </button>
       </div>
     </div>
@@ -101,13 +113,22 @@ export default function NoticeContent() {
 }
 
 function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
-  const unreadNotifications = useMemo(() => notifications.filter((n: any) => !n.isReadByUser), [notifications]);
+  const unreadNotifications = useMemo(
+    () => notifications.filter((n: any) => !n.isReadByUser),
+    [notifications]
+  );
 
   const items: TabsProps["items"] = [
     {
       key: "all",
       label: <span className="px-2 py-1 italic">Mới nhất</span>,
-      children: <NotificationList data={notifications} loading={loading} onMarkAsRead={onMarkAsRead} />,
+      children: (
+        <NotificationList
+          data={notifications}
+          loading={loading}
+          onMarkAsRead={onMarkAsRead}
+        />
+      ),
     },
     {
       key: "unread",
@@ -121,7 +142,13 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
           )}
         </div>
       ),
-      children: <NotificationList data={unreadNotifications} loading={loading} onMarkAsRead={onMarkAsRead} />,
+      children: (
+        <NotificationList
+          data={unreadNotifications}
+          loading={loading}
+          onMarkAsRead={onMarkAsRead}
+        />
+      ),
     },
   ];
 
@@ -131,42 +158,72 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
       items={items}
       centered
       className="modern-tabs"
-      tabBarStyle={{ borderBottom: 'none', marginBottom: '8px' }}
+      tabBarStyle={{ borderBottom: "none", marginBottom: "8px" }}
     />
   );
 }
 
 function NotificationList({ data, loading, onMarkAsRead }: any) {
-  if (loading) return (
-    <div className="p-4 space-y-4">
-      {[1, 2, 3].map(i => <Skeleton key={i} active avatar paragraph={{ rows: 1 }} />)}
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="p-4 space-y-4">
+        {[1, 2, 3].map((i) => (
+          <Skeleton key={i} active avatar paragraph={{ rows: 1 }} />
+        ))}
+      </div>
+    );
 
-  if (data.length === 0) return (
-    <div className="py-12 flex flex-col items-center opacity-80">
-      <Icon icon="solar:box-minimalistic-linear" size={64} className="mb-2" />
-      <span className="text-xs font-bold uppercase tracking-tighter text-muted-foreground">Hộp thư trống</span>
-    </div>
-  );
+  if (data.length === 0)
+    return (
+      <EmptyState
+        height="sm"
+        title="Trống"
+        description="Chưa có thông báo nào"
+      />
+    );
 
   return (
     <div className="overflow-y-auto max-h-[300px] pb-2 space-y-2 custom-scroll">
       {data.map((item: Notification) => (
-        <NotificationItem key={item._id} item={item} onMarkAsRead={onMarkAsRead} />
+        <NotificationItem
+          key={item._id}
+          item={item}
+          onMarkAsRead={onMarkAsRead}
+        />
       ))}
     </div>
   );
 }
 
-function NotificationItem({ item, onMarkAsRead }: { item: Notification; onMarkAsRead: any }) {
+function NotificationItem({
+  item,
+  onMarkAsRead,
+}: {
+  item: Notification;
+  onMarkAsRead: any;
+}) {
   const isUnread = !item.isReadByUser;
 
   const getIcon = (type: string) => {
     switch (type) {
-      case NotificationType.SYSTEM: return { icon: "solar:shield-check-bold", color: "text-green-500", bg: "bg-green-50 dark:bg-green-500/10" };
-      case NotificationType.MAINTENANCE: return { icon: "solar:danger-bold", color: "text-red-500", bg: "bg-red-50 dark:bg-red-500/10" };
-      default: return { icon: "solar:unread-bold", color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-500/10" };
+      case NotificationType.SYSTEM:
+        return {
+          icon: "solar:shield-check-bold",
+          color: "text-green-500",
+          bg: "bg-green-50 dark:bg-green-500/10",
+        };
+      case NotificationType.MAINTENANCE:
+        return {
+          icon: "solar:danger-bold",
+          color: "text-red-500",
+          bg: "bg-red-50 dark:bg-red-500/10",
+        };
+      default:
+        return {
+          icon: "solar:unread-bold",
+          color: "text-blue-500",
+          bg: "bg-blue-50 dark:bg-blue-500/10",
+        };
     }
   };
 
@@ -175,13 +232,16 @@ function NotificationItem({ item, onMarkAsRead }: { item: Notification; onMarkAs
   return (
     <div
       onClick={() => isUnread && onMarkAsRead(item._id)}
-      className={`group relative flex gap-2 p-2 rounded-2xl transition-all duration-300 border cursor-pointer ${isUnread
-        ? "border-border border shadow-md"
-        : "bg-transparent border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-900/50 opacity-80"
-        }`}
+      className={`group relative flex gap-2 p-2 rounded-2xl transition-all duration-300 border cursor-pointer ${
+        isUnread
+          ? "border-border border shadow-md"
+          : "bg-transparent border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-900/50 opacity-80"
+      }`}
     >
       <div className="relative flex-shrink-0">
-        <div className={`w-12 h-12 rounded-2xl ${meta.bg} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}>
+        <div
+          className={`w-12 h-12 rounded-2xl ${meta.bg} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}
+        >
           <Icon icon={meta.icon} size={24} className={meta.color} />
         </div>
         {isUnread && (
@@ -194,7 +254,9 @@ function NotificationItem({ item, onMarkAsRead }: { item: Notification; onMarkAs
 
       <div className="flex-1 flex flex-col gap-1 min-w-0">
         <div className="flex items-center justify-between">
-          <span className={`text-[10px] font-black uppercase tracking-widest ${meta.color}`}>
+          <span
+            className={`text-[10px] font-black uppercase tracking-widest ${meta.color}`}
+          >
             {item.type}
           </span>
           <span className="text-[10px] text-muted-foreground font-bold italic">
@@ -202,13 +264,20 @@ function NotificationItem({ item, onMarkAsRead }: { item: Notification; onMarkAs
           </span>
         </div>
 
-        <h4 className={`text-[12px] leading-[1.4] line-clamp-2 ${isUnread ? "font-bold text-muted-foreground" : "font-medium text-zinc-500"}`}>
+        <h4
+          className={`text-[12px] leading-[1.4] line-clamp-2 ${
+            isUnread
+              ? "font-bold text-muted-foreground"
+              : "font-medium text-zinc-500"
+          }`}
+        >
           {item.content}
         </h4>
 
         {isUnread && (
           <div className="mt-2 flex items-center gap-1 text-[10px] text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-            Nhấp để đánh dấu đọc <Icon icon="solar:double-alt-arrow-right-bold" size={12} />
+            Nhấp để đánh dấu đọc{" "}
+            <Icon icon="solar:double-alt-arrow-right-bold" size={12} />
           </div>
         )}
       </div>
