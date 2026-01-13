@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Title from "@/ui/title";
 import { Link } from "react-router";
 import SeeMore from "@/ui/see-more";
 import { ClockCircleOutlined, EyeOutlined } from "@ant-design/icons";
@@ -48,9 +47,12 @@ const HomeNewsSection = () => {
   return (
     <section className="mb-6">
       <div className="flex items-center justify-between mb-2">
-        <Title className="text-xl font-bold uppercase tracking-wider text-foreground">
-          Tin tức mới nhất
-        </Title>
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
+          Tin tức{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-sky-500">
+            Mới nhất
+          </span>
+        </h2>
         <SeeMore to="/all-news">Xem tất cả</SeeMore>
       </div>
 

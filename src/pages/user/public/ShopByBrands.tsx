@@ -75,7 +75,7 @@ export default function ShopByBrands() {
               Đối tác uy tín
             </Badge>
 
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighttight">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
               Mua sắm theo{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">
                 Thương hiệu

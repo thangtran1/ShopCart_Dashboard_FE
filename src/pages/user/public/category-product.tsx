@@ -44,7 +44,7 @@ const CategoryProduct = () => {
 
   const renderCategories = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-      {categories.map((category) => (
+      {categories.slice(0, 8).map((category) => (
         <Link
           key={category._id}
           to={`/category/${category.slug}`}
@@ -85,7 +85,7 @@ const CategoryProduct = () => {
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
           <div className="w-1 h-6 bg-primary rounded-full" />
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighttight">
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
             Danh mục {" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
               Sản phẩm
