@@ -45,7 +45,10 @@ const TableAntd: React.FC<TableAntdProps> = ({
         rowKey="id"
         loading={loading}
         pagination={false} // tắt pagination mặc định
-        scroll={{ x: 800, y: 500 }}
+        scroll={{ 
+          x: data.length > 0 ? "max-content" : 1000, // Nếu trống thì ép nó rộng 1000px để header dãn ra
+          y: 500 
+        }}
         onRow={(record) => ({
           onClick: () => onRowClick?.(record),    // click row
           onMouseEnter: () => onRowHover?.(record), // hover row (nếu muốn)
