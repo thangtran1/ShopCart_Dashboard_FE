@@ -125,7 +125,7 @@ const SignIn = () => {
               <div className="p-2 bg-muted/20 border-t border-border">
                 <button
                   onClick={handleLogout}
-                  className="w-full cursor-pointer flex items-center justify-center gap-2 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 text-zinc-400 hover:text-red-500 transition-all font-bold text-[10px] uppercase tracking-[0.1em]"
+                  className="w-full cursor-pointer flex items-center justify-center gap-2 py-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 text-foreground hover:text-red-500 transition-all font-bold text-[10px] uppercase tracking-[0.1em]"
                 >
                   <LogOut size={14} />
                   {t("auth.login.logout")}

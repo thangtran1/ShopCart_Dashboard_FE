@@ -1,9 +1,7 @@
-import Title from "@/ui/title";
 import { Link } from "react-router";
 import SeeMore from "@/ui/see-more";
 import { Category, categoryService } from "@/api/services/category";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@/ui/skeleton";
 import { EmptyState } from "@/components/common/EmptyState";
 
 const CategoryProduct = () => {
@@ -36,84 +34,78 @@ const CategoryProduct = () => {
     fetchCategories();
   }, []);
 
-  // Skeleton placeholder
   const renderSkeleton = () => (
-    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div
-          key={i}
-          className="animate-pulse p-4 border rounded-xl flex items-center gap-4"
-        >
-          <Skeleton.Image className="w-20 h-20" />
-          <div className="flex-1 space-y-2">
-            <div className="h-4 w-2/3 bg-muted rounded"></div>
-            <div className="h-3 w-1/2 bg-muted rounded"></div>
-          </div>
-        </div>
+        <div key={i} className="h-24 bg-muted animate-pulse rounded-2xl" />
       ))}
     </div>
   );
 
-  // Hiển thị danh mục
   const renderCategories = () => (
-    <div className="
-      max-h-[450px] overflow-y-auto overflow-x-hidden pr-2
-      flex flex-col gap-2 
-      md:grid md:max-h-none md:overflow-visible md:grid-cols-2 lg:grid-cols-3
-      border border-border rounded-xl shadow-sm p-2
-    ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
       {categories.map((category) => (
         <Link
           key={category._id}
           to={`/category/${category.slug}`}
-          className="
-            group flex items-center gap-4 p-4 rounded-xl border border-border
-            hover:shadow-md hover:border-primary/30 transition-all duration-300
-            bg-white shrink-0 /* Đảm bảo item không bị co lại trên mobile */
-          "
+          className="group relative flex items-center justify-between p-4 bg-white dark:bg-card border border-border rounded-2xl hover:border-primary/40 hover:shadow-lg transition-all duration-300 overflow-hidden"
         >
-          {category.image && (
-            <div className="w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg border border-border p-1 bg-gray-50">
-              <img
-                src={category.image || "/images/products/product_1.png"}
-                alt={category.name}
-                className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
-          )}
-
-          <div className="space-y-1">
-            <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
+          <div className="z-10 space-y-1">
+            <h3 className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">
               {category.name}
             </h3>
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-primary">{`(${category.productCount})`}</span>{" "}
-              Sản phẩm có sẵn
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                {category.productCount} sản phẩm
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground group-hover:translate-x-1 transition-transform duration-300">
+              Xem ngay →
             </p>
           </div>
+
+          <div className="relative w-20 h-20 flex-shrink-0">
+            <div className="absolute inset-0 bg-primary/5 rounded-full scale-110 group-hover:scale-125 transition-transform duration-500" />
+
+            <img
+              src={category.image || "/images/products/product_1.png"}
+              alt={category.name}
+              className="relative z-10 w-full h-full object-contain drop-shadow-md transition-all duration-500 group-hover:scale-110 group-hover:-rotate-6"
+            />
+          </div>
+
+          <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
         </Link>
       ))}
     </div>
   );
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <Title className="text-2xl font-semibold">Danh mục phổ biến</Title>
-        <SeeMore to="/category">Xem thêm</SeeMore>
+    <div className="w-full space-y-4">
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-6 bg-primary rounded-full" />
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighttight">
+            Danh mục {" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
+              Sản phẩm
+            </span>
+          </h2>
+        </div>
+        <SeeMore to="/category">
+          Xem tất cả
+        </SeeMore>
       </div>
 
-      {loading || error ? (
-        renderSkeleton()
-      ) : categories.length === 0 ? (
-        <EmptyState
-          height="sm"
-          title="Trống"
-          description="Hiện chưa có danh mục nào để hiển thị"
-        />
-      ) : (
-        renderCategories()
-      )}
+      <div>
+        {loading || error ? (
+          renderSkeleton()
+        ) : categories.length === 0 ? (
+          <EmptyState height="sm" title="Trống" description="Hiện chưa có danh mục nào" />
+        ) : (
+          renderCategories()
+        )}
+      </div>
     </div>
   );
 };

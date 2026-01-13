@@ -1,10 +1,8 @@
-import Title from "@/ui/title";
 import { Link } from "react-router";
 import { GitCompareArrows, Headset, ShieldCheck, Truck } from "lucide-react";
 import SeeMore from "@/ui/see-more";
 import { useCallback, useEffect, useState } from "react";
 import { Brand, brandService } from "@/api/services/brands";
-import { Skeleton } from "@/ui/skeleton";
 import { Badge } from "@/ui/badge";
 import { EmptyState } from "@/components/common/EmptyState";
 
@@ -40,7 +38,6 @@ export default function ShopByBrands() {
     try {
       setLoading(true);
       setError(false);
-
       const response = await brandService.getActive();
       if (response.success) {
         setBrands(response.data || []);
@@ -61,82 +58,91 @@ export default function ShopByBrands() {
   }, [fetchBrands]);
 
   const renderSkeleton = () => (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-24 flex items-center justify-center border border-border rounded-lg animate-pulse"
-        >
-          <Skeleton.Image className="w-28 h-20" />
-        </div>
-      ))}
-    </div>
-  );
-
-  const renderBrands = () => (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-      {brands.map((brand) => (
-        <Link
-          key={brand._id}
-          to={`/brand/${brand.slug}`}
-          className="border relative border-border h-24 rounded-lg flex items-center justify-center hover:shadow-md transition-all duration-300"
-        >
-          <img
-            src={brand.logo}
-            alt={brand.name}
-            className="w-28 h-20 object-contain opacity-80 hover:opacity-100 transition"
-          />
-          <Badge className="absolute top-0 right-0" variant="success" >{brand.productCount}</Badge>
-        </Link>
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} className="h-24 bg-muted animate-pulse rounded-2xl" />
       ))}
     </div>
   );
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <Title className="text-2xl font-semibold">Thương hiệu phổ biến</Title>
-        <SeeMore to="/brand">Xem thêm</SeeMore>
+    <div className="w-full space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
 
+        <div className="lg:col-span-4 space-y-2 lg:sticky lg:top-10">
+          <div className="space-y-2">
+            <Badge variant="outline" className="px-3 py-1 uppercase tracking-wider text-primary border-primary/30 bg-primary/5 w-fit">
+              Đối tác uy tín
+            </Badge>
+
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighttight">
+              Mua sắm theo{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">
+                Thương hiệu
+              </span>
+            </h2>
+
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+              Chúng tôi tuyển chọn những thương hiệu hàng đầu thế giới để mang lại trải nghiệm tốt nhất cho bạn.
+            </p>
+          </div>
+
+          <SeeMore to="/brand">
+            Khám phá tất cả
+          </SeeMore>
+        </div>
+
+        <div className="lg:col-span-8 p-4 rounded-[2rem] border border-border">
+          {loading || error ? (
+            renderSkeleton()
+          ) : brands.length === 0 ? (
+            <EmptyState height="sm" title="Trống" description="Hiện chưa có thương hiệu nào" />
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+              {brands.slice(0, 8).map((brand) => (
+                <Link
+                  key={brand._id}
+                  to={`/brand/${brand.slug}`}
+                  className="group aspect-[4/3] rounded-xl flex flex-col items-center justify-center p-4 border border-primary/20 hover:border-primary/40 hover:shadow-xl transition-all duration-500"
+                >
+                  <div className="relative w-full h-12 mb-2">
+                    <img
+                      src={brand.logo}
+                      alt={brand.name}
+                      className="w-full h-full object-contain transition-all duration-500 scale-90 group-hover:scale-100"
+                    />
+                  </div>
+                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase group-hover:text-primary transition-colors">
+                    <span className="text-primary">({brand.productCount}) </span> Sản phẩm
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="border border-border p-2 rounded-xl shadow-sm space-y-6">
-        {loading || error ? (
-          renderSkeleton()
-        ) : brands.length === 0 ? (
-          <EmptyState
-          height="sm"
-          title="Trống"
-          description="Hiện chưa có thương hiệu nào để hiển thị"
-        />
-        ) : (
-          renderBrands()
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
+        {extraData.map((item, index) => (
+          <div
+            key={index}
+            className="relative overflow-hidden group p-4 rounded-3xl bg-white dark:bg-card border border-border hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300"
+          >
+            <div className="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 rounded-full group-hover:scale-150 transition-transform duration-700" />
 
-        {/* Extra Info */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {extraData.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 hover:shadow-md transition-all duration-300 group bg-primary/5"
-            >
-              <div className="p-3 rounded-full bg-primary/5 group-hover:bg-primary/20 transition-all flex items-center justify-center">
-                <span className="text-primary group-hover:scale-110 transition-transform">
-                  {item.icon}
-                </span>
+            <div className="relative z-10 flex flex-col gap-3">
+              <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/30">
+                {item.icon}
               </div>
-
-              <div className="text-sm">
-                <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {item.title}
-                </p>
-                <p className="text-muted-foreground text-xs mt-0.5">
+              <div>
+                <h4 className="text-lg font-bold">{item.title}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {item.description}
                 </p>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
