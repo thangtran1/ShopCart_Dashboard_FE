@@ -1,10 +1,12 @@
+"use client";
 import { useEffect, useState, useCallback } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { ProductType } from "@/types/enum";
 import { Skeleton } from "antd";
+import { Badge } from "@/ui/badge";
 
 export default function ProductsPage() {
   const [productsByType, setProductsByType] = useState<Record<string, any[]>>(
@@ -12,24 +14,28 @@ export default function ProductsPage() {
   );
   const [loading, setLoading] = useState(true);
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
   const fetchProductsByType = useCallback(async () => {
     setLoading(true);
     try {
       const types = Object.values(ProductType);
-      const results: Record<string, any[]> = {};
-
-      await Promise.all(
-        types.map(async (type) => {
-          const res = await productService.getActiveProducts({
-            productType: type,
-          });
-          results[type] = res.data;
-        })
+      const responses = await Promise.all(
+        types.map((type) =>
+          productService
+            .getActiveProducts({ productType: type })
+            .then((res) => ({ type, data: res.data }))
+            .catch(() => ({ type, data: [] }))
+        )
       );
-
+      const results = responses.reduce((acc, curr) => {
+        acc[curr.type] = curr.data;
+        return acc;
+      }, {} as Record<string, any[]>);
       setProductsByType(results);
     } catch (error) {
-      console.error("Product fetching error:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
@@ -39,51 +45,110 @@ export default function ProductsPage() {
     fetchProductsByType();
   }, [fetchProductsByType]);
 
-  // Kiểm tra toàn bộ productsByType có sản phẩm không
-  const hasProducts = Object.values(productsByType).some(
-    (products) => products.length > 0
-  );
+  const hasProducts = Object.values(productsByType).some((p) => p.length > 0);
 
   return (
-    <div className="pb-3 space-y-6">
-      <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center">
-        Sản phẩm{" "}
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500">
-          Công nghệ
-        </span>
-      </h1>
+    <div className="space-y-6 antialiased">
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-indigo-600 origin-left z-[100]"
+        style={{ scaleX }}
+      />
+      {/* thanh cuộn ngag */}
+      <div>
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-4xl md:text-5xl font-bold mb-4 text-center"
+        >
+          Sản phẩm{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500">
+            Công nghệ
+          </span>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-center text-muted-foreground max-w-2xl text-lg"
+        >
+          Khám phá những thiết bị công nghệ mới nhất, từ iPhone đỉnh cao đến
+          MacBook mạnh mẽ.
+        </motion.p>
+      </div>
+
       {loading ? (
-        Array.from({ length: 3 }).map((_, idx) => (
-          <div key={idx} className="space-y-4">
-            <Skeleton.Input active className="!w-60 !h-6" />
-            <Skeleton active paragraph={{ rows: 3 }} />
-          </div>
-        ))
-      ) : hasProducts ? (
-        Object.entries(productsByType)
-          .filter(([_, products]) => products.length > 0) // chỉ giữ loại có sản phẩm
-          .map(([type, products]) => (
-            <section key={type} className="space-y-4">
-              <div className="rounded-t-2xl bg-error/70 p-3">
-                <h2 className="md:text-2xl font-semibold">{type}</h2>
+        <div className="space-y-12">
+          {Array.from({ length: 2 }).map((_, idx) => (
+            <div key={idx} className="space-y-3">
+              <div className="flex items-center gap-4">
+                <Skeleton.Input active className="!w-64 !h-10 rounded-md" />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
-                {products.map((product) => (
-                  <AnimatePresence key={product._id}>
-                    <motion.div
-                      layout
-                      initial={{ opacity: 1 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <ProductCard key={product._id} product={product} />
-                    </motion.div>
-                  </AnimatePresence>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <div key={i} className="flex flex-col gap-3">
+                    <Skeleton.Button
+                      active
+                      className="!w-full !h-64 rounded-xl"
+                    />
+                    <Skeleton active title={true} paragraph={{ rows: 1 }} />
+                  </div>
                 ))}
               </div>
-            </section>
-          ))
+            </div>
+          ))}
+        </div>
+      ) : hasProducts ? (
+        <div className="space-y-6">
+          {Object.entries(productsByType)
+            .filter(([_, products]) => products.length > 0)
+            .map(([type, products]) => (
+              <section key={type} id={type} className="scroll-mt-32">
+                <div className="flex items-center justify-between mb-3 group">
+                  <div className="flex cursor-pointer items-center gap-2">
+                    <h2 className="text-2xl md:text-4xl font-bold border-l-4 border-indigo-600 pl-3 transition-all group-hover:pl-5">
+                      {type}
+                    </h2>
+                    <Badge variant={"success"}>{products.length} Items</Badge>
+                  </div>
+                  <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-50 to-transparent hidden md:block" />
+                </div>
+
+                <motion.div
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, margin: "-50px" }}
+                  variants={{
+                    hidden: { opacity: 0 },
+                    show: {
+                      opacity: 1,
+                      transition: { staggerChildren: 0.1 },
+                    },
+                  }}
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
+                >
+                  <AnimatePresence mode="popLayout">
+                    {products.map((product) => (
+                      <motion.div
+                        key={product._id}
+                        variants={{
+                          hidden: { opacity: 0, y: 30 },
+                          show: { opacity: 1, y: 0 },
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        }}
+                      >
+                        <ProductCard product={product} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </section>
+            ))}
+        </div>
       ) : (
         <NoProductAvailable />
       )}

@@ -90,7 +90,7 @@ const Footer = () => {
         {scrollPercent > 0 && (
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-25 right-8 z-50 w-14 h-14 rounded-full bg-background border border-border text-primary hover:bg-primary hover:text-white transition flex items-center justify-center"
+            className="fixed cursor-pointer bottom-25 right-8 z-50 w-14 h-14 rounded-full bg-background border border-border text-primary hover:bg-primary hover:text-white transition flex items-center justify-center"
           >
             <svg
               className="absolute w-full h-full rotate-[-90deg]"

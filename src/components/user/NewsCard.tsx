@@ -46,7 +46,7 @@ const HomeNewsSection = () => {
 
   return (
     <section className="mb-6">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between my-2">
         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
           Tin tức{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-sky-500">

@@ -67,7 +67,7 @@ export default function ShopByBrands() {
 
   return (
     <div className="w-full space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start mt-2">
 
         <div className="lg:col-span-4 space-y-2 lg:sticky lg:top-10">
           <div className="space-y-2">
@@ -92,7 +92,7 @@ export default function ShopByBrands() {
           </SeeMore>
         </div>
 
-        <div className="lg:col-span-8 p-4 rounded-[2rem] border border-border">
+        <div className="lg:col-span-8">
           {loading || error ? (
             renderSkeleton()
           ) : brands.length === 0 ? (
