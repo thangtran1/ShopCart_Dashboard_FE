@@ -1,4 +1,41 @@
-# 🚀 System Admin Frontend
+## 🌐 Live Demo
+
+- **URL**: [shop_cart_tvt.vn](https://shop-cart-dashboard-fe.vercel.app/)
+- **Tài khoản dùng thử (User)**:
+  - **Email**: `user1@gmail.com`
+  - **Mật khẩu**: `123123`
+- **Tài khoản Quản trị (Admin)**:  
+  Vì lý do bảo mật, tài khoản Admin không được cung cấp công khai.  
+  Vui lòng liên hệ **Quản trị viên** để được cấp quyền test các tính năng nâng cao.
+- **Hỗ trợ kỹ thuật**:
+  - 📧 Email: [thangtrandz04@gmail.com](mailto:thangtrandz04@gmail.com)
+  - 📞 Hotline: **0389 215 396**
+  - 💬 Fanpage: [vanthang.io.vn](https://vanthang.io.vn)
+
+---
+
+## 📸 Giao diện dự án (Screenshots)
+
+### 👤 User Interface
+
+| | |
+|:---:|:---:|
+| **🌙 Trang chủ (Dark)** | **☀️ Trang chủ (Light)** |
+| ![User Dark](./src/assets/images/screenshots/UI-User1-dark.png) | ![User Light](./src/assets/images/screenshots/UI-User1-light.png) |
+| **🛒 Cửa hàng** | **👤 Hồ sơ** |
+| ![User Shop](./src/assets/images/screenshots/UI-User1-SHOP-dark.png) | ![User Profile](./src/assets/images/screenshots/UI-User-profile.png) |
+
+---
+
+### 🛠️ Admin Dashboard
+
+| | |
+|:---:|:---:|
+| **📊 Quản trị viên (Dark)** | **📈 Quản trị viên (Light)** |
+| ![Admin Dark](./src/assets/images/screenshots/UI-Admin-dark.png) | ![Admin Light](./src/assets/images/screenshots/UI-Admin-light.png) |
+| **👨‍💼 Quản lý** | **⚙️ Hồ sơ Admin** |
+| ![Admin Manager](./src/assets/images/screenshots/UI-Admin-manager.png) | ![Admin Profile](./src/assets/images/screenshots/UI-Admin-profile.png) |
+---
 
 ## Installation
 
