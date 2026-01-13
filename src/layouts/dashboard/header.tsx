@@ -27,7 +27,7 @@ export default function Header({ headerLeftSlot }: HeaderProps) {
         <SearchBar /> // Admin search bar
       )}
 
-      <div className="flex w-full justify-end items-center gap-2 pr-4">
+      <div className="flex w-full justify-end items-center gap-2">
         <LocalePicker />
         <SettingButton />
         <AccountDropdown />

@@ -84,7 +84,8 @@
       "googleLoginError": "Đăng nhập Google thất bại!",
 
       "githubLoginSuccess": "Đăng nhập GitHub thành công!",
-      "githubLoginProcessing": "Đang xử lý đăng nhập GitHub..."
+      "githubLoginProcessing": "Đang xử lý đăng nhập GitHub...",
+      "home": "Cửa hàng"
     }
   },
   "components": {

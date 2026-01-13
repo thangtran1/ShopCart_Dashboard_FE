@@ -84,7 +84,8 @@
       "googleLoginError": "Login with Google failed!",
 
       "githubLoginSuccess": "Login with GitHub successful!",
-      "githubLoginProcessing": "Processing login with GitHub..."
+      "githubLoginProcessing": "Processing login with GitHub...",
+       "home": "Shop"
     }
   },
   "components": {
