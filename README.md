@@ -21,9 +21,9 @@
 | | |
 |:---:|:---:|
 | **🌙 Trang chủ (Dark)** | **☀️ Trang chủ (Light)** |
-| ![User Dark](./src/assets/images/screenshots/UI-User1-dark.png) | ![User Light](./src/assets/images/screenshots/UI-User1-light.png) |
+| ![User Dark](./src/assets/screenshots/UI-User1-dark.png) | ![User Light](./src/assets/screenshots/UI-User1-light.png) |
 | **🛒 Cửa hàng** | **👤 Hồ sơ** |
-| ![User Shop](./src/assets/images/screenshots/UI-User1-SHOP-dark.png) | ![User Profile](./src/assets/images/screenshots/UI-User-profile.png) |
+| ![User Shop](./src/assets/screenshots/UI-User1-SHOP-dark.png) | ![User Profile](./src/assets/screenshots/UI-User-profile.png) |
 
 ---
 
@@ -32,9 +32,9 @@
 | | |
 |:---:|:---:|
 | **📊 Quản trị viên (Dark)** | **📈 Quản trị viên (Light)** |
-| ![Admin Dark](./src/assets/images/screenshots/UI-Admin-dark.png) | ![Admin Light](./src/assets/images/screenshots/UI-Admin-light.png) |
+| ![Admin Dark](./src/assets/screenshots/UI-Admin-dark.png) | ![Admin Light](./src/assets/screenshots/UI-Admin-light.png) |
 | **👨‍💼 Quản lý** | **⚙️ Hồ sơ Admin** |
-| ![Admin Manager](./src/assets/images/screenshots/UI-Admin-manager.png) | ![Admin Profile](./src/assets/images/screenshots/UI-Admin-profile.png) |
+| ![Admin Manager](./src/assets/screenshots/UI-Admin-manager.png) | ![Admin Profile](./src/assets/screenshots/UI-Admin-profile.png) |
 ---
 
 ## Installation
