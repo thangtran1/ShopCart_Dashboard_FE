@@ -1,7 +1,9 @@
+"use client";
 import Title from "../../../ui/title";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Label } from "@/ui/label";
 import { Brand } from "@/api/services/brands";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   brands: Brand[];
@@ -10,15 +12,20 @@ interface Props {
 }
 
 const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
+  const { t } = useTranslation();
   const isAllSelected = !selectedBrand;
 
   return (
     <div className="w-full py-2">
-      <Title className="text-base font-bold">Thương hiệu</Title>
+      <Title className="text-base font-bold">
+        {t("shop.filter_brand_title")}
+      </Title>
+
       <RadioGroup value={selectedBrand || "all"} className="mt-2 space-y-1">
+        {/* Option: Tất cả thương hiệu */}
         <div
           onClick={() => setSelectedBrand(null)}
-          className="flex items-center space-x-2 hover:cursor-pointer"
+          className="flex items-center space-x-2 hover:cursor-pointer group"
         >
           <RadioGroupItem
             value="all"
@@ -28,18 +35,19 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
           />
           <Label
             htmlFor="all-brands"
-            className={`${isAllSelected ? "font-semibold text-primary" : "font-normal"}`}
+            className={`cursor-pointer transition-colors ${isAllSelected ? "font-semibold text-primary" : "font-normal group-hover:text-primary"
+              }`}
           >
-            Tất cả thương hiệu
+            {t("shop.all_brands")}
           </Label>
         </div>
 
-        {/* Các brand khác */}
+        {/* Danh sách thương hiệu từ API */}
         {brands?.map((brand) => (
           <div
             key={brand?._id}
             onClick={() => setSelectedBrand(brand?.slug as string)}
-            className="flex items-center space-x-2 hover:cursor-pointer"
+            className="flex items-center space-x-2 hover:cursor-pointer group"
           >
             <RadioGroupItem
               value={brand?.slug as string}
@@ -48,18 +56,23 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
             />
             <Label
               htmlFor={brand?.slug}
-              className={`${selectedBrand === brand?.slug ? "font-semibold text-primary" : "font-normal"}`}
+              className={`cursor-pointer transition-colors ${selectedBrand === brand?.slug
+                  ? "font-semibold text-primary"
+                  : "font-normal group-hover:text-primary"
+                }`}
             >
               {brand?.name}
             </Label>
           </div>
         ))}
+
+        {/* Nút đặt lại nhanh */}
         {selectedBrand && (
           <button
             onClick={() => setSelectedBrand(null)}
-            className="text-sm cursor-pointer font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary text-left"
+            className="text-sm cursor-pointer font-medium mt-3 underline underline-offset-2 decoration-[1px] hover:text-primary text-left transition-colors"
           >
-            Đặt lại lựa chọn
+            {t("shop.reset_selection")}
           </button>
         )}
       </RadioGroup>

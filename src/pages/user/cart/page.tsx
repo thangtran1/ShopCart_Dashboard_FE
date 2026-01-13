@@ -19,8 +19,10 @@ import { useUserToken } from "@/store/userStore";
 import { useCart } from "@/hooks/useCart";
 import { EmptyState } from "@/components/common/EmptyState";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { useTranslation } from "react-i18next";
 
 const CartPage = () => {
+  const { t } = useTranslation();
   const userToken = useUserToken();
   const navigate = useRouter();
   const { items, loading, totalAmount, removeItem, clearCart } = useCart();
@@ -31,9 +33,9 @@ const CartPage = () => {
     setIsProcessing("clear");
     try {
       await clearCart();
-      toast.success("Giỏ hàng đã được làm trống!");
+      toast.success(t("cart.msg_clear_success"));
     } catch (error) {
-      toast.error("Không thể reset giỏ hàng");
+      toast.error(t("cart.msg_clear_error"));
     } finally {
       setIsProcessing(null);
     }
@@ -43,13 +45,14 @@ const CartPage = () => {
     setIsProcessing(id);
     try {
       await removeItem(id);
-      toast.success("Đã xóa sản phẩm!");
+      toast.success(t("cart.msg_remove_success"));
     } catch (error) {
-      toast.error("Lỗi khi xóa sản phẩm");
+      toast.error(t("cart.msg_remove_error"));
     } finally {
       setIsProcessing(null);
     }
   };
+
   const handleCheckout = () => {
     navigate.push("/checkout");
   };
@@ -74,31 +77,31 @@ const CartPage = () => {
 
           <div>
             <Title className="text-2xl font-bold tracking-tight mb-0.5">
-              Giỏ hàng của bạn
+              {t("cart.title")}
             </Title>
             <p className="text-sm text-muted-foreground">
-              Xem lại các sản phẩm đã chọn và tiến hành thanh toán đơn hàng của
-              bạn
+              {t("cart.sub_title")}
             </p>
           </div>
         </div>
       </div>
+
       {!userToken?.accessToken ? (
         <EmptyState
           height="sm"
-          title="Chưa đăng nhập"
-          description="Vui lòng đăng nhập để xem giỏ hàng."
-          actionLabel="Đăng nhập ngay"
+          title={t("cart.not_logged_in")}
+          description={t("cart.not_logged_in_desc")}
+          actionLabel={t("cart.login_now")}
           onAction={() => navigate.push("/login")}
         />
       ) : loading ? (
-        <PageLoading height={300} text="Đang tải giỏ hàng của bạn..." />
+        <PageLoading height={300} text={t("cart.loading_cart")} />
       ) : items.length === 0 ? (
         <EmptyState
           height="sm"
-          title="Giỏ hàng trống!"
-          description="Sản phẩm được thêm vào giỏ hàng của bạn sẽ hiện ở đây"
-          actionLabel="Tiếp tục mua sắm"
+          title={t("cart.empty_title")}
+          description={t("cart.empty_desc")}
+          actionLabel={t("cart.continue_shopping")}
           onAction={handleGoToShop}
         />
       ) : (
@@ -112,11 +115,10 @@ const CartPage = () => {
                 return (
                   <div
                     key={product?._id}
-                    className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${
-                      isItemLoading
+                    className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${isItemLoading
                         ? "opacity-50 pointer-events-none"
                         : "hover:bg-muted/50"
-                    }`}
+                      }`}
                   >
                     <div className="relative border rounded-xl overflow-hidden shrink-0 shadow-sm mx-auto sm:mx-0">
                       <img
@@ -132,15 +134,15 @@ const CartPage = () => {
                         </h2>
                         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
                           <p className="text-[10px] sm:text-xs text-muted-foreground">
-                            Loại:{" "}
+                            {t("cart.product_type")}:{" "}
                             <span className="text-foreground font-medium uppercase">
                               {product?.type}
                             </span>
                           </p>
                           <p className="text-[10px] sm:text-xs text-muted-foreground italic">
-                            Kho:{" "}
+                            {t("cart.stock_status")}:{" "}
                             <span className="text-success font-medium italic">
-                              Còn hàng
+                              {t("cart.in_stock")}
                             </span>
                           </p>
                         </div>
@@ -157,27 +159,17 @@ const CartPage = () => {
                         />
 
                         <Popconfirm
-                          title="Xóa khỏi giỏ hàng?"
+                          title={t("cart.remove_confirm")}
+                          description={t("cart.remove_confirm_desc")}
                           onConfirm={() => handleRemoveCartProduct(product._id)}
-                          okText="Xóa"
-                          cancelText="Hủy"
+                          okText={t("cart.btn_confirm")}
+                          cancelText={t("cart.btn_cancel")}
                           okButtonProps={{ danger: true }}
                         >
-                          <Button
-                            type="text"
-                            danger
-                            size="small"
-                            icon={
-                              isItemLoading ? (
-                                <LoadingOutlined />
-                              ) : (
-                                <DeleteOutlined />
-                              )
-                            }
-                            className="text-xs sm:text-sm"
-                          >
-                            Xóa
-                          </Button>
+                          <button className="text-xs sm:text-sm text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors">
+                            {isItemLoading ? <LoadingOutlined /> : <DeleteOutlined />}
+                            <span>{t("cart.remove")}</span>
+                          </button>
                         </Popconfirm>
                       </div>
                     </div>
@@ -185,7 +177,7 @@ const CartPage = () => {
                     <div className="w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-3 sm:pt-0 border-t sm:border-t-0 border-dashed sm:min-w-[140px]">
                       <div className="flex flex-col sm:items-end">
                         <span className="text-[9px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-                          Thành tiền
+                          {t("cart.total_item_price")}
                         </span>
                         <PriceFormatter
                           amount={product?.price * quantity}
@@ -211,15 +203,15 @@ const CartPage = () => {
                 onClick={() => navigate.push("/")}
                 icon={<ArrowRightOutlined className="rotate-180" />}
               >
-                Tiếp tục mua sắm
+                {t("cart.continue_shopping")}
               </Button>
 
               <Popconfirm
-                title="Làm trống giỏ hàng"
-                description="Bạn có chắc chắn muốn xóa tất cả sản phẩm không?"
+                title={t("cart.clear_confirm")}
+                description={t("cart.clear_confirm_desc")}
                 onConfirm={handleResetCart}
-                okText="Đồng ý"
-                cancelText="Hủy"
+                okText={t("cart.btn_confirm")}
+                cancelText={t("cart.btn_cancel")}
                 okButtonProps={{
                   danger: true,
                   loading: isProcessing === "clear",
@@ -231,7 +223,7 @@ const CartPage = () => {
                   icon={<DeleteOutlined />}
                   className="font-medium"
                 >
-                  Xóa toàn bộ giỏ hàng
+                  {t("cart.clear_all")}
                 </Button>
               </Popconfirm>
             </div>
@@ -240,13 +232,13 @@ const CartPage = () => {
           <div className="lg:col-span-1">
             <div className="p-5 rounded-2xl border shadow-sm sticky top-24 space-y-6">
               <h2 className="text-xl font-bold flex items-center gap-2">
-                <ShoppingCartOutlined /> Tóm tắt đơn hàng
+                <ShoppingCartOutlined /> {t("cart.order_summary")}
               </h2>
 
               <div className="space-y-3">
                 <div className="flex justify-between items-center gap-2">
                   <span className="text-muted-foreground whitespace-nowrap text-sm">
-                    Tạm tính:
+                    {t("cart.subtotal")}:
                   </span>
                   <PriceFormatter
                     amount={subTotal}
@@ -256,24 +248,24 @@ const CartPage = () => {
 
                 <div className="flex justify-between items-center gap-2">
                   <span className="text-muted-foreground text-sm">
-                    Phí vận chuyển:
+                    {t("cart.shipping_fee")}:
                   </span>
                   <span className="text-success font-medium italic text-sm">
-                    Miễn phí
+                    {t("cart.free")}
                   </span>
                 </div>
 
                 <Separator className="my-4" />
 
                 <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center gap-1">
-                  <span className="font-bold text-sm uppercase">Tổng tiền</span>
+                  <span className="font-bold text-sm uppercase">{t("cart.final_total")}</span>
                   <PriceFormatter
                     amount={finalTotal}
                     className="text-2xl sm:text-3xl font-black text-primary leading-none"
                   />
                 </div>
                 <p className="text-[10px] text-muted-foreground italic text-right mt-1">
-                  (Đã bao gồm VAT)
+                  {t("cart.vat_included")}
                 </p>
               </div>
               <Button
@@ -283,20 +275,8 @@ const CartPage = () => {
                 className="h-14 font-bold text-lg rounded-xl shadow-lg shadow-blue-100 uppercase tracking-widest hover:scale-[1.02] transition"
                 onClick={handleCheckout}
               >
-                Tiến hành đặt hàng
+                {t("cart.checkout_now")}
               </Button>
-              <div className="flex items-center justify-center gap-4 grayscale">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
-                  className="h-4"
-                  alt="visa"
-                />
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
-                  className="h-6"
-                  alt="master"
-                />
-              </div>
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ const AddToCartButton = ({ product, className }: Props) => {
     }
 
     if (product.stock > itemCount) {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
         await addToCart({ productId: product._id, quantity: 1 });
         toast.success(
@@ -47,7 +47,7 @@ const AddToCartButton = ({ product, className }: Props) => {
   };
 
   return (
-    <div className="h-12 w-full flex items-center">
+    <div className="h-12 flex items-center">
       {itemCount ? (
         <div className="text-sm w-full">
           <div className="flex items-center justify-between">
@@ -77,7 +77,7 @@ const AddToCartButton = ({ product, className }: Props) => {
             </>
           ) : (
             <>
-              <ShoppingBag className="h-4 w-4" /> 
+              <ShoppingBag className="h-4 w-4" />
               {isOutOfStock ? "Hết hàng" : "Thêm vào giỏ"}
             </>
           )}

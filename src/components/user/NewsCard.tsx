@@ -8,8 +8,10 @@ import { useNews } from "@/hooks/useNews";
 import { INews } from "@/api/services/newsApi";
 import { Skeleton } from "antd";
 import { EmptyState } from "../common/EmptyState";
+import { useTranslation } from "react-i18next";
 
 const HomeNewsSection = () => {
+  const { t, i18n } = useTranslation();
   const { refreshNews, loading } = useNews();
   const [newsList, setNewsList] = useState<INews[]>([]);
 
@@ -22,6 +24,12 @@ const HomeNewsSection = () => {
     };
     fetchData();
   }, [refreshNews]);
+
+  // Xử lý định dạng ngày tháng theo ngôn ngữ hiện tại
+  const formatDate = (dateString: string) => {
+    const locale = i18n.language === "vi" ? "vi-VN" : "en-US";
+    return new Date(dateString).toLocaleDateString(locale);
+  };
 
   if (loading) {
     return (
@@ -47,20 +55,20 @@ const HomeNewsSection = () => {
   return (
     <section className="mb-6">
       <div className="flex items-center justify-between my-2">
-        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
-          Tin tức{" "}
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+          {t("news.title_main")}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-sky-500">
-            Mới nhất
+            {t("news.title_sub")}
           </span>
         </h2>
-        <SeeMore to="/all-news">Xem tất cả</SeeMore>
+        <SeeMore to="/all-news">{t("news.see_all")}</SeeMore>
       </div>
 
       {newsList.length === 0 ? (
         <EmptyState
           height="sm"
-          title="Trống"
-          description="Hiện chưa có bảng tin mới nào"
+          title={t("news.empty_title")}
+          description={t("news.empty_description")}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
@@ -98,7 +106,7 @@ const HomeNewsSection = () => {
                   <div className="flex items-center gap-2">
                     <span className="flex items-center gap-1">
                       <ClockCircleOutlined />
-                      {new Date(blog.createdAt).toLocaleDateString("vi-VN")}
+                      {formatDate(blog.createdAt)}
                     </span>
                   </div>
                   <div className="flex items-center gap-1">

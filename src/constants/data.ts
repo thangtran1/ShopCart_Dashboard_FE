@@ -1,10 +1,10 @@
 export const headerData = [
-  { title: "Home", href: "/" },
-  { title: "Shop", href: "/shop" },
-  { title: "Category", href: "/category" },
-  { title: "Brand", href: "/brand" },
-  { title: "News", href: "/all-news" },
-  { title: "Contact", href: "/contact" },
+  { titleKey: "headerData.home", href: "/" },
+  { titleKey: "headerData.shop", href: "/shop" },
+  { titleKey: "headerData.category", href: "/category" },
+  { titleKey: "headerData.brand", href: "/brand" },
+  { titleKey: "headerData.news", href: "/all-news" },
+  { titleKey: "headerData.contact", href: "/contact" }
 ];
 export const promotions = [
   {

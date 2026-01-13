@@ -12,8 +12,10 @@ import { brandService } from "@/api/services/brands";
 import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { useTranslation } from "react-i18next";
 
 const Shop = () => {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<any[]>([]);
   const [brands, setBrands] = useState<any[]>([]);
@@ -24,6 +26,7 @@ const Shop = () => {
   const selectedCategory = searchParams.get("category");
   const selectedBrand = searchParams.get("brand");
   const selectedPrice = searchParams.get("price");
+
   // Hàm cập nhật URL khi filter thay đổi
   const updateFilter = useCallback((key: string, value: string | null) => {
     const newParams = new URLSearchParams(searchParams);
@@ -50,6 +53,7 @@ const Shop = () => {
       console.error("Error fetching brands:", error);
     }
   }, []);
+
   const fetchCategories = useCallback(async () => {
     try {
       const response = await categoryService.getActive();
@@ -60,6 +64,7 @@ const Shop = () => {
       console.error("Error fetching categories:", error);
     }
   }, []);
+
   useEffect(() => {
     fetchCategories();
     fetchBrands();
@@ -68,76 +73,80 @@ const Shop = () => {
   // Fetch products on filter change
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    const response = await productService.getActiveProducts();
-    const allProducts = response.data;
-    let filtered = allProducts;
-    if (selectedCategory) {
-      const cat = categories.find((c) => c.slug === selectedCategory);
-      if (cat) {
-        filtered = filtered.filter((p) => p.category?._id === cat._id);
-      }
-    }
-    if (selectedBrand) {
-      const br = brands.find((b) => b.slug === selectedBrand);
-      if (br) {
-        filtered = filtered.filter((p) => p.brand?._id === br._id);
-      }
-    }
-    if (selectedPrice) {
-      const [minStr, maxStr] = selectedPrice.split("-");
-      const min = Number(minStr) || 0;
-      const max = maxStr === "Infinity" ? Infinity : Number(maxStr);
+    try {
+      const response = await productService.getActiveProducts();
+      const allProducts = response.data;
+      let filtered = allProducts;
 
-      filtered = filtered.filter(
-        (p) => p.price >= min && p.price <= max
-      );
+      if (selectedCategory) {
+        const cat = categories.find((c) => c.slug === selectedCategory);
+        if (cat) {
+          filtered = filtered.filter((p) => p.category?._id === cat._id);
+        }
+      }
+      if (selectedBrand) {
+        const br = brands.find((b) => b.slug === selectedBrand);
+        if (br) {
+          filtered = filtered.filter((p) => p.brand?._id === br._id);
+        }
+      }
+      if (selectedPrice) {
+        const [minStr, maxStr] = selectedPrice.split("-");
+        const min = Number(minStr) || 0;
+        const max = maxStr === "Infinity" ? Infinity : Number(maxStr);
+
+        filtered = filtered.filter(
+          (p) => p.price >= min && p.price <= max
+        );
+      }
+      setProducts(filtered as any[]);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
     }
-    setProducts(filtered as any[]);
-    setLoading(false);
   }, [categories, brands, selectedCategory, selectedBrand, selectedPrice]);
 
   useEffect(() => {
     if (categories.length > 0 && brands.length > 0) {
       fetchProducts();
     }
-  }, [fetchProducts]);
+  }, [fetchProducts, categories.length, brands.length]);
 
-  // Callback cho NoProductAvailable - Làm mới (fetch lại với filter hiện tại)
   const handleRefresh = useCallback(() => {
     fetchProducts();
   }, [fetchProducts]);
 
-  // Callback cho NoProductAvailable - Xem tất cả (xóa hết filter)
   const handleViewAll = useCallback(() => {
     setSearchParams(new URLSearchParams());
   }, [setSearchParams]);
 
-  // Reset tất cả filters
   const handleResetFilters = useCallback(() => {
     setSearchParams(new URLSearchParams());
   }, [setSearchParams]);
 
   return (
     <div>
-      <div className="sticky top-0 z-10 mb-5">
+      <div className="sticky top-0 z-10 mb-5 bg-background/80 backdrop-blur-md pb-2">
         <div className="flex items-center justify-between">
           <Title className="text-lg uppercase tracking-wide">
-          Nhận sản phẩm theo nhu cầu của bạn
+            {t("shop.title")}
           </Title>
 
           {(selectedCategory || selectedBrand || selectedPrice) && (
             <button
               onClick={handleResetFilters}
-              className="text-primary cursor-pointer underline text-sm mt-2 font-medium"
+              className="text-primary cursor-pointer underline text-sm mt-2 font-medium hover:text-primary/80 transition-colors"
             >
-              Đặt lại bộ lọc
+              {t("shop.reset_filter")}
             </button>
           )}
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-2 border-t border-border">
-        <div className="md:sticky md:top-20 md:self-start md:h-[calc(100vh-160px)] md:overflow-y-auto md:min-w-64 pb-5 md:border-r border-r scrollbar-hide">
+        {/* Sidebar Filter */}
+        <div className="md:sticky md:top-20 md:self-start md:h-[calc(100vh-160px)] md:overflow-y-auto md:min-w-64 pb-5 md:border-r border-border scrollbar-hide">
           <CategoryList
             categories={categories}
             selectedCategory={selectedCategory}
@@ -154,6 +163,7 @@ const Shop = () => {
           />
         </div>
 
+        {/* Product Grid */}
         <div className="flex-1 pt-2">
           <div
             className={
@@ -166,8 +176,8 @@ const Shop = () => {
               <div className="p-20 flex flex-col gap-2 items-center justify-center">
                 <PageLoading
                   height={300}
-                  text="Đang tải sản phẩm..."
-                  />
+                  text={t("shop.loading_products")}
+                />
               </div>
             ) : products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 py-2">
@@ -183,7 +193,6 @@ const Shop = () => {
             )}
           </div>
         </div>
-
       </div>
     </div>
   );

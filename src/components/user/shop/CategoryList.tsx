@@ -1,6 +1,8 @@
+"use client";
 import Title from "../../../ui/title";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Label } from "@/ui/label";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   categories: any[];
@@ -13,15 +15,22 @@ const CategoryList = ({
   selectedCategory,
   setSelectedCategory,
 }: Props) => {
+  const { t } = useTranslation();
+
   // Khi selectedCategory là null hoặc undefined → "Tất cả" được active
   const isAllSelected = !selectedCategory;
+
   return (
     <div className="w-full py-3">
-      <Title className="text-base font-bold">Danh mục sản phẩm</Title>
+      <Title className="text-base font-bold">
+        {t("shop.filter_category_title")}
+      </Title>
+
       <RadioGroup value={selectedCategory || "all"} className="mt-2 space-y-1">
+        {/* Option: Tất cả sản phẩm */}
         <div
           onClick={() => setSelectedCategory(null)}
-          className="flex items-center space-x-2 hover:cursor-pointer"
+          className="flex items-center space-x-2 hover:cursor-pointer group"
         >
           <RadioGroupItem
             value="all"
@@ -31,20 +40,19 @@ const CategoryList = ({
           />
           <Label
             htmlFor="all-categories"
-            className={`${isAllSelected ? "font-semibold text-primary" : "font-normal"}`}
+            className={`cursor-pointer transition-colors ${isAllSelected ? "font-semibold text-primary" : "font-normal group-hover:text-primary"
+              }`}
           >
-            Tất cả sản phẩm
+            {t("shop.all_products")}
           </Label>
         </div>
 
-        {/* Các category khác */}
+        {/* Các category từ API */}
         {categories?.map((category) => (
           <div
-            onClick={() => {
-              setSelectedCategory(category?.slug as string);
-            }}
+            onClick={() => setSelectedCategory(category?.slug as string)}
             key={category?._id}
-            className="flex items-center space-x-2 hover:cursor-pointer"
+            className="flex items-center space-x-2 hover:cursor-pointer group"
           >
             <RadioGroupItem
               value={category?.slug as string}
@@ -53,19 +61,24 @@ const CategoryList = ({
             />
             <Label
               htmlFor={category?.slug}
-              className={`${selectedCategory === category?.slug ? "font-semibold text-primary" : "font-normal"}`}
+              className={`cursor-pointer transition-colors ${selectedCategory === category?.slug
+                ? "font-semibold text-primary"
+                : "font-normal group-hover:text-primary"
+                }`}
             >
               {category?.name}
             </Label>
           </div>
         ))}
       </RadioGroup>
+
+      {/* Nút đặt lại nhanh */}
       {selectedCategory && (
         <button
           onClick={() => setSelectedCategory(null)}
-          className="text-sm cursor-pointer font-medium mt-2 underline underline-offset-2 decoration-[1px] hover:text-primary text-left"
+          className="text-sm cursor-pointer font-medium mt-3 underline underline-offset-2 decoration-[1px] hover:text-primary text-left transition-colors"
         >
-          Đặt lại lựa chọn
+          {t("shop.reset_selection")}
         </button>
       )}
     </div>

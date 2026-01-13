@@ -17,17 +17,19 @@ import { useOrder } from "@/hooks/useOrder";
 import { Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { ORDER_STATUS_MAP, OrderStatus } from "@/types/enum";
+import { useTranslation } from "react-i18next";
 
 const OrdersComponent = ({ orders }: { orders: any[] }) => {
+  const { t } = useTranslation();
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const { cancelOrder } = useOrder();
 
   const handleCancel = async (id: string) => {
     try {
       await cancelOrder(id);
-      toast.success("Hủy đơn hàng thành công");
+      toast.success(t("orders.cancel_success"));
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Không thể hủy đơn hàng");
+      toast.error(error?.response?.data?.message || t("orders.cancel_error"));
     }
   };
 
@@ -72,7 +74,7 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                       <div className="flex flex-col">
                         <PriceFormatter amount={order?.totalAmount} className="font-bold text-primary" />
                         <span className="text-[9px] uppercase font-semibold text-muted-foreground">
-                          {order.paymentMethod === 'COD' ? 'Tiền mặt' : 'Chuyển khoản'}
+                          {order.paymentMethod === 'COD' ? t("orders.payment_cash") : t("orders.payment_transfer")}
                         </span>
                       </div>
                     </TableCell>
@@ -80,14 +82,14 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                     <TableCell className="text-center">
                       {(() => {
                         const status = order.status as OrderStatus;
-                        const config = ORDER_STATUS_MAP[status] || {
-                          label: status,
-                          className: "bg-slate-100 text-slate-700"
-                        };
+                        const config = ORDER_STATUS_MAP[status];
+
+                        // Sử dụng chung key status đã định nghĩa ở phần OrdersPage
+                        const statusKey = `orders.status_${status.toLowerCase()}`;
 
                         return (
-                          <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ${config.className}`}>
-                            {config.label}
+                          <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase whitespace-nowrap ${config?.className || "bg-slate-100 text-slate-700"}`}>
+                            {t(statusKey)}
                           </span>
                         );
                       })()}
@@ -102,11 +104,11 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                           <TooltipTrigger asChild>
                             <div>
                               <Popconfirm
-                                title="Hủy đơn hàng"
-                                description="Bạn có chắc muốn hủy đơn này không?"
+                                title={t("orders.cancel_confirm_title")}
+                                description={t("orders.cancel_confirm_desc")}
                                 onConfirm={() => handleCancel(order._id)}
-                                okText="Đồng ý"
-                                cancelText="Không"
+                                okText={t("orders.btn_confirm")}
+                                cancelText={t("orders.btn_cancel")}
                                 okButtonProps={{ danger: true }}
                                 placement="left"
                               >
@@ -119,7 +121,7 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                             </div>
                           </TooltipTrigger>
                           <TooltipContent side="top">
-                            <p>Hủy đơn hàng này</p>
+                            <p>{t("orders.tooltip_cancel")}</p>
                           </TooltipContent>
                         </Tooltip>
                       ) : (
@@ -129,7 +131,7 @@ const OrdersComponent = ({ orders }: { orders: any[] }) => {
                   </TableRow>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Xem chi tiết đơn hàng</p>
+                  <p>{t("orders.tooltip_view_detail")}</p>
                 </TooltipContent>
               </Tooltip>
             );
