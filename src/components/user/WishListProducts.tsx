@@ -60,7 +60,7 @@ const WishListProducts = () => {
               Danh sách yêu thích
             </Title>
             <p className="text-sm text-muted-foreground">
-              XXem lại các sản phẩm bạn đã quan tâm và thêm chúng vào giỏ hàng
+              Xem lại các sản phẩm bạn đã quan tâm và thêm chúng vào giỏ hàng
             </p>
           </div>
         </div>
