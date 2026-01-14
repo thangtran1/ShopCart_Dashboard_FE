@@ -1,21 +1,20 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { ProductType } from "@/types/enum";
 import { Skeleton } from "antd";
 import { Badge } from "@/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export default function ProductsPage() {
+  const { t } = useTranslation();
   const [productsByType, setProductsByType] = useState<Record<string, any[]>>(
     {}
   );
   const [loading, setLoading] = useState(true);
-
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   const fetchProductsByType = useCallback(async () => {
     setLoading(true);
@@ -49,30 +48,24 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-6 antialiased">
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-indigo-600 origin-left z-[100]"
-        style={{ scaleX }}
-      />
-      {/* thanh cuộn ngag */}
       <div>
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-4xl md:text-5xl font-bold mb-4 text-center"
         >
-          Sản phẩm{" "}
+          {t("product.hero_title")}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500">
-            Công nghệ
+            {t("product.hero_subtitle")}
           </span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-center text-muted-foreground max-w-2xl text-lg"
+          className="text-center text-muted-foreground text-lg"
         >
-          Khám phá những thiết bị công nghệ mới nhất, từ iPhone đỉnh cao đến
-          MacBook mạnh mẽ.
+          {t("product.hero_description")}
         </motion.p>
       </div>
 
@@ -107,9 +100,12 @@ export default function ProductsPage() {
                 <div className="flex items-center justify-between mb-3 group">
                   <div className="flex cursor-pointer items-center gap-2">
                     <h2 className="text-2xl md:text-4xl font-bold border-l-4 border-indigo-600 pl-3 transition-all group-hover:pl-5">
-                      {type}
+                      {/* Dịch loại sản phẩm dựa trên enum type */}
+                      {t(`product.type_${type.toLowerCase()}`, { defaultValue: type })}
                     </h2>
-                    <Badge variant={"success"}>{products.length} Items</Badge>
+                    <Badge variant={"success"}>
+                      {t("product.count_label", { count: products.length })}
+                    </Badge>
                   </div>
                   <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-50 to-transparent hidden md:block" />
                 </div>

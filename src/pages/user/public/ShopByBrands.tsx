@@ -1,3 +1,4 @@
+"use client";
 import { Link } from "react-router";
 import { GitCompareArrows, Headset, ShieldCheck, Truck } from "lucide-react";
 import SeeMore from "@/ui/see-more";
@@ -5,34 +6,37 @@ import { useCallback, useEffect, useState } from "react";
 import { Brand, brandService } from "@/api/services/brands";
 import { Badge } from "@/ui/badge";
 import { EmptyState } from "@/components/common/EmptyState";
-
-const extraData = [
-  {
-    title: "Giao hàng miễn phí",
-    description: "Miễn phí vận chuyển cho đơn hàng trên $100",
-    icon: <Truck size={40} />
-  },
-  {
-    title: "Đổi trả miễn phí",
-    description: "Cam kết đổi trả trong vòng 30 ngày",
-    icon: <GitCompareArrows size={40} />
-  },
-  {
-    title: "Hỗ trợ khách hàng",
-    description: "Đội ngũ hỗ trợ thân thiện 24/7",
-    icon: <Headset size={40} />
-  },
-  {
-    title: "Đảm bảo hoàn tiền",
-    description: "Chất lượng sản phẩm được kiểm định",
-    icon: <ShieldCheck size={40} />
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function ShopByBrands() {
+  const { t } = useTranslation();
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  // Đưa extraData vào trong component để sử dụng được hàm t()
+  const extraData = [
+    {
+      title: t("brands.extra.shipping_title"),
+      description: t("brands.extra.shipping_desc"),
+      icon: <Truck size={40} />
+    },
+    {
+      title: t("brands.extra.return_title"),
+      description: t("brands.extra.return_desc"),
+      icon: <GitCompareArrows size={40} />
+    },
+    {
+      title: t("brands.extra.support_title"),
+      description: t("brands.extra.support_desc"),
+      icon: <Headset size={40} />
+    },
+    {
+      title: t("brands.extra.guarantee_title"),
+      description: t("brands.extra.guarantee_desc"),
+      icon: <ShieldCheck size={40} />
+    },
+  ];
 
   const fetchBrands = useCallback(async () => {
     try {
@@ -68,27 +72,26 @@ export default function ShopByBrands() {
   return (
     <div className="w-full space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start mt-2">
-
         <div className="lg:col-span-4 space-y-2 lg:sticky lg:top-10">
           <div className="space-y-2">
             <Badge variant="outline" className="px-3 py-1 uppercase tracking-wider text-primary border-primary/30 bg-primary/5 w-fit">
-              Đối tác uy tín
+              {t("brands.badge")}
             </Badge>
 
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
-              Mua sắm theo{" "}
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              {t("brands.title_main")}{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600">
-                Thương hiệu
+                {t("brands.title_sub")}
               </span>
             </h2>
 
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              Chúng tôi tuyển chọn những thương hiệu hàng đầu thế giới để mang lại trải nghiệm tốt nhất cho bạn.
+              {t("brands.description")}
             </p>
           </div>
 
           <SeeMore to="/brand">
-            Khám phá tất cả
+            {t("brands.see_all")}
           </SeeMore>
         </div>
 
@@ -96,7 +99,11 @@ export default function ShopByBrands() {
           {loading || error ? (
             renderSkeleton()
           ) : brands.length === 0 ? (
-            <EmptyState height="sm" title="Trống" description="Hiện chưa có thương hiệu nào" />
+            <EmptyState
+              height="sm"
+              title={t("brands.empty_title")}
+              description={t("brands.empty_description")}
+            />
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
               {brands.slice(0, 8).map((brand) => (
@@ -113,7 +120,7 @@ export default function ShopByBrands() {
                     />
                   </div>
                   <span className="text-[10px] font-bold text-muted-foreground/60 uppercase group-hover:text-primary transition-colors">
-                    <span className="text-primary">({brand.productCount}) </span> Sản phẩm
+                    {t("brands.product_count", { count: brand.productCount })}
                   </span>
                 </Link>
               ))}

@@ -16,8 +16,10 @@ import { toast } from "sonner";
 import Title from "@/ui/title";
 import { EmptyState } from "../common/EmptyState";
 import { useRouter } from "@/router/hooks";
+import { useTranslation } from "react-i18next";
 
 const WishListProducts = () => {
+  const { t } = useTranslation();
   const navigate = useRouter();
   const { favoriteProduct, removeFromFavorite, resetFavorite } = useStore();
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
@@ -25,14 +27,14 @@ const WishListProducts = () => {
   const handleRemoveProduct = (id: string) => {
     setIsProcessing(id);
     removeFromFavorite(id);
-    toast.success("Đã xóa khỏi danh sách yêu thích");
+    toast.success(t("wishList.msg_remove_success"));
     setIsProcessing(null);
   };
 
   const handleResetWishlist = () => {
     setIsProcessing("clear");
     resetFavorite();
-    toast.success("Đã làm trống danh sách yêu thích");
+    toast.success(t("wishList.msg_clear_success"));
     setIsProcessing(null);
   };
 
@@ -57,21 +59,21 @@ const WishListProducts = () => {
 
           <div>
             <Title className="text-2xl font-bold tracking-tight mb-0.5">
-              Danh sách yêu thích
+              {t("wishList.title")}
             </Title>
             <p className="text-sm text-muted-foreground">
-              Xem lại các sản phẩm bạn đã quan tâm và thêm chúng vào giỏ hàng
+              {t("wishList.sub_title")}
             </p>
           </div>
         </div>
 
         {favoriteProduct.length > 0 && (
           <Popconfirm
-            title="Làm trống danh sách"
-            description="Bạn có chắc chắn muốn xóa tất cả sản phẩm yêu thích?"
+            title={t("wishList.clear_confirm")}
+            description={t("wishList.clear_confirm_desc")}
             onConfirm={handleResetWishlist}
-            okText="Đồng ý"
-            cancelText="Hủy"
+            okText={t("wishList.btn_confirm")}
+            cancelText={t("wishList.btn_cancel")}
             okButtonProps={{
               danger: true,
               loading: isProcessing === "clear",
@@ -83,7 +85,7 @@ const WishListProducts = () => {
               icon={<DeleteOutlined />}
               className="font-bold self-start sm:self-auto"
             >
-              Xóa toàn bộ yêu thích
+              {t("wishList.clear_all")}
             </Button>
           </Popconfirm>
         )}
@@ -92,9 +94,9 @@ const WishListProducts = () => {
       {favoriteProduct.length === 0 ? (
         <EmptyState
           height="sm"
-          title="Trống"
-          description="Sản phẩm được thêm vào danh sách yêu thích sẽ hiện ở đây"
-          actionLabel="Khám phá ngay"
+          title={t("wishList.empty_title")}
+          description={t("wishList.empty_desc")}
+          actionLabel={t("wishList.explore_now")}
           onAction={handleGoToShop}
         />
       ) : (
@@ -107,11 +109,10 @@ const WishListProducts = () => {
                 return (
                   <div
                     key={product?._id}
-                    className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${
-                      isItemLoading
-                        ? "opacity-50 pointer-events-none"
-                        : "hover:bg-muted/30"
-                    }`}
+                    className={`relative border-b p-4 md:p-5 last:border-b-0 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-all ${isItemLoading
+                      ? "opacity-50 pointer-events-none"
+                      : "hover:bg-muted/30"
+                      }`}
                   >
                     <div className="relative border rounded-xl overflow-hidden shrink-0 shadow-sm mx-auto sm:mx-0">
                       <img
@@ -128,15 +129,15 @@ const WishListProducts = () => {
                         </h2>
                         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1">
                           <p className="text-[10px] sm:text-xs text-muted-foreground">
-                            Danh mục:{" "}
+                            {t("wishList.category")}:{" "}
                             <span className="text-foreground font-medium uppercase">
-                              {product?.category?.name || "Đang cập nhật"}
+                              {product?.category?.name || t("wishList.category_updating")}
                             </span>
                           </p>
                           <p className="text-[10px] sm:text-xs text-muted-foreground italic">
-                            Tình trạng:{" "}
+                            {t("wishList.stock_status")}:{" "}
                             <span className="text-emerald-500 font-medium italic">
-                              Còn hàng
+                              {t("wishList.in_stock")}
                             </span>
                           </p>
                         </div>
@@ -151,10 +152,10 @@ const WishListProducts = () => {
                         <div className="h-4 w-[1px] bg-border hidden sm:block" />
 
                         <Popconfirm
-                          title="Xóa khỏi yêu thích?"
+                          title={t("wishList.remove_confirm")}
                           onConfirm={() => handleRemoveProduct(product._id)}
-                          okText="Xóa"
-                          cancelText="Hủy"
+                          okText={t("wishList.btn_confirm")}
+                          cancelText={t("wishList.btn_cancel")}
                           okButtonProps={{ danger: true }}
                         >
                           <Button
@@ -170,7 +171,7 @@ const WishListProducts = () => {
                             }
                             className="text-xs sm:text-sm font-medium"
                           >
-                            Xóa
+                            {t("wishList.remove")}
                           </Button>
                         </Popconfirm>
                       </div>
@@ -179,7 +180,7 @@ const WishListProducts = () => {
                     <div className="w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-3 sm:pt-0 border-t sm:border-t-0 border-dashed sm:min-w-[160px]">
                       <div className="flex flex-col sm:items-end">
                         <span className="text-[9px] sm:text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
-                          Giá hiện tại
+                          {t("wishList.current_price")}
                         </span>
                         <PriceFormatter
                           amount={product?.price}
@@ -196,7 +197,7 @@ const WishListProducts = () => {
                           type="link"
                           className="text-xs italic"
                         >
-                          Xem chi tiết
+                          {t("wishList.view_detail")}
                         </Button>
                       </Link>
                     </div>

@@ -1,10 +1,13 @@
+"use client";
 import { Link } from "react-router";
 import SeeMore from "@/ui/see-more";
 import { Category, categoryService } from "@/api/services/category";
 import { useEffect, useState } from "react";
 import { EmptyState } from "@/components/common/EmptyState";
+import { useTranslation } from "react-i18next";
 
 const CategoryProduct = () => {
+  const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -13,7 +16,6 @@ const CategoryProduct = () => {
     try {
       setLoading(true);
       setError(false);
-
       const response = await categoryService.getActive();
 
       if (response.success) {
@@ -56,17 +58,16 @@ const CategoryProduct = () => {
             </h3>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                {category.productCount} sản phẩm
+                {t("categoryProduct.product_count", { count: category.productCount })}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground group-hover:translate-x-1 transition-transform duration-300">
-              Xem ngay →
+              {t("categoryProduct.view_now")}
             </p>
           </div>
 
           <div className="relative w-20 h-20 flex-shrink-0">
             <div className="absolute inset-0 bg-primary/5 rounded-full scale-110 group-hover:scale-125 transition-transform duration-500" />
-
             <img
               src={category.image || "/images/products/product_1.png"}
               alt={category.name}
@@ -85,15 +86,15 @@ const CategoryProduct = () => {
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-3">
           <div className="w-1 h-6 bg-primary rounded-full" />
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tighttight">
-            Danh mục {" "}
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            {t("categoryProduct.title_main")}{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-500">
-              Sản phẩm
+              {t("categoryProduct.title_sub")}
             </span>
           </h2>
         </div>
         <SeeMore to="/category">
-          Xem tất cả
+          {t("categoryProduct.see_all")}
         </SeeMore>
       </div>
 
@@ -101,7 +102,11 @@ const CategoryProduct = () => {
         {loading || error ? (
           renderSkeleton()
         ) : categories.length === 0 ? (
-          <EmptyState height="sm" title="Trống" description="Hiện chưa có danh mục nào" />
+          <EmptyState
+            height="sm"
+            title={t("categoryProduct.empty_title")}
+            description={t("categoryProduct.empty_description")}
+          />
         ) : (
           renderCategories()
         )}

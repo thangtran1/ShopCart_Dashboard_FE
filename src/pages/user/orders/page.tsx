@@ -13,23 +13,23 @@ import { OrderStatus } from "@/types/enum";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useRouter } from "@/router/hooks";
+import { useTranslation } from "react-i18next";
 
 const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
+  const { t } = useTranslation();
   const router = useRouter();
-  // Mặc định là 'all'
   const [currentTab, setCurrentTab] = useState("all");
   const userToken = useUserToken();
 
-  // Truyền currentTab vào hook để React Query tự động fetch theo status
   const { orders, loading } = useOrder(currentTab);
 
   const STATUS_TABS = [
-    { label: "Tất cả", key: "all" },
-    { label: "Chờ xử lý", key: OrderStatus.PENDING },
-    { label: "Đang xử lý", key: OrderStatus.PROCESSING },
-    { label: "Đang giao", key: OrderStatus.SHIPPED },
-    { label: "Đã giao hàng", key: OrderStatus.DELIVERED },
-    { label: "Đã hủy", key: OrderStatus.CANCELLED },
+    { label: t("orders.status_all"), key: "all" },
+    { label: t("orders.status_pending"), key: OrderStatus.PENDING },
+    { label: t("orders.status_processing"), key: OrderStatus.PROCESSING },
+    { label: t("orders.status_shipped"), key: OrderStatus.SHIPPED },
+    { label: t("orders.status_delivered"), key: OrderStatus.DELIVERED },
+    { label: t("orders.status_cancelled"), key: OrderStatus.CANCELLED },
   ];
 
   return (
@@ -41,10 +41,10 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
           </div>
           <div>
             <Title className="text-2xl font-bold tracking-tight">
-              Đơn hàng của tôi
+              {t("orders.title")}
             </Title>
             <p className="text-sm text-muted-foreground italic">
-              Quản lý và theo dõi trạng thái đơn hàng
+              {t("orders.sub_title")}
             </p>
           </div>
         </div>
@@ -54,7 +54,6 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
         <Tabs
           activeKey={currentTab}
           onChange={(key) => setCurrentTab(key)}
-          // centered  Bật cái này nếu muốn các tabs nằm giữa màn hình
           items={STATUS_TABS.map((tab) => ({
             label: (
               <span className="font-semibold uppercase text-[12px]">
@@ -68,17 +67,17 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
 
       <div className="w-full overflow-hidden -mt-4">
         <div className="p-0">
-        {!userToken?.accessToken ? (
+          {!userToken?.accessToken ? (
             <EmptyState
-              title="Chưa đăng nhập"
+              title={t("orders.auth_required")}
               height="sm"
-              description="Vui lòng đăng nhập để xem danh sách đơn hàng."
-              actionLabel="Đăng nhập ngay"
+              description={t("orders.auth_required_desc")}
+              actionLabel={t("orders.auth_login_btn")}
               onAction={() => router.push("/login")}
             />
           ) : loading ? (
             <div className="flex h-[450px] flex-col items-center justify-center gap-4">
-              <PageLoading text="Đang tải dữ liệu..." />
+              <PageLoading text={t("orders.loading_text")} />
             </div>
           ) : orders?.length > 0 ? (
             <ScrollArea className="w-full h-[400px]">
@@ -86,27 +85,15 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
                 <Table className="relative w-full border-collapse">
                   <TableHeader className="sticky top-0 z-30 bg-secondary/95 backdrop-blur-md shadow-sm">
                     <TableRow className="hover:bg-transparent border-b">
-                      <TableHead className="font-bold h-12">
-                        Mã đơn hàng
-                      </TableHead>
-                      <TableHead className="font-bold">Ngày đặt</TableHead>
-                      <TableHead className="font-bold">Người đặt</TableHead>
-                      <TableHead className="sm:table-cell font-bold">
-                        Email
-                      </TableHead>
-                      <TableHead className="sm:table-cell font-bold">
-                        Tạm tính
-                      </TableHead>
-                      <TableHead className="lg:table-cell text-center font-bold">
-                        Giảm giá
-                      </TableHead>
-                      <TableHead className="font-bold">Tổng cộng</TableHead>
-                      <TableHead className="text-center font-bold">
-                        Trạng thái
-                      </TableHead>
-                      <TableHead className="text-center font-bold">
-                        Thao tác
-                      </TableHead>
+                      <TableHead className="font-bold h-12">{t("orders.table_id")}</TableHead>
+                      <TableHead className="font-bold">{t("orders.table_date")}</TableHead>
+                      <TableHead className="font-bold">{t("orders.table_customer")}</TableHead>
+                      <TableHead className="sm:table-cell font-bold">{t("orders.table_email")}</TableHead>
+                      <TableHead className="sm:table-cell font-bold">{t("orders.table_subtotal")}</TableHead>
+                      <TableHead className="lg:table-cell text-center font-bold">{t("orders.table_discount")}</TableHead>
+                      <TableHead className="font-bold">{t("orders.table_total")}</TableHead>
+                      <TableHead className="text-center font-bold">{t("orders.table_status")}</TableHead>
+                      <TableHead className="text-center font-bold">{t("orders.table_action")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <OrdersComponent orders={orders} />
@@ -116,11 +103,10 @@ const OrdersPage = ({ hideTitle }: { hideTitle?: boolean }) => {
             </ScrollArea>
           ) : (
             <EmptyState
-              title="Trống"
+              title={t("orders.empty_title")}
               height="md"
-              description={`Không tìm thấy đơn hàng nào trong mục "${
-                STATUS_TABS.find((t) => t.key === currentTab)?.label
-              }"`}
+              description={`${t("orders.empty_not_found")} "${STATUS_TABS.find((t) => t.key === currentTab)?.label
+                }"`}
             />
           )}
         </div>
