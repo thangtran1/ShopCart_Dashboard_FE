@@ -1,5 +1,5 @@
 import React, { useState, useMemo, lazy, Suspense } from "react";
-import { useUserInfo } from "@/store/userStore";
+import { useUserInfo, useUserToken } from "@/store/userStore";
 import SimpleChatIcon from "./SimpleChatIcon";
 
 const ModalChatUser = lazy(() => import("./ModalChatUser"));
@@ -8,9 +8,11 @@ const ModalChatAdmin = lazy(() => import("./ModalChatAdmin"));
 const SimpleChatWrapper: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const userInfo = useUserInfo();
+  const token = useUserToken()
+
 
   const currentUser = useMemo(() => {
-    if (!userInfo?.id) return null;
+    if (!userInfo?.id || !token.accessToken) return null;
 
     return {
       id: userInfo.id,

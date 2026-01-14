@@ -72,7 +72,7 @@ export default function ShopByBrands() {
   return (
     <div className="w-full space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start mt-2">
-        <div className="lg:col-span-4 space-y-2 lg:sticky lg:top-10">
+        <div className="lg:col-span-4 space-y-2">
           <div className="space-y-2">
             <Badge variant="outline" className="px-3 py-1 uppercase tracking-wider text-primary border-primary/30 bg-primary/5 w-fit">
               {t("brands.badge")}

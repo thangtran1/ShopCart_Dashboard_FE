@@ -20,7 +20,7 @@ const Header = () => {
           <Logo />
         </div>
         <HeaderMenu />
-        <div className="w-auto md:w-1/3 flex items-center justify-end gap-4">
+        <div className="w-auto md:w-1/3 flex items-center justify-end gap-3">
           <SearchBar />
           <CartIcon />
           <FavoriteButton />

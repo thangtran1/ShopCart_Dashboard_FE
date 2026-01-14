@@ -46,7 +46,7 @@ const SignIn = () => {
       {!accessToken ? (
         <Link
           to="/login"
-          className="bg-foreground text-background px-4 py-2 rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
+          className="bg-foreground text-background rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
         >
           {t("user.login")}
         </Link>
