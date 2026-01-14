@@ -1,14 +1,17 @@
+"use client";
 import { addressService, CreateAddressDto } from "@/api/services/addressesApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const useAddressActions = (onClose?: () => void) => {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   // 1. GET ALL
   const { data: addressData, isLoading: isFetching } = useQuery({
     queryKey: ["addresses"],
-    queryFn: () => addressService.getAll(1, 50), // Lấy trang 1, limit 50
+    queryFn: () => addressService.getAll(1, 50),
   });
 
   // 2. CREATE
@@ -16,12 +19,12 @@ export const useAddressActions = (onClose?: () => void) => {
     mutationFn: (data: CreateAddressDto) => addressService.create(data),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success("Thêm địa chỉ mới thành công");
+        toast.success(t("address.toast.create_success"));
         queryClient.invalidateQueries({ queryKey: ["addresses"] });
         if (onClose) onClose();
       }
     },
-    onError: (err: any) => toast.error(err?.message || "Không thể thêm địa chỉ"),
+    onError: (err: any) => toast.error(err?.message || t("address.toast.create_error")),
   });
 
   // 3. UPDATE
@@ -30,12 +33,12 @@ export const useAddressActions = (onClose?: () => void) => {
       addressService.updateAddress(id, data),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success("Cập nhật địa chỉ thành công");
+        toast.success(t("address.toast.update_success"));
         queryClient.invalidateQueries({ queryKey: ["addresses"] });
         if (onClose) onClose();
       }
     },
-    onError: (err: any) => toast.error(err?.message || "Cập nhật thất bại"),
+    onError: (err: any) => toast.error(err?.message || t("address.toast.update_error")),
   });
 
   // 4. DELETE
@@ -43,23 +46,23 @@ export const useAddressActions = (onClose?: () => void) => {
     mutationFn: (id: string) => addressService.deleteAddress(id),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success("Xóa địa chỉ thành công");
+        toast.success(t("address.toast.delete_success"));
         queryClient.invalidateQueries({ queryKey: ["addresses"] });
       }
     },
-    onError: (err: any) => toast.error(err?.message || "Xóa thất bại"),
+    onError: (err: any) => toast.error(err?.message || t("address.toast.delete_error")),
   });
 
-   // 4. DELETE ADMIN
-   const { mutateAsync: deleteAddressAdmin, isPending: isAdminDeleting } = useMutation({
+  // 5. DELETE ADMIN
+  const { mutateAsync: deleteAddressAdmin, isPending: isAdminDeleting } = useMutation({
     mutationFn: (id: string) => addressService.deleteAddressAdmin(id),
     onSuccess: (res) => {
       if (res.success) {
-        toast.success("Admin Xóa địa chỉ thành công");
+        toast.success(t("address.toast.admin_delete_success"));
         queryClient.invalidateQueries({ queryKey: ["addresses"] });
       }
     },
-    onError: (err: any) => toast.error(err?.message || "Xóa thất bại"),
+    onError: (err: any) => toast.error(err?.message || t("address.toast.delete_error")),
   });
 
   return {

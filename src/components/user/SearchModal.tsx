@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "antd";
 import { productService } from "@/api/services/product";
 import { categoryService } from "@/api/services/category";
+import { Trans, useTranslation } from "react-i18next";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ interface SearchModalProps {
 }
 
 const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
+  const { t } = useTranslation()
   const [categories, setCategories] = useState<any[]>([]);
   useEffect(() => {
     if (!isOpen) return;
@@ -119,7 +121,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
         <DialogHeader className="p-0">
           <div className="flex items-center gap-2 p-4 border-b">
             <Input
-              placeholder="Tìm kiếm sản phẩm..."
+              placeholder={t('search.placeholder')}
               value={searchQuery}
               suffix={
                 searchQuery ? (
@@ -148,13 +150,13 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
           {searchQuery ? (
             <>
               <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4" /> Kết quả tìm kiếm ({searchResults.length})
+                <ShoppingBag className="w-4 h-4" /> {t("search.results_count", { count: searchResults.length })}
               </h3>
 
               {isLoading ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  <span className="ml-2 text-foreground">Đang tìm kiếm...</span>
+                  <span className="ml-2 text-foreground">{t("search.searching")}</span>
                 </div>
               ) : searchResults.length > 0 ? (
                 <>
@@ -204,8 +206,8 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
               ) : (
                 <div className="text-center py-8 text-foreground">
                   <Search className="w-12 h-12 mx-auto mb-2 text-foreground" />
-                  <p>Không tìm thấy sản phẩm nào</p>
-                  <p className="text-sm">Thử tìm kiếm với từ khóa khác</p>
+                  <p>{t("search.no_results")}</p>
+                  <p className="text-sm">{t("search.try_another")}</p>
                 </div>
               )}
             </>
@@ -216,10 +218,10 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                      <Clock className="w-4 h-4" /> Tìm kiếm gần đây
+                      <Clock className="w-4 h-4" /> {t("search.recent")}
                     </h3>
                     <button onClick={clearRecentSearches} className="text-xs text-primary hover:underline">
-                      Xóa tất cả
+                    {t("search.clear_all")}
                     </button>
                   </div>
                   <div className="space-y-1">
@@ -240,7 +242,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
               {/* Popular Categories */}
               <div>
                 <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" /> Danh mục phổ biến
+                  <TrendingUp className="w-4 h-4" /> {t("search.popular_categories")}
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
                   {categories.map((c: any, i: number) => (
@@ -263,7 +265,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
               {/* Suggested Searches */}
               <div className="space-y-3">
                 <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
-                  Gợi ý tìm kiếm
+                {t("search.suggestions")}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {suggestedSearches.map((s, i) => (
@@ -281,20 +283,28 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
               {/* Search Tips */}
               <div className="bg-background/80 dark:bg-background/70 rounded-xl p-5 border border-border/50 shadow-sm">
                 <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <span className="text-primary">💡</span> Mẹo tìm kiếm
+                  <span className="text-primary">💡</span> {t("search.tips.title")}
                 </h4>
                 <ul className="text-sm text-muted-foreground space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary">•</span>
-                    <span>Tìm theo <span className="font-medium text-foreground">tên sản phẩm</span>: "iPhone 15"</span>
+                    <Trans i18nKey="search.tips.by_name">
+                      Tìm theo <span className="font-medium text-foreground">tên sản phẩm</span>: "iPhone 15"
+                    </Trans>
                   </li>
+
                   <li className="flex items-start gap-2">
                     <span className="text-primary">•</span>
-                    <span>Tìm theo <span className="font-medium text-foreground">thương hiệu</span>: "Samsung", "Apple"</span>
+                    <Trans i18nKey="search.tips.by_brand">
+                      Tìm theo <span className="font-medium text-foreground">thương hiệu</span>: "Samsung", "Apple"
+                    </Trans>
                   </li>
+
                   <li className="flex items-start gap-2">
                     <span className="text-primary">•</span>
-                    <span>Tìm theo <span className="font-medium text-foreground">danh mục</span>: "Laptop", "Headphones"</span>
+                    <Trans i18nKey="search.tips.by_category">
+                      Tìm theo <span className="font-medium text-foreground">danh mục</span>: "Laptop", "Headphones"
+                    </Trans>
                   </li>
                 </ul>
               </div>

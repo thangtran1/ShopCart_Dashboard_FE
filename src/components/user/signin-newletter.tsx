@@ -1,42 +1,49 @@
+"use client";
 import Logo from "@/ui/logo";
 import { Button, Typography, Form, Input } from "antd";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+
 const { Title, Paragraph, Text } = Typography;
 
 export default function SigninNewletter() {
+    const { t } = useTranslation();
     const [form] = Form.useForm();
 
     const handleSubmit = async () => {
         try {
             await form.validateFields();
-            toast.success("Đăng ký thành công");
+            toast.success(t("newsletter.toast.success"));
             form.resetFields();
         } catch (err) {
-            // Nếu validation fail, Antd sẽ tự động hiển thị lỗi dưới input
+            // Validation lỗi sẽ hiển thị tự động theo rules bên dưới
         }
     };
 
     return (
         <div className="border border-primary/30 p-4 rounded-2xl flex flex-col items-center space-y-4">
-            <Title level={4} className="font-extrabold text-center">
-                Đăng Ký Nhận Tin
+            <Title level={4} className="font-extrabold text-center !m-0">
+                {t("newsletter.title")}
             </Title>
+            
             <div className="w-20 h-1 bg-primary rounded-full" />
-            <Paragraph className="text-center !text-muted-foreground">
-                Nhận thông tin mới nhất về sản phẩm và ưu đãi.
+            
+            <Paragraph className="text-center !text-muted-foreground !m-0">
+                {t("newsletter.description")}
             </Paragraph>
 
-            <Form form={form} className="w-full">
+            <Form form={form} className="w-full !my-2">
                 <Form.Item
                     name="email"
                     rules={[
-                        { required: true, message: "Vui lòng nhập email" },
-                        { type: "email", message: "Email không hợp lệ" },
+                        { required: true, message: t("newsletter.error.required") },
+                        { type: "email", message: t("newsletter.error.invalid") },
                     ]}
+                    className="!mb-2"
                 >
                     <Input
                         size="large"
-                        placeholder="Nhập email của bạn"
+                        placeholder={t("newsletter.placeholder")}
                         className="w-full rounded-lg"
                     />
                 </Form.Item>
@@ -46,14 +53,14 @@ export default function SigninNewletter() {
                     type="primary"
                     size="large"
                     block
-                    className="rounded-lg"
+                    className="rounded-lg font-bold"
                 >
-                    Đăng Ký
+                    {t("newsletter.button")}
                 </Button>
             </Form>
 
             <Text className="text-sm !text-muted-foreground text-center">
-                Bằng việc đăng ký, bạn đồng ý với chính sách của <Logo />.
+                {t("newsletter.policy")} <Logo />.
             </Text>
         </div>
     );

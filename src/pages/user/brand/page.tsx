@@ -8,6 +8,7 @@ import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useMemo, useState } from "react";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   brands: any[];
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
+  const { t } = useTranslation();
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
   const [loading, setLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -26,7 +28,7 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
     if (slug && slug !== currentSlug) setCurrentSlug(slug);
   }, [slug]);
 
-  const handleCategoryChange = (newSlug: string) => {
+  const handleBrandChange = (newSlug: string) => {
     if (newSlug === currentSlug) return;
     setCurrentSlug(newSlug);
     navigate(newSlug === "all" ? "/brand" : `/brand/${newSlug}`);
@@ -34,15 +36,9 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
 
   const brandCountMap = useMemo(() => {
     const map: Record<string, number> = {};
-
     allProducts.forEach(p => {
-      const brandId =
-        typeof p.brand === "object"
-          ? p.brand._id
-          : p.brand;
-
+      const brandId = typeof p.brand === "object" ? p.brand._id : p.brand;
       if (!brandId) return;
-
       map[brandId] = (map[brandId] || 0) + 1;
     });
     return map;
@@ -55,12 +51,7 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
   const filteredProducts = allProducts.filter(p => {
     if (currentSlug === "all") return true;
     if (!currentBrand || !p.brand) return false;
-
-    const brandId =
-      typeof p.brand === "object"
-        ? p.brand._id
-        : p.brand;
-
+    const brandId = typeof p.brand === "object" ? p.brand._id : p.brand;
     return brandId === currentBrand._id;
   });
 
@@ -70,19 +61,18 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
   };
   const handleViewAll = () => navigate("/brand");
 
-  const currentCategory = brands.find((cat) => cat.slug === currentSlug);
-
   return (
     <div className="pb-3 flex flex-row items-start gap-2">
       {/* Sidebar */}
       <div
-        className={`rounded-lg shadow-sm border transition-all duration-300 ${isSidebarCollapsed ? "w-12" : "w-54"
-          }`}
+        className={`rounded-lg shadow-sm border transition-all duration-300 ${
+          isSidebarCollapsed ? "w-12" : "w-54"
+        }`}
       >
         <div className="p-4 bg-primary/90 flex justify-between items-center">
           {!isSidebarCollapsed && (
             <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
-              <Package className="w-5 h-5 flex-none" /> Thương hiệu
+              <Package className="w-5 h-5 flex-none" /> {t("brand.sidebar_title")}
             </h3>
           )}
           <button
@@ -95,21 +85,19 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
 
         <div className="flex flex-col">
           <button
-            onClick={() => handleCategoryChange("all")}
+            onClick={() => handleBrandChange("all")}
             className={`group flex items-center gap-2 px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200 relative
-              ${currentSlug === "all"
-                ? "bg-primary/10 text-primary border-l-2 border-l-primary"
-                : "text-foreground"
-              }`}
+              ${currentSlug === "all" ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
           >
             <LayoutGrid className="w-5 h-5 flex-none" />
             <span
-              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${isSidebarCollapsed
-                ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                : "opacity-100"
-                }`}
+              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${
+                isSidebarCollapsed
+                  ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                  : "opacity-100"
+              }`}
             >
-              Tất cả thương hiệu
+              {t("brand.all_brands")}
             </span>
             {!isSidebarCollapsed && (
               <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
@@ -121,20 +109,18 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
           {brands?.map((item) => (
             <button
               key={item._id}
-              onClick={() => handleCategoryChange(item.slug || "")}
+              onClick={() => handleBrandChange(item.slug || "")}
               className={`group cursor-pointer flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
-                ${item.slug === currentSlug
-                  ? "bg-primary/10 text-primary border-l-2 border-l-primary"
-                  : "text-foreground"
-                }`}
+                ${item.slug === currentSlug ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
             >
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <Package className="w-5 h-5 flex-none" />
                 <span
-                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${isSidebarCollapsed
-                    ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                    : "opacity-100"
-                    }`}
+                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${
+                    isSidebarCollapsed
+                      ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
+                      : "opacity-100"
+                  }`}
                 >
                   {item.name}
                 </span>
@@ -159,33 +145,27 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-bold text-primary capitalize mb-1">
-                {currentSlug === "all"
-                  ? "Tất cả thương hiệu"
-                  : currentCategory?.name}
+                {currentSlug === "all" ? t("brand.all_brands") : currentBrand?.name}
               </h2>
               {currentSlug === "all" ? (
-                <p className="text-foreground text-sm">
-                  Khám phá tất cả sản phẩm trong cửa hàng
-                </p>
+                <p className="text-foreground text-sm">{t("brand.explore_all")}</p>
               ) : (
-                currentCategory?.description && (
-                  <p className="text-foreground text-sm">
-                    {currentCategory.description}
-                  </p>
+                currentBrand?.description && (
+                  <p className="text-foreground text-sm">{currentBrand.description}</p>
                 )
               )}
               {!loading && filteredProducts.length > 0 && (
                 <p className="text-sm text-primary mt-2 font-medium">
-                  {filteredProducts.length} Sản phẩm có sẵn
+                  {t("brand.products_available", { count: filteredProducts.length })}
                 </p>
               )}
             </div>
 
-            {currentSlug !== "all" && currentCategory?.logo && (
+            {currentSlug !== "all" && currentBrand?.logo && (
               <div className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-md">
                 <img
-                  src={currentCategory.logo}
-                  alt={currentCategory.name}
+                  src={currentBrand.logo}
+                  alt={currentBrand.name}
                   className="max-w-full max-h-full object-contain"
                 />
               </div>
@@ -195,10 +175,7 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 min-h-80 space-y-4 text-center rounded-lg shadow-sm border">
-            <PageLoading
-              height={300}
-              text="Đang tải sản phẩm..."
-              />
+            <PageLoading height={300} text={t("brand.loading")} />
           </div>
         ) : filteredProducts.length > 0 ? (
           <motion.div
@@ -220,10 +197,7 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
             ))}
           </motion.div>
         ) : (
-          <NoProductAvailable
-            onRefresh={handleRefresh}
-            onViewAll={handleViewAll}
-          />
+          <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
         )}
       </div>
     </div>

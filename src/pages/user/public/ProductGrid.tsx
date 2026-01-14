@@ -100,7 +100,7 @@ const ProductGrid = () => {
       {loading ? (
         <PageLoading
         height={300}
-        text="Đang tải sản phẩm..."
+        text={t('shop.loading_products')}
       />
       ) : products.length ? (
         <>

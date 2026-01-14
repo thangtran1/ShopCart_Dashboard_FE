@@ -17,24 +17,12 @@ import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
 import { ActivityContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
+import { TFunction } from "i18next"; 
 
 export type TabKey =
-  | "overview"
-  | "member"
-  | "discount"
-  | "history"
-  | "activity"
-  | "address"
-  | "infor"
-  | "student"
-  | "linked"
-  | "warranty"
-  | "preferences"
-  | "store"
-  | "policy"
-  | "support"
-  | "terms"
-  | "logout"
+  | "overview" | "member" | "discount" | "history" | "activity"
+  | "address" | "infor" | "student" | "linked" | "warranty"
+  | "preferences" | "store" | "policy" | "support" | "terms" | "logout"
 
 export interface TabConfig {
   key: TabKey
@@ -46,33 +34,32 @@ export interface TabConfig {
   sidebarKey?: TabKey;
 }
 
-export const tabsConfig: TabConfig[] = [
+export const getTabsConfig = (t: TFunction): TabConfig[] => [
   {
     key: "overview",
-    label: "Tổng quan",
+    label: t("about.sidebar.tabs.overview"),
     icon: <HomeOutlined />,
     component: <OverviewContent />,
     showInSidebar: true,
   },
   {
     key: "discount",
-    label: "Mã giảm giá",
+    label: t("about.sidebar.tabs.discount"),
     icon: <TagOutlined />,
     component: <DiscountContent />,
     showInTopTabs: true,
   },
   {
     key: "history",
-    label: "Lịch sử mua hàng",
+    label: t("about.sidebar.tabs.history"),
     icon: <ShoppingOutlined />,
     component: <HistoryContent />,
     showInTopTabs: true,
     showInSidebar: true,
   },
-
   {
     key: "activity",
-    label: "Lịch sử hoạt động",
+    label: t("about.sidebar.tabs.activity"),
     icon: <HistoryOutlined />,
     component: <ActivityContent />,
     showInTopTabs: false,
@@ -80,7 +67,7 @@ export const tabsConfig: TabConfig[] = [
   },
   {
     key: "address",
-    label: "Số địa chỉ",
+    label: t("about.sidebar.tabs.address"),
     icon: <EnvironmentOutlined />,
     component: <InforContent />,
     showInTopTabs: true,
@@ -88,14 +75,14 @@ export const tabsConfig: TabConfig[] = [
   },
   {
     key: "infor",
-    label: "Thông tin tài khoản",
+    label: t("about.sidebar.tabs.infor"),
     icon: <InfoCircleOutlined />,
     component: <InforContent />,
     showInSidebar: true,
   },
   {
     key: "linked",
-    label: "Liên kết tài khoản",
+    label: t("about.sidebar.tabs.linked"),
     icon: <LinkOutlined />,
     component: <InforContent />,
     showInTopTabs: true,
@@ -103,34 +90,34 @@ export const tabsConfig: TabConfig[] = [
   },
   {
     key: "warranty",
-    label: "Tra cứu bảo hành",
+    label: t("about.sidebar.tabs.warranty"),
     icon: <SearchOutlined />,
     component: <WarrantyContent />,
     showInSidebar: true,
   },
   {
     key: "support",
-    label: "Góp ý - Phản hồi - Hỗ trợ",
+    label: t("about.sidebar.tabs.support"),
     icon: <MailOutlined />,
     component: <SupportContent />,
     showInSidebar: true,
   },
   {
     key: "terms",
-    label: "Điều khoản sử dụng",
+    label: t("about.sidebar.tabs.terms"),
     icon: <SafetyOutlined />,
     component: <TermsContent />,
     showInSidebar: true,
   },
   {
     key: "logout",
-    label: "Đăng xuất",
+    label: t("about.sidebar.tabs.logout"),
     icon: <LogoutOutlined />,
     component: <></>,
     showInSidebar: true,
   },
 ]
 
-export const getTopTabs = () => tabsConfig.filter((tab) => tab.showInTopTabs)
-export const getSidebarTabs = () => tabsConfig.filter((tab) => tab.showInSidebar)
-export const getTabByKey = (key: TabKey) => tabsConfig.find((tab) => tab.key === key)
+export const getTopTabs = (t: TFunction) => getTabsConfig(t).filter((tab) => tab.showInTopTabs)
+export const getSidebarTabs = (t: TFunction) => getTabsConfig(t).filter((tab) => tab.showInSidebar)
+export const getTabByKey = (key: TabKey, t: TFunction) => getTabsConfig(t).find((tab) => tab.key === key)

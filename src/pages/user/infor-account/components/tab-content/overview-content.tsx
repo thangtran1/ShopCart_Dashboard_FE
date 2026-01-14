@@ -11,38 +11,40 @@ import Title from "@/ui/title";
 import { HeartOutlined, ShoppingOutlined } from "@ant-design/icons";
 import { Badge } from "antd";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export function OverviewContent() {
+  const { t } = useTranslation();
   const { favoriteProduct } = useStore();
-
   const { profile } = useUserProfile();
   const { addresses, isFetching } = useAddressActions();
 
   const reminders = [];
 
   const missingFields = [];
-  if (!profile?.dateOfBirth) missingFields.push("ngày sinh");
+  if (!profile?.dateOfBirth) {
+    missingFields.push(t("overview.reminders.fields.dob"));
+  }
 
   if (missingFields.length > 0) {
     reminders.push({
       key: "user-info",
       icon: "ℹ️",
-      message: `Vui lòng cập nhật ${missingFields.join(
-        ", "
-      )} để nhận thêm ưu đãi đặc quyền.`,
-      btnText: "Cập nhật ngay",
-      link: "/profile", // Chuyển hướng sang trang profile
+      message: t("overview.reminders.missing_fields", { fields: missingFields.join(", ") }),
+      btnText: t("overview.reminders.update_now"),
+      link: "/profile",
       colorClass: "bg-blue-50 border-blue-200 text-blue-600",
     });
   }
 
+  // Check phone
   if (!profile?.phone) {
     reminders.push({
       key: "phone-info",
       icon: "ℹ️",
-      message: `Vui lòng cập nhật số điện thoại để nhận thêm ưu đãi đặc quyền.`,
-      btnText: "Cập nhật ngay",
-      link: "/profile", // Chuyển hướng sang trang profile
+      message: t("overview.reminders.missing_phone"),
+      btnText: t("overview.reminders.update_now"),
+      link: "/profile",
       colorClass: "bg-blue-50 border-blue-200 text-blue-600",
     });
   }
@@ -52,9 +54,8 @@ export function OverviewContent() {
     reminders.push({
       key: "address-info",
       icon: "📍",
-      message:
-        "Bạn chưa có địa chỉ nhận hàng. Thêm địa chỉ để đặt hàng nhanh hơn!",
-      btnText: "Thêm ngay",
+      message: t("overview.reminders.no_address"),
+      btnText: t("overview.reminders.add_now"),
       link: "/profile",
       colorClass: "bg-amber-50 border-amber-200 text-amber-600",
     });
@@ -66,22 +67,20 @@ export function OverviewContent() {
         {reminders.map((item) => (
           <div
             key={item.key}
-            className={`${item.colorClass} border mb-4 rounded-lg p-4 flex items-center justify-between`}
+            className={`${item.colorClass} border mb-4 rounded-lg p-4 flex items-center justify-between shadow-sm`}
           >
             <div className="flex items-center gap-3">
               <div className="text-lg">{item.icon}</div>
-              <span className="text-sm text-gray-700 font-medium">
+              <span className="text-sm font-medium">
                 {item.message}
               </span>
             </div>
-            {/* <Link to={item.link}> */}
             <button
-              onClick={() => toast.warning("Tính năng đang được phát triển 🛠️")}
-              className="text-inherit cursor-pointer text-sm font-bold hover:underline flex items-center gap-1"
+              onClick={() => toast.warning("Feature under development 🛠️")}
+              className="text-inherit cursor-pointer text-sm font-bold hover:underline flex items-center gap-1 whitespace-nowrap ml-4"
             >
               {item.btnText}
             </button>
-            {/* </Link> */}
           </div>
         ))}
       </div>
@@ -98,11 +97,10 @@ export function OverviewContent() {
 
               <div>
                 <Title className="text-xl sm:text-2xl font-bold tracking-tight mb-1">
-                  Lịch sử đơn hàng
+                  {t("overview.orders.title")}
                 </Title>
                 <p className="text-sm text-muted-foreground max-w-[500px]">
-                  Quản lý, theo dõi trạng thái các đơn hàng bạn đã đặt và xem
-                  chi tiết hóa đơn.
+                  {t("overview.orders.description")}
                 </p>
               </div>
             </div>
@@ -126,17 +124,17 @@ export function OverviewContent() {
 
             <div>
               <Title className="text-xl sm:text-2xl font-bold tracking-tight mb-0.5">
-                Sản phẩm yêu thích
+                {t("overview.wishlist.title")}
               </Title>
               <p className="text-sm text-muted-foreground hidden sm:block">
-                Các sản phẩm bạn đã quan tâm và muốn sở hữu
+                {t("overview.wishlist.description")}
               </p>
             </div>
           </div>
 
           {favoriteProduct && favoriteProduct.length > 3 && (
             <SeeMore to="/wishlist">
-              Xem tất cả ({favoriteProduct.length})
+              {t("overview.wishlist.see_all", { count: favoriteProduct.length })}
             </SeeMore>
           )}
         </div>
@@ -156,8 +154,8 @@ export function OverviewContent() {
           ) : (
             <EmptyState
               height="sm"
-              title="Trống"
-              description="Bạn chưa có sản phẩm yêu thích nào."
+              title={t("overview.wishlist.empty_title")}
+              description={t("overview.wishlist.empty_description")}
             />
           )}
         </div>

@@ -31,25 +31,110 @@
     "deal": "Ưu đãi",
     "all": "Tất cả",
     "hero_title": "Sản phẩm",
-  "hero_subtitle": "Công nghệ",
-  "hero_description": "Khám phá những thiết bị công nghệ mới nhất, từ iPhone đỉnh cao đến MacBook mạnh mẽ.",
-  "count_label": "{{count}} Sản phẩm",
-  "type_iphone": "Điện thoại iPhone",
-  "type_macbook": "Máy tính MacBook",
-  "type_ipad": "Máy tính bảng iPad",
-  "type_watch": "Đồng hồ Apple Watch",
-  "type_accessory": "Phụ kiện công nghệ"
+    "hero_subtitle": "Công nghệ",
+    "hero_description": "Khám phá những thiết bị công nghệ mới nhất, từ iPhone đỉnh cao đến MacBook mạnh mẽ.",
+    "count_label": "{{count}} Sản phẩm",
+    "type_iphone": "Điện thoại iPhone",
+    "type_macbook": "Máy tính MacBook",
+    "type_ipad": "Máy tính bảng iPad",
+    "type_watch": "Đồng hồ Apple Watch",
+    "type_accessory": "Phụ kiện công nghệ",
+    "commitment_title": "Cam kết sản phẩm",
+    "favorite": "Yêu thích",
+    "specifications": "Thông số",
+    "commitment": {
+      "quality": "Chất lượng đảm bảo",
+      "quality_desc": "Sản phẩm chính hãng 100%",
+      "return": "Đổi trả linh hoạt",
+      "return_desc": "Hỗ trợ đổi trả trong 7 ngày",
+      "service": "Dịch vụ tốt nhất",
+      "service_desc": "Tư vấn & hỗ trợ nhanh chóng"
+    },
+    "price_label": "Giá sản phẩm",
+    "or": "hoặc",
+    "trade_in_label": "Thu cũ lên đời chỉ từ",
+    "discount_label": "Giảm giá lên đến {{percent}}%",
+    "in_stock": "Còn hàng",
+    "out_of_stock": "Hết hàng",
+    "characteristics": "Đặc điểm nổi bật",
+    "brand": "Thương hiệu",
+    "manufacturing_year": "Năm sản xuất",
+    "category": "Loại sản phẩm",
+    "status": "Tình trạng",
+    "available": "Sẵn hàng",
+    "buy_now": "Mua ngay - Giao nhanh",
+    "toast": {
+      "login_buy_now": "Vui lòng đăng nhập để mua hàng ngay",
+      "out_of_stock": "Sản phẩm đã hết hàng!",
+      "buy_error": "Có lỗi xảy ra khi xử lý đơn hàng"
+    },
+    "status-filter": {
+      "new": "Mới",
+      "featured": "Nổi bật",
+      "best_seller": "Bán chạy",
+      "sale": "Giảm giá!"
+    },
+    "info": {
+      "no_category": "Chưa phân loại",
+      "no_brand": "Không có",
+      "reviews": "đánh giá",
+      "no_reviews": "Chưa có đánh giá",
+      "stock": "Kho",
+      "in_stock": "{{count}} sản phẩm",
+      "out_of_stock": "Hết hàng"
+    },
+    "related_title": "Sản phẩm liên quan",
+    "related_desc": "Yếu tố để có sản phẩm liên quan: Cùng danh mục | cùng thương hiệu | cùng tags"
+  },
+  "review": {
+    "rating_count": "đánh giá",
+    "write_review": "Viết đánh giá",
+    "rating_label": "Đánh giá *",
+    "content_label": "Nội dung *",
+    "placeholder": "Chia sẻ về {{name}}...",
+    "image_url_label": "Hình ảnh (URL)",
+    "image_placeholder": "Nhập URL ảnh...",
+    "send_btn": "Gửi",
+    "login_to_review": "Đăng nhập để đánh giá",
+    "login_desc": "Chia sẻ trải nghiệm của bạn",
+    "login_btn": "Đăng nhập",
+    "all_reviews": "Tất cả đánh giá",
+    "no_review_title": "Chưa có đánh giá nào",
+    "no_review_desc": "Sản phẩm này chưa có đánh giá. Hãy là người đầu tiên để lại phản hồi!",
+    "labels": {
+      "very_bad": "Rất tệ 😞",
+      "bad": "Tệ 😕",
+      "normal": "Bình thường 😐",
+      "good": "Tốt 😊",
+      "excellent": "Tuyệt vời 🤩"
+    },
+    "toast": {
+      "select_star": "Chọn số sao!",
+      "enter_content": "Nhập nội dung!",
+      "api_error": "API không trả về đánh giá",
+      "success": "Đã gửi đánh giá!",
+      "fail": "Gửi thất bại!",
+      "reply_success": "Đã phản hồi!",
+      "reply_fail": "Phản hồi thất bại!"
+    },
+    "user_anonymous": "Người dùng",
+    "reply_action": "Phản hồi",
+    "reply_count": "{{count}} phản hồi",
+    "reply_placeholder": "Viết phản hồi...",
+    "view_more_replies": "Xem thêm {{count}} phản hồi",
+    "admin_badge": "Quản trị viên",
+    "date_format": "vi-VN"
   },
   "headerData": {
-      "home": "Trang chủ",
-      "shop": "Cửa hàng",
-      "category": "Danh mục",
-      "brand": "Thương hiệu",
-      "news": "Tin tức",
-      "contact": "Liên hệ",
-      "connect_us": "Kết nối với chúng tôi"
+    "home": "Trang chủ",
+    "shop": "Cửa hàng",
+    "category": "Danh mục",
+    "brand": "Thương hiệu",
+    "news": "Tin tức",
+    "contact": "Liên hệ",
+    "connect_us": "Kết nối với chúng tôi"
   },
-"cart": {
+  "cart": {
     "title": "Giỏ hàng của bạn",
     "sub_title": "Xem lại các sản phẩm đã chọn và tiến hành thanh toán đơn hàng của bạn",
     "not_logged_in": "Chưa đăng nhập",
@@ -81,7 +166,24 @@
     "msg_clear_success": "Giỏ hàng đã được làm trống!",
     "msg_clear_error": "Không thể reset giỏ hàng",
     "msg_remove_success": "Đã xóa sản phẩm!",
-    "msg_remove_error": "Lỗi khi xóa sản phẩm"
+    "msg_remove_error": "Lỗi khi xóa sản phẩm",
+    "cart_add": "Đã thêm sản phẩm vào giỏ hàng!",
+    "cart_remove": "Đã xóa sản phẩm khỏi giỏ hàng!",
+    "add_to_cart": "Thêm vào giỏ",
+    "out_of_stock": "Hết hàng",
+    "adding": "Đang thêm...",
+    "quantity": "Số lượng",
+    "total": "Tổng",
+    "toast": {
+      "login_required": "Vui lòng đăng nhập để thêm vào giỏ hàng",
+      "add_success": "{{name}}... đã được thêm thành công!",
+      "add_error": "Có lỗi xảy ra, vui lòng thử lại",
+      "decrease_success": "Đã giảm số lượng!",
+      "remove_success": "{{name}}... đã được xóa khỏi giỏ hàng!",
+      "update_error": "Không thể cập nhật giỏ hàng",
+      "increase_success": "Đã tăng số lượng!",
+      "stock_limit": "Đã đạt giới hạn tồn kho!"
+    }
   },
   "wishList": {
     "title": "Danh sách yêu thích",
@@ -103,136 +205,1132 @@
     "btn_confirm": "Đồng ý",
     "btn_cancel": "Hủy",
     "msg_remove_success": "Đã xóa khỏi danh sách yêu thích",
-    "msg_clear_success": "Đã làm trống danh sách yêu thích"
+    "msg_clear_success": "Đã làm trống danh sách yêu thích",
+    "add_success": "Đã thêm vào danh sách yêu thích!"
   },
   "orders": {
-  "title": "Đơn hàng của tôi",
-  "sub_title": "Quản lý và theo dõi trạng thái đơn hàng",
-  "status_all": "Tất cả",
-  "status_pending": "Chờ xử lý",
-  "status_processing": "Đang xử lý",
-  "status_shipped": "Đang giao",
-  "status_delivered": "Đã giao hàng",
-  "status_cancelled": "Đã hủy",
-  "table_id": "Mã đơn hàng",
-  "table_date": "Ngày đặt",
-  "table_customer": "Người đặt",
-  "table_email": "Email",
-  "table_subtotal": "Tạm tính",
-  "table_discount": "Giảm giá",
-  "table_total": "Tổng cộng",
-  "table_status": "Trạng thái",
-  "table_action": "Thao tác",
-  "empty_title": "Trống",
-  "empty_not_found": "Không tìm thấy đơn hàng nào trong mục",
-  "auth_required": "Chưa đăng nhập",
-  "auth_required_desc": "Vui lòng đăng nhập để xem danh sách đơn hàng.",
-  "auth_login_btn": "Đăng nhập ngay",
-  "loading_text": "Đang tải dữ liệu...",
-  "payment_cash": "Tiền mặt",
-  "payment_transfer": "Chuyển khoản",
-  "cancel_success": "Hủy đơn hàng thành công",
-  "cancel_error": "Không thể hủy đơn hàng",
-  "cancel_confirm_title": "Hủy đơn hàng",
-  "cancel_confirm_desc": "Bạn có chắc muốn hủy đơn này không?",
-  "btn_confirm": "Đồng ý",
-  "btn_cancel": "Không",
-  "tooltip_view_detail": "Xem chi tiết đơn hàng",
-  "tooltip_cancel": "Hủy đơn hàng này"
-},
-"ordersDetail": {
-  "dialog_title": "Chi tiết đơn hàng",
-  "dialog_description": "Thông tin chi tiết về đơn hàng, sản phẩm, người nhận và trạng thái xử lý.",
-  "no_warranty": "Không có bảo hành",
-  "warranty_expired": "Hết bảo hành",
-  "warranty_until": "Bảo hành đến",
-  "warranty_package": "Gói {{month}} tháng",
-  "customer_info": "Thông tin khách hàng",
-  "order_status_payment": "Trạng thái & Thanh toán",
-  "order_status_label": "Trạng thái đơn:",
-  "payment_online": "Thanh toán Online (Thẻ)",
-  "payment_cod": "Thanh toán khi nhận hàng (COD)",
-  "shipping_address": "Địa chỉ giao hàng",
-  "shipping_notes": "Ghi chú",
-  "table_product": "Sản phẩm",
-  "table_quantity": "Số lượng",
-  "table_unit_price": "Đơn giá",
-  "table_total_price": "Thành tiền",
-  "summary_subtotal": "Tạm tính:",
-  "summary_discount": "Giảm giá",
-  "summary_shipping": "Phí vận chuyển:",
-  "summary_shipping_free": "Miễn phí",
-  "summary_total": "Tổng thanh toán:"
-},
-"features": {
-  "phone_warranty": "Điện thoại bảo hành",
-  "laptop_warranty": "Laptop bảo hành",
-  "watch_warranty": "Đồng hồ bảo hành",
-  "trial_title": "Dùng thử",
-  "trial_highlight": "7 ngày miễn phí",
-  "trial_sub": "(đối với hàng cũ)",
-  "hold_order_title": "Giữ đặt hàng",
-  "hold_order_highlight": "3 ngày miễn phí",
-  "shipping_title": "Gửi hàng đi ngay trong ngày",
-  "shipping_sub": "(đơn lên trước 12:00)",
-  "payment_title": "Thanh toán khi nhận hàng",
-  "payment_sub": "(Daibiki)",
-  "support_title": "Hỗ trợ online",
-  "support_highlight": "24/7",
-  "months": "tháng",
-  "years": "năm"
-},
-"categoryProduct": {
-  "title_main": "Danh mục",
-  "title_sub": "Sản phẩm",
-  "see_all": "Xem tất cả",
-  "view_now": "Xem ngay →",
-  "product_count": "{{count}} sản phẩm",
-  "empty_title": "Trống",
-  "empty_description": "Hiện chưa có danh mục nào"
-},
-"brands": {
-  "badge": "Đối tác uy tín",
-  "title_main": "Mua sắm theo",
-  "title_sub": "Thương hiệu",
-  "description": "Chúng tôi tuyển chọn những thương hiệu hàng đầu thế giới để mang lại trải nghiệm tốt nhất cho bạn.",
-  "see_all": "Khám phá tất cả",
-  "product_count": "({{count}}) Sản phẩm",
-  "empty_title": "Trống",
-  "empty_description": "Hiện chưa có thương hiệu nào",
-  "extra": {
-    "shipping_title": "Giao hàng miễn phí",
-    "shipping_desc": "Miễn phí vận chuyển cho đơn hàng trên $100",
-    "return_title": "Đổi trả miễn phí",
-    "return_desc": "Cam kết đổi trả trong vòng 30 ngày",
-    "support_title": "Hỗ trợ khách hàng",
-    "support_desc": "Đội ngũ hỗ trợ thân thiện 24/7",
-    "guarantee_title": "Đảm bảo hoàn tiền",
-    "guarantee_desc": "Chất lượng sản phẩm được kiểm định"
+    "title": "Đơn hàng của tôi",
+    "sub_title": "Quản lý và theo dõi trạng thái đơn hàng",
+    "status_all": "Tất cả",
+    "status_pending": "Chờ xử lý",
+    "status_processing": "Đang xử lý",
+    "status_shipped": "Đang giao",
+    "status_delivered": "Đã giao hàng",
+    "status_cancelled": "Đã hủy",
+    "table_id": "Mã đơn hàng",
+    "table_date": "Ngày đặt",
+    "table_customer": "Người đặt",
+    "table_email": "Email",
+    "table_subtotal": "Tạm tính",
+    "table_discount": "Giảm giá",
+    "table_total": "Tổng cộng",
+    "table_status": "Trạng thái",
+    "table_action": "Thao tác",
+    "empty_title": "Trống",
+    "empty_not_found": "Không tìm thấy đơn hàng nào trong mục",
+    "auth_required": "Chưa đăng nhập",
+    "auth_required_desc": "Vui lòng đăng nhập để xem danh sách đơn hàng.",
+    "auth_login_btn": "Đăng nhập ngay",
+    "loading_text": "Đang tải dữ liệu...",
+    "payment_cash": "Tiền mặt",
+    "payment_transfer": "Chuyển khoản",
+    "cancel_success": "Hủy đơn hàng thành công",
+    "cancel_error": "Không thể hủy đơn hàng",
+    "cancel_confirm_title": "Hủy đơn hàng",
+    "cancel_confirm_desc": "Bạn có chắc muốn hủy đơn này không?",
+    "btn_confirm": "Đồng ý",
+    "btn_cancel": "Không",
+    "tooltip_view_detail": "Xem chi tiết đơn hàng",
+    "tooltip_cancel": "Hủy đơn hàng này"
+  },
+  "ordersDetail": {
+    "dialog_title": "Chi tiết đơn hàng",
+    "dialog_description": "Thông tin chi tiết về đơn hàng, sản phẩm, người nhận và trạng thái xử lý.",
+    "no_warranty": "Không có bảo hành",
+    "warranty_expired": "Hết bảo hành",
+    "warranty_until": "Bảo hành đến",
+    "warranty_package": "Gói {{month}} tháng",
+    "customer_info": "Thông tin khách hàng",
+    "order_status_payment": "Trạng thái & Thanh toán",
+    "order_status_label": "Trạng thái đơn:",
+    "payment_online": "Thanh toán Online (Thẻ)",
+    "payment_cod": "Thanh toán khi nhận hàng (COD)",
+    "shipping_address": "Địa chỉ giao hàng",
+    "shipping_notes": "Ghi chú",
+    "table_product": "Sản phẩm",
+    "table_quantity": "Số lượng",
+    "table_unit_price": "Đơn giá",
+    "table_total_price": "Thành tiền",
+    "summary_subtotal": "Tạm tính:",
+    "summary_discount": "Giảm giá",
+    "summary_shipping": "Phí vận chuyển:",
+    "summary_shipping_free": "Miễn phí",
+    "summary_total": "Tổng thanh toán:"
+  },
+  "features": {
+    "phone_warranty": "Điện thoại bảo hành",
+    "laptop_warranty": "Laptop bảo hành",
+    "watch_warranty": "Đồng hồ bảo hành",
+    "trial_title": "Dùng thử",
+    "trial_highlight": "7 ngày miễn phí",
+    "trial_sub": "(đối với hàng cũ)",
+    "hold_order_title": "Giữ đặt hàng",
+    "hold_order_highlight": "3 ngày miễn phí",
+    "shipping_title": "Gửi hàng đi ngay trong ngày",
+    "shipping_sub": "(đơn lên trước 12:00)",
+    "payment_title": "Thanh toán khi nhận hàng",
+    "payment_sub": "(Daibiki)",
+    "support_title": "Hỗ trợ online",
+    "support_highlight": "24/7",
+    "months": "tháng",
+    "years": "năm"
+  },
+  "categoryProduct": {
+    "title_main": "Danh mục",
+    "title_sub": "Sản phẩm",
+    "see_all": "Xem tất cả",
+    "view_now": "Xem ngay →",
+    "product_count": "{{count}} sản phẩm",
+    "empty_title": "Trống",
+    "empty_description": "Hiện chưa có danh mục nào"
+  },
+  "brands": {
+    "badge": "Đối tác uy tín",
+    "title_main": "Mua sắm theo",
+    "title_sub": "Thương hiệu",
+    "description": "Chúng tôi tuyển chọn những thương hiệu hàng đầu thế giới để mang lại trải nghiệm tốt nhất cho bạn.",
+    "see_all": "Khám phá tất cả",
+    "product_count": "({{count}}) Sản phẩm",
+    "empty_title": "Trống",
+    "empty_description": "Hiện chưa có thương hiệu nào",
+    "extra": {
+      "shipping_title": "Giao hàng miễn phí",
+      "shipping_desc": "Miễn phí vận chuyển cho đơn hàng trên $100",
+      "return_title": "Đổi trả miễn phí",
+      "return_desc": "Cam kết đổi trả trong vòng 30 ngày",
+      "support_title": "Hỗ trợ khách hàng",
+      "support_desc": "Đội ngũ hỗ trợ thân thiện 24/7",
+      "guarantee_title": "Đảm bảo hoàn tiền",
+      "guarantee_desc": "Chất lượng sản phẩm được kiểm định"
+    }
+  },
+  "news": {
+    "title_main": "Tin tức",
+    "title_sub": "Mới nhất",
+    "see_all": "Xem tất cả",
+    "empty_title": "Trống",
+    "empty_description": "Hiện chưa có bảng tin mới nào",
+    "read_more": "Đọc tiếp",
+    "toast": {
+      "fetch_admin_error": "Lỗi khi tải dữ liệu quản trị",
+      "create_success": "Đăng tin tức thành công",
+      "create_error": "Lỗi khi tạo tin tức",
+      "update_success": "Cập nhật tin tức thành công",
+      "update_error": "Lỗi khi cập nhật bài viết",
+      "delete_success": "Đã xóa bài viết",
+      "delete_error": "Không thể xóa bài viết"
+    },
+    "error": {
+      "not_found": "Không tìm thấy bài viết"
+    }
+  },
+  "shop": {
+    "title": "Nhận sản phẩm theo nhu cầu của bạn",
+    "reset_filter": "Đặt lại bộ lọc",
+    "loading_products": "Đang tải sản phẩm...",
+    "filter_category": "Danh mục",
+    "filter_brand": "Thương hiệu",
+    "filter_price": "Khoảng giá",
+    "filter_category_title": "Danh mục sản phẩm",
+    "all_products": "Tất cả sản phẩm",
+    "reset_selection": "Đặt lại lựa chọn",
+    "filter_brand_title": "Thương hiệu",
+    "all_brands": "Tất cả thương hiệu"
+  },
+  "filter": {
+    "price_title": "Mức giá",
+    "all_prices": "Tất cả mức giá",
+    "reset": "Đặt lại lựa chọn",
+    "under": "Dưới",
+    "above": "Trên",
+    "million": "triệu"
+  },
+  "search": {
+    "placeholder": "Tìm kiếm sản phẩm...",
+    "results_count": "Kết quả tìm kiếm ({{count}})",
+    "view_all": "Xem tất cả {{count}} kết quả →",
+    "searching": "Đang tìm kiếm...",
+    "no_results": "Không tìm thấy sản phẩm nào",
+    "try_another": "Thử tìm kiếm với từ khóa khác",
+    "recent": "Tìm kiếm gần đây",
+    "clear_all": "Xóa tất cả",
+    "popular_categories": "Danh mục phổ biến",
+    "suggestions": "Gợi ý tìm kiếm",
+    "tips": {
+      "title": "Mẹo tìm kiếm",
+      "by_name": "Tìm theo <1>tên sản phẩm</1>: \"iPhone 15\"",
+      "by_brand": "Tìm theo <1>thương hiệu</1>: \"Samsung\", \"Apple\"",
+      "by_category": "Tìm theo <1>danh mục</1>: \"Laptop\", \"Headphones\""
+    },
+    "trigger_placeholder": "Tìm kiếm...",
+    "sr_title": "Hệ thống tìm kiếm menu",
+    "sr_description": "Điều hướng bằng bàn phím để tìm các trang và danh mục",
+    "input_placeholder": "Tìm kiếm các tính năng...",
+    "empty": {
+      "title": "Trống",
+      "description": "Rất tiếc, chúng tôi không tìm thấy nội dung nào khớp với từ khóa của bạn."
+    },
+    "badges": {
+      "category": "DANH MỤC",
+      "open": "MỞ"
+    },
+    "footer": {
+      "navigate": "Di chuyển",
+      "select": "Chọn",
+      "close": "Đóng"
+    }
+  },
+  "newsletter": {
+    "title": "Đăng Ký Nhận Tin",
+    "description": "Nhận thông tin mới nhất về sản phẩm và ưu đãi.",
+    "placeholder": "Nhập email của bạn",
+    "button": "Đăng Ký",
+    "policy": "Bằng việc đăng ký, bạn đồng ý với chính sách của",
+    "toast": {
+      "success": "Đăng ký thành công"
+    },
+    "error": {
+      "required": "Vui lòng nhập email",
+      "invalid": "Email không hợp lệ"
+    }
+  },
+  "clipboard": {
+    "success": "Đã sao chép: {{text}}",
+    "error": "Lỗi! Không thể sao chép"
+  },
+  "address": {
+    "toast": {
+      "create_success": "Thêm địa chỉ mới thành công",
+      "create_error": "Không thể thêm địa chỉ",
+      "update_success": "Cập nhật địa chỉ thành công",
+      "update_error": "Cập nhật thất bại",
+      "delete_success": "Xóa địa chỉ thành công",
+      "delete_error": "Xóa thất bại",
+      "admin_delete_success": "Admin đã xóa địa chỉ thành công"
+    }
+  },
+  "coupon": {
+    "error_fetch": "Không thể tải danh sách mã giảm giá",
+    "toast": {
+      "create_success": "Tạo voucher thành công",
+      "create_error": "Lỗi khi tạo voucher",
+      "update_success": "Cập nhật thành công",
+      "update_error": "Lỗi khi cập nhật",
+      "delete_success": "Đã xóa voucher",
+      "delete_error": "Không thể xóa voucher"
+    }
+  },
+  "notifications": {
+    "types": {
+      "system": "Hệ thống",
+      "maintenance": "Bảo trì",
+      "general": "Thông báo"
+    },
+    "mark_as_read": "Nhấp để đánh dấu đã đọc",
+    "time": {
+      "just_now": "Vừa xong"
+    },
+    "empty": {
+      "title": "Trống",
+      "description": "Chưa có thông báo nào"
+    },
+    "tabs": {
+      "latest": "Mới nhất",
+      "unread": "Chưa đọc"
+    },
+    "center_title": "Trung tâm tin nhắn",
+    "unread_count": "Bạn có {{count}} tin nhắn chưa đọc",
+    "mark_all_read_hint": "Đánh dấu tất cả đã đọc",
+    "view_all_activity": "Xem tất cả hoạt động",
+    "toast": {
+      "mark_read_success": "Đã đánh dấu là đã đọc",
+      "mark_read_error": "Không thể đánh dấu đọc",
+      "mark_all_success": "Đã đọc tất cả thông báo"
+    }
+  },
+  "success_page": {
+    "title": "🎉 Đặt Hàng Thành Công!",
+    "order_details": "Chi Tiết Đơn Hàng",
+    "thank_you": "Cảm ơn bạn đã mua hàng! Chúng tôi đang xử lý đơn hàng của bạn và sẽ giao sớm nhất có thể.",
+    "email_notice": "Email xác nhận đơn hàng sẽ sớm được gửi đến bạn.",
+    "order_number": "Mã đơn hàng:",
+    "payment_method": "Phương thức thanh toán:",
+    "steps": {
+      "title": "Quy Trình Xử Lý",
+      "step_1": "Đặt hàng",
+      "step_2": "Xử lý",
+      "step_3": "Giao hàng"
+    },
+    "payment": {
+      "card": "Thẻ tín dụng/ghi nợ",
+      "card_status": "Đã thanh toán",
+      "card_msg": "Thanh toán đã được xác nhận. Đơn hàng sẽ được xử lý ngay.",
+      "cod": "Thanh toán khi nhận hàng (COD)",
+      "cod_status": "Chờ thanh toán",
+      "cod_msg": "Vui lòng chuẩn bị tiền mặt khi nhận hàng."
+    },
+    "footer": {
+      "help": "Cần hỗ trợ? Liên hệ",
+      "hotline": "Hotline"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Về Chúng Tôi",
+      "welcome": "Chào mừng bạn đến với <1>Shopcart TVT</1> - điểm đến tin cậy cho mọi nhu cầu mua sắm của bạn."
+    },
+    "story": {
+      "title": "Câu Chuyện Của Chúng Tôi",
+      "p1": "Shopcart TVT được thành lập với sứ mệnh mang đến trải nghiệm mua sắm trực tuyến tuyệt vời nhất cho khách hàng Việt Nam. Xuất phát từ niềm đam mê công nghệ và mong muốn kết nối người tiêu dùng với những sản phẩm chất lượng, chúng tôi đã xây dựng nền tảng thương mại điện tử hiện đại và thân thiện.",
+      "p2": "Với đội ngũ nhân viên tận tâm và chuyên nghiệp, chúng tôi cam kết mang đến dịch vụ khách hàng xuất sắc, giao hàng nhanh chóng và chính sách đổi trả linh hoạt."
+    },
+    "values": {
+      "title": "Giá Trị Cốt Lõi",
+      "items": {
+        "heart": {
+          "title": "Tận tâm",
+          "desc": "Luôn đặt khách hàng làm trọng tâm trong mọi hoạt động"
+        },
+        "award": {
+          "title": "Chất lượng",
+          "desc": "Cam kết mang đến sản phẩm và dịch vụ tốt nhất"
+        },
+        "target": {
+          "title": "Đổi mới",
+          "desc": "Không ngừng sáng tạo và cải tiến mỗi ngày"
+        },
+        "users": {
+          "title": "Đoàn kết",
+          "desc": "Xây dựng đội ngũ mạnh mẽ và gắn kết"
+        }
+      }
+    },
+    "milestones": {
+      "title": "Hành Trình Phát Triển",
+      "m1": "Thành lập công ty",
+      "m2": "Ra mắt nền tảng thương mại điện tử",
+      "m3": "Đạt 100,000 khách hàng",
+      "m4": "Mở rộng thị trường quốc tế",
+      "m5": "Tương lai sáng tạo"
+    },
+    "team": {
+      "title": "Đội Ngũ Của Chúng Tôi"
+    },
+    "sidebar": {
+      "connect": "Kết Nối Với Chúng Tôi",
+      "newsletter_desc": "Đăng ký để nhận thông tin mới nhất về sản phẩm và ưu đãi đặc biệt.",
+      "email_placeholder": "Nhập email của bạn",
+      "subscribe": "Đăng Ký Ngay",
+      "agreement": "Bằng việc đăng ký, bạn đồng ý với Điều khoản dịch vụ của <1 />.",
+      "stats_title": "Con Số Ấn Tượng",
+      "stats": {
+        "customers": "Khách hàng",
+        "products": "Sản phẩm",
+        "partners": "Đối tác",
+        "reviews": "Đánh giá 5 sao"
+      },
+      "support_title": "Bạn Cần Hỗ Trợ?",
+      "support_desc": "Đội ngũ chăm sóc khách hàng sẵn sàng hỗ trợ bạn 24/7",
+      "contact_btn": "Liên Hệ Ngay",
+      "server_status": "Máy chủ: Trực tuyến",
+      "version": "Phiên bản",
+      "logout_modal": {
+        "title": "Đăng xuất",
+        "confirm": "Bạn có chắc chắn muốn đăng xuất?",
+        "btn_logout": "Đăng xuất",
+        "btn_stay": "Ở lại trang"
+      },
+      "tabs": {
+        "overview": "Tổng quan",
+        "discount": "Mã giảm giá",
+        "history": "Lịch sử mua hàng",
+        "activity": "Lịch sử hoạt động",
+        "address": "Số địa chỉ",
+        "infor": "Thông tin tài khoản",
+        "linked": "Liên kết tài khoản",
+        "warranty": "Tra cứu bảo hành",
+        "support": "Góp ý - Hỗ trợ",
+        "terms": "Điều khoản sử dụng",
+        "logout": "Đăng xuất"
+      }
+    }
+  },
+  "faq": {
+    "title": "Câu Hỏi Thường Gặp",
+    "subtitle": "Tìm câu trả lời nhanh cho các thắc mắc của bạn về <1>Shopcart TVT</1>",
+    "search_placeholder": "Tìm kiếm câu hỏi...",
+    "no_results": "Không tìm thấy câu hỏi phù hợp. Vui lòng thử từ khóa khác.",
+    "sidebar": {
+      "help_title": "Vẫn Cần Hỗ Trợ?",
+      "help_desc": "Không tìm thấy câu trả lời? Đội ngũ CSKH sẵn sàng giúp đỡ bạn 24/7.",
+      "contact_btn": "Liên Hệ Hỗ Trợ",
+      "popular_title": "Chủ Đề Phổ Biến"
+    },
+    "categories": {
+      "all": "Tất cả",
+      "order": "Đặt hàng",
+      "shipping": "Vận chuyển",
+      "payment": "Thanh toán",
+      "return": "Đổi trả",
+      "account": "Tài khoản"
+    },
+    "questions": {
+      "order_q1": "Làm thế nào để đặt hàng trên Shopcart TVT?",
+      "order_a1": "Bạn có thể đặt hàng dễ dàng bằng cách: 1) Chọn sản phẩm yêu thích và thêm vào giỏ hàng, 2) Kiểm tra giỏ hàng và nhấn 'Thanh toán', 3) Điền thông tin giao hàng và chọn phương thức thanh toán, 4) Xác nhận đơn hàng.",
+      "order_q2": "Tôi có thể hủy đơn hàng không?",
+      "order_a2": "Bạn có thể hủy đơn hàng trong vòng 2 giờ sau khi đặt hàng nếu đơn chưa được xử lý trong mục 'Đơn hàng của tôi'.",
+      "order_q3": "Làm sao để theo dõi đơn hàng?",
+      "order_a3": "Bạn có thể theo dõi trạng thái đơn hàng trong mục 'Đơn hàng của tôi' hoặc sử dụng tính năng 'Tra cứu đơn hàng'.",
+      "order_q4": "Đơn hàng tối thiểu là bao nhiêu?",
+      "order_a4": "Không có giá trị đơn hàng tối thiểu. Đơn hàng từ 500,000đ sẽ được miễn phí vận chuyển.",
+      "order_q5": "Tôi có thể thay đổi địa chỉ giao hàng không?",
+      "order_a5": "Có thể thay đổi trước khi đơn hàng được giao cho đơn vị vận chuyển qua hotline.",
+      "shipping_q1": "Thời gian giao hàng là bao lâu?",
+      "shipping_a1": "Nội thành: 1-2 ngày. Các tỉnh: 3-5 ngày. Vùng sâu vùng xa: 5-7 ngày làm việc.",
+      "shipping_q2": "Phí vận chuyển tính như thế nào?",
+      "shipping_a2": "Tính dựa trên trọng lượng và khoảng cách. Miễn phí cho đơn hàng từ 500,000đ.",
+      "shipping_q3": "Có giao hàng vào cuối tuần không?",
+      "shipping_a3": "Có, chúng tôi giao cả Thứ 7 và Chủ nhật (trừ ngày lễ).",
+      "shipping_q4": "Tôi có thể nhận hàng tại cửa hàng không?",
+      "shipping_a4": "Hiện tại chúng tôi chỉ hỗ trợ giao hàng tận nơi.",
+      "payment_q1": "Các phương thức thanh toán?",
+      "payment_a1": "COD, Chuyển khoản, Thẻ Visa/Master, Ví MoMo, ZaloPay, Trả góp 0%.",
+      "payment_q2": "Thanh toán có an toàn không?",
+      "payment_a2": "Tuyệt đối an toàn với công nghệ mã hóa SSL 256-bit và tiêu chuẩn PCI DSS.",
+      "payment_q3": "Làm sao để thanh toán trả góp?",
+      "payment_a3": "Chọn 'Trả góp' khi checkout. Áp dụng cho đơn từ 3tr qua thẻ tín dụng.",
+      "payment_q4": "Tôi có nhận được hóa đơn VAT không?",
+      "payment_a4": "Có, chúng tôi xuất hóa đơn điện tử VAT cho tất cả các đơn hàng.",
+      "return_q1": "Chính sách đổi trả như thế nào?",
+      "return_a1": "Đổi trả trong 30 ngày nếu còn nguyên tem mác và hóa đơn.",
+      "return_q2": "Làm sao để yêu cầu đổi/trả hàng?",
+      "return_a2": "Vào 'Đơn hàng của tôi', chọn 'Yêu cầu đổi/trả' và làm theo hướng dẫn.",
+      "return_q3": "Ai chịu phí vận chuyển khi đổi/trả?",
+      "return_a3": "Shop chịu nếu lỗi từ shop. Khách chịu nếu đổi theo nhu cầu cá nhân.",
+      "return_q4": "Khi nào tôi nhận được tiền hoàn?",
+      "return_a4": "Tiền được hoàn trong 3-5 ngày làm việc sau khi nhận lại sản phẩm.",
+      "account_q1": "Làm sao để tạo tài khoản?",
+      "account_a1": "Đăng ký bằng Email, SĐT hoặc đăng nhập nhanh qua Google/Facebook.",
+      "account_q2": "Tôi quên mật khẩu phải làm sao?",
+      "account_a2": "Dùng tính năng 'Quên mật khẩu' để nhận link reset qua email hoặc OTP.",
+      "account_q3": "Làm sao để xóa tài khoản?",
+      "account_a3": "Liên hệ CSKH để yêu cầu xóa tài khoản vĩnh viễn."
+    }
+  },
+  "help": {
+    "hero": {
+      "title": "Trung Tâm Hỗ Trợ",
+      "subtitle": "Chúng tôi luôn sẵn sàng giúp đỡ bạn"
+    },
+    "contact_methods": {
+      "title": "Liên Hệ Với Chúng Tôi",
+      "hotline": "Hotline",
+      "hotline_desc": "Miễn phí cuộc gọi",
+      "email": "Email",
+      "email_desc": "Phản hồi trong 24h",
+      "address": "Địa chỉ",
+      "address_value": "123 Nguyễn Huệ, Q.1, TP.HCM",
+      "address_desc": "Văn phòng chính"
+    },
+    "categories": {
+      "title": "Bạn Cần Hỗ Trợ Về?",
+      "order": "Đặt hàng",
+      "order_desc": "Hướng dẫn mua sắm",
+      "shipping": "Vận chuyển",
+      "shipping_desc": "Theo dõi đơn hàng",
+      "payment": "Thanh toán",
+      "payment_desc": "Phương thức thanh toán",
+      "return": "Đổi trả",
+      "return_desc": "Chính sách hoàn tiền",
+      "account": "Tài khoản",
+      "account_desc": "Quản lý thông tin",
+      "other": "Hỗ trợ khác",
+      "other_desc": "Câu hỏi thường gặp"
+    },
+    "form": {
+      "title": "Gửi Yêu Cầu Hỗ Trợ",
+      "subtitle": "Điền thông tin bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.",
+      "label_name": "Họ và tên",
+      "placeholder_name": "Nhập họ và tên",
+      "label_phone": "Số điện thoại",
+      "placeholder_phone": "Nhập số điện thoại",
+      "label_email": "Email",
+      "placeholder_email": "Nhập địa chỉ email",
+      "label_subject": "Tiêu đề",
+      "placeholder_subject": "Nhập tiêu đề yêu cầu",
+      "label_message": "Nội dung",
+      "placeholder_message": "Mô tả chi tiết vấn đề của bạn...",
+      "btn_reset": "Đặt lại",
+      "btn_send": "Gửi yêu cầu",
+      "error_name": "Vui lòng nhập họ tên",
+      "error_phone": "Vui lòng nhập số điện thoại",
+      "error_email_req": "Vui lòng nhập email",
+      "error_email_type": "Email không hợp lệ",
+      "error_subject": "Vui lòng nhập tiêu đề",
+      "error_message": "Vui lòng nhập nội dung"
+    },
+    "sidebar": {
+      "working_hours": "Giờ Làm Việc",
+      "monday_friday": "Thứ 2 - Thứ 6",
+      "saturday": "Thứ 7",
+      "sunday": "Chủ nhật",
+      "note": "* Hotline và Live Chat hoạt động 24/7 để hỗ trợ bạn.",
+      "quick_links": "Liên Kết Nhanh",
+      "link_faq": "Câu hỏi thường gặp",
+      "link_terms": "Điều khoản sử dụng",
+      "link_privacy": "Chính sách bảo mật",
+      "link_about": "Về chúng tôi"
+    }
+  },
+  "auth": {
+    "login": {
+      "logout": "Đăng xuất",
+      "logoutSuccess": "Đăng xuất thành công!"
+    }
+  },
+  "user": {
+    "login": "Đăng nhập",
+    "profile": "Hồ sơ",
+    "admin": "Quản trị viên",
+    "personal_account": "Tài khoản cá nhân",
+    "dashboard": "Quản trị",
+    "settings": "Cài đặt",
+    "access_tmember": "Truy cập Tmember",
+    "unknown_user": "Người dùng"
+  },
+  "terms": {
+    "header": {
+      "title": "Điều Khoản Sử Dụng",
+      "brand": "Thương hiệu Shopcart TVT",
+      "updated": "Cập nhật: {{date}}",
+      "effective": "Có hiệu lực từ: {{date}}"
+    },
+    "important_note": {
+      "title": "Lưu Ý Quan Trọng",
+      "content": "Vui lòng đọc kỹ các điều khoản và điều kiện dưới đây trước khi sử dụng dịch vụ của chúng tôi. Bằng việc truy cập hoặc sử dụng website Shopcart TVT, bạn đồng ý bị ràng buộc bởi các điều khoản này. Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi."
+    },
+    "sections": [
+      {
+        "title": "1. Giới Thiệu & Điều Khoản Chung",
+        "content": [
+          {
+            "subtitle": "1.1 Chào mừng",
+            "text": "Chào mừng bạn đến với Shopcart TVT! Bằng việc truy cập và sử dụng website của chúng tôi, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu trong tài liệu này."
+          },
+          {
+            "subtitle": "1.2 Phạm vi áp dụng",
+            "text": "Các điều khoản này áp dụng cho tất cả người dùng, bao gồm khách truy cập, khách hàng đã đăng ký và bất kỳ ai sử dụng dịch vụ của chúng tôi."
+          },
+          {
+            "subtitle": "1.3 Cập nhật điều khoản",
+            "text": "Chúng tôi có quyền cập nhật điều khoản bất cứ lúc nào. Phiên bản mới nhất sẽ được đăng tải trên trang này với ngày có hiệu lực rõ ràng."
+          }
+        ]
+      },
+      {
+        "title": "2. Quyền Sở Hữu & Bản Quyền",
+        "content": [
+          {
+            "subtitle": "2.1 Nội dung website",
+            "text": "Tất cả nội dung trên website bao gồm văn bản, hình ảnh, logo, đồ họa, video và phần mềm đều thuộc quyền sở hữu của Shopcart TVT hoặc các đối tác được cấp phép."
+          },
+          {
+            "subtitle": "2.2 Sử dụng nội dung",
+            "text": "Bạn không được sao chép, phân phối, sửa đổi hoặc sử dụng bất kỳ nội dung nào từ website cho mục đích thương mại mà không có sự đồng ý bằng văn bản."
+          },
+          {
+            "subtitle": "2.3 Chia sẻ liên kết",
+            "text": "Việc chia sẻ liên kết đến website của chúng tôi được cho phép, miễn là không gây hiểu lầm hoặc gây hại đến thương hiệu."
+          }
+        ]
+      },
+      {
+        "title": "3. Tài Khoản Người Dùng",
+        "content": [
+          {
+            "subtitle": "3.1 Đăng ký tài khoản",
+            "text": "Để sử dụng đầy đủ tính năng, bạn cần đăng ký tài khoản với thông tin chính xác và cập nhật. Bạn chịu trách nhiệm bảo mật thông tin đăng nhập của mình."
+          },
+          {
+            "subtitle": "3.2 Trách nhiệm tài khoản",
+            "text": "Mọi hoạt động từ tài khoản của bạn đều được xem là do bạn thực hiện. Hãy thông báo ngay cho chúng tôi nếu phát hiện truy cập trái phép."
+          },
+          {
+            "subtitle": "3.3 Chấm dứt tài khoản",
+            "text": "Chúng tôi có quyền tạm ngưng hoặc chấm dứt tài khoản nếu phát hiện vi phạm điều khoản hoặc hành vi gian lận."
+          }
+        ]
+      },
+      {
+        "title": "4. Thanh Toán & Giá Cả",
+        "content": [
+          {
+            "subtitle": "4.1 Giá sản phẩm",
+            "text": "Giá hiển thị trên website đã bao gồm VAT (trừ khi có ghi chú khác). Giá có thể thay đổi mà không cần thông báo trước."
+          },
+          {
+            "subtitle": "4.2 Phương thức thanh toán",
+            "text": "Chúng tôi chấp nhận nhiều phương thức thanh toán: COD, chuyển khoản, thẻ tín dụng/ghi nợ, ví điện tử và trả góp 0%."
+          },
+          {
+            "subtitle": "4.3 Bảo mật thanh toán",
+            "text": "Mọi giao dịch được mã hóa SSL 256-bit và tuân thủ tiêu chuẩn PCI DSS để đảm bảo an toàn tuyệt đối."
+          }
+        ]
+      },
+      {
+        "title": "5. Giao Hàng & Vận Chuyển",
+        "content": [
+          {
+            "subtitle": "5.1 Phạm vi giao hàng",
+            "text": "Chúng tôi giao hàng toàn quốc. Thời gian giao hàng từ 1-7 ngày làm việc tùy thuộc vào địa điểm."
+          },
+          {
+            "subtitle": "5.2 Phí vận chuyển",
+            "text": "Phí vận chuyển được tính dựa trên trọng lượng và khoảng cách. Đơn hàng từ 500,000đ được miễn phí vận chuyển."
+          },
+          {
+            "subtitle": "5.3 Kiểm tra hàng",
+            "text": "Bạn có quyền kiểm tra sản phẩm trước khi nhận. Nếu sản phẩm không đúng hoặc bị hư hỏng, vui lòng từ chối nhận hàng."
+          }
+        ]
+      },
+      {
+        "title": "6. Đổi Trả & Hoàn Tiền",
+        "content": [
+          {
+            "subtitle": "6.1 Thời hạn đổi trả",
+            "text": "Bạn có 30 ngày để yêu cầu đổi/trả sản phẩm kể từ ngày nhận hàng, với điều kiện sản phẩm còn nguyên tem, nhãn và chưa qua sử dụng."
+          },
+          {
+            "subtitle": "6.2 Quy trình hoàn tiền",
+            "text": "Sau khi yêu cầu được duyệt và nhận lại sản phẩm, tiền hoàn sẽ được xử lý trong 3-5 ngày làm việc."
+          },
+          {
+            "subtitle": "6.3 Sản phẩm không đổi trả",
+            "text": "Một số sản phẩm như đồ lót, mỹ phẩm đã mở seal, sản phẩm theo yêu cầu riêng không áp dụng đổi trả."
+          }
+        ]
+      },
+      {
+        "title": "7. Bảo Mật & Quyền Riêng Tư",
+        "content": [
+          {
+            "subtitle": "7.1 Thu thập thông tin",
+            "text": "Chúng tôi thu thập thông tin cần thiết để xử lý đơn hàng và cải thiện dịch vụ. Thông tin được bảo mật theo chính sách riêng tư."
+          },
+          {
+            "subtitle": "7.2 Sử dụng thông tin",
+            "text": "Thông tin của bạn chỉ được sử dụng cho mục đích đã nêu và không được chia sẻ với bên thứ ba ngoài đối tác vận chuyển."
+          },
+          {
+            "subtitle": "7.3 Cookie",
+            "text": "Website sử dụng cookie để cải thiện trải nghiệm người dùng. Bạn có thể tắt cookie trong cài đặt trình duyệt."
+          }
+        ]
+      },
+      {
+        "title": "8. Giới Hạn Trách Nhiệm",
+        "content": [
+          {
+            "subtitle": "8.1 Trách nhiệm của chúng tôi",
+            "text": "Shopcart TVT cam kết cung cấp sản phẩm chất lượng và dịch vụ tốt nhất, nhưng không chịu trách nhiệm cho những tổn thất ngoài tầm kiểm soát."
+          },
+          {
+            "subtitle": "8.2 Sử dụng hợp pháp",
+            "text": "Bạn cam kết sử dụng website và dịch vụ cho mục đích hợp pháp. Mọi hành vi vi phạm pháp luật sẽ bị từ chối phục vụ."
+          },
+          {
+            "subtitle": "8.3 Giải quyết tranh chấp",
+            "text": "Mọi tranh chấp sẽ được giải quyết theo pháp luật Việt Nam. Chúng tôi ưu tiên thương lượng và hòa giải trước khi đưa ra tòa án."
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "title": "Thông Tin Tài Liệu",
+      "labels": {
+        "effective": "Ngày có hiệu lực",
+        "updated": "Cập nhật lần cuối",
+        "version": "Phiên bản",
+        "language": "Ngôn ngữ",
+        "lang_value": "Tiếng Việt"
+      }
+    },
+    "contact": {
+      "title": "Liên Hệ & Hỗ Trợ",
+      "desc": "Nếu bạn có bất kỳ câu hỏi nào về các Điều khoản và Điều kiện này, vui lòng liên hệ với chúng tôi:",
+      "email_label": "Email hỗ trợ:",
+      "hotline_label": "Hotline:",
+      "button": "Liên Hệ Ngay"
+    },
+    "sidebar": {
+      "toc": "Mục Lục",
+      "related": "Trang Liên Quan",
+      "links": {
+        "privacy": "Chính sách bảo mật",
+        "faqs": "Câu hỏi thường gặp",
+        "help": "Trung tâm hỗ trợ",
+        "about": "Về chúng tôi"
+      }
+    }
+  },
+  "product_page": {
+    "loading": "Đang tải...",
+    "tabs": {
+      "details": "Mô tả sản phẩm",
+      "reviews": "Đánh giá"
+    },
+    "info": {
+      "title": "Thông tin sản phẩm",
+      "brand": "Thương hiệu",
+      "category": "Danh mục",
+      "status": "Tình trạng",
+      "warranty": "Bảo hành",
+      "in_stock": "Còn hàng",
+      "out_of_stock": "Hết hàng",
+      "updating": "Đang cập nhật",
+      "months": "tháng"
+    },
+    "highlights": {
+      "title": "Đặc điểm nổi bật",
+      "no_desc": "Chưa có mô tả"
+    },
+    "full_desc": {
+      "title": "Mô tả chi tiết",
+      "no_desc_detail": "Chưa có mô tả chi tiết"
+    },
+    "specs": {
+      "title": "Thông số kỹ thuật"
+    },
+    "promotions": {
+      "title": "Khuyến mãi hấp dẫn",
+      "view_detail": "Xem chi tiết"
+    },
+    "payment": {
+      "title": "Ưu đãi thanh toán",
+      "installment": "Trả góp 0%"
+    }
+  },
+  "news_page": {
+    "breadcrumb": {
+      "home": "Trang chủ",
+      "news": "Tin tức"
+    },
+    "latest_title": "TIN TỨC MỚI NHẤT",
+    "trending": {
+      "title": "Xu hướng nổi bật",
+      "subtitle": "Top lượt xem nhiều nhất"
+    },
+    "article": {
+      "views": "lượt xem",
+      "admin": "Quản trị viên"
+    },
+    "locales": "vi-VN"
+  },
+  "news_detail": {
+    "not_found": "Bài viết không tồn tại hoặc đã bị gỡ bỏ.",
+    "breadcrumb": {
+      "home": "Trang chủ",
+      "news": "Tin tức"
+    },
+    "meta": {
+      "author": "Quản trị viên",
+      "views": "lượt xem"
+    },
+    "tags": "Thẻ:"
+  },
+  "account_header": {
+    "role_null": "TVT-NULL",
+    "total_orders": "Tổng đơn đã mua",
+    "warranty_orders": "Đơn hàng còn bảo hành",
+    "unit_order": "đơn"
+  },
+  "discount": {
+    "title": "Ưu đãi độc quyền",
+    "description": "Săn voucher và mã giảm giá dành riêng cho thành viên thân thiết",
+    "freeship": "Freeship",
+    "discount_label": "Giảm giá",
+    "copy": "Sao chép",
+    "copied": "Xong",
+    "off": "Giảm",
+    "unlimited": "Vô hạn",
+    "usage_limit": "{{count}} lượt dùng",
+    "min_order": "Đơn tối thiểu:",
+    "expiry": "HSD:",
+    "empty": {
+      "title": "Trống",
+      "description": "Hiện không có mã giảm giá nào khả dụng. Hãy quay lại sau bạn nhé!"
+    }
+  },
+  "history": {
+    "title": "Lịch sử mua hàng",
+    "description": "Theo dõi chi tiết các đơn hàng bạn đã thực hiện tại hệ thống"
+  },
+  "profile": {
+    "reminders": {
+      "update_now": "Cập nhật ngay",
+      "add_now": "Thêm địa chỉ",
+      "missing_fields": "Vui lòng cập nhật {{fields}} để có trải nghiệm tốt hơn.",
+      "fields": {
+        "dob": "ngày sinh",
+        "phone": "số điện thoại",
+        "gender": "giới tính"
+      },
+      "no_address": "Bạn chưa có địa chỉ nhận hàng nào. Thêm ngay để thuận tiện đặt hàng nhé!"
+    }
+  },
+  "warranty": {
+    "badge": "Bảo hành điện tử",
+    "title": "Tra cứu",
+    "title_highlight": "Bảo hành",
+    "subtitle": "Quản lý và theo dõi thời gian bảo hành các thiết bị của bạn",
+    "search_placeholder": "Tìm tên sản phẩm...",
+    "tabs": {
+      "all": "Tất cả",
+      "active": "Bảo hành",
+      "expired": "Hết hạn"
+    },
+    "card": {
+      "active": "Còn bảo hành",
+      "expired": "Hết bảo hành",
+      "purchase_date": "Ngày mua:",
+      "expiry_date": "Ngày hết hạn:",
+      "not_updated": "Chưa cập nhật",
+      "days_left": "Thời gian còn lại {{count}} ngày",
+      "btn_contact": "Liên hệ hỗ trợ",
+      "btn_request": "Yêu cầu bảo hành"
+    },
+    "empty": {
+      "title": "Trống",
+      "description": "Không tìm thấy thiết bị nào phù hợp",
+      "action": "Xem lại tất cả"
+    }
+  },
+  "activity": {
+    "title": "Lịch sử hoạt động",
+    "description": "Xem lại các hoạt động, thay đổi và nhật ký thao tác của tài khoản"
+  },
+  "overview": {
+    "reminders": {
+      "update_now": "Cập nhật ngay",
+      "add_now": "Thêm ngay",
+      "missing_fields": "Vui lòng cập nhật {{fields}} để nhận thêm ưu đãi đặc quyền.",
+      "missing_phone": "Vui lòng cập nhật số điện thoại để nhận thêm ưu đãi đặc quyền.",
+      "no_address": "Bạn chưa có địa chỉ nhận hàng. Thêm địa chỉ để đặt hàng nhanh hơn!",
+      "fields": {
+        "dob": "ngày sinh"
+      }
+    },
+    "orders": {
+      "title": "Lịch sử đơn hàng",
+      "description": "Quản lý, theo dõi trạng thái các đơn hàng bạn đã đặt và xem chi tiết hóa đơn."
+    },
+    "wishlist": {
+      "title": "Sản phẩm yêu thích",
+      "description": "Các sản phẩm bạn đã quan tâm và muốn sở hữu",
+      "see_all": "Xem tất cả ({{count}})",
+      "empty_title": "Trống",
+      "empty_description": "Bạn chưa có sản phẩm yêu thích nào."
+    }
+  },
+  "addresses": {
+    "title": "Sổ địa chỉ",
+    "subtitle": "Quản lý các địa điểm nhận hàng của bạn",
+    "add_btn": "Thêm địa chỉ",
+    "empty": {
+      "title": "Trống",
+      "description": "Bạn chưa lưu địa chỉ nhận hàng nào",
+      "action": "Tạo địa chỉ đầu tiên ngay"
+    },
+    "types": {
+      "home": "Nhà riêng",
+      "office": "Công ty",
+      "default": "Mặc định"
+    },
+    "actions": {
+      "delete": "Xóa",
+      "update": "Cập nhật",
+      "confirm_delete": "Xóa địa chỉ này?",
+      "confirm_desc": "Hành động này không thể hoàn tác.",
+      "ok_delete": "Xóa ngay",
+      "cancel": "Hủy"
+    },
+    "view_more": "Xem thêm ({{count}})",
+    "view_less": "Thu gọn"
+  },
+  "linked_accounts": {
+    "title": "Tài khoản liên kết",
+    "status": {
+      "linked": "Đã liên kết",
+      "not_linked": "Chưa liên kết"
+    },
+    "actions": {
+      "link": "Liên kết",
+      "unlink": "Hủy liên kết",
+      "stay": "Ở lại trang",
+      "toast_success": "Hủy liên kết thành công"
+    },
+    "providers": {
+      "google": "Đăng nhập nhanh bằng Google",
+      "github": "Liên kết tài khoản GitHub",
+      "local": "Đăng nhập bằng email và mật khẩu"
+    },
+    "modal": {
+      "title": "Huỷ liên kết tài khoản",
+      "description": "Bạn có chắc chắn muốn hủy liên kết tài khoản {{name}} không?"
+    }
+  },
+  "password": {
+    "title": "Mật khẩu",
+    "subtitle": "Cập nhật mật khẩu đăng nhập để bảo vệ tài khoản",
+    "btn_change": "Thay đổi mật khẩu"
+  },
+  "profile_drawer": {
+    "titles": {
+      "updateUser": "Cập nhật thông tin",
+      "addAddress": "Thêm địa chỉ",
+      "updateAddress": "Cập nhật địa chỉ",
+      "updatePassword": "Đổi mật khẩu"
+    },
+    "descriptions": {
+      "updateUser": "Chỉnh sửa thông tin cá nhân của bạn",
+      "addAddress": "Dùng để giao hàng nhanh hơn",
+      "updateAddress": "Thay đổi thông tin địa chỉ",
+      "updatePassword": "Bảo mật tài khoản của bạn"
+    },
+    "address_limit": "{{current}}/10 địa chỉ",
+    "max_address_warning": "⚠️ Bạn đã đạt giới hạn tối đa 10 địa chỉ",
+    "max_badge": "Tối đa 10 địa chỉ",
+    "form": {
+      "cancel": "Hủy",
+      "save": "Lưu thay đổi",
+      "limit_reached": "Đã đạt giới hạn",
+      "no_change": "Không có thông tin nào thay đổi",
+      "success_profile": "Cập nhật thông tin thành công",
+      "success_add_addr": "Thêm địa chỉ thành công",
+      "success_update_addr": "Cập nhật địa chỉ thành công",
+      "success_password": "Đổi mật khẩu thành công",
+      "fail": "Thao tác thất bại",
+      "labels": {
+        "name": "Họ và tên",
+        "gender": "Giới tính",
+        "dob": "Ngày sinh",
+        "phone": "Số điện thoại",
+        "email": "Email",
+        "bio": "Bio",
+        "default_shipping": "Địa chỉ giao hàng mặc định",
+        "address_book": "Sổ địa chỉ",
+        "address_hint": "Địa chỉ này sẽ được dùng làm mặc định khi giao hàng",
+        "empty_address": "Bạn chưa có địa chỉ nào trong sổ địa chỉ. Vui lòng thêm địa chỉ ở mục “Sổ địa chỉ” để sử dụng tính năng này.",
+        "addr_title": "Tên gợi nhớ",
+        "province": "Tỉnh/Thành phố",
+        "district": "Quận/Huyện",
+        "ward": "Phường/Xã",
+        "detail": "Địa chỉ chi tiết",
+        "addr_type": "Loại địa chỉ",
+        "set_default": "Đặt làm mặc định",
+        "current_pass": "Mật khẩu hiện tại",
+        "new_pass": "Mật khẩu mới",
+        "confirm_pass": "Xác nhận mật khẩu"
+      },
+      "placeholders": {
+        "gender": "Chọn giới tính",
+        "bio": "Giới thiệu ngắn",
+        "addr_title": "Ví dụ: Nhà mẹ, Chung cư...",
+        "province": "Chọn tỉnh",
+        "district": "Chọn huyện",
+        "ward": "Chọn xã",
+        "detail": "Số nhà, tên đường...",
+        "current_pass": "Nhập mật khẩu cũ của bạn",
+        "new_pass": "Thiết lập mật khẩu mới",
+        "confirm_pass": "Nhập lại mật khẩu mới"
+      },
+      "rules": {
+        "required_name": "Nhập họ tên",
+        "required_gender": "Vui lòng chọn giới tính",
+        "required_title": "Vui lòng nhập tên gợi nhớ",
+        "required_pass": "Vui lòng nhập mật khẩu",
+        "pass_min": "Mật khẩu phải có ít nhất 8 ký tự",
+        "pass_mismatch": "Mật khẩu xác nhận không khớp",
+        "pass_extra": "Mật khẩu phải từ 8-20 ký tự, bao gồm chữ và số.",
+        "confirm_extra": "Nhập lại chính xác mật khẩu mới bên trên."
+      },
+      "gender_options": {
+        "male": "Nam",
+        "female": "Nữ",
+        "other": "Khác"
+      },
+      "address_types": {
+        "home": "Nhà",
+        "office": "Công ty",
+        "is_default": "Mặc định",
+        "currently_default": "Đang là địa chỉ mặc định"
+      }
+    },
+    "section": {
+      "user_info_title": "Thông tin cá nhân",
+      "user_info_desc": "Quản lý hồ sơ cá nhân của bạn",
+      "btn_update": "Cập nhật",
+      "not_updated": "Chưa cập nhật",
+      "date_locale": "vi-VN"
+    }
+  },
+  "contact_page": {
+    "hero": {
+      "title": "Liên Hệ Với Chúng Tôi",
+      "subtitle": "Chúng tôi luôn sẵn lòng lắng nghe và hỗ trợ bạn",
+      "features": [
+        "Phản hồi nhanh chóng trong 24h",
+        "Đội ngũ hỗ trợ chuyên nghiệp",
+        "Giải đáp mọi thắc mắc",
+        "Hỗ trợ đa kênh 24/7"
+      ]
+    },
+    "form": {
+      "title": "Gửi Feedback Cho Chúng Tôi",
+      "subtitle": "Điền thông tin bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.",
+      "placeholders": {
+        "name": "Nhập họ và tên của bạn",
+        "phone": "Nhập số điện thoại",
+        "email": "Nhập địa chỉ email",
+        "subject": "Nhập tiêu đề tin nhắn",
+        "message": "Nhập nội dung tin nhắn của bạn..."
+      },
+      "btns": {
+        "reset": "Xóa nội dung",
+        "send": "Gửi tin nhắn"
+      }
+    },
+    "sidebar": {
+      "social_title": "Kết Nối Với Chúng Tôi",
+      "links_title": "Liên Kết Hữu Ích",
+      "cta_title": "Cần Hỗ Trợ Ngay?",
+      "cta_subtitle": "Gọi ngay hotline để được tư vấn miễn phí",
+      "location_title": "Vị Trí Của Chúng Tôi",
+      "links": {
+        "faqs": "Câu hỏi thường gặp",
+        "help": "Trung tâm hỗ trợ",
+        "terms": "Điều khoản sử dụng",
+        "about": "Về chúng tôi"
+      }
+    }
+  },
+  "checkout": {
+    "title": "Thanh Toán",
+    "loading_title": "Đang tải đơn hàng",
+    "loading_desc": "Vui lòng đợi trong giây lát...",
+    "messages": {
+      "missing_info": "Vui lòng nhập đầy đủ thông tin!",
+      "order_success": "Đặt hàng thành công!"
+    },
+    "customer_info": {
+      "title": "Thông tin khách hàng",
+      "first_name": "Tên",
+      "last_name": "Họ & tên đệm"
+    },
+    "shipping": {
+      "title": "Địa chỉ giao hàng",
+      "address_label": "Địa chỉ cụ thể",
+      "address_placeholder": "Số nhà, tên đường",
+      "province": "Tỉnh/Thành",
+      "district": "Quận/Huyện",
+      "ward": "Phường/Xã",
+      "notes": "Ghi chú (tùy chọn)",
+      "notes_placeholder": "Ghi chú thêm cho shipper...",
+      "select_province": "Chọn Tỉnh/Thành",
+      "select_district": "Chọn Quận/Huyện",
+      "select_ward": "Chọn Phường/Xã"
+    },
+    "payment": {
+      "title": "Phương thức thanh toán",
+      "cod": "Thanh toán khi nhận hàng",
+      "online": "Thanh toán trực tuyến",
+      "placeholder": "Chọn phương thức thanh toán",
+      "discount_hint": "Giảm thêm tới 1.000.000đ",
+      "modal_title": "Chọn phương thức thanh toán",
+      "confirm": "Xác nhận",
+      "methods": {
+        "store": "Thanh toán tại cửa hàng",
+        "store_desc": "CellphoneS giữ sản phẩm 24h.",
+        "qr": "Chuyển khoản ngân hàng qua mã QR",
+        "momo_desc": "Giảm 2% tối đa 200k",
+        "visa": "Qua thẻ Visa/Master/JCB/Napas",
+        "kredivo_desc": "Giảm 7% tối đa 1.000.000đ",
+        "cod": "Thanh toán khi nhận hàng",
+        "cod_desc": "Thanh toán trực tiếp khi nhận hàng (COD)"
+      }
+    },
+    "summary": {
+      "title": "Tóm Tắt Đơn Hàng",
+      "shipping_fee": "Phí vận chuyển",
+      "free": "Miễn phí",
+      "no_coupon": "Chưa có mã",
+      "processing": "Đang xử lý...",
+      "btn_cod": "Đặt hàng (COD)",
+      "btn_online": "Thanh toán ngay",
+      "secure_payment": "Bảo mật 100%",
+      "fast_delivery": "Giao hàng nhanh"
+    },
+    "voucher": {
+      "loading": "Đang tải mã giảm giá...",
+      "available_title": "Mã giảm giá khả dụng",
+      "usage_limit": "Còn {{count}} lần dùng",
+      "min_order_hint": "Mua thêm {{amount}} để áp dụng",
+      "no_vouchers": "Bạn không có mã giảm giá nào khả dụng hoặc đã sử dụng hết lượt."
+    }
+  },
+  "customer_info": {
+    "title": "1. Thông Tin Khách Hàng",
+    "first_name": "Họ",
+    "first_name_placeholder": "Ví dụ: Nguyễn",
+    "first_name_hint": "Vui lòng nhập họ như trên giấy tờ tùy thân",
+    "last_name": "Tên",
+    "last_name_placeholder": "Ví dụ: Văn An",
+    "email_hint": "Dùng để nhận thông tin hành trình đơn hàng",
+    "phone_hint": "Số dùng để liên hệ khi giao hàng"
+  },
+  "category": {
+    "sidebar_title": "Danh mục",
+    "all_categories": "Tất cả danh mục",
+    "explore_all": "Khám phá tất cả sản phẩm trong cửa hàng",
+    "products_available": "{{count}} Sản phẩm có sẵn",
+    "loading": "Đang tải sản phẩm...",
+    "collapse_open": "«",
+    "collapse_close": "»",
+    "page_title": "Sản phẩm theo danh mục:",
+    "all_products": "Tất cả sản phẩm"
+  },
+  "brand": {
+    "sidebar_title": "Thương hiệu",
+    "all_brands": "Tất cả thương hiệu",
+    "explore_all": "Khám phá tất cả sản phẩm trong cửa hàng",
+    "products_available": "{{count}} Sản phẩm có sẵn",
+    "loading": "Đang tải sản phẩm...",
+    "page_title": "Sản phẩm theo thương hiệu:",
+    "all_products": "Tất cả sản phẩm"
+  },
+  "common": {
+    "seeMore": "Xem Thêm",
+    "no_product": {
+      "title": "Không có sản phẩm",
+      "description": "Rất tiếc, hiện tại không có sản phẩm nào phù hợp với bộ lọc của bạn.",
+      "status_updating": "Chúng tôi đang cập nhật sản phẩm mới",
+      "suggestions": "Bạn có thể thử những gợi ý sau:",
+      "btn_refresh": "Làm mới",
+      "btn_view_all": "Xem tất cả",
+      "help_text": "Cần hỗ trợ? Liên hệ với chúng tôi qua"
+    },
+    "updating": "Tính năng đang cập nhật 😅"
   }
-},
-"news": {
-  "title_main": "Tin tức",
-  "title_sub": "Mới nhất",
-  "see_all": "Xem tất cả",
-  "empty_title": "Trống",
-  "empty_description": "Hiện chưa có bảng tin mới nào",
-  "read_more": "Đọc tiếp"
-},
-"shop": {
-  "title": "Nhận sản phẩm theo nhu cầu của bạn",
-  "reset_filter": "Đặt lại bộ lọc",
-  "loading_products": "Đang tải sản phẩm...",
-  "filter_category": "Danh mục",
-  "filter_brand": "Thương hiệu",
-  "filter_price": "Khoảng giá",
-  "filter_category_title": "Danh mục sản phẩm",
-  "all_products": "Tất cả sản phẩm",
-  "reset_selection": "Đặt lại lựa chọn",
-  "filter_brand_title": "Thương hiệu",
-  "all_brands": "Tất cả thương hiệu"
-},
-"common": {
-  "seeMore": "Xem Thêm"
-}
 }

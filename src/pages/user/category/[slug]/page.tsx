@@ -6,8 +6,10 @@ import CategoryPage from "@/pages/user/category/page";
 import { useEffect, useState } from "react";
 import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
+import { useTranslation } from "react-i18next";
 
 const DetailCategory = () => {
+  const { t } = useTranslation();
   const { slug } = useParams();
   const [category, setCategory] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -28,18 +30,22 @@ const DetailCategory = () => {
     };
     fetchProducts();
   }, [category]);
-  const currentSlug = slug || "all";
-  const currentCategory = category[0]; // vì category là array 1 phần tử
 
-  const categoryName =
-    currentSlug === "all" ? "Tất cả sản phẩm" : currentCategory?.name || slug;
+  const currentSlug = slug || "all";
+  
+  const foundCategory = category.find(cat => cat.slug === currentSlug);
+
+  const categoryDisplayName =
+    currentSlug === "all" 
+      ? t("category.all_products") 
+      : foundCategory?.name || slug;
 
   return (
     <div>
       <Title className="text-lg mb-5 uppercase tracking-wide">
-        Sản phẩm theo danh mục:{" "}
+        {t("category.page_title")}{" "}
         <span className="font-bold text-primary capitalize tracking-wide">
-          {categoryName}
+          {categoryDisplayName}
         </span>
       </Title>
 

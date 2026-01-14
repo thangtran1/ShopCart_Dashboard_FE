@@ -9,6 +9,7 @@ import { Button } from "@/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { useUserToken } from "@/store/userStore";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   product: Product;
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const AddToCartButton = ({ product, className }: Props) => {
+  const { t } = useTranslation();
   const { items, addToCart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const token = useUserToken();
@@ -25,7 +27,7 @@ const AddToCartButton = ({ product, className }: Props) => {
 
   const handleAddToCart = async () => {
     if (!token?.accessToken) {
-      toast.error("Vui lòng đăng nhập để thêm vào giỏ hàng");
+      toast.error(t("cart.toast.login_required"));
       return;
     }
 
@@ -34,15 +36,15 @@ const AddToCartButton = ({ product, className }: Props) => {
       try {
         await addToCart({ productId: product._id, quantity: 1 });
         toast.success(
-          `${product?.name?.substring(0, 12)}... added successfully!`
+          t("cart.toast.add_success", { name: product?.name?.substring(0, 12) })
         );
       } catch (error) {
-        toast.error("Vui lòng đăng nhập để thực hiện");
+        toast.error(t("cart.toast.add_error"));
       } finally {
         setIsLoading(false);
       }
     } else {
-      toast.error("Can not add more than available stock");
+      toast.error(t("cart.toast.stock_limit"));
     }
   };
 
@@ -51,11 +53,11 @@ const AddToCartButton = ({ product, className }: Props) => {
       {itemCount ? (
         <div className="text-sm w-full">
           <div className="flex items-center justify-between">
-            <span className="text-xs mr-5">Số lượng</span>
+            <span className="text-xs mr-5">{t("cart.quantity")}</span>
             <QuantityButtons product={product} />
           </div>
           <div className="flex items-center justify-between border-t pt-1">
-            <span className="text-xs font-semibold">Tổng</span>
+            <span className="text-xs font-semibold">{t("cart.total")}</span>
             <PriceFormatter
               amount={product?.price ? product?.price * itemCount : 0}
             />
@@ -73,12 +75,12 @@ const AddToCartButton = ({ product, className }: Props) => {
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Đang thêm...
+              {t("cart.adding")}
             </>
           ) : (
             <>
-              <ShoppingBag className="h-4 w-4" />
-              {isOutOfStock ? "Hết hàng" : "Thêm vào giỏ"}
+              <ShoppingBag className="h-4 w-4 mr-2" />
+              {isOutOfStock ? t("cart.out_of_stock") : t("cart.add_to_cart")}
             </>
           )}
         </Button>

@@ -7,6 +7,7 @@ import VoucherSelector from "./VoucherSelector";
 import { Button } from "@/ui/button";
 import { Separator } from "@/ui/separator";
 import { useUserInfo } from "@/store/userStore";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
@@ -33,11 +34,12 @@ const OrderSummary = ({
   loading,
   paymentMethod,
 }: OrderSummaryProps) => {
+  const { t } = useTranslation();
   const userInfo = useUserInfo();
 
   return (
     <div className="lg:sticky lg:top-4 space-y-4">
-      <Title level={4}>Tóm Tắt Đơn Hàng</Title>
+      <Title level={4}>{t("checkout.summary.title")}</Title>
 
       <div className="space-y-4 border border-border rounded-lg p-4 bg-card shadow-sm">
         <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
@@ -70,28 +72,28 @@ const OrderSummary = ({
 
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Tạm tính</span>
+            <span className="text-muted-foreground">{t("cart.subtotal")}</span>
             <PriceFormatter amount={totalAmount} />
           </div>
 
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Giảm giá</span>
+            <span className="text-muted-foreground">{t("cart.discount")}</span>
             {discountAmount > 0 ? (
               <span className="text-red-500 font-medium">- <PriceFormatter amount={discountAmount} /></span>
             ) : (
-              <span className="text-xs italic text-muted-foreground">Chưa có mã</span>
+              <span className="text-xs italic text-muted-foreground">{t("checkout.summary.no_coupon")}</span>
             )}
           </div>
 
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Phí vận chuyển</span>
-            <span className="text-green-600 font-medium">Miễn phí</span>
+            <span className="text-muted-foreground">{t("checkout.summary.shipping_fee")}</span>
+            <span className="text-green-600 font-medium">{t("checkout.summary.free")}</span>
           </div>
 
           <Separator className="my-2" />
 
           <div className="flex justify-between items-center">
-            <span className="font-bold text-base">Tổng cộng</span>
+            <span className="font-bold text-base">{t("cart.total")}</span>
             <PriceFormatter amount={finalTotal} className="text-xl font-bold text-primary" />
           </div>
         </div>
@@ -103,30 +105,30 @@ const OrderSummary = ({
             if (!loading) onPlaceOrder();
           }}
           disabled={loading}
-          className={`w-full h-10 text-lg font-semibold mt-4 ${loading ? "cursor-not-allowed opacity-80" : "cursor-pointer"
-            }`}
+          className={`w-full h-10 text-lg text-foreground font-semibold mt-4 ${
+            loading ? "cursor-not-allowed opacity-80" : "cursor-pointer"
+          }`}
         >
           {loading ? (
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full animate-spin" />
-              Đang xử lý...
+              {t("checkout.summary.processing")}
             </div>
           ) : (
-            paymentMethod === "COD" || paymentMethod === "cod"
-              ? "Đặt hàng (COD)"
-              : "Thanh toán ngay"
+            String(paymentMethod).toUpperCase() === "COD" 
+              ? t("checkout.summary.btn_cod") 
+              : t("checkout.summary.btn_online")
           )}
         </Button>
 
-        {/* Cam kết an toàn */}
-        <div className="grid grid-cols-2 gap-2 pt-2">
+        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-dashed mt-2">
           <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <Shield className="w-3.5 h-3.5 text-green-600" />
-            Bảo mật 100%
+            {t("checkout.summary.secure_payment")}
           </div>
           <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <Truck className="w-3.5 h-3.5 text-primary" />
-            Giao hàng nhanh
+            {t("checkout.summary.fast_delivery")}
           </div>
         </div>
       </div>

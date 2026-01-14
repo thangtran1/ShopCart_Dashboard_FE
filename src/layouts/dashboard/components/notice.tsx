@@ -10,11 +10,13 @@ import { NotificationType } from "@/types/enum";
 import { Notification } from "@/types/entity";
 import { useUserToken } from "@/store/userStore";
 import { EmptyState } from "@/components/common/EmptyState";
+import { useTranslation } from "react-i18next";
 
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
 
 export default function NoticeContent() {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useUserToken();
@@ -42,9 +44,9 @@ export default function NoticeContent() {
       setNotifications((prev) =>
         prev.map((n) => (n._id === id ? { ...n, isReadByUser: true } : n))
       );
-      toast.success("Đã đánh dấu là đã đọc");
+      toast.success(t("notifications.toast.mark_read_success"));
     } catch (error) {
-      toast.error("Không thể đánh dấu đọc");
+      toast.error(t("notifications.toast.mark_read_error"));
     }
   };
 
@@ -61,35 +63,35 @@ export default function NoticeContent() {
       setNotifications((prev) =>
         prev.map((n) => ({ ...n, isReadByUser: true }))
       );
-      toast.success("Đã đọc tất cả thông báo");
+      toast.success(t("notifications.toast.mark_all_success"));
     } catch (error) {
       console.error(error);
     }
   };
+
+  const unreadCount = notifications.filter((n) => !n.isReadByUser).length;
 
   return (
     <div className="flex flex-col overflow-hidden">
       <div className="relative px-3">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-            Trung tâm tin nhắn
+            {t("notifications.center_title")}
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
           </h3>
           <button
             onClick={handleMarkAllAsRead}
             className="p-2 rounded-full cursor-pointer hover:bg-white dark:hover:bg-zinc-800 shadow-sm border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 transition-all text-zinc-500 hover:text-primary active:scale-90"
-            title="Đánh dấu tất cả đã đọc"
+            title={t("notifications.mark_all_read_hint")}
           >
-            <Icon icon="solar:checklist-minimalistic-bold" size={20} />
+            <Icon icon="solar:checklist-minimalistic-bold" width={20} height={20} />
           </button>
         </div>
         <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-widest">
-          Bạn có {notifications.filter((n) => !n.isReadByUser).length} tin nhắn
-          chưa đọc
+          {t("notifications.unread_count", { count: unreadCount })}
         </p>
       </div>
 
-      {/* Tabs Custom Styling */}
       <div className="notice-tabs-container px-2">
         <NoticeTabs
           notifications={notifications}
@@ -98,12 +100,13 @@ export default function NoticeContent() {
         />
       </div>
 
-      <div className="p-3  border-b border-border">
-        <button className="group w-full cursor-pointer py-2.5 px-4  hover:bg-primary border border-border rounded-xl text-xs font-bold transition-all duration-300 shadow-sm flex items-center justify-center gap-2 ">
-          Xem tất cả hoạt động
+      <div className="p-3 border-t border-border">
+        <button className="group w-full cursor-pointer py-2.5 px-4 hover:bg-primary/10 border border-border rounded-xl text-xs font-bold transition-all duration-300 shadow-sm flex items-center justify-center gap-2">
+          {t("notifications.view_all_activity")}
           <Icon
             icon="solar:alt-arrow-right-linear"
-            size={16}
+            width={16}
+            height={16}
             className="group-hover:translate-x-1 transition-transform"
           />
         </button>
@@ -113,15 +116,17 @@ export default function NoticeContent() {
 }
 
 function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
+  const { t } = useTranslation();
+
   const unreadNotifications = useMemo(
     () => notifications.filter((n: any) => !n.isReadByUser),
     [notifications]
   );
 
-  const items: TabsProps["items"] = [
+  const items: TabsProps["items"] = useMemo(() => [
     {
       key: "all",
-      label: <span className="px-2 py-1 italic">Mới nhất</span>,
+      label: <span className="px-2 py-1 italic font-medium">{t("notifications.tabs.latest")}</span>,
       children: (
         <NotificationList
           data={notifications}
@@ -134,7 +139,7 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
       key: "unread",
       label: (
         <div className="flex items-center gap-2 px-2">
-          <span>Chưa đọc</span>
+          <span>{t("notifications.tabs.unread")}</span>
           {unreadNotifications.length > 0 && (
             <span className="bg-red-500 text-white text-[10px] px-1.5 rounded-full font-black animate-bounce">
               {unreadNotifications.length}
@@ -150,7 +155,7 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
         />
       ),
     },
-  ];
+  ], [notifications, loading, onMarkAsRead, unreadNotifications.length, t]);
 
   return (
     <Tabs
@@ -164,6 +169,8 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
 }
 
 function NotificationList({ data, loading, onMarkAsRead }: any) {
+  const { t } = useTranslation();
+
   if (loading)
     return (
       <div className="p-4 space-y-4">
@@ -177,8 +184,8 @@ function NotificationList({ data, loading, onMarkAsRead }: any) {
     return (
       <EmptyState
         height="sm"
-        title="Trống"
-        description="Chưa có thông báo nào"
+        title={t("notifications.empty.title")}
+        description={t("notifications.empty.description")}
       />
     );
 
@@ -194,7 +201,6 @@ function NotificationList({ data, loading, onMarkAsRead }: any) {
     </div>
   );
 }
-
 function NotificationItem({
   item,
   onMarkAsRead,
@@ -202,6 +208,7 @@ function NotificationItem({
   item: Notification;
   onMarkAsRead: any;
 }) {
+  const { t } = useTranslation();
   const isUnread = !item.isReadByUser;
 
   const getIcon = (type: string) => {
@@ -211,18 +218,21 @@ function NotificationItem({
           icon: "solar:shield-check-bold",
           color: "text-green-500",
           bg: "bg-green-50 dark:bg-green-500/10",
+          label: t("notifications.types.system"), 
         };
       case NotificationType.MAINTENANCE:
         return {
           icon: "solar:danger-bold",
           color: "text-red-500",
           bg: "bg-red-50 dark:bg-red-500/10",
+          label: t("notifications.types.maintenance"), 
         };
       default:
         return {
           icon: "solar:unread-bold",
           color: "text-blue-500",
           bg: "bg-blue-50 dark:bg-blue-500/10",
+          label: t("notifications.types.general"), 
         };
     }
   };
@@ -242,7 +252,7 @@ function NotificationItem({
         <div
           className={`w-12 h-12 rounded-2xl ${meta.bg} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500`}
         >
-          <Icon icon={meta.icon} size={24} className={meta.color} />
+          <Icon icon={meta.icon} width={24} height={24} className={meta.color} />
         </div>
         {isUnread && (
           <div className="absolute -top-1 -right-1 flex h-4 w-4">
@@ -257,7 +267,7 @@ function NotificationItem({
           <span
             className={`text-[10px] font-black uppercase tracking-widest ${meta.color}`}
           >
-            {item.type}
+            {meta.label}
           </span>
           <span className="text-[10px] text-muted-foreground font-bold italic">
             {dayjs(item.createdAt).fromNow()}
@@ -276,8 +286,8 @@ function NotificationItem({
 
         {isUnread && (
           <div className="mt-2 flex items-center gap-1 text-[10px] text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-            Nhấp để đánh dấu đọc{" "}
-            <Icon icon="solar:double-alt-arrow-right-bold" size={12} />
+            {t("notifications.mark_as_read")}
+            <Icon icon="solar:double-alt-arrow-right-bold" width={12} height={12} />
           </div>
         )}
       </div>

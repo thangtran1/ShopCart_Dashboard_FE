@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import { Link } from "react-router";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const FavoriteButton = ({
   showProduct = false,
@@ -13,6 +14,7 @@ const FavoriteButton = ({
   showProduct?: boolean;
   product?: Product | null | undefined;
 }) => {
+  const { t } = useTranslation();
   const { favoriteProduct, addToFavorite } = useStore();
   const [existingProduct, setExistingProduct] = useState<Product | null>(null);
   useEffect(() => {
@@ -28,8 +30,8 @@ const FavoriteButton = ({
       addToFavorite(product).then(() => {
         toast.success(
           existingProduct
-            ? "Product removed successfully!"
-            : "Product added successfully!"
+          ? t("wishlist.msg_remove_success")
+          : t("wishlist.add_success")
         );
       });
     }

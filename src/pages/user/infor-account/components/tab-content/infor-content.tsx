@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import AddressSection from "../infor-content/AddressSection";
@@ -7,6 +9,7 @@ import ProfileDrawer from "../infor-content/ProfileDrawer";
 import UserInfoSection from "../infor-content/UserInfoSection";
 import { useAddressActions } from "@/hooks/useAddresses";
 import { Button } from "antd";
+import { useTranslation } from "react-i18next";
 
 export type DrawerType =
   | "updateUser"
@@ -15,6 +18,7 @@ export type DrawerType =
   | "updatePassword";
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const { profile } = useUserProfile();
   const { addresses, isFetching, deleteAddress } = useAddressActions();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -34,33 +38,35 @@ export default function ProfilePage() {
 
   const reminders = [];
 
-  // 1. Kiểm tra thiếu thông tin cá nhân (Giới tính, Ngày sinh, Bio...)
-  const missingInfo = [];
-  if (!profile?.dateOfBirth) missingInfo.push("ngày sinh");
-  if (!profile?.phone) missingInfo.push("số điện thoại");
+  // 1. Kiểm tra thiếu thông tin cá nhân
+  const missingInfoKeys = [];
+  if (!profile?.dateOfBirth) missingInfoKeys.push(t("profile.reminders.fields.dob"));
+  if (!profile?.phone) missingInfoKeys.push(t("profile.reminders.fields.phone"));
   if (profile?.gender === undefined || profile?.gender === null || profile?.gender === "") {
-    missingInfo.push("giới tính");
+    missingInfoKeys.push(t("profile.reminders.fields.gender"));
   }
 
-  if (missingInfo.length > 0) {
+  if (missingInfoKeys.length > 0) {
     reminders.push({
       key: "missing_user_info",
       color: "bg-blue-50 border-blue-200 text-blue-600",
       icon: "ℹ️",
-      message: `Vui lòng cập nhật ${missingInfo.join(", ")} để có trải nghiệm tốt hơn.`,
-      btnText: "Cập nhật ngay",
+      message: t("profile.reminders.missing_fields", { 
+        fields: missingInfoKeys.join(", ") 
+      }),
+      btnText: t("profile.reminders.update_now"),
       action: () => openDrawer("updateUser", profile),
     });
   }
 
-  // 2. Kiểm tra nếu chưa có địa chỉ (sau khi đã load xong API)
+  // 2. Kiểm tra nếu chưa có địa chỉ
   if (!isFetching && addresses?.length === 0) {
     reminders.push({
       key: "missing_address",
       color: "bg-amber-50 border-amber-200 text-amber-600",
       icon: "📍",
-      message: "Bạn chưa có địa chỉ nhận hàng nào. Thêm ngay để thuận tiện đặt hàng nhé!",
-      btnText: "Thêm địa chỉ",
+      message: t("profile.reminders.no_address"),
+      btnText: t("profile.reminders.add_now"),
       action: () => openDrawer("addAddress"),
     });
   }
@@ -74,12 +80,12 @@ export default function ProfilePage() {
             className={`${item.color} border mb-4 rounded-lg p-4 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-500`}
           >
             <div className="flex items-center gap-3">
-              <div className="text-lg">{item.icon}</div>
-              <span className="text-sm text-gray-700">{item.message}</span>
+              <div className="text-lg shrink-0">{item.icon}</div>
+              <span className="text-sm font-medium">{item.message}</span>
             </div>
             <Button
               type="link"
-              className={`!text-inherit font-semibold !text-sm hover:underline`}
+              className="!text-inherit font-bold !text-sm hover:underline shrink-0"
               onClick={item.action}
             >
               {item.btnText}
@@ -88,7 +94,6 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      {/* CÁC SECTION THÔNG TIN */}
       <div className="space-y-6">
         <UserInfoSection
           addresses={addresses}
@@ -108,7 +113,6 @@ export default function ProfilePage() {
 
         <LinkedAccountSection />
 
-        {/* DRAWER TỔNG */}
         <ProfileDrawer
           open={drawerOpen}
           type={drawerType}

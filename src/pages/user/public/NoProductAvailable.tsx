@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Search, RefreshCw, ShoppingBag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface NoProductAvailableProps {
   className?: string;
@@ -17,6 +18,7 @@ const NoProductAvailable = ({
   onRefresh,
   onViewAll,
 }: NoProductAvailableProps) => {
+  const { t } = useTranslation();
   const handleRefresh = () => {
     if (onRefresh) {
       onRefresh();
@@ -46,11 +48,11 @@ const NoProductAvailable = ({
         </div>
 
         <h2 className="text-2xl font-bold text-foreground mb-2">
-          Không có sản phẩm
+          {t("common.no_product.title")}
         </h2>
 
         <p className="text-sm text-muted-foreground max-w-xs leading-relaxed mb-3">
-          Rất tiếc, hiện tại không có sản phẩm nào phù hợp với bộ lọc của bạn.
+          {t("common.no_product.description")}
         </p>
 
         {/* Status indicator */}
@@ -64,39 +66,40 @@ const NoProductAvailable = ({
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
           >
-            <RefreshCw className="w-5 h-5 text-success" />
+            <RefreshCw className="w-5 h-5 text-green-500" />
           </motion.div>
-          <span className="text-success font-medium">
-            Chúng tôi đang cập nhật sản phẩm mới
+          <span className="text-green-600 font-medium">
+            {t("common.no_product.status_updating")}
           </span>
         </motion.div>
+
         <p className="text-sm text-foreground my-3">
-          Bạn có thể thử những gợi ý sau:
+          {t("common.no_product.suggestions")}
         </p>
 
         <div className="flex items-center gap-3">
           <button
             onClick={handleRefresh}
-            className="px-5 cursor-pointer py-2.5 rounded-lg border border-border hover:!bg-primary/10 hover:border-primary transition-all duration-300 flex items-center gap-2 text-sm font-medium"
+            className="px-5 cursor-pointer py-2.5 rounded-lg border border-border hover:bg-primary/10 hover:border-primary transition-all duration-300 flex items-center gap-2 text-sm font-medium"
           >
             <RefreshCw className="w-4 h-4" />
-            Làm mới
+            {t("common.no_product.btn_refresh")}
           </button>
 
           <button
             onClick={handleViewAll}
-            className="px-5 cursor-pointer py-2.5 rounded-lg border border-border hover:!bg-primary/10 hover:border-primary transition-all duration-300 flex items-center gap-2 text-sm font-medium"
+            className="px-5 cursor-pointer py-2.5 rounded-lg border border-border hover:bg-primary/10 hover:border-primary transition-all duration-300 flex items-center gap-2 text-sm font-medium"
           >
             <ShoppingBag className="w-4 h-4" />
-            Xem tất cả
+            {t("common.no_product.btn_view_all")}
           </button>
         </div>
       </div>
       {/* Additional help */}
       <div className="pt-4 border-t border-border w-full max-w-md">
         <p className="text-xs text-foreground">
-          Cần hỗ trợ? Liên hệ với chúng tôi qua{" "}
-          <a href="mailto:thangtrandz04@gmail.com" className="text-primary hover:underline">
+          {t("common.no_product.help_text")}{" "}
+          <a href="mailto:thangtrandz04@gmail.com" className="text-primary hover:underline font-medium">
             thangtrandz04@gmail.com
           </a>
         </p>

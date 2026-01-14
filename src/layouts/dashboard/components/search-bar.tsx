@@ -130,27 +130,38 @@ const SearchBar = () => {
       <DialogTrigger asChild>
         <Button variant="ghost" className="bg-secondary px-3 gap-2 cursor-pointer" onClick={() => toggle(true)}>
           <Icon icon="local:ic-search" size="20" />
-          <kbd className="border px-1.5 rounded text-[10px]">⌘K</kbd>
+          <span className="hidden sm:inline text-sm text-muted-foreground mr-1">
+             {t("search.trigger_placeholder")}
+          </span>
+          <kbd className="border px-1.5 rounded text-[10px] font-sans">⌘K</kbd>
         </Button>
       </DialogTrigger>
 
       <DialogContent className="p-0 w-[90vw] sm:max-w-2xl border-none shadow-2xl overflow-hidden bg-background rounded-xl">
-        <DialogTitle className="sr-only">Hệ thống tìm kiếm menu</DialogTitle>
-        <DialogDescription className="sr-only">Điều hướng bàn phím</DialogDescription>
+        <DialogTitle className="sr-only">{t("search.sr_title")}</DialogTitle>
+        <DialogDescription className="sr-only">{t("search.sr_description")}</DialogDescription>
 
         <div className="p-3 border-b flex items-center gap-3">
           <Icon icon="local:ic-search" size="22" className="!text-foreground" />
           <Input 
             value={searchQuery} 
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm kiếm..."
+            placeholder={t("search.input_placeholder")}
             className="border-none !text-foreground focus-visible:ring-0 text-lg !bg-transparent p-0 shadow-none h-auto caret-foreground"
             autoFocus
           />
         </div>
 
         <ScrollArea className="h-[50vh]">
-          {visibleRoutes.length === 0 ? <div className="px-4"><EmptyState height="sm" title="Trống" description="Rất tiếc, chúng tôi không tìm thấy nội dung nào khớp với từ khóa của bạn." /></div> : (
+          {visibleRoutes.length === 0 ? (
+            <div className="px-4">
+              <EmptyState 
+                height="sm" 
+                title={t("search.empty.title")} 
+                description={t("search.empty.description")} 
+              />
+            </div>
+          ) : (
             <div className="flex flex-col gap-1 p-2" ref={scrollRef}>
               {visibleRoutes.map((item, index) => {
                 const depth = (item.key.match(/\//g) || []).length - 1;
@@ -181,7 +192,7 @@ const SearchBar = () => {
 
                       <div className="flex flex-col overflow-hidden text-left">
                         <span className={`text-sm truncate text-foreground ${hasChildren ? "font-bold" : "font-medium"}`}>
-                          {t(item.label)}
+                          {t(item.label)} 
                         </span>
                         <span className="text-[9px] truncate tracking-tight text-foreground/60">
                           {item.key}
@@ -190,11 +201,13 @@ const SearchBar = () => {
 
                       <div className="ml-auto flex items-center gap-2">
                         {hasChildren && !searchQuery && (
-                          <Badge variant="warning" className="text-[9px] h-5">DANH MỤC</Badge>
+                          <Badge variant="warning" className="text-[9px] h-5">
+                            {t("search.badges.category")}
+                          </Badge>
                         )}
                         {isActive && (
                           <Badge variant="success" className="text-[10px] h-5 animate-in fade-in zoom-in-95 duration-200">
-                            MỞ ↵
+                            {t("search.badges.open")} ↵
                           </Badge>
                         )}
                       </div>
@@ -208,9 +221,18 @@ const SearchBar = () => {
 
         <DialogFooter className="p-3 bg-secondary/30 border-t hidden sm:flex justify-start items-center">
           <div className="flex gap-4 text-[11px] text-foreground">
-            <span className="flex items-center gap-1"><Badge variant="info" className="px-1 h-4">↑↓</Badge> Di chuyển</span>
-            <span className="flex items-center gap-1"><Badge variant="info" className="px-1 h-4">↵</Badge> Chọn</span>
-            <span className="flex items-center gap-1"><Badge variant="info" className="px-1 h-4">ESC</Badge> Đóng</span>
+            <span className="flex items-center gap-1">
+              <Badge variant="info" className="px-1 h-4">↑↓</Badge> 
+              {t("search.footer.navigate")}
+            </span>
+            <span className="flex items-center gap-1">
+              <Badge variant="info" className="px-1 h-4">↵</Badge> 
+              {t("search.footer.select")}
+            </span>
+            <span className="flex items-center gap-1">
+              <Badge variant="info" className="px-1 h-4">ESC</Badge> 
+              {t("search.footer.close")}
+            </span>
           </div>
         </DialogFooter>
       </DialogContent>

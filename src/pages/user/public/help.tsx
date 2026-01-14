@@ -1,85 +1,76 @@
-import { Button, Col, Input, Row, Typography, Form } from "antd";
+"use client";
+
+import { Button, Col, Input, Row, Typography, Form, message } from "antd";
 import { useRouter } from "@/router/hooks";
 import {
-    Headphones,
-    Mail,
-    Phone,
-    MapPin,
-    Clock,
-    FileText,
-    ShoppingBag,
-    Truck,
-    CreditCard,
-    Shield,
-    Send,
-    ArrowRight
+    Headphones, Mail, Phone, MapPin, Clock, FileText,
+    ShoppingBag, Truck, CreditCard, Shield, Send, ArrowRight
 } from "lucide-react";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import SigninNewletter from "@/components/user/signin-newletter";
 
 const { Title, Paragraph, Text } = Typography;
 
-const contactMethods = [
-    {
-        icon: Phone,
-        title: "Hotline",
-        value: "038 921 5396",
-        desc: "Miễn phí cuộc gọi",
-        color: "bg-green-500/10 text-green-600"
-    },
-    {
-        icon: Mail,
-        title: "Email",
-        value: "thangtrandz04@gmail.com",
-        desc: "Phản hồi trong 24h",
-        color: "bg-blue-500/10 text-blue-600"
-    },
-    {
-        icon: MapPin,
-        title: "Địa chỉ",
-        value: "123 Nguyễn Huệ, Q.1, TP.HCM",
-        desc: "Văn phòng chính",
-        color: "bg-orange-500/10 text-orange-600"
-    },
-];
-
-const helpCategories = [
-    { icon: ShoppingBag, title: "Đặt hàng", desc: "Hướng dẫn mua sắm", link: "/faqs?category=order" },
-    { icon: Truck, title: "Vận chuyển", desc: "Theo dõi đơn hàng", link: "/faqs?category=shipping" },
-    { icon: CreditCard, title: "Thanh toán", desc: "Phương thức thanh toán", link: "/faqs?category=payment" },
-    { icon: FileText, title: "Đổi trả", desc: "Chính sách hoàn tiền", link: "/faqs?category=return" },
-    { icon: Shield, title: "Tài khoản", desc: "Quản lý thông tin", link: "/faqs?category=account" },
-    { icon: Headphones, title: "Hỗ trợ khác", desc: "Câu hỏi thường gặp", link: "/faqs" },
-];
-
-const workingHours = [
-    { day: "Thứ 2 - Thứ 6", hours: "8:00 - 21:00" },
-    { day: "Thứ 7", hours: "9:00 - 18:00" },
-    { day: "Chủ nhật", hours: "9:00 - 17:00" },
-];
-
 export default function Help() {
+    const { t } = useTranslation();
     const navigate = useRouter();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
+    const contactMethods = [
+        {
+            icon: Phone,
+            title: t("help.contact_methods.hotline"),
+            value: "038 921 5396",
+            desc: t("help.contact_methods.hotline_desc"),
+            color: "bg-green-500/10 text-green-600"
+        },
+        {
+            icon: Mail,
+            title: t("help.contact_methods.email"),
+            value: "thangtrandz04@gmail.com",
+            desc: t("help.contact_methods.email_desc"),
+            color: "bg-blue-500/10 text-blue-600"
+        },
+        {
+            icon: MapPin,
+            title: t("help.contact_methods.address"),
+            value: t("help.contact_methods.address_value"),
+            desc: t("help.contact_methods.address_desc"),
+            color: "bg-orange-500/10 text-orange-600"
+        },
+    ];
+
+    const helpCategories = [
+        { icon: ShoppingBag, title: t("help.categories.order"), desc: t("help.categories.order_desc"), link: "/faqs?category=order" },
+        { icon: Truck, title: t("help.categories.shipping"), desc: t("help.categories.shipping_desc"), link: "/faqs?category=shipping" },
+        { icon: CreditCard, title: t("help.categories.payment"), desc: t("help.categories.payment_desc"), link: "/faqs?category=payment" },
+        { icon: FileText, title: t("help.categories.return"), desc: t("help.categories.return_desc"), link: "/faqs?category=return" },
+        { icon: Shield, title: t("help.categories.account"), desc: t("help.categories.account_desc"), link: "/faqs?category=account" },
+        { icon: Headphones, title: t("help.categories.other"), desc: t("help.categories.other_desc"), link: "/faqs" },
+    ];
+
+    const workingHours = [
+        { day: t("help.sidebar.monday_friday"), hours: "8:00 - 21:00" },
+        { day: t("help.sidebar.saturday"), hours: "9:00 - 18:00" },
+        { day: t("help.sidebar.sunday"), hours: "9:00 - 17:00" },
+    ];
+
     const handleSubmit = () => {
         setLoading(true);
-        // Simulate API call
         setTimeout(() => {
             setLoading(false);
             form.resetFields();
-            // Show success message
+            message.success(t("help.form.subtitle"));
         }, 1500);
     };
 
     return (
         <div>
             <Row gutter={[16, 16]}>
-                {/* Main content */}
                 <Col xs={24} lg={16}>
-                    {/* Hero Section */}
                     <div className="rounded-xl p-4 border border-border bg-gradient-to-r from-primary/10 to-primary/5 mb-6">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
@@ -87,19 +78,18 @@ export default function Help() {
                             </div>
                             <div>
                                 <Title level={2} className="!text-primary font-extrabold mb-0">
-                                    Trung Tâm Hỗ Trợ
+                                    {t("help.hero.title")}
                                 </Title>
                                 <Paragraph className="!text-muted-foreground mb-0">
-                                    Chúng tôi luôn sẵn sàng giúp đỡ bạn
+                                    {t("help.hero.subtitle")}
                                 </Paragraph>
                             </div>
                         </div>
                     </div>
 
-                    {/* Contact Methods */}
                     <div className="mb-6">
                         <Title level={4} className="font-bold mb-4">
-                            Liên Hệ Với Chúng Tôi
+                            {t("help.contact_methods.title")}
                         </Title>
                         <Row gutter={[16, 16]}>
                             {contactMethods.map(({ icon: Icon, title, value, desc, color }) => (
@@ -117,10 +107,9 @@ export default function Help() {
                         </Row>
                     </div>
 
-                    {/* Help Categories */}
                     <div className="mb-6">
                         <Title level={4} className="font-bold mb-4">
-                            Bạn Cần Hỗ Trợ Về?
+                            {t("help.categories.title")}
                         </Title>
                         <Row gutter={[16, 16]}>
                             {helpCategories.map(({ icon: Icon, title, desc, link }) => (
@@ -144,104 +133,60 @@ export default function Help() {
                         </Row>
                     </div>
 
-                    {/* Contact Form */}
                     <div className="rounded-xl p-6 border border-border">
                         <Title level={4} className="font-bold mb-4 flex items-center gap-2">
                             <Send className="w-5 h-5 text-primary" />
-                            Gửi Yêu Cầu Hỗ Trợ
+                            {t("help.form.title")}
                         </Title>
                         <Paragraph className="!text-muted-foreground mb-4">
-                            Điền thông tin bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
+                            {t("help.form.subtitle")}
                         </Paragraph>
 
-                        <Form
-                            form={form}
-                            layout="vertical"
-                            onFinish={handleSubmit}
-                        >
+                        <Form form={form} layout="vertical" onFinish={handleSubmit}>
                             <Row gutter={16}>
                                 <Col xs={24} sm={12}>
-                                    <Form.Item
-                                        name="name"
-                                        label="Họ và tên"
-                                        rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
-                                    >
-                                        <Input size="large" placeholder="Nhập họ và tên" className="rounded-lg" />
+                                    <Form.Item name="name" label={t("help.form.label_name")} rules={[{ required: true, message: t("help.form.error_name") }]}>
+                                        <Input size="large" placeholder={t("help.form.placeholder_name")} className="rounded-lg" />
                                     </Form.Item>
                                 </Col>
                                 <Col xs={24} sm={12}>
-                                    <Form.Item
-                                        name="phone"
-                                        label="Số điện thoại"
-                                        rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
-                                    >
-                                        <Input size="large" placeholder="Nhập số điện thoại" className="rounded-lg" />
+                                    <Form.Item name="phone" label={t("help.form.label_phone")} rules={[{ required: true, message: t("help.form.error_phone") }]}>
+                                        <Input size="large" placeholder={t("help.form.placeholder_phone")} className="rounded-lg" />
                                     </Form.Item>
                                 </Col>
                             </Row>
-
-                            <Form.Item
-                                name="email"
-                                label="Email"
-                                rules={[
-                                    { required: true, message: "Vui lòng nhập email" },
-                                    { type: "email", message: "Email không hợp lệ" }
-                                ]}
-                            >
-                                <Input size="large" placeholder="Nhập địa chỉ email" className="rounded-lg" />
+                            <Form.Item name="email" label={t("help.form.label_email")} rules={[
+                                { required: true, message: t("help.form.error_email_req") },
+                                { type: "email", message: t("help.form.error_email_type") }
+                            ]}>
+                                <Input size="large" placeholder={t("help.form.placeholder_email")} className="rounded-lg" />
                             </Form.Item>
-
-                            <Form.Item
-                                name="subject"
-                                label="Tiêu đề"
-                                rules={[{ required: true, message: "Vui lòng nhập tiêu đề" }]}
-                            >
-                                <Input size="large" placeholder="Nhập tiêu đề yêu cầu" className="rounded-lg" />
+                            <Form.Item name="subject" label={t("help.form.label_subject")} rules={[{ required: true, message: t("help.form.error_subject") }]}>
+                                <Input size="large" placeholder={t("help.form.placeholder_subject")} className="rounded-lg" />
                             </Form.Item>
-
-                            <Form.Item
-                                name="message"
-                                label="Nội dung"
-                                rules={[{ required: true, message: "Vui lòng nhập nội dung" }]}
-                            >
-                                <TextArea
-                                    rows={4}
-                                    placeholder="Mô tả chi tiết vấn đề của bạn..."
-                                    className="rounded-lg"
-                                />
+                            <Form.Item name="message" label={t("help.form.label_message")} rules={[{ required: true, message: t("help.form.error_message") }]}>
+                                <TextArea rows={4} placeholder={t("help.form.placeholder_message")} className="rounded-lg" />
                             </Form.Item>
-
                             <div className="flex justify-end gap-3">
                                 <Button size="large" onClick={() => form.resetFields()} className="rounded-lg">
-                                    Đặt lại
+                                    {t("help.form.btn_reset")}
                                 </Button>
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    htmlType="submit"
-                                    loading={loading}
-                                    icon={<Send className="w-4 h-4" />}
-                                    className="rounded-lg"
-                                >
-                                    Gửi yêu cầu
+                                <Button type="primary" size="large" htmlType="submit" loading={loading} icon={<Send className="w-4 h-4" />} className="rounded-lg">
+                                    {t("help.form.btn_send")}
                                 </Button>
                             </div>
                         </Form>
                     </div>
                 </Col>
 
-                {/* Sidebar */}
                 <Col xs={24} lg={8}>
                     <div className="sticky top-4 space-y-4">
-                        {/* Working Hours */}
                         <div className="border border-border p-4 rounded-2xl">
                             <div className="flex items-center gap-3 mb-4">
                                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                                     <Clock className="w-5 h-5 text-primary" />
                                 </div>
-                                <Title level={4} className="font-bold mb-0">
-                                    Giờ Làm Việc
-                                </Title>
+                                <Title level={4} className="font-bold mb-0">{t("help.sidebar.working_hours")}</Title>
                             </div>
                             <div className="space-y-2">
                                 {workingHours.map(({ day, hours }) => (
@@ -251,36 +196,25 @@ export default function Help() {
                                     </div>
                                 ))}
                             </div>
-                            <Paragraph className="!text-muted-foreground text-sm mt-4 mb-0">
-                                * Hotline và Live Chat hoạt động 24/7 để hỗ trợ bạn.
-                            </Paragraph>
+                            <Paragraph className="!text-muted-foreground text-sm mt-4 mb-0">{t("help.sidebar.note")}</Paragraph>
                         </div>
 
-                        {/* Quick Links */}
                         <div className="border border-border p-4 rounded-2xl">
-                            <Title level={4} className="font-bold mb-4">
-                                Liên Kết Nhanh
-                            </Title>
+                            <Title level={4} className="font-bold mb-4">{t("help.sidebar.quick_links")}</Title>
                             <div className="space-y-2">
                                 {[
-                                    { label: "Câu hỏi thường gặp", link: "/faqs" },
-                                    { label: "Điều khoản sử dụng", link: "/terms" },
-                                    { label: "Chính sách bảo mật", link: "/privacy" },
-                                    { label: "Về chúng tôi", link: "/about" },
+                                    { label: t("help.sidebar.link_faq"), link: "/faqs" },
+                                    { label: t("help.sidebar.link_terms"), link: "/terms" },
+                                    { label: t("help.sidebar.link_privacy"), link: "/privacy" },
+                                    { label: t("help.sidebar.link_about"), link: "/about" },
                                 ].map(({ label, link }) => (
-                                    <div
-                                        key={label}
-                                        className="p-3 bg-muted/30 rounded-lg hover:bg-primary/10 cursor-pointer transition-all flex items-center justify-between group"
-                                        onClick={() => navigate.push(link)}
-                                    >
+                                    <div key={label} className="p-3 bg-muted/30 rounded-lg hover:bg-primary/10 cursor-pointer transition-all flex items-center justify-between group" onClick={() => navigate.push(link)}>
                                         <Text>{label}</Text>
                                         <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-all" />
                                     </div>
                                 ))}
                             </div>
                         </div>
-
-                        {/* Newsletter */}
                         <SigninNewletter />
                     </div>
                 </Col>

@@ -1,35 +1,36 @@
 "use client";
 
 import { useSearchParams } from "react-router";
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Check, Package, CreditCard, Truck, Wallet } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SuccessPageContent = () => {
+  const { t } = useTranslation()
   const [searchParams] = useSearchParams();
   const orderNumber = searchParams.get("orderNumber");
   const paymentMethod = searchParams.get("payment") || "cod";
 
-  const getPaymentInfo = () => {
+  const paymentInfo = useMemo(() => {
     if (paymentMethod === "card") {
       return {
         icon: <CreditCard className="w-5 h-5 text-blue-500" />,
-        label: "Thẻ tín dụng/ghi nợ",
-        status: "Đã thanh toán",
+        label: t("success_page.payment.card"),
+        status: t("success_page.payment.card_status"),
         statusColor: "text-green-500",
-        message: "Thanh toán đã được xác nhận. Đơn hàng sẽ được xử lý ngay."
+        message: t("success_page.payment.card_msg")
       };
     }
     return {
       icon: <Truck className="w-5 h-5 text-amber-500" />,
-      label: "Thanh toán khi nhận hàng (COD)",
-      status: "Chờ thanh toán",
+      label: t("success_page.payment.cod"),
+      status: t("success_page.payment.cod_status"),
       statusColor: "text-amber-500",
-      message: "Vui lòng chuẩn bị tiền mặt khi nhận hàng."
+      message: t("success_page.payment.cod_msg")
     };
-  };
+  }, [paymentMethod, t]);
 
-  const paymentInfo = getPaymentInfo();
 
   return (
     <div className="pb-5 flex items-center justify-center text-foreground">
@@ -75,7 +76,7 @@ const SuccessPageContent = () => {
           transition={{ delay: 0.4 }}
           className="text-3xl font-extrabold mb-3 bg-gradient-to-r from-green-300 to-green-500 bg-clip-text text-transparent"
         >
-          🎉 Đặt Hàng Thành Công!
+          {t("success_page.title")}
         </motion.h1>
 
         {/* Order Details Box */}
@@ -88,22 +89,16 @@ const SuccessPageContent = () => {
           <div className="bg-muted rounded-2xl p-3 text-left border border-border shadow-inner">
             <h3 className="font-semibold text-lg mb-2 flex items-center gap-2">
               <Package className="w-5 h-5 text-green-500" />
-              Chi Tiết Đơn Hàng
+              {t("success_page.order_details")}
             </h3>
 
-            <p className="opacity-90 mb-1">
-              Cảm ơn bạn đã mua hàng! Chúng tôi đang xử lý đơn hàng của bạn và sẽ giao sớm nhất có thể.
-            </p>
-            <p className="opacity-80 mb-2">
-              Email xác nhận đơn hàng sẽ sớm được gửi đến bạn.
-            </p>
+            <p className="opacity-90 mb-1">{t("success_page.thank_you")}</p>
+            <p className="opacity-80 mb-2">{t("success_page.email_notice")}</p>
 
             {/* Order Number Badge */}
             <div className="border rounded-xl p-3 border-green-600 bg-green-600/10 shadow-sm mb-3">
-              <p className="text-sm opacity-80">Mã đơn hàng:</p>
-              <p className="text-2xl font-bold text-green-500 tracking-wide">
-                #{orderNumber}
-              </p>
+            <p className="text-sm opacity-80">{t("success_page.order_number")}</p>
+            <p className="text-2xl font-bold text-green-500 tracking-wide">#{orderNumber}</p>
             </div>
 
             {/* Payment Method Info */}
@@ -111,7 +106,7 @@ const SuccessPageContent = () => {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Wallet className="w-4 h-4 opacity-70" />
-                  <span className="text-sm opacity-80">Phương thức thanh toán:</span>
+                  <span className="text-sm opacity-80">{t("success_page.payment_method_label")}</span>
                 </div>
                 <span className={`text-sm font-medium ${paymentInfo.statusColor}`}>
                   {paymentInfo.status}
@@ -127,7 +122,7 @@ const SuccessPageContent = () => {
 
           {/* Timeline */}
           <div className="bg-muted rounded-2xl p-3 border border-border shadow-inner">
-            <h3 className="font-semibold mb-2 text-center">Quy Trình Xử Lý</h3>
+            <h3 className="font-semibold mb-2 text-center">{t("success_page.steps.title")}</h3>
 
             <div className="flex items-center justify-between text-sm">
               {/* Step 1 */}
@@ -135,7 +130,7 @@ const SuccessPageContent = () => {
                 <div className="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center text-white font-bold shadow">
                   ✓
                 </div>
-                <span className="mt-2 text-green-500 font-medium">Đặt hàng</span>
+                <span className="mt-2 text-green-500 font-medium">{t("success_page.steps.step_1")}</span>
               </div>
 
               <div className="flex-1 h-[2px] bg-green-500/50 mx-2"></div>
@@ -145,7 +140,7 @@ const SuccessPageContent = () => {
                 <div className="w-9 h-9 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold shadow">
                   2
                 </div>
-                <span className="mt-2 text-yellow-500 font-medium">Xử lý</span>
+                <span className="mt-2 text-yellow-500 font-medium">{t("success_page.steps.step_2")}</span>
               </div>
 
               <div className="flex-1 h-[2px] bg-foreground/40 mx-2"></div>
@@ -155,7 +150,7 @@ const SuccessPageContent = () => {
                 <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-white font-bold shadow">
                   3
                 </div>
-                <span className="mt-2 text-foreground font-medium">Giao hàng</span>
+                <span className="mt-2 text-foreground font-medium">{t("success_page.steps.step_3")}</span>
               </div>
             </div>
           </div>
@@ -169,11 +164,11 @@ const SuccessPageContent = () => {
           className="pt-6 border-t border-border"
         >
           <p className="text-sm">
-            Cần hỗ trợ? Liên hệ{" "}
+            {t("success_page.footer.help")}{" "}
             <a href="mailto:thangtrandz04@gmail.com" className="text-blue-500 hover:underline">
               thangtrandz04@gmail.com
             </a>{" "}
-            • Hotline{" "}
+            • {t("success_page.footer.hotline")}{" "}
             <a href="tel:+84389215396" className="text-blue-500 hover:underline">
               038 921 5396
             </a>

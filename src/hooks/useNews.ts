@@ -1,13 +1,16 @@
+"use client";
 import { INews, newsService, NewsPaginationResponse, INewsFilters } from "@/api/services/newsApi";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export const useNews = () => {
+  const { t } = useTranslation(); 
   const [news, setNews] = useState<INews[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 1. Lấy danh sách tin tức cho Public (Khách hàng)
+  // 1. Lấy danh sách tin tức cho Public
   const fetchPublicNews = useCallback(async (sort?: string) => {
     setLoading(true);
     try {
@@ -23,23 +26,22 @@ export const useNews = () => {
     }
   }, []);
 
-  // Tự động gọi lần đầu khi hook được mount
   useEffect(() => {
     fetchPublicNews();
   }, [fetchPublicNews]);
 
-  // 2. Lấy chi tiết tin tức (Dùng khi cần lấy lẻ 1 bài)
+  // 2. Lấy chi tiết tin tức
   const getNewsDetail = async (slug: string) => {
     try {
       const res = await newsService.getDetail(slug);
       return res.data;
     } catch (err) {
-      toast.error("Không tìm thấy bài viết");
+      console.log(t("news.error.not_found"));
       return null;
     }
   };
 
-  // 3. Lấy tất cả tin tức cho Admin (Phân trang/Search)
+  // 3. Lấy tất cả tin tức cho Admin
   const fetchAdminNews = useCallback(
     async (filters: INewsFilters): Promise<NewsPaginationResponse | null> => {
       setLoading(true);
@@ -49,23 +51,23 @@ export const useNews = () => {
         return res;
       } catch (err) {
         console.error("Lỗi lấy danh sách admin:", err);
-        toast.error("Lỗi khi tải dữ liệu quản trị");
+        toast.error(t("news.toast.fetch_admin_error"));
         return null;
       } finally {
         setLoading(false);
       }
     },
-    []
+    [t] 
   );
 
   // 4. Tạo mới tin tức
   const createNews = async (data: Partial<INews>) => {
     try {
       const res = await newsService.create(data);
-      toast.success("Đăng tin tức thành công");
+      toast.success(t("news.toast.create_success"));
       return res;
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Lỗi khi tạo tin tức");
+      toast.error(err.response?.data?.message || t("news.toast.create_error"));
       throw err;
     }
   };
@@ -74,10 +76,10 @@ export const useNews = () => {
   const updateNews = async (id: string, data: Partial<INews>) => {
     try {
       const res = await newsService.update(id, data);
-      toast.success("Cập nhật tin tức thành công");
+      toast.success(t("news.toast.update_success"));
       return res;
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Lỗi khi cập nhật");
+      toast.error(err.response?.data?.message || t("news.toast.update_error"));
       throw err;
     }
   };
@@ -86,10 +88,10 @@ export const useNews = () => {
   const deleteNews = async (id: string) => {
     try {
       await newsService.delete(id);
-      toast.success("Đã xóa bài viết");
+      toast.success(t("news.toast.delete_success"));
       return true;
     } catch (err) {
-      toast.error("Không thể xóa bài viết");
+      toast.error(t("news.toast.delete_error"));
       return false;
     }
   };

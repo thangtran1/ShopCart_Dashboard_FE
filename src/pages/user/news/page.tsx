@@ -15,11 +15,12 @@ import {
 import { Link } from "react-router";
 import { useNews } from "@/hooks/useNews";
 import { INews } from "@/api/services/newsApi";
+import { useTranslation } from "react-i18next";
 
 export default function NewsPage() {
   const { refreshNews, loading } = useNews();
   const [allNews, setAllNews] = useState<INews[]>([]);
-  console.log(allNews)
+  const { t, i18n } = useTranslation()
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
@@ -57,23 +58,26 @@ export default function NewsPage() {
       </div>
     );
   }
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US');
+  };
 
   return (
     <div>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>
+            <BreadcrumbLink href="/">{t("news_page.breadcrumb.home")}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Tin tức</BreadcrumbPage>
+            <BreadcrumbPage>{t("news_page.breadcrumb.news")}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
       <h2 className="text-2xl font-bold my-4 flex items-center gap-2">
-         TIN TỨC MỚI NHẤT
+        {t("news_page.latest_title")}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -99,9 +103,9 @@ export default function NewsPage() {
               <div className="flex items-center gap-4 text-xs text-white/70">
                 <span className="flex items-center gap-1">
                   <ClockCircleOutlined />
-                  {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                  {formatDate(news.createdAt)}
                 </span>
-                <span>{news.views} lượt xem</span>
+                <span>{news.views} {t("news_page.article.views")}</span>
               </div>
             </div>
           </Link>
@@ -115,10 +119,7 @@ export default function NewsPage() {
               key={news._id}
               className="group rounded-xl border border-border bg-card p-4 transition-all hover:shadow-lg hover:border-primary/30"
             >
-              <Link
-                to={`/all-news/${news.slug}`}
-                className="flex flex-col sm:flex-row gap-5"
-              >
+              <Link to={`/all-news/${news.slug}`} className="flex flex-col sm:flex-row gap-5">
                 <div className="relative h-[180px] w-full sm:w-[260px] flex-shrink-0 overflow-hidden rounded-lg">
                   <img
                     src={news.thumbnail}
@@ -134,7 +135,7 @@ export default function NewsPage() {
                     </Badge>
                     <span className="text-xs text-muted-foreground flex items-center gap-1">
                       <ClockCircleOutlined />
-                      {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                      {formatDate(news.createdAt)}
                     </span>
                   </div>
 
@@ -149,10 +150,10 @@ export default function NewsPage() {
                   <div className="mt-auto flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs">
                       <Avatar size="small" icon={<UserOutlined />} />
-                      <span className="font-medium">Admin</span>
+                      <span className="font-medium">{t("news_page.article.admin")}</span>
                     </div>
                     <span className="text-xs text-muted-foreground italic">
-                      {news.views} lượt xem
+                      {news.views} {t("news_page.article.views")}
                     </span>
                   </div>
                 </div>
@@ -180,8 +181,10 @@ export default function NewsPage() {
               <div className="px-4 py-4 bg-muted/50 border-b border-border flex items-center gap-2">
                 <FireOutlined className="text-orange-500 text-lg" />
                 <div>
-                  <h3 className="font-bold text-sm uppercase">Xu hướng nổi bật</h3>
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Top lượt xem nhiều nhất</p>
+                  <h3 className="font-bold text-sm uppercase">{t("news_page.trending.title")}</h3>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                    {t("news_page.trending.subtitle")}
+                  </p>
                 </div>
               </div>
 
@@ -204,7 +207,7 @@ export default function NewsPage() {
                           <span>{news.category}</span>
                           <span className="flex items-center gap-0.5">
                             <ClockCircleOutlined className="scale-75" />
-                            {new Date(news.createdAt).toLocaleDateString("vi-VN")}
+                            {formatDate(news.createdAt)}
                           </span>
                         </div>
                       </div>
@@ -218,4 +221,4 @@ export default function NewsPage() {
       </div>
     </div>
   );
-}
+};

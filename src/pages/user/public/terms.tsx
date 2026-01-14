@@ -1,182 +1,36 @@
 import { Button, Col, Row, Typography, Collapse } from "antd";
 import { useRouter } from "@/router/hooks";
+import { useTranslation } from "react-i18next";
 import {
-    FileText,
-    Shield,
-    Scale,
-    AlertCircle,
-    Users,
-    Lock,
-    CreditCard,
-    Truck,
-    RefreshCw,
-    MessageCircle,
-    ArrowRight,
-    CheckCircle,
-    Calendar,
-    BookOpen
+    FileText, Shield, Scale, AlertCircle, Users, Lock,
+    CreditCard, Truck, RefreshCw, MessageCircle, ArrowRight,
+    CheckCircle, Calendar, BookOpen
 } from "lucide-react";
 import SigninNewletter from "@/components/user/signin-newletter";
 
 const { Title, Paragraph, Text } = Typography;
 const { Panel } = Collapse;
 
-const termsSections = [
-    {
-        icon: BookOpen,
-        title: "1. Giới Thiệu & Điều Khoản Chung",
-        content: [
-            {
-                subtitle: "1.1 Chào mừng",
-                text: "Chào mừng bạn đến với Shopcart TVT! Bằng việc truy cập và sử dụng website của chúng tôi, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu trong tài liệu này."
-            },
-            {
-                subtitle: "1.2 Phạm vi áp dụng",
-                text: "Các điều khoản này áp dụng cho tất cả người dùng, bao gồm khách truy cập, khách hàng đã đăng ký và bất kỳ ai sử dụng dịch vụ của chúng tôi."
-            },
-            {
-                subtitle: "1.3 Cập nhật điều khoản",
-                text: "Chúng tôi có quyền cập nhật điều khoản bất cứ lúc nào. Phiên bản mới nhất sẽ được đăng tải trên trang này với ngày có hiệu lực rõ ràng."
-            }
-        ]
-    },
-    {
-        icon: Shield,
-        title: "2. Quyền Sở Hữu & Bản Quyền",
-        content: [
-            {
-                subtitle: "2.1 Nội dung website",
-                text: "Tất cả nội dung trên website bao gồm văn bản, hình ảnh, logo, đồ họa, video và phần mềm đều thuộc quyền sở hữu của Shopcart TVT hoặc các đối tác được cấp phép."
-            },
-            {
-                subtitle: "2.2 Sử dụng nội dung",
-                text: "Bạn không được sao chép, phân phối, sửa đổi hoặc sử dụng bất kỳ nội dung nào từ website cho mục đích thương mại mà không có sự đồng ý bằng văn bản."
-            },
-            {
-                subtitle: "2.3 Chia sẻ liên kết",
-                text: "Việc chia sẻ liên kết đến website của chúng tôi được cho phép, miễn là không gây hiểu lầm hoặc gây hại đến thương hiệu."
-            }
-        ]
-    },
-    {
-        icon: Users,
-        title: "3. Tài Khoản Người Dùng",
-        content: [
-            {
-                subtitle: "3.1 Đăng ký tài khoản",
-                text: "Để sử dụng đầy đủ tính năng, bạn cần đăng ký tài khoản với thông tin chính xác và cập nhật. Bạn chịu trách nhiệm bảo mật thông tin đăng nhập của mình."
-            },
-            {
-                subtitle: "3.2 Trách nhiệm tài khoản",
-                text: "Mọi hoạt động từ tài khoản của bạn đều được xem là do bạn thực hiện. Hãy thông báo ngay cho chúng tôi nếu phát hiện truy cập trái phép."
-            },
-            {
-                subtitle: "3.3 Chấm dứt tài khoản",
-                text: "Chúng tôi có quyền tạm ngưng hoặc chấm dứt tài khoản nếu phát hiện vi phạm điều khoản hoặc hành vi gian lận."
-            }
-        ]
-    },
-    {
-        icon: CreditCard,
-        title: "4. Thanh Toán & Giá Cả",
-        content: [
-            {
-                subtitle: "4.1 Giá sản phẩm",
-                text: "Giá hiển thị trên website đã bao gồm VAT (trừ khi có ghi chú khác). Giá có thể thay đổi mà không cần thông báo trước."
-            },
-            {
-                subtitle: "4.2 Phương thức thanh toán",
-                text: "Chúng tôi chấp nhận nhiều phương thức thanh toán: COD, chuyển khoản, thẻ tín dụng/ghi nợ, ví điện tử và trả góp 0%."
-            },
-            {
-                subtitle: "4.3 Bảo mật thanh toán",
-                text: "Mọi giao dịch được mã hóa SSL 256-bit và tuân thủ tiêu chuẩn PCI DSS để đảm bảo an toàn tuyệt đối."
-            }
-        ]
-    },
-    {
-        icon: Truck,
-        title: "5. Giao Hàng & Vận Chuyển",
-        content: [
-            {
-                subtitle: "5.1 Phạm vi giao hàng",
-                text: "Chúng tôi giao hàng toàn quốc. Thời gian giao hàng từ 1-7 ngày làm việc tùy thuộc vào địa điểm."
-            },
-            {
-                subtitle: "5.2 Phí vận chuyển",
-                text: "Phí vận chuyển được tính dựa trên trọng lượng và khoảng cách. Đơn hàng từ 500,000đ được miễn phí vận chuyển."
-            },
-            {
-                subtitle: "5.3 Kiểm tra hàng",
-                text: "Bạn có quyền kiểm tra sản phẩm trước khi nhận. Nếu sản phẩm không đúng hoặc bị hư hỏng, vui lòng từ chối nhận hàng."
-            }
-        ]
-    },
-    {
-        icon: RefreshCw,
-        title: "6. Đổi Trả & Hoàn Tiền",
-        content: [
-            {
-                subtitle: "6.1 Thời hạn đổi trả",
-                text: "Bạn có 30 ngày để yêu cầu đổi/trả sản phẩm kể từ ngày nhận hàng, với điều kiện sản phẩm còn nguyên tem, nhãn và chưa qua sử dụng."
-            },
-            {
-                subtitle: "6.2 Quy trình hoàn tiền",
-                text: "Sau khi yêu cầu được duyệt và nhận lại sản phẩm, tiền hoàn sẽ được xử lý trong 3-5 ngày làm việc."
-            },
-            {
-                subtitle: "6.3 Sản phẩm không đổi trả",
-                text: "Một số sản phẩm như đồ lót, mỹ phẩm đã mở seal, sản phẩm theo yêu cầu riêng không áp dụng đổi trả."
-            }
-        ]
-    },
-    {
-        icon: Lock,
-        title: "7. Bảo Mật & Quyền Riêng Tư",
-        content: [
-            {
-                subtitle: "7.1 Thu thập thông tin",
-                text: "Chúng tôi thu thập thông tin cần thiết để xử lý đơn hàng và cải thiện dịch vụ. Thông tin được bảo mật theo chính sách riêng tư."
-            },
-            {
-                subtitle: "7.2 Sử dụng thông tin",
-                text: "Thông tin của bạn chỉ được sử dụng cho mục đích đã nêu và không được chia sẻ với bên thứ ba ngoài đối tác vận chuyển."
-            },
-            {
-                subtitle: "7.3 Cookie",
-                text: "Website sử dụng cookie để cải thiện trải nghiệm người dùng. Bạn có thể tắt cookie trong cài đặt trình duyệt."
-            }
-        ]
-    },
-    {
-        icon: Scale,
-        title: "8. Giới Hạn Trách Nhiệm",
-        content: [
-            {
-                subtitle: "8.1 Trách nhiệm của chúng tôi",
-                text: "Shopcart TVT cam kết cung cấp sản phẩm chất lượng và dịch vụ tốt nhất, nhưng không chịu trách nhiệm cho những tổn thất ngoài tầm kiểm soát."
-            },
-            {
-                subtitle: "8.2 Sử dụng hợp pháp",
-                text: "Bạn cam kết sử dụng website và dịch vụ cho mục đích hợp pháp. Mọi hành vi vi phạm pháp luật sẽ bị từ chối phục vụ."
-            },
-            {
-                subtitle: "8.3 Giải quyết tranh chấp",
-                text: "Mọi tranh chấp sẽ được giải quyết theo pháp luật Việt Nam. Chúng tôi ưu tiên thương lượng và hòa giải trước khi đưa ra tòa án."
-            }
-        ]
-    }
-];
-
-const quickStats = [
-    { label: "Ngày có hiệu lực", value: "01/01/2023" },
-    { label: "Cập nhật lần cuối", value: "05/12/2025" },
-    { label: "Phiên bản", value: "3.0" },
-    { label: "Ngôn ngữ", value: "Tiếng Việt" },
-];
-
 export default function TermsPage() {
+    const { t } = useTranslation();
     const navigate = useRouter();
+
+    const icons = [BookOpen, Shield, Users, CreditCard, Truck, RefreshCw, Lock, Scale];
+
+    // Lấy dữ liệu mảng từ i18n
+    const sectionsData = t("terms.sections", { returnObjects: true }) as any[];
+
+    const termsSections = sectionsData.map((section, index) => ({
+        ...section,
+        icon: icons[index] || FileText
+    }));
+
+    const quickStats = [
+        { label: t("terms.stats.labels.effective"), value: "01/01/2023" },
+        { label: t("terms.stats.labels.updated"), value: "05/12/2025" },
+        { label: t("terms.stats.labels.version"), value: "3.0" },
+        { label: t("terms.stats.labels.language"), value: t("terms.stats.labels.lang_value") },
+    ];
 
     return (
         <div>
@@ -191,21 +45,21 @@ export default function TermsPage() {
                             </div>
                             <div>
                                 <Title level={2} className="!text-primary font-extrabold mb-0">
-                                    Điều Khoản Sử Dụng
+                                    {t("terms.header.title")}
                                 </Title>
                                 <Paragraph className="!text-muted-foreground mb-0">
-                                    Thương hiệu Shopcart TVT
+                                    {t("terms.header.brand")}
                                 </Paragraph>
                             </div>
                         </div>
                         <div className="flex flex-wrap gap-2 mt-2">
                             <div className="flex items-center gap-2 px-3 py-1 bg-white/50 rounded-full text-sm">
                                 <Calendar className="w-4 h-4 text-primary" />
-                                <Text>Cập nhật: 05/12/2025</Text>
+                                <Text>{t("terms.header.updated", { date: "05/12/2025" })}</Text>
                             </div>
                             <div className="flex items-center gap-2 px-3 py-1 bg-white/50 rounded-full text-sm">
                                 <CheckCircle className="w-4 h-4 text-green-500" />
-                                <Text>Có hiệu lực từ: 01/01/2023</Text>
+                                <Text>{t("terms.header.effective", { date: "01/01/2023" })}</Text>
                             </div>
                         </div>
                     </div>
@@ -217,11 +71,9 @@ export default function TermsPage() {
                                 <AlertCircle className="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
-                                <Title level={4} className="font-bold mb-2">Lưu Ý Quan Trọng</Title>
+                                <Title level={4} className="font-bold mb-2">{t("terms.important_note.title")}</Title>
                                 <Paragraph className="!text-muted-foreground mb-0">
-                                    Vui lòng đọc kỹ các điều khoản và điều kiện dưới đây trước khi sử dụng dịch vụ của chúng tôi.
-                                    Bằng việc truy cập hoặc sử dụng website Shopcart TVT, bạn đồng ý bị ràng buộc bởi các điều khoản này.
-                                    Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi.
+                                    {t("terms.important_note.content")}
                                 </Paragraph>
                             </div>
                         </div>
@@ -252,7 +104,7 @@ export default function TermsPage() {
                                         className="border-b border-border last:border-b-0"
                                     >
                                         <div className="pl-13 space-y-4">
-                                            {section.content.map((item, idx) => (
+                                            {section.content.map((item: any, idx: number) => (
                                                 <div key={idx} className="pl-4 border-l-2 border-primary/30">
                                                     <Text className="font-medium block mb-1">{item.subtitle}</Text>
                                                     <Paragraph className="!text-muted-foreground mb-0 leading-relaxed">
@@ -271,21 +123,21 @@ export default function TermsPage() {
                     <div className="rounded-xl p-4 border border-border mt-6">
                         <Title level={4} className="font-bold mb-4 flex items-center gap-2">
                             <MessageCircle className="w-5 h-5 text-primary" />
-                            Liên Hệ & Hỗ Trợ
+                            {t("terms.contact.title")}
                         </Title>
                         <Paragraph className="!text-muted-foreground mb-4">
-                            Nếu bạn có bất kỳ câu hỏi nào về các Điều khoản và Điều kiện này, vui lòng liên hệ với chúng tôi:
+                            {t("terms.contact.desc")}
                         </Paragraph>
                         <Row gutter={[16, 16]}>
                             <Col xs={24} sm={12}>
                                 <div className="p-4 bg-muted/30 rounded-lg">
-                                    <Text className="font-medium block">Email hỗ trợ:</Text>
+                                    <Text className="font-medium block">{t("terms.contact.email_label")}</Text>
                                     <Text className="text-primary">thangtrandz04@gmail.com</Text>
                                 </div>
                             </Col>
                             <Col xs={24} sm={12}>
                                 <div className="p-4 bg-muted/30 rounded-lg">
-                                    <Text className="font-medium block">Hotline:</Text>
+                                    <Text className="font-medium block">{t("terms.contact.hotline_label")}</Text>
                                     <Text className="text-primary">038 921 5396</Text>
                                 </div>
                             </Col>
@@ -298,7 +150,7 @@ export default function TermsPage() {
                                 onClick={() => navigate.push("/contact")}
                                 className="rounded-lg"
                             >
-                                Liên Hệ Ngay
+                                {t("terms.contact.button")}
                             </Button>
                         </div>
                     </div>
@@ -310,7 +162,7 @@ export default function TermsPage() {
                         {/* Document Info */}
                         <div className="border border-border p-4 rounded-2xl">
                             <Title level={4} className="font-bold mb-4">
-                                Thông Tin Tài Liệu
+                                {t("terms.stats.title")}
                             </Title>
                             <div className="space-y-3">
                                 {quickStats.map(({ label, value }) => (
@@ -325,7 +177,7 @@ export default function TermsPage() {
                         {/* Quick Navigation */}
                         <div className="border border-border p-4 rounded-2xl">
                             <Title level={4} className="font-bold mb-4">
-                                Mục Lục
+                                {t("terms.sidebar.toc")}
                             </Title>
                             <div className="space-y-2">
                                 {termsSections.map((section, index) => (
@@ -344,21 +196,21 @@ export default function TermsPage() {
                         {/* Related Links */}
                         <div className="border border-border p-4 rounded-2xl">
                             <Title level={4} className="font-bold mb-4">
-                                Trang Liên Quan
+                                {t("terms.sidebar.related")}
                             </Title>
                             <div className="space-y-2">
                                 {[
-                                    { label: "Chính sách bảo mật", link: "/privacy" },
-                                    { label: "Câu hỏi thường gặp", link: "/faqs" },
-                                    { label: "Trung tâm hỗ trợ", link: "/help" },
-                                    { label: "Về chúng tôi", link: "/about" },
-                                ].map(({ label, link }) => (
+                                    { key: "privacy", link: "/privacy" },
+                                    { key: "faqs", link: "/faqs" },
+                                    { key: "help", link: "/help" },
+                                    { key: "about", link: "/about" },
+                                ].map(({ key, link }) => (
                                     <div
-                                        key={label}
+                                        key={key}
                                         className="p-3 bg-muted/30 rounded-lg hover:bg-primary/10 cursor-pointer transition-all flex items-center justify-between group"
                                         onClick={() => navigate.push(link)}
                                     >
-                                        <Text>{label}</Text>
+                                        <Text>{t(`terms.sidebar.links.${key}`)}</Text>
                                         <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-all" />
                                     </div>
                                 ))}

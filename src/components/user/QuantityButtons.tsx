@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   product: Product;
@@ -13,12 +14,12 @@ interface Props {
 }
 
 const QuantityButtons = ({ product, className }: Props) => {
+  const { t } = useTranslation();
   const { items, addToCart, decreaseItem } = useCart();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const currentItem = items.find((item: any) => item.product._id === product._id);
   const itemCount = currentItem ? currentItem.quantity : 0;
-
   const isOutOfStock = product?.stock === 0;
 
   const handleDecreaseProduct = async () => {
@@ -26,14 +27,14 @@ const QuantityButtons = ({ product, className }: Props) => {
     try {
       await decreaseItem(product._id);
       if (itemCount > 1) {
-        toast.success("Quantity Decreased successfully!");
+        toast.success(t("cart.toast.decrease_success"));
       } else {
         toast.success(
-          `${product?.name?.substring(0, 12)}... removed successfully!`
+          t("cart.toast.remove_success", { name: product?.name?.substring(0, 12) })
         );
       }
     } catch (error) {
-      toast.error("Không thể cập nhật giỏ hàng");
+      toast.error(t("cart.toast.update_error"));
     } finally {
       setIsUpdating(false);
     }
@@ -44,14 +45,14 @@ const QuantityButtons = ({ product, className }: Props) => {
       setIsUpdating(true);
       try {
         await addToCart({ productId: product._id, quantity: 1 });
-        toast.success("Đã tăng số lượng!");
+        toast.success(t("cart.toast.increase_success"));
       } catch (error) {
-        toast.error("Không thể cập nhật giỏ hàng");
+        toast.error(t("cart.toast.update_error"));
       } finally {
         setIsUpdating(false);
       }
     } else {
-      toast.error("Đã đạt giới hạn tồn kho!");
+      toast.error(t("cart.toast.stock_limit"));
     }
   };
 
@@ -62,7 +63,7 @@ const QuantityButtons = ({ product, className }: Props) => {
         variant="outline"
         size="icon"
         disabled={itemCount === 0 || isOutOfStock || isUpdating}
-        className="w-6 h-6 border-[1px] hover:bg-muted hover:border-border"
+        className="w-6 h-6 border-[1px] hover:bg-muted hover:border-border cursor-pointer"
       >
         <Minus className="w-3 h-3" />
       </Button>
@@ -81,7 +82,7 @@ const QuantityButtons = ({ product, className }: Props) => {
         variant="outline"
         size="icon"
         disabled={isOutOfStock || isUpdating}
-        className="w-6 h-6 border-[1px] hover:bg-muted hover:border-border"
+        className="w-6 h-6 border-[1px] hover:bg-muted hover:border-border cursor-pointer"
       >
         <Plus className="w-3 h-3" />
       </Button>

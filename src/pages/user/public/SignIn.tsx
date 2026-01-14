@@ -46,9 +46,9 @@ const SignIn = () => {
       {!accessToken ? (
         <Link
           to="/login"
-          className="bg-foreground text-background rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
+          className="bg-foreground text-background px-4 py-2 rounded-full font-bold text-[11px] uppercase tracking-wider hover:opacity-90 transition-all shadow-sm"
         >
-          Đăng Nhập
+          {t("user.login")}
         </Link>
       ) : (
         <div
@@ -63,6 +63,7 @@ const SignIn = () => {
                 <img
                   src={`${import.meta.env.VITE_API_URL}${profile.avatar}`}
                   className="w-7 h-7 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow-sm transition-transform group-hover:scale-105"
+                  alt="Avatar"
                 />
               ) : (
                 <UserCircle className="w-7 h-7 text-zinc-400 group-hover:text-primary transition-colors" />
@@ -70,48 +71,53 @@ const SignIn = () => {
               <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full" />
             </div>
             <span className="hidden md:block font-bold text-[11px] text-zinc-700 dark:text-zinc-200 uppercase tracking-tight">
-              {profile?.name ? profile.name.split(" ").pop() : "Hồ sơ"}
+              {profile?.name ? profile.name.split(" ").pop() : t("user.profile")}
             </span>
           </div>
 
           <div
-            className={`absolute right-0 mt-0 w-[320px] origin-top-right transition-all duration-300 ease-out z-50 ${dropdownOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
-              }`}
+            className={`absolute right-0 mt-0 w-[320px] origin-top-right transition-all duration-300 ease-out z-50 ${
+              dropdownOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+            }`}
           >
             <div className="bg-background backdrop-blur-xl rounded-[24px] border border-border shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-hidden">
               <div className="p-4 flex items-center gap-3 bg-muted/30">
                 <div className="w-10 h-10 rounded-xl overflow-hidden ring-1 ring-border">
                   {profile?.avatar ? (
-                    <img src={`${import.meta.env.VITE_API_URL}${profile.avatar}`} className="w-full h-full object-cover" />
+                    <img src={`${import.meta.env.VITE_API_URL}${profile.avatar}`} className="w-full h-full object-cover" alt="Avatar" />
                   ) : (
-                    <div className="w-full h-full bg-zinc-200 flex items-center justify-center"><UserCircle className="text-zinc-400" size={20} /></div>
+                    <div className="w-full h-full bg-zinc-200 flex items-center justify-center">
+                      <UserCircle className="text-zinc-400" size={20} />
+                    </div>
                   )}
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <h4 className="font-bold text-sm truncate">{profile?.name || "Người dùng"}</h4>
+                  <h4 className="font-bold text-sm truncate">{profile?.name || t("user.unknown_user")}</h4>
                   <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
-                    {profile?.role === "admin" ? "Quản trị viên" : "Tài khoản cá nhân"}
+                    {profile?.role === "admin" ? t("user.admin") : t("user.personal_account")}
                   </span>
                 </div>
               </div>
 
-              <div className="px-2 pb-2 grid grid-cols-2 gap-2 px-3">
+              <div className="px-3 pb-2 grid grid-cols-2 gap-2">
                 {profile?.role === "admin" && (
                   <button
                     onClick={() => router.push("/dashboard/workbench")}
                     className="flex flex-col border border-border items-center justify-center gap-1.5 py-3 rounded-2xl bg-muted/50 hover:bg-amber-500 hover:text-white transition-all group cursor-pointer"
                   >
                     <Shield size={16} className="text-amber-500 group-hover:text-white" />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Quản trị</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest">{t("user.dashboard")}</span>
                   </button>
                 )}
                 <button
                   onClick={() => router.push("/infor-account")}
-                  className={`flex border border-border  flex-col items-center justify-center gap-1.5 py-2 rounded-2xl bg-muted/50 hover:bg-primary hover:text-white transition-all group cursor-pointer ${profile?.role !== 'admin' ? 'col-span-2 flex-row py-2.5' : ''}`}
+                  className={`flex border border-border flex-col items-center justify-center gap-1.5 py-2 rounded-2xl bg-muted/50 hover:bg-primary hover:text-white transition-all group cursor-pointer ${
+                    profile?.role !== 'admin' ? 'col-span-2 flex-row py-2.5' : ''
+                  }`}
                 >
                   {profile?.role === 'admin' ? <Settings size={16} /> : <Logo iconClassName="w-5 h-5 group-hover:brightness-200" hideText />}
                   <span className="text-[9px] font-black uppercase tracking-widest">
-                    {profile?.role === 'admin' ? "Cài đặt" : "Truy cập Tmember"}
+                    {profile?.role === 'admin' ? t("user.settings") : t("user.access_tmember")}
                   </span>
                 </button>
               </div>
@@ -131,7 +137,6 @@ const SignIn = () => {
                   {t("auth.login.logout")}
                 </button>
               </div>
-
             </div>
           </div>
         </div>

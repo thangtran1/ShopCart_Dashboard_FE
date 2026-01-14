@@ -9,8 +9,10 @@ import Title from "@/ui/title";
 import { ScrollArea, ScrollBar } from "@/ui/scroll-area";
 import { useState } from "react";
 import { EmptyState } from "@/components/common/EmptyState";
+import { useTranslation } from "react-i18next";
 
 export function DiscountContent() {
+  const { t, i18n } = useTranslation();
   const { coupons, loading } = useCoupon();
   const { copyFn } = useCopyToClipboard();
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -50,7 +52,6 @@ export function DiscountContent() {
                   <div className="h-4 w-32 bg-slate-200 animate-pulse rounded" />
                   <div className="h-6 w-16 bg-slate-100 animate-pulse rounded-full" />
                 </div>
-
                 <div className="h-3 w-20 bg-slate-200 animate-pulse rounded" />
                 <div className="border-t border-dashed border-border pt-2 flex justify-between">
                   <div className="h-2 w-24 bg-slate-100 animate-pulse rounded" />
@@ -77,10 +78,10 @@ export function DiscountContent() {
 
             <div>
               <Title className="text-xl sm:text-2xl font-bold tracking-tight mb-0.5">
-                Ưu đãi độc quyền
+                {t("discount.title")}
               </Title>
               <p className="text-sm text-muted-foreground hidden sm:block">
-                Săn voucher và mã giảm giá dành riêng cho thành viên thân thiết
+                {t("discount.description")}
               </p>
             </div>
           </div>
@@ -90,12 +91,12 @@ export function DiscountContent() {
       <div className="w-full">
         {coupons && coupons.length > 0 ? (
           <ScrollArea>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto max-h-[400px]">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 overflow-y-auto max-h-[450px] pr-3">
               {coupons.map((voucher) => {
                 const isShipping = voucher.code.toLowerCase().includes("ship");
-                const expiryDate = new Date(
-                  voucher.expiryDate
-                ).toLocaleDateString("vi-VN");
+                const expiryDate = new Date(voucher.expiryDate).toLocaleDateString(
+                  i18n.language === "vi" ? "vi-VN" : "en-US"
+                );
                 const isUnlimited = voucher.limitPerUser === 0;
 
                 return (
@@ -112,7 +113,7 @@ export function DiscountContent() {
                       `}
                     >
                       <div className="z-10 text-[9px] font-bold uppercase tracking-tighter opacity-90">
-                        {isShipping ? "Freeship" : "Giảm giá"}
+                        {isShipping ? t("discount.freeship") : t("discount.discount_label")}
                       </div>
                       <div className="z-10 text-xl sm:text-2xl font-black tracking-tighter">
                         {voucher.discountType === "percentage"
@@ -134,18 +135,19 @@ export function DiscountContent() {
                       <div className="absolute top-2.5 right-3">
                         <button
                           onClick={() => handleCopy(voucher.code)}
-                          className={`px-3 py-1 rounded-full cursor-pointer text-[10px] font-bold transition-all duration-300 active:scale-90 ${copiedCode === voucher.code
+                          className={`px-3 py-1 rounded-full cursor-pointer text-[10px] font-bold transition-all duration-300 active:scale-90 ${
+                            copiedCode === voucher.code
                             ? "bg-blue-500 text-white"
                             : "bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white"
-                            }`}
+                          }`}
                         >
-                          {copiedCode === voucher.code ? "Xong" : "Sao chép"}
+                          {copiedCode === voucher.code ? t("discount.copied") : t("discount.copy")}
                         </button>
                       </div>
 
                       <div className="pr-14">
                         <h3 className="font-bold text-sm text-foreground line-clamp-1 mb-1">
-                          Giảm{" "}
+                          {t("discount.off")}{" "}
                           {voucher.discountType === "percentage" ? (
                             `${voucher.discountValue}%`
                           ) : (
@@ -158,13 +160,14 @@ export function DiscountContent() {
                             {voucher.code}
                           </span>
                           <span
-                            className={`text-[10px] font-medium ${isUnlimited ? "text-primary" : "text-warning"
-                              }`}
+                            className={`text-[10px] font-medium ${
+                              isUnlimited ? "text-primary" : "text-warning"
+                            }`}
                           >
                             •{" "}
                             {isUnlimited
-                              ? "Vô hạn"
-                              : `${voucher.limitPerUser} lượt dùng`}
+                              ? t("discount.unlimited")
+                              : t("discount.usage_limit", { count: voucher.limitPerUser })}
                           </span>
                         </div>
                       </div>
@@ -172,7 +175,7 @@ export function DiscountContent() {
                       <div className="border-t border-dashed pt-2 flex items-center justify-between text-[10px] text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <span>
-                            Đơn tối thiểu:{" "}
+                            {t("discount.min_order")}{" "}
                             <span className="ml-1 font-bold text-foreground">
                               <PriceFormatter amount={voucher.minOrderAmount} />
                             </span>
@@ -180,7 +183,7 @@ export function DiscountContent() {
                         </div>
                         <div className="flex items-center gap-1">
                           <CalendarOutlined className="text-[9px]" />
-                          <span>HSD: {expiryDate}</span>
+                          <span>{t("discount.expiry")} {expiryDate}</span>
                         </div>
                       </div>
                     </div>
@@ -193,8 +196,8 @@ export function DiscountContent() {
         ) : (
           <EmptyState
             height="sm"
-            title="Trống"
-            description="Hiện không có mã giảm giá nào khả dụng. Hãy quay lại sau bạn nhé!"
+            title={t("discount.empty.title")}
+            description={t("discount.empty.description")}
           />
         )}
       </div>

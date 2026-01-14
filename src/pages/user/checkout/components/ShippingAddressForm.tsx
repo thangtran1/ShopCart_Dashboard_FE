@@ -6,6 +6,7 @@ import { Label } from "@/ui/label";
 import { Textarea } from "@/ui/textarea";
 import { Typography, Select } from "antd";
 import { useLocation } from "@/hooks/useLocation";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -15,16 +16,16 @@ interface ShippingAddressFormProps {
 }
 
 const ShippingAddressForm = ({ onChange }: ShippingAddressFormProps) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     address: "",
-    state: "",    
+    state: "",     
     district: "", 
-    city: "",     
+    city: "",      
     notes: "",
   });
 
   const { provinces, districts, wards } = useLocation(formData.state, formData.district);
-  
   const lastDataRef = useRef("");
 
   useEffect(() => {
@@ -67,26 +68,28 @@ const ShippingAddressForm = ({ onChange }: ShippingAddressFormProps) => {
 
   return (
     <div className="space-y-4">
-      <Title level={4}>Địa Chỉ Giao Hàng</Title>
-      <div className="space-y-4 border border-border rounded-lg p-4 bg-card">
+      <Title level={4}>{t("checkout.shipping.title")}</Title>
+      
+      <div className="space-y-4 border border-border rounded-lg p-4 bg-card shadow-sm">
         <div className="space-y-2">
-          <Label htmlFor="address">Địa chỉ cụ thể *</Label>
+          <Label htmlFor="address">{t("checkout.shipping.address_label")} *</Label>
           <Input
             id="address"
             name="address"
             value={formData.address}
             onChange={handleInputChange}
-            placeholder="Số nhà, tên đường"
+            placeholder={t("checkout.shipping.address_placeholder")}
+            className="focus-visible:ring-primary"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label>Tỉnh/Thành *</Label>
+            <Label>{t("checkout.shipping.province")} *</Label>
             <Select
               showSearch
-              placeholder="Chọn Tỉnh/Thành"
+              placeholder={t("checkout.shipping.select_province")}
               className="w-full"
               value={formData.state || undefined}
               onChange={(val) => handleSelectChange("state", val)}
@@ -99,10 +102,10 @@ const ShippingAddressForm = ({ onChange }: ShippingAddressFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Quận/Huyện *</Label>
+            <Label>{t("checkout.shipping.district")} *</Label>
             <Select
               showSearch
-              placeholder="Chọn Quận/Huyện"
+              placeholder={t("checkout.shipping.select_district")}
               className="w-full"
               disabled={!formData.state}
               value={formData.district || undefined}
@@ -116,10 +119,10 @@ const ShippingAddressForm = ({ onChange }: ShippingAddressFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Phường/Xã *</Label>
+            <Label>{t("checkout.shipping.ward")} *</Label>
             <Select
               showSearch
-              placeholder="Chọn Phường/Xã"
+              placeholder={t("checkout.shipping.select_ward")}
               className="w-full"
               disabled={!formData.district}
               value={formData.city || undefined}
@@ -134,14 +137,15 @@ const ShippingAddressForm = ({ onChange }: ShippingAddressFormProps) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="notes">Ghi chú (tùy chọn)</Label>
+          <Label htmlFor="notes">{t("checkout.shipping.notes")}</Label>
           <Textarea
             id="notes"
             name="notes"
             value={formData.notes}
             onChange={handleInputChange}
-            placeholder="Ghi chú thêm cho shipper..."
+            placeholder={t("checkout.shipping.notes_placeholder")}
             rows={3}
+            className="focus-visible:ring-primary resize-none"
           />
         </div>
       </div>

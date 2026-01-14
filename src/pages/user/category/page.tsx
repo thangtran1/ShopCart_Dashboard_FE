@@ -8,6 +8,7 @@ import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useMemo, useState } from "react";
 import PageLoading from "@/components/common/loading/PageLoading";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   categories: any[];
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
+  const { t } = useTranslation();
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
   const [loading, setLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -34,15 +36,9 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
 
   const categoryCountMap = useMemo(() => {
     const map: Record<string, number> = {};
-
     allProducts.forEach(p => {
-      const categoryId =
-        typeof p.category === "object"
-          ? p.category._id
-          : p.category;
-
+      const categoryId = typeof p.category === "object" ? p.category._id : p.category;
       if (!categoryId) return;
-
       map[categoryId] = (map[categoryId] || 0) + 1;
     });
     return map;
@@ -61,12 +57,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
   const filteredProducts = allProducts.filter(p => {
     if (currentSlug === "all") return true;
     if (!currentCategory || !p.category) return false;
-
-    const categoryId =
-      typeof p.category === "object"
-        ? p.category._id
-        : p.category;
-
+    const categoryId = typeof p.category === "object" ? p.category._id : p.category;
     return categoryId === currentCategory._id;
   });
 
@@ -77,14 +68,14 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
         <div className="p-4 bg-primary/90 flex justify-between items-center">
           {!isSidebarCollapsed && (
             <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
-              <Package className="w-5 h-5 flex-none" /> Danh mục
+              <Package className="w-5 h-5 flex-none" /> {t("category.sidebar_title")}
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             className="text-foreground cursor-pointer text-sm font-medium hover:text-gray-200"
           >
-            {isSidebarCollapsed ? "»" : "«"}
+            {isSidebarCollapsed ? t("category.collapse_close") : t("category.collapse_open")}
           </button>
         </div>
 
@@ -101,7 +92,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
                 : "opacity-100"
                 }`}
             >
-              Tất cả danh mục
+              {t("category.all_categories")}
             </span>
             {!isSidebarCollapsed && (
               <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
@@ -146,17 +137,19 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           className="mb-1 rounded-lg shadow-sm border p-3"
         >
           <h2 className="text-2xl font-bold text-primary capitalize mb-1">
-            {currentSlug === "all" ? "Tất cả danh mục" : currentCategory?.name}
+            {currentSlug === "all" ? t("category.all_categories") : currentCategory?.name}
           </h2>
           {currentSlug === "all" ? (
-            <p className="text-foreground text-sm">Khám phá tất cả sản phẩm trong cửa hàng</p>
+            <p className="text-foreground text-sm">{t("category.explore_all")}</p>
           ) : (
             currentCategory?.description && (
               <p className="text-foreground text-sm">{currentCategory.description}</p>
             )
           )}
           {!loading && filteredProducts.length > 0 && (
-            <p className="text-sm text-primary mt-2 font-medium">{filteredProducts.length} Sản phẩm có sẵn</p>
+            <p className="text-sm text-primary mt-2 font-medium">
+              {t("category.products_available", { count: filteredProducts.length })}
+            </p>
           )}
         </motion.div>
 
@@ -164,7 +157,7 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
           <div className="flex flex-col items-center justify-center py-20 min-h-80 space-y-4 text-center rounded-lg shadow-sm border">
              <PageLoading
               height={300}
-              text="Đang tải sản phẩm..."
+              text={t("category.loading")}
               />
           </div>
         ) : filteredProducts.length > 0 ? (

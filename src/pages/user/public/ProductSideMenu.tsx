@@ -5,6 +5,7 @@ import useStore from "@/store/store";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const ProductSideMenu = ({
   product,
@@ -13,6 +14,7 @@ const ProductSideMenu = ({
   product: Product;
   className?: string;
 }) => {
+  const { t } = useTranslation()
   const { favoriteProduct, addToFavorite } = useStore();
   const [existingProduct, setExistingProduct] = useState<Product | null>(null);
   useEffect(() => {
@@ -27,8 +29,8 @@ const ProductSideMenu = ({
       addToFavorite(product).then(() => {
         toast.success(
           existingProduct
-            ? "Product removed successfully!"
-            : "Product added successfully!"
+          ? t("cart.cart_remove") 
+          : t("cart.cart_add")           
         );
       });
     }

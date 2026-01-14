@@ -24,32 +24,117 @@
     "categories": "Categories",
     "brands": "Brands"
   },
-"product": {
-  "new": "New",
-  "bestSeller": "Best Seller",
-  "featured": "Featured",
-  "deal": "Deals",
-  "all": "All",
-  "hero_title": "Products",
-  "hero_subtitle": "Technology",
-  "hero_description": "Explore the latest tech gadgets, from cutting-edge iPhones to powerful MacBooks.",
-  "count_label": "{{count}} Products",
-  "type_iphone": "iPhone",
-  "type_macbook": "MacBook",
-  "type_ipad": "iPad",
-  "type_watch": "Apple Watch",
-  "type_accessory": "Accessories"
-},
-"headerData": {
-  "home": "Home",
-  "shop": "Shop",
-  "category": "Category",
-  "brand": "Brand",
-  "news": "News",
-  "contact": "Contact",
-  "connect_us": "Connect with us"
-},
-"cart": {
+  "product": {
+    "new": "New",
+    "bestSeller": "Best Seller",
+    "featured": "Featured",
+    "deal": "Deals",
+    "all": "All",
+    "hero_title": "Products",
+    "hero_subtitle": "Technology",
+    "hero_description": "Explore the latest tech gadgets, from cutting-edge iPhones to powerful MacBooks.",
+    "count_label": "{{count}} Products",
+    "type_iphone": "iPhone",
+    "type_macbook": "MacBook",
+    "type_ipad": "iPad",
+    "type_watch": "Apple Watch",
+    "type_accessory": "Accessories",
+    "commitment_title": "Product Commitment",
+    "favorite": "Favorite",
+    "specifications": "Specifications",
+    "commitment": {
+      "quality": "Guaranteed Quality",
+      "quality_desc": "100% Genuine Product",
+      "return": "Flexible Returns",
+      "return_desc": "7-day return support",
+      "service": "Best Service",
+      "service_desc": "Quick advice & support"
+    },
+    "price_label": "Product Price",
+    "or": "or",
+    "trade_in_label": "Trade-in starting from",
+    "discount_label": "Discount up to {{percent}}%",
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "characteristics": "Characteristics",
+    "brand": "Brand",
+    "manufacturing_year": "Manufacturing Year",
+    "category": "Category",
+    "status": "Status",
+    "available": "Available",
+    "buy_now": "Buy Now - Fast Delivery",
+    "toast": {
+      "login_buy_now": "Please login to buy now",
+      "out_of_stock": "Product is out of stock!",
+      "buy_error": "An error occurred while processing"
+    },
+    "status-filter": {
+      "new": "New",
+      "featured": "Featured",
+      "best_seller": "Best Seller",
+      "sale": "Sale!"
+    },
+    "info": {
+      "no_category": "Uncategorized",
+      "no_brand": "None",
+      "reviews": "reviews",
+      "no_reviews": "No reviews",
+      "stock": "Stock",
+      "in_stock": "{{count}} items",
+      "out_of_stock": "Out of stock"
+    },
+    "related_title": "Related Products",
+    "related_desc": "Factors for related products: Same category | same brand | same tags"
+  },
+  "review": {
+    "rating_count": "reviews",
+    "write_review": "Write a review",
+    "rating_label": "Rating *",
+    "content_label": "Content *",
+    "placeholder": "Share about {{name}}...",
+    "image_url_label": "Images (URL)",
+    "image_placeholder": "Enter image URL...",
+    "send_btn": "Send",
+    "login_to_review": "Login to review",
+    "login_desc": "Share your experience",
+    "login_btn": "Login",
+    "all_reviews": "All reviews",
+    "no_review_title": "No reviews yet",
+    "no_review_desc": "Be the first to review this product!",
+    "labels": {
+      "very_bad": "Very Bad 😞",
+      "bad": "Bad 😕",
+      "normal": "Normal 😐",
+      "good": "Good 😊",
+      "excellent": "Excellent 🤩"
+    },
+    "toast": {
+      "select_star": "Please select stars!",
+      "enter_content": "Please enter content!",
+      "api_error": "API did not return reviews",
+      "success": "Review sent!",
+      "fail": "Review failed!",
+      "reply_success": "Reply sent!",
+      "reply_fail": "Reply failed!"
+    },
+    "user_anonymous": "User",
+    "reply_action": "Reply",
+    "reply_count": "{{count}} replies",
+    "reply_placeholder": "Write a reply...",
+    "view_more_replies": "View {{count}} more replies",
+    "admin_badge": "Admin",
+    "date_format": "en-US"
+  },
+  "headerData": {
+    "home": "Home",
+    "shop": "Shop",
+    "category": "Category",
+    "brand": "Brand",
+    "news": "News",
+    "contact": "Contact",
+    "connect_us": "Connect with us"
+  },
+  "cart": {
     "title": "Your Shopping Cart",
     "sub_title": "Review your selected products and proceed to checkout",
     "not_logged_in": "Not Logged In",
@@ -81,7 +166,24 @@
     "msg_clear_success": "Cart has been cleared!",
     "msg_clear_error": "Cannot reset cart",
     "msg_remove_success": "Product removed!",
-    "msg_remove_error": "Error removing product"
+    "msg_remove_error": "Error removing product",
+    "cart_add": "Product added successfully!",
+    "cart_remove": "Product removed successfully!",
+    "add_to_cart": "Add to cart",
+    "out_of_stock": "Out of stock",
+    "adding": "Adding...",
+    "quantity": "Quantity",
+    "total": "Total",
+    "toast": {
+      "login_required": "Please login to add to cart",
+      "add_success": "{{name}}... added successfully!",
+      "add_error": "Something went wrong, please try again",
+      "decrease_success": "Quantity decreased successfully!",
+      "remove_success": "{{name}}... removed successfully!",
+      "update_error": "Could not update cart",
+      "increase_success": "Quantity increased!",
+      "stock_limit": "Stock limit reached!"
+    }
   },
   "wishList": {
     "title": "My Wishlist",
@@ -103,136 +205,1132 @@
     "btn_confirm": "Confirm",
     "btn_cancel": "Cancel",
     "msg_remove_success": "Removed from wishlist",
-    "msg_clear_success": "Wishlist has been cleared"
+    "msg_clear_success": "Wishlist has been cleared",
+    "add_success": "Added to wishlist successfully!"
   },
   "orders": {
-  "title": "My Orders",
-  "sub_title": "Manage and track your order status",
-  "status_all": "All",
-  "status_pending": "Pending",
-  "status_processing": "Processing",
-  "status_shipped": "Shipped",
-  "status_delivered": "Delivered",
-  "status_cancelled": "Cancelled",
-  "table_id": "Order ID",
-  "table_date": "Order Date",
-  "table_customer": "Customer",
-  "table_email": "Email",
-  "table_subtotal": "Subtotal",
-  "table_discount": "Discount",
-  "table_total": "Total",
-  "table_status": "Status",
-  "table_action": "Action",
-  "empty_title": "Empty",
-  "empty_not_found": "No orders found in",
-  "auth_required": "Authentication Required",
-  "auth_required_desc": "Please login to view your order list.",
-  "auth_login_btn": "Login Now",
-  "loading_text": "Loading data...",
-  "payment_cash": "Cash",
-  "payment_transfer": "Transfer",
-  "cancel_success": "Order cancelled successfully",
-  "cancel_error": "Cannot cancel order",
-  "cancel_confirm_title": "Cancel Order",
-  "cancel_confirm_desc": "Are you sure you want to cancel this order?",
-  "btn_confirm": "Yes",
-  "btn_cancel": "No",
-  "tooltip_view_detail": "View order details",
-  "tooltip_cancel": "Cancel this order"
-},
-"ordersDetail": {
-  "dialog_title": "Order Details",
-  "dialog_description": "Detailed information about the order, products, recipient, and processing status.",
-  "no_warranty": "No warranty",
-  "warranty_expired": "Warranty expired",
-  "warranty_until": "Warranty until",
-  "warranty_package": "{{month}} months package",
-  "customer_info": "Customer Information",
-  "order_status_payment": "Status & Payment",
-  "order_status_label": "Order Status:",
-  "payment_online": "Online Payment (Card)",
-  "payment_cod": "Cash on Delivery (COD)",
-  "shipping_address": "Shipping Address",
-  "shipping_notes": "Notes",
-  "table_product": "Product",
-  "table_quantity": "Qty",
-  "table_unit_price": "Unit Price",
-  "table_total_price": "Total",
-  "summary_subtotal": "Subtotal:",
-  "summary_discount": "Discount",
-  "summary_shipping": "Shipping Fee:",
-  "summary_shipping_free": "Free",
-  "summary_total": "Total Payment:"
-},
-"features": {
-  "phone_warranty": "Phone warranty",
-  "laptop_warranty": "Laptop warranty",
-  "watch_warranty": "Watch warranty",
-  "trial_title": "Trial",
-  "trial_highlight": "7 days free",
-  "trial_sub": "(for used items)",
-  "hold_order_title": "Hold order",
-  "hold_order_highlight": "3 days free",
-  "shipping_title": "Same-day shipping",
-  "shipping_sub": "(orders before 12:00)",
-  "payment_title": "Cash on delivery",
-  "payment_sub": "(Daibiki)",
-  "support_title": "Online support",
-  "support_highlight": "24/7",
-  "months": "months",
-  "years": "years"
-},
-"categoryProduct": {
-  "title_main": "Product",
-  "title_sub": "Categories",
-  "see_all": "View all",
-  "view_now": "View now →",
-  "product_count": "{{count}} products",
-  "empty_title": "Empty",
-  "empty_description": "No categories available yet"
-},
-"brands": {
-  "badge": "Trusted Partners",
-  "title_main": "Shop by",
-  "title_sub": "Brands",
-  "description": "We handpick the world's leading brands to bring you the best experience.",
-  "see_all": "Explore all",
-  "product_count": "({{count}}) Products",
-  "empty_title": "Empty",
-  "empty_description": "No brands available yet",
-  "extra": {
-    "shipping_title": "Free Shipping",
-    "shipping_desc": "Free shipping for orders over $100",
-    "return_title": "Free Returns",
-    "return_desc": "30-day return guarantee",
-    "support_title": "Customer Support",
-    "support_desc": "Friendly 24/7 support team",
-    "guarantee_title": "Money Back Guarantee",
-    "guarantee_desc": "Quality tested products"
+    "title": "My Orders",
+    "sub_title": "Manage and track your order status",
+    "status_all": "All",
+    "status_pending": "Pending",
+    "status_processing": "Processing",
+    "status_shipped": "Shipped",
+    "status_delivered": "Delivered",
+    "status_cancelled": "Cancelled",
+    "table_id": "Order ID",
+    "table_date": "Order Date",
+    "table_customer": "Customer",
+    "table_email": "Email",
+    "table_subtotal": "Subtotal",
+    "table_discount": "Discount",
+    "table_total": "Total",
+    "table_status": "Status",
+    "table_action": "Action",
+    "empty_title": "Empty",
+    "empty_not_found": "No orders found in",
+    "auth_required": "Authentication Required",
+    "auth_required_desc": "Please login to view your order list.",
+    "auth_login_btn": "Login Now",
+    "loading_text": "Loading data...",
+    "payment_cash": "Cash",
+    "payment_transfer": "Transfer",
+    "cancel_success": "Order cancelled successfully",
+    "cancel_error": "Cannot cancel order",
+    "cancel_confirm_title": "Cancel Order",
+    "cancel_confirm_desc": "Are you sure you want to cancel this order?",
+    "btn_confirm": "Yes",
+    "btn_cancel": "No",
+    "tooltip_view_detail": "View order details",
+    "tooltip_cancel": "Cancel this order"
+  },
+  "ordersDetail": {
+    "dialog_title": "Order Details",
+    "dialog_description": "Detailed information about the order, products, recipient, and processing status.",
+    "no_warranty": "No warranty",
+    "warranty_expired": "Warranty expired",
+    "warranty_until": "Warranty until",
+    "warranty_package": "{{month}} months package",
+    "customer_info": "Customer Information",
+    "order_status_payment": "Status & Payment",
+    "order_status_label": "Order Status:",
+    "payment_online": "Online Payment (Card)",
+    "payment_cod": "Cash on Delivery (COD)",
+    "shipping_address": "Shipping Address",
+    "shipping_notes": "Notes",
+    "table_product": "Product",
+    "table_quantity": "Qty",
+    "table_unit_price": "Unit Price",
+    "table_total_price": "Total",
+    "summary_subtotal": "Subtotal:",
+    "summary_discount": "Discount",
+    "summary_shipping": "Shipping Fee:",
+    "summary_shipping_free": "Free",
+    "summary_total": "Total Payment:"
+  },
+  "features": {
+    "phone_warranty": "Phone warranty",
+    "laptop_warranty": "Laptop warranty",
+    "watch_warranty": "Watch warranty",
+    "trial_title": "Trial",
+    "trial_highlight": "7 days free",
+    "trial_sub": "(for used items)",
+    "hold_order_title": "Hold order",
+    "hold_order_highlight": "3 days free",
+    "shipping_title": "Same-day shipping",
+    "shipping_sub": "(orders before 12:00)",
+    "payment_title": "Cash on delivery",
+    "payment_sub": "(Daibiki)",
+    "support_title": "Online support",
+    "support_highlight": "24/7",
+    "months": "months",
+    "years": "years"
+  },
+  "categoryProduct": {
+    "title_main": "Product",
+    "title_sub": "Categories",
+    "see_all": "View all",
+    "view_now": "View now →",
+    "product_count": "{{count}} products",
+    "empty_title": "Empty",
+    "empty_description": "No categories available yet"
+  },
+  "brands": {
+    "badge": "Trusted Partners",
+    "title_main": "Shop by",
+    "title_sub": "Brands",
+    "description": "We handpick the world's leading brands to bring you the best experience.",
+    "see_all": "Explore all",
+    "product_count": "({{count}}) Products",
+    "empty_title": "Empty",
+    "empty_description": "No brands available yet",
+    "extra": {
+      "shipping_title": "Free Shipping",
+      "shipping_desc": "Free shipping for orders over $100",
+      "return_title": "Free Returns",
+      "return_desc": "30-day return guarantee",
+      "support_title": "Customer Support",
+      "support_desc": "Friendly 24/7 support team",
+      "guarantee_title": "Money Back Guarantee",
+      "guarantee_desc": "Quality tested products"
+    }
+  },
+  "news": {
+    "title_main": "Latest",
+    "title_sub": "News",
+    "see_all": "View all",
+    "empty_title": "Empty",
+    "empty_description": "No new updates available yet",
+    "read_more": "Read more",
+    "toast": {
+      "fetch_admin_error": "Error loading admin data",
+      "create_success": "News published successfully",
+      "create_error": "Error creating news",
+      "update_success": "News updated successfully",
+      "update_error": "Error updating post",
+      "delete_success": "Post deleted",
+      "delete_error": "Could not delete post"
+    },
+    "error": {
+      "not_found": "Article not found"
+    }
+  },
+  "shop": {
+    "title": "Get products according to your needs",
+    "reset_filter": "Reset filters",
+    "loading_products": "Loading products...",
+    "filter_category": "Categories",
+    "filter_brand": "Brands",
+    "filter_price": "Price Range",
+    "filter_category_title": "Product Categories",
+    "all_products": "All Products",
+    "reset_selection": "Reset selection",
+    "filter_brand_title": "Brands",
+    "all_brands": "All Brands"
+  },
+  "filter": {
+    "price_title": "Price Range",
+    "all_prices": "All Prices",
+    "reset": "Reset selection",
+    "under": "Under",
+    "above": "Above",
+    "million": "million"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "results_count": "Search results ({{count}})",
+    "view_all": "View all {{count}} results →",
+    "searching": "Searching...",
+    "no_results": "No products found",
+    "try_another": "Try searching with different keywords",
+    "recent": "Recent searches",
+    "clear_all": "Clear all",
+    "popular_categories": "Popular categories",
+    "suggestions": "Suggested searches",
+    "tips": {
+      "title": "Search Tips",
+      "by_name": "Search by <1>product name</1>: \"iPhone 15\"",
+      "by_brand": "Search by <1>brand</1>: \"Samsung\", \"Apple\"",
+      "by_category": "Search by <1>category</1>: \"Laptop\", \"Headphones\""
+    },
+    "trigger_placeholder": "Search...",
+    "sr_title": "Menu search system",
+    "sr_description": "Keyboard navigation to find pages and categories",
+    "input_placeholder": "Search for features...",
+    "empty": {
+      "title": "Empty",
+      "description": "Sorry, we couldn't find any content matching your keyword."
+    },
+    "badges": {
+      "category": "CATEGORY",
+      "open": "OPEN"
+    },
+    "footer": {
+      "navigate": "Navigate",
+      "select": "Select",
+      "close": "Close"
+    }
+  },
+  "newsletter": {
+    "title": "Subscribe to Newsletter",
+    "description": "Get the latest information about products and offers.",
+    "placeholder": "Enter your email",
+    "button": "Subscribe",
+    "policy": "By subscribing, you agree to the policies of",
+    "toast": {
+      "success": "Subscription successful"
+    },
+    "error": {
+      "required": "Please enter your email",
+      "invalid": "Invalid email address"
+    }
+  },
+  "clipboard": {
+    "success": "Copied: {{text}}",
+    "error": "Error! Copy failed"
+  },
+  "address": {
+    "toast": {
+      "create_success": "New address added successfully",
+      "create_error": "Could not add address",
+      "update_success": "Address updated successfully",
+      "update_error": "Update failed",
+      "delete_success": "Address deleted successfully",
+      "delete_error": "Delete failed",
+      "admin_delete_success": "Admin deleted address successfully"
+    }
+  },
+  "coupon": {
+    "error_fetch": "Could not load coupon list",
+    "toast": {
+      "create_success": "Voucher created successfully",
+      "create_error": "Error creating voucher",
+      "update_success": "Update successful",
+      "update_error": "Update failed",
+      "delete_success": "Voucher deleted",
+      "delete_error": "Could not delete voucher"
+    }
+  },
+  "notifications": {
+    "types": {
+      "system": "System",
+      "maintenance": "Maintenance",
+      "general": "General"
+    },
+    "mark_as_read": "Click to mark as read",
+    "time": {
+      "just_now": "Just now"
+    },
+    "empty": {
+      "title": "Empty",
+      "description": "No notifications yet"
+    },
+    "tabs": {
+      "latest": "Latest",
+      "unread": "Unread"
+    },
+    "center_title": "Message Center",
+    "unread_count": "You have {{count}} unread messages",
+    "mark_all_read_hint": "Mark all as read",
+    "view_all_activity": "View all activity",
+    "toast": {
+      "mark_read_success": "Marked as read",
+      "mark_read_error": "Could not mark as read",
+      "mark_all_success": "All notifications marked as read"
+    }
+  },
+  "success_page": {
+    "title": "🎉 Order Successful!",
+    "order_details": "Order Details",
+    "thank_you": "Thank you for your purchase! We are processing your order and will deliver it as soon as possible.",
+    "email_notice": "A confirmation email will be sent to you shortly.",
+    "order_number": "Order Number:",
+    "payment_method": "Payment Method:",
+    "steps": {
+      "title": "Processing Flow",
+      "step_1": "Ordered",
+      "step_2": "Processing",
+      "step_3": "Shipping"
+    },
+    "payment": {
+      "card": "Credit/Debit Card",
+      "card_status": "Paid",
+      "card_msg": "Payment confirmed. Your order is being processed.",
+      "cod": "Cash on Delivery (COD)",
+      "cod_status": "Pending Payment",
+      "cod_msg": "Please prepare cash upon delivery."
+    },
+    "footer": {
+      "help": "Need help? Contact",
+      "hotline": "Hotline"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "About Us",
+      "welcome": "Welcome to <1>Shopcart TVT</1> - your trusted destination for all your shopping needs."
+    },
+    "story": {
+      "title": "Our Story",
+      "p1": "Shopcart TVT was founded with the mission to bring the best online shopping experience to customers. Starting from a passion for technology and a desire to connect consumers with quality products, we have built a modern and user-friendly e-commerce platform.",
+      "p2": "With a dedicated and professional team, we are committed to providing excellent customer service, fast delivery, and flexible return policies."
+    },
+    "values": {
+      "title": "Core Values",
+      "items": {
+        "heart": {
+          "title": "Dedication",
+          "desc": "Always putting customers at the center of all our activities"
+        },
+        "award": {
+          "title": "Quality",
+          "desc": "Committed to delivering the best products and services"
+        },
+        "target": {
+          "title": "Innovation",
+          "desc": "Constantly creating and improving every single day"
+        },
+        "users": {
+          "title": "Solidarity",
+          "desc": "Building a strong and cohesive team together"
+        }
+      }
+    },
+    "milestones": {
+      "title": "Our Journey",
+      "m1": "Company Foundation",
+      "m2": "E-commerce Platform Launch",
+      "m3": "Reached 100,000 Customers",
+      "m4": "International Market Expansion",
+      "m5": "Creative Future"
+    },
+    "team": {
+      "title": "Meet Our Team"
+    },
+    "sidebar": {
+      "connect": "Connect With Us",
+      "newsletter_desc": "Subscribe to receive the latest updates on products and special offers.",
+      "email_placeholder": "Enter your email address",
+      "subscribe": "Subscribe Now",
+      "agreement": "By subscribing, you agree to our Terms of Service <1 />.",
+      "stats_title": "Impressive Numbers",
+      "stats": {
+        "customers": "Customers",
+        "products": "Products",
+        "partners": "Partners",
+        "reviews": "5-Star Reviews"
+      },
+      "support_title": "Need Help?",
+      "support_desc": "Our customer support team is available 24/7 to assist you",
+      "contact_btn": "Contact Now",
+      "server_status": "Server: Online",
+      "version": "Version",
+      "logout_modal": {
+        "title": "Logout",
+        "confirm": "Are you sure you want to logout?",
+        "btn_logout": "Logout",
+        "btn_stay": "Stay here"
+      },
+      "tabs": {
+        "overview": "Overview",
+        "discount": "Discounts",
+        "history": "Purchase History",
+        "activity": "Activity Log",
+        "address": "Address Book",
+        "infor": "Account Info",
+        "linked": "Linked Accounts",
+        "warranty": "Warranty Lookup",
+        "support": "Support & Feedback",
+        "terms": "Terms of Use",
+        "logout": "Logout"
+      }
+    }
+  },
+  "faq": {
+    "title": "FAQs",
+    "subtitle": "Find quick answers to your questions about <1>Shopcart TVT</1>",
+    "search_placeholder": "Search questions...",
+    "no_results": "No matching questions found. Please try another keyword.",
+    "sidebar": {
+      "help_title": "Still Need Help?",
+      "help_desc": "Can't find the answer? Our support team is here 24/7.",
+      "contact_btn": "Contact Support",
+      "popular_title": "Popular Topics"
+    },
+    "categories": {
+      "all": "All",
+      "order": "Orders",
+      "shipping": "Shipping",
+      "payment": "Payment",
+      "return": "Returns",
+      "account": "Account"
+    },
+    "questions": {
+      "order_q1": "How do I place an order?",
+      "order_a1": "Select products, add to cart, click 'Checkout', enter info and confirm.",
+      "order_q2": "Can I cancel my order?",
+      "order_a2": "Yes, within 2 hours if not yet processed via 'My Orders'.",
+      "order_q3": "How to track my order?",
+      "order_a3": "Check 'My Orders' section or use the 'Order Tracking' feature.",
+      "order_q4": "Is there a minimum order value?",
+      "order_a4": "No minimum. Free shipping for orders over 500,000 VND.",
+      "order_q5": "Can I change my shipping address?",
+      "order_a5": "Yes, before the order is handed to the carrier. Contact our hotline.",
+      "shipping_q1": "How long is delivery?",
+      "shipping_a1": "Urban: 1-2 days. Provinces: 3-5 days. Remote: 5-7 days.",
+      "shipping_q2": "How are shipping fees calculated?",
+      "shipping_a2": "Based on weight and distance. Free for orders from 500,000 VND.",
+      "shipping_q3": "Do you deliver on weekends?",
+      "shipping_a3": "Yes, we deliver on Saturdays and Sundays (except holidays).",
+      "shipping_q4": "Can I pick up at the store?",
+      "shipping_a4": "Currently, we only support home delivery.",
+      "payment_q1": "Which payment methods are accepted?",
+      "payment_a1": "COD, Bank Transfer, Visa/Master, MoMo, ZaloPay, 0% Installment.",
+      "payment_q2": "Is payment secure?",
+      "payment_a2": "Yes, with 256-bit SSL encryption and PCI DSS compliance.",
+      "payment_q3": "How to pay in installments?",
+      "payment_a3": "Select 'Installment' at checkout for orders over 3M VND.",
+      "payment_q4": "Will I receive a VAT invoice?",
+      "payment_a4": "Yes, we issue electronic VAT invoices for all orders.",
+      "return_q1": "What is the return policy?",
+      "return_a1": "Return within 30 days if original tags and invoice are kept.",
+      "return_q2": "How to request a return?",
+      "return_a2": "Go to 'My Orders', select 'Request Return' and follow prompts.",
+      "return_q3": "Who pays for return shipping?",
+      "return_a3": "Shop pays for errors; customers pay for personal preference changes.",
+      "return_q4": "When will I receive my refund?",
+      "return_a4": "Refunds are processed within 3-5 business days after receipt.",
+      "account_q1": "How to create an account?",
+      "account_a1": "Register via Email, Phone, or fast login with Google/Facebook.",
+      "account_q2": "I forgot my password, what to do?",
+      "account_a2": "Use 'Forgot Password' to receive a reset link or OTP.",
+      "account_q3": "How to delete my account?",
+      "account_a3": "Contact Customer Support for permanent account deletion."
+    }
+  },
+  "help": {
+    "hero": {
+      "title": "Help Center",
+      "subtitle": "We are always here to help you"
+    },
+    "contact_methods": {
+      "title": "Contact Us",
+      "hotline": "Hotline",
+      "hotline_desc": "Toll-free call",
+      "email": "Email",
+      "email_desc": "Response within 24h",
+      "address": "Address",
+      "address_value": "123 Nguyen Hue, Dist.1, HCMC",
+      "address_desc": "Headquarters"
+    },
+    "categories": {
+      "title": "How can we help?",
+      "order": "Ordering",
+      "order_desc": "Shopping guide",
+      "shipping": "Shipping",
+      "shipping_desc": "Order tracking",
+      "payment": "Payment",
+      "payment_desc": "Payment methods",
+      "return": "Returns",
+      "return_desc": "Refund policy",
+      "account": "Account",
+      "account_desc": "Manage info",
+      "other": "Other Support",
+      "other_desc": "FAQs"
+    },
+    "form": {
+      "title": "Submit a Request",
+      "subtitle": "Fill in the information below, we will contact you as soon as possible.",
+      "label_name": "Full Name",
+      "placeholder_name": "Enter your full name",
+      "label_phone": "Phone Number",
+      "placeholder_phone": "Enter your phone number",
+      "label_email": "Email",
+      "placeholder_email": "Enter your email address",
+      "label_subject": "Subject",
+      "placeholder_subject": "Enter request subject",
+      "label_message": "Message",
+      "placeholder_message": "Describe your issue in detail...",
+      "btn_reset": "Reset",
+      "btn_send": "Send Request",
+      "error_name": "Please enter your name",
+      "error_phone": "Please enter your phone number",
+      "error_email_req": "Please enter your email",
+      "error_email_type": "Invalid email",
+      "error_subject": "Please enter a subject",
+      "error_message": "Please enter your message"
+    },
+    "sidebar": {
+      "working_hours": "Working Hours",
+      "monday_friday": "Mon - Fri",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "note": "* Hotline and Live Chat are available 24/7.",
+      "quick_links": "Quick Links",
+      "link_faq": "FAQs",
+      "link_terms": "Terms of Use",
+      "link_privacy": "Privacy Policy",
+      "link_about": "About Us"
+    }
+  },
+  "auth": {
+    "login": {
+      "logout": "Logout",
+      "logoutSuccess": "Logged out successfully!"
+    }
+  },
+  "user": {
+    "login": "Login",
+    "profile": "Profile",
+    "admin": "Administrator",
+    "personal_account": "Personal Account",
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "access_tmember": "Go to Tmember",
+    "unknown_user": "User"
+  },
+  "terms": {
+    "header": {
+      "title": "Terms of Service",
+      "brand": "Shopcart TVT Brand",
+      "updated": "Updated: {{date}}",
+      "effective": "Effective: {{date}}"
+    },
+    "important_note": {
+      "title": "Important Note",
+      "content": "Please read these terms and conditions carefully before using our services. By accessing or using the Shopcart TVT website, you agree to be bound by these terms. If you do not agree with any part of the terms, please do not use our services."
+    },
+    "sections": [
+      {
+        "title": "1. Introduction & General Terms",
+        "content": [
+          {
+            "subtitle": "1.1 Welcome",
+            "text": "Welcome to Shopcart TVT! By accessing and using our website, you agree to comply with the terms and conditions set forth in this document."
+          },
+          {
+            "subtitle": "1.2 Scope",
+            "text": "These terms apply to all users, including visitors, registered customers, and anyone using our services."
+          },
+          {
+            "subtitle": "1.3 Updates",
+            "text": "We reserve the right to update terms at any time. The latest version will be posted here with a clear effective date."
+          }
+        ]
+      },
+      {
+        "title": "2. Ownership & Copyright",
+        "content": [
+          {
+            "subtitle": "2.1 Content",
+            "text": "All website content including text, images, logos, graphics, and software are property of Shopcart TVT or its licensed partners."
+          },
+          {
+            "subtitle": "2.2 Usage",
+            "text": "You may not copy, distribute, or modify any content for commercial purposes without written consent."
+          },
+          {
+            "subtitle": "2.3 Link Sharing",
+            "text": "Sharing links to our website is allowed, provided it is not misleading or harmful to the brand."
+          }
+        ]
+      },
+      {
+        "title": "3. User Accounts",
+        "content": [
+          {
+            "subtitle": "3.1 Registration",
+            "text": "To use full features, register with accurate information. You are responsible for your account security."
+          },
+          {
+            "subtitle": "3.2 Responsibility",
+            "text": "All activities on your account are considered yours. Notify us immediately of unauthorized access."
+          },
+          {
+            "subtitle": "3.3 Termination",
+            "text": "We may suspend or terminate accounts for violations or fraudulent behavior."
+          }
+        ]
+      },
+      {
+        "title": "4. Payment & Pricing",
+        "content": [
+          {
+            "subtitle": "4.1 Pricing",
+            "text": "Prices include VAT (unless noted). Prices are subject to change without notice."
+          },
+          {
+            "subtitle": "4.2 Methods",
+            "text": "We accept COD, bank transfer, cards, e-wallets, and 0% installments."
+          },
+          {
+            "subtitle": "4.3 Security",
+            "text": "Transactions are encrypted via 256-bit SSL and comply with PCI DSS standards."
+          }
+        ]
+      },
+      {
+        "title": "5. Shipping & Delivery",
+        "content": [
+          {
+            "subtitle": "5.1 Scope",
+            "text": "We deliver nationwide. Delivery takes 1-7 business days depending on location."
+          },
+          {
+            "subtitle": "5.2 Fees",
+            "text": "Fees are based on weight and distance. Free shipping for orders over 500,000 VND."
+          },
+          {
+            "subtitle": "5.3 Inspection",
+            "text": "You may inspect items before receiving. Refuse delivery if items are incorrect or damaged."
+          }
+        ]
+      },
+      {
+        "title": "6. Returns & Refunds",
+        "content": [
+          {
+            "subtitle": "6.1 Period",
+            "text": "Request exchange/return within 30 days if items are unused and have original tags."
+          },
+          {
+            "subtitle": "6.2 Process",
+            "text": "Refunds are processed within 3-5 business days after product inspection."
+          },
+          {
+            "subtitle": "6.3 Exceptions",
+            "text": "Underwear, opened cosmetics, or custom products are not eligible for return."
+          }
+        ]
+      },
+      {
+        "title": "7. Privacy & Security",
+        "content": [
+          {
+            "subtitle": "7.1 Collection",
+            "text": "We collect data to process orders and improve services, secured per our privacy policy."
+          },
+          {
+            "subtitle": "7.2 Usage",
+            "text": "Information is only used for stated purposes and not shared with third parties (except shipping)."
+          },
+          {
+            "subtitle": "7.3 Cookies",
+            "text": "We use cookies to improve experience. You can disable them in browser settings."
+          }
+        ]
+      },
+      {
+        "title": "8. Liability",
+        "content": [
+          {
+            "subtitle": "8.1 Responsibility",
+            "text": "Shopcart TVT provides quality service but is not liable for losses beyond our control."
+          },
+          {
+            "subtitle": "8.2 Lawful Use",
+            "text": "You commit to using our services for lawful purposes. Violations result in service refusal."
+          },
+          {
+            "subtitle": "8.3 Disputes",
+            "text": "Disputes are resolved under Vietnamese law, prioritizing negotiation and mediation."
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "title": "Document Information",
+      "labels": {
+        "effective": "Effective Date",
+        "updated": "Last Updated",
+        "version": "Version",
+        "language": "Language",
+        "lang_value": "English"
+      }
+    },
+    "contact": {
+      "title": "Contact & Support",
+      "desc": "If you have any questions about these Terms and Conditions, please contact us:",
+      "email_label": "Support Email:",
+      "hotline_label": "Hotline:",
+      "button": "Contact Now"
+    },
+    "sidebar": {
+      "toc": "Table of Contents",
+      "related": "Related Pages",
+      "links": {
+        "privacy": "Privacy Policy",
+        "faqs": "FAQs",
+        "help": "Help Center",
+        "about": "About Us"
+      }
+    }
+  },
+  "product_page": {
+    "loading": "Loading...",
+    "tabs": {
+      "details": "Product Description",
+      "reviews": "Reviews"
+    },
+    "info": {
+      "title": "Product Information",
+      "brand": "Brand",
+      "category": "Category",
+      "status": "Status",
+      "warranty": "Warranty",
+      "in_stock": "In Stock",
+      "out_of_stock": "Out of Stock",
+      "updating": "Updating",
+      "months": "months"
+    },
+    "highlights": {
+      "title": "Highlights",
+      "no_desc": "No description available"
+    },
+    "full_desc": {
+      "title": "Detailed Description",
+      "no_desc_detail": "No detailed description available"
+    },
+    "specs": {
+      "title": "Specifications"
+    },
+    "promotions": {
+      "title": "Hot Promotions",
+      "view_detail": "View details"
+    },
+    "payment": {
+      "title": "Payment Offers",
+      "installment": "0% Installment"
+    }
+  },
+  "news_page": {
+    "breadcrumb": {
+      "home": "Home",
+      "news": "News"
+    },
+    "latest_title": "LATEST NEWS",
+    "trending": {
+      "title": "Trending Now",
+      "subtitle": "Most viewed articles"
+    },
+    "article": {
+      "views": "views",
+      "admin": "Admin"
+    },
+    "locales": "en-US"
+  },
+  "news_detail": {
+    "not_found": "The article does not exist or has been removed.",
+    "breadcrumb": {
+      "home": "Home",
+      "news": "News"
+    },
+    "meta": {
+      "author": "Admin",
+      "views": "views"
+    },
+    "tags": "Tags:"
+  },
+  "account_header": {
+    "role_null": "TVT-GUEST",
+    "total_orders": "Total orders purchased",
+    "warranty_orders": "Orders under warranty",
+    "unit_order": "orders"
+  },
+  "discount": {
+    "title": "Exclusive Offers",
+    "description": "Hunt for vouchers and discount codes exclusively for loyal members",
+    "freeship": "Freeship",
+    "discount_label": "Discount",
+    "copy": "Copy",
+    "copied": "Done",
+    "off": "Off",
+    "unlimited": "Unlimited",
+    "usage_limit": "{{count}} uses",
+    "min_order": "Min spend:",
+    "expiry": "Exp:",
+    "empty": {
+      "title": "Empty",
+      "description": "No discount codes are currently available. Please check back later!"
+    }
+  },
+  "history": {
+    "title": "Order History",
+    "description": "Keep track of all the orders you have placed in our system"
+  },
+  "profile": {
+    "reminders": {
+      "update_now": "Update now",
+      "add_now": "Add address",
+      "missing_fields": "Please update your {{fields}} for a better experience.",
+      "fields": {
+        "dob": "date of birth",
+        "phone": "phone number",
+        "gender": "gender"
+      },
+      "no_address": "You don't have any shipping addresses yet. Add one now for easier ordering!"
+    }
+  },
+  "warranty": {
+    "badge": "E-Warranty",
+    "title": "Search",
+    "title_highlight": "Warranty",
+    "subtitle": "Manage and track the warranty period of your devices",
+    "search_placeholder": "Search product name...",
+    "tabs": {
+      "all": "All",
+      "active": "Active",
+      "expired": "Expired"
+    },
+    "card": {
+      "active": "Under Warranty",
+      "expired": "Expired",
+      "purchase_date": "Purchase Date:",
+      "expiry_date": "Expiry Date:",
+      "not_updated": "Not updated",
+      "days_left": "{{count}} days remaining",
+      "btn_contact": "Contact Support",
+      "btn_request": "Request Warranty"
+    },
+    "empty": {
+      "title": "Empty",
+      "description": "No matching devices found",
+      "action": "Reset all"
+    }
+  },
+  "activity": {
+    "title": "Activity Log",
+    "description": "Review activities, changes, and operation logs of your account"
+  },
+  "overview": {
+    "reminders": {
+      "update_now": "Update now",
+      "add_now": "Add now",
+      "missing_fields": "Please update your {{fields}} to receive exclusive offers.",
+      "missing_phone": "Please update your phone number to receive exclusive offers.",
+      "no_address": "You don't have a shipping address. Add one for faster checkout!",
+      "fields": {
+        "dob": "date of birth"
+      }
+    },
+    "orders": {
+      "title": "Order History",
+      "description": "Manage, track your orders, and view invoice details."
+    },
+    "wishlist": {
+      "title": "Wishlist",
+      "description": "Products you are interested in and want to own",
+      "see_all": "See all ({{count}})",
+      "empty_title": "Empty",
+      "empty_description": "Your wishlist is currently empty."
+    }
+  },
+  "addresses": {
+    "title": "Address Book",
+    "subtitle": "Manage your shipping locations",
+    "add_btn": "Add Address",
+    "empty": {
+      "title": "Empty",
+      "description": "You haven't saved any shipping addresses yet",
+      "action": "Create your first address"
+    },
+    "types": {
+      "home": "Home",
+      "office": "Office",
+      "default": "Default"
+    },
+    "actions": {
+      "delete": "Delete",
+      "update": "Update",
+      "confirm_delete": "Delete this address?",
+      "confirm_desc": "This action cannot be undone.",
+      "ok_delete": "Delete now",
+      "cancel": "Cancel"
+    },
+    "view_more": "View more ({{count}})",
+    "view_less": "Collapse"
+  },
+  "linked_accounts": {
+    "title": "Linked Accounts",
+    "status": {
+      "linked": "Linked",
+      "not_linked": "Not linked"
+    },
+    "actions": {
+      "link": "Link",
+      "unlink": "Unlink",
+      "stay": "Stay here",
+      "toast_success": "Unlinked successfully"
+    },
+    "providers": {
+      "google": "Fast login with Google",
+      "github": "Link GitHub account",
+      "local": "Login with email and password"
+    },
+    "modal": {
+      "title": "Unlink Account",
+      "description": "Are you sure you want to unlink your {{name}} account?"
+    }
+  },
+  "password": {
+    "title": "Password",
+    "subtitle": "Update your login password to protect your account",
+    "btn_change": "Change password"
+  },
+  "profile_drawer": {
+    "titles": {
+      "updateUser": "Update Profile",
+      "addAddress": "Add New Address",
+      "updateAddress": "Update Address",
+      "updatePassword": "Change Password"
+    },
+    "descriptions": {
+      "updateUser": "Edit your personal information",
+      "addAddress": "Used for faster delivery",
+      "updateAddress": "Modify your address details",
+      "updatePassword": "Secure your account"
+    },
+    "address_limit": "{{current}}/10 addresses",
+    "max_address_warning": "⚠️ You have reached the maximum limit of 10 addresses",
+    "max_badge": "Max 10 addresses",
+    "form": {
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "limit_reached": "Limit Reached",
+      "no_change": "No information has changed",
+      "success_profile": "Profile updated successfully",
+      "success_add_addr": "Address added successfully",
+      "success_update_addr": "Address updated successfully",
+      "success_password": "Password changed successfully",
+      "fail": "Operation failed",
+      "labels": {
+        "name": "Full Name",
+        "gender": "Gender",
+        "dob": "Date of Birth",
+        "phone": "Phone Number",
+        "email": "Email",
+        "bio": "Bio",
+        "default_shipping": "Default Shipping Address",
+        "address_book": "Address Book",
+        "address_hint": "This address will be used as default for shipping",
+        "empty_address": "You don't have any addresses in your address book. Please add an address in the \"Address Book\" section to use this feature.",
+        "addr_title": "Address Label",
+        "province": "Province/City",
+        "district": "District",
+        "ward": "Ward/Commune",
+        "detail": "Detailed Address",
+        "addr_type": "Address Type",
+        "set_default": "Set as Default",
+        "current_pass": "Current Password",
+        "new_pass": "New Password",
+        "confirm_pass": "Confirm Password"
+      },
+      "placeholders": {
+        "gender": "Select gender",
+        "bio": "Short introduction",
+        "addr_title": "e.g., Home, Office, Mom's House...",
+        "province": "Select province",
+        "district": "Select district",
+        "ward": "Select ward",
+        "detail": "House number, street name...",
+        "current_pass": "Enter your current password",
+        "new_pass": "Set a new password",
+        "confirm_pass": "Re-enter new password"
+      },
+      "rules": {
+        "required_name": "Please enter your name",
+        "required_gender": "Please select your gender",
+        "required_title": "Please enter an address label",
+        "required_pass": "Please enter your password",
+        "pass_min": "Password must be at least 8 characters",
+        "pass_mismatch": "The confirmation password does not match",
+        "pass_extra": "Password must be 8-20 characters, including letters and numbers.",
+        "confirm_extra": "Re-enter the exact new password above."
+      },
+      "gender_options": {
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      },
+      "address_types": {
+        "home": "Home",
+        "office": "Office",
+        "is_default": "Default",
+        "currently_default": "Currently set as default"
+      }
+    },
+    "section": {
+      "user_info_title": "Personal Information",
+      "user_info_desc": "Manage your personal profile",
+      "btn_update": "Update",
+      "not_updated": "Not updated",
+      "date_locale": "en-US"
+    }
+  },
+  "contact_page": {
+    "hero": {
+      "title": "Contact Us",
+      "subtitle": "We are always ready to listen and support you",
+      "features": [
+        "Fast response within 24h",
+        "Professional support team",
+        "Resolve all inquiries",
+        "24/7 multi-channel support"
+      ]
+    },
+    "form": {
+      "title": "Send Us Your Feedback",
+      "subtitle": "Fill in the information below, we will get back to you as soon as possible.",
+      "placeholders": {
+        "name": "Enter your full name",
+        "phone": "Enter your phone number",
+        "email": "Enter your email address",
+        "subject": "Enter message subject",
+        "message": "Enter your message content..."
+      },
+      "btns": {
+        "reset": "Clear content",
+        "send": "Send message"
+      }
+    },
+    "sidebar": {
+      "social_title": "Connect With Us",
+      "links_title": "Useful Links",
+      "cta_title": "Need Urgent Help?",
+      "cta_subtitle": "Call our hotline for free consultation",
+      "location_title": "Our Location",
+      "links": {
+        "faqs": "FAQs",
+        "help": "Help Center",
+        "terms": "Terms of Use",
+        "about": "About Us"
+      }
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "loading_title": "Loading Order",
+    "loading_desc": "Please wait a moment...",
+    "messages": {
+      "missing_info": "Please fill in all required information!",
+      "order_success": "Order placed successfully!"
+    },
+    "customer_info": {
+      "title": "Customer Information",
+      "first_name": "First Name",
+      "last_name": "Last Name"
+    },
+    "shipping": {
+      "title": "Shipping Address",
+      "address_label": "Specific Address",
+      "address_placeholder": "House number, street name",
+      "province": "Province/City",
+      "district": "District",
+      "ward": "Ward/Commune",
+      "notes": "Notes (optional)",
+      "notes_placeholder": "Extra notes for delivery...",
+      "select_province": "Select Province",
+      "select_district": "Select District",
+      "select_ward": "Select Ward"
+    },
+    "payment": {
+      "title": "Payment Method",
+      "cod": "Cash on Delivery",
+      "online": "Online Payment",
+      "placeholder": "Select payment method",
+      "discount_hint": "Extra discount up to 1,000,000đ",
+      "modal_title": "Select Payment Method",
+      "confirm": "Confirm",
+      "methods": {
+        "store": "Pay at Store",
+        "store_desc": "Item held for 24h.",
+        "qr": "Bank Transfer via QR Code",
+        "momo_desc": "2% off, max 200k",
+        "visa": "Via Visa/Master/JCB/Napas",
+        "kredivo_desc": "7% off, max 1,000,000đ",
+        "cod": "Cash on Delivery",
+        "cod_desc": "Pay directly upon receipt (COD)"
+      }
+    },
+    "summary": {
+      "title": "Order Summary",
+      "shipping_fee": "Shipping Fee",
+      "free": "Free",
+      "no_coupon": "No coupon applied",
+      "processing": "Processing...",
+      "btn_cod": "Place Order (COD)",
+      "btn_online": "Pay Now",
+      "secure_payment": "100% Secure",
+      "fast_delivery": "Fast Delivery"
+    },
+    "voucher": {
+      "loading": "Loading vouchers...",
+      "available_title": "Available Vouchers",
+      "usage_limit": "{{count}} uses left",
+      "min_order_hint": "Add {{amount}} more to apply",
+      "no_vouchers": "No vouchers available or you have reached the usage limit."
+    }
+  },
+  "customer_info": {
+    "title": "1. Customer Information",
+    "first_name": "First Name",
+    "first_name_placeholder": "e.g., John",
+    "first_name_hint": "Please enter your first name as on your ID",
+    "last_name": "Last Name",
+    "last_name_placeholder": "e.g., Doe",
+    "email_hint": "Used to receive order tracking information",
+    "phone_hint": "Number used for delivery contact"
+  },
+  "category": {
+    "sidebar_title": "Categories",
+    "all_categories": "All Categories",
+    "explore_all": "Explore all products in our store",
+    "products_available": "{{count}} Products available",
+    "loading": "Loading products...",
+    "collapse_open": "«",
+    "collapse_close": "»",
+    "page_title": "Products by Category:",
+    "all_products": "All Products"
+  },
+  "brand": {
+    "sidebar_title": "Brands",
+    "all_brands": "All Brands",
+    "explore_all": "Explore all products in our store",
+    "products_available": "{{count}} Products available",
+    "loading": "Loading products...",
+    "page_title": "Products by Brand:",
+    "all_products": "All Products"
+  },
+  "common": {
+    "seeMore": "See More",
+    "no_product": {
+      "title": "No products found",
+      "description": "Sorry, there are no products matching your current filters.",
+      "status_updating": "We are updating new products",
+      "suggestions": "You can try the following suggestions:",
+      "btn_refresh": "Refresh",
+      "btn_view_all": "View all",
+      "help_text": "Need help? Contact us via"
+    },
+    "updating": "Feature under development 😅"
   }
-},
-"news": {
-  "title_main": "Latest",
-  "title_sub": "News",
-  "see_all": "View all",
-  "empty_title": "Empty",
-  "empty_description": "No new updates available yet",
-  "read_more": "Read more"
-},
-"shop": {
-  "title": "Get products according to your needs",
-  "reset_filter": "Reset filters",
-  "loading_products": "Loading products...",
-  "filter_category": "Categories",
-  "filter_brand": "Brands",
-  "filter_price": "Price Range",
-  "filter_category_title": "Product Categories",
-  "all_products": "All Products",
-  "reset_selection": "Reset selection",
-  "filter_brand_title": "Brands",
-  "all_brands": "All Brands"
-},
-"common": {
-  "seeMore": "See More"
-}
 }

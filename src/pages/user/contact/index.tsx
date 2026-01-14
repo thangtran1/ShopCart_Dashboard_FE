@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Col, Input, Row, Typography, Form } from "antd";
 import { useRouter } from "@/router/hooks";
 import {
@@ -18,51 +20,53 @@ import { toast } from "sonner";
 import { feedbackService } from "@/api/services/feedback";
 import { useUserInfo } from "@/store/userStore";
 import SigninNewletter from "@/components/user/signin-newletter";
+import { useTranslation } from "react-i18next";
 
 const { Title, Paragraph, Text } = Typography;
 
-const socialLinks = [
-    { icon: Facebook, name: "Facebook", url: "https://www.facebook.com/thang.tran.631808", color: "bg-blue-600" },
-    { icon: MessageCircle, name: "WhatsApp", url: "https://wa.me/+8562096356940", color: "bg-green-500" },
-    { icon: Send, name: "Telegram", url: "https://t.me/kai_dev123", color: "bg-sky-500" },
-    { icon: Globe, name: "Website", url: "https://shop-cart-dashboard-fe.vercel.app/", color: "bg-primary" },
-];
-
-const quickLinks = [
-    { label: "Câu hỏi thường gặp", link: "/faqs" },
-    { label: "Trung tâm hỗ trợ", link: "/help" },
-    { label: "Điều khoản sử dụng", link: "/terms" },
-    { label: "Về chúng tôi", link: "/about" },
-];
-
-const features = [
-    "Phản hồi nhanh chóng trong 24h",
-    "Đội ngũ hỗ trợ chuyên nghiệp",
-    "Giải đáp mọi thắc mắc",
-    "Hỗ trợ đa kênh 24/7"
-];
-
 export default function Contact() {
+    const { t } = useTranslation();
     const navigate = useRouter();
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const userInfo = useUserInfo();
+
+    const socialLinks = [
+        { icon: Facebook, name: "Facebook", url: "https://www.facebook.com/thang.tran.631808", color: "bg-blue-600" },
+        { icon: MessageCircle, name: "WhatsApp", url: "https://wa.me/+8562096356940", color: "bg-green-500" },
+        { icon: Send, name: "Telegram", url: "https://t.me/kai_dev123", color: "bg-sky-500" },
+        { icon: Globe, name: "Website", url: "https://shop-cart-dashboard-fe.vercel.app/", color: "bg-primary" },
+    ];
+
+    const quickLinks = [
+        { label: t("contact_page.sidebar.links.faqs"), link: "/faqs" },
+        { label: t("contact_page.sidebar.links.help"), link: "/help" },
+        { label: t("contact_page.sidebar.links.terms"), link: "/terms" },
+        { label: t("contact_page.sidebar.links.about"), link: "/about" },
+    ];
+
+    const features = t("contact_page.hero.features", { returnObjects: true }) as string[];
+
     const handleSubmit = async () => {
-        setLoading(true);
-        const values = await form.validateFields();
-        const response = await feedbackService.create({
-            fullName: userInfo.username || values.fullName,
-            phone: userInfo.phone || values.phoneNumber,
-            email: userInfo.email || values.emailAddress,
-            title: values.title,
-            content: values.content,
-        });
-        if (response.success) {
-            toast.success(response.message);
-            form.resetFields();
-            setLoading(false);
-        } else {
-            toast.error(response.message);
+        try {
+            setLoading(true);
+            const values = await form.validateFields();
+            const response = await feedbackService.create({
+                fullName: userInfo.username || values.fullName,
+                phone: userInfo.phone || values.phoneNumber,
+                email: userInfo.email || values.emailAddress,
+                title: values.title,
+                content: values.content,
+            });
+            if (response.success) {
+                toast.success(response.message);
+                form.resetFields();
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            console.error("Validation failed:", error);
+        } finally {
             setLoading(false);
         }
     };
@@ -70,7 +74,6 @@ export default function Contact() {
     return (
         <div>
             <Row gutter={[16, 16]}>
-                {/* Main content */}
                 <Col xs={24} lg={16}>
                     {/* Hero Section */}
                     <div className="rounded-xl p-4 border border-border bg-gradient-to-r from-primary/10 to-primary/5 mb-6">
@@ -80,14 +83,14 @@ export default function Contact() {
                             </div>
                             <div>
                                 <Title level={2} className="!text-primary font-extrabold mb-0">
-                                    Liên Hệ Với Chúng Tôi
+                                    {t("contact_page.hero.title")}
                                 </Title>
                                 <Paragraph className="!text-muted-foreground mb-0">
-                                    Chúng tôi luôn sẵn lòng lắng nghe và hỗ trợ bạn
+                                    {t("contact_page.hero.subtitle")}
                                 </Paragraph>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 mt-2">
                             {features.map((feature) => (
                                 <div key={feature} className="flex items-center gap-2 text-sm">
                                     <CheckCircle className="w-4 h-4 text-green-500" />
@@ -101,10 +104,10 @@ export default function Contact() {
                     <div className="rounded-xl p-6 border border-border">
                         <Title level={4} className="font-bold mb-2 flex items-center gap-2">
                             <Send className="w-5 h-5 text-primary" />
-                            Gửi Feedback Cho Chúng Tôi
+                            {t("contact_page.form.title")}
                         </Title>
                         <Paragraph className="!text-muted-foreground mb-6">
-                            Điền thông tin bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
+                            {t("contact_page.form.subtitle")}
                         </Paragraph>
 
                         <Form
@@ -116,28 +119,28 @@ export default function Contact() {
                                 <Col xs={24} sm={12}>
                                     <Form.Item
                                         name="fullName"
-                                        label="Họ và tên"
+                                        label={t("profile_drawer.form.labels.name")}
                                         initialValue={userInfo.username || ""}
-                                        rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}
+                                        rules={[{ required: true, message: t("profile_drawer.form.rules.required_name") }]}
                                     >
                                         <Input
                                             size="large"
-                                            placeholder="Nhập họ và tên của bạn"
+                                            placeholder={t("contact_page.form.placeholders.name")}
                                             className="rounded-lg"
-                                            disabled={!!userInfo.username} // Có thì khóa input
+                                            disabled={!!userInfo.username}
                                         />
                                     </Form.Item>
                                 </Col>
                                 <Col xs={24} sm={12}>
                                     <Form.Item
                                         name="phoneNumber"
-                                        label="Số điện thoại"
+                                        label={t("profile_drawer.form.labels.phone")}
                                         initialValue={userInfo.phone || ""}
-                                        rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
+                                        rules={[{ required: true, message: t("profile_drawer.form.rules.required_phone") || "Required" }]}
                                     >
                                         <Input
                                             size="large"
-                                            placeholder="Nhập số điện thoại"
+                                            placeholder={t("contact_page.form.placeholders.phone")}
                                             className="rounded-lg"
                                             disabled={!!userInfo.phone}
                                         />
@@ -147,16 +150,16 @@ export default function Contact() {
 
                             <Form.Item
                                 name="emailAddress"
-                                label="Email"
+                                label={t("profile_drawer.form.labels.email")}
                                 initialValue={userInfo.email || ""}
                                 rules={[
-                                    { required: true, message: "Vui lòng nhập email" },
-                                    { type: "email", message: "Email không hợp lệ" }
+                                    { required: true, message: t("profile_drawer.form.rules.required_email") || "Required" },
+                                    { type: "email", message: t("profile_drawer.form.rules.email_invalid") || "Invalid email" }
                                 ]}
                             >
                                 <Input
                                     size="large"
-                                    placeholder="Nhập địa chỉ email"
+                                    placeholder={t("contact_page.form.placeholders.email")}
                                     className="rounded-lg"
                                     disabled={!!userInfo.email}
                                 />
@@ -164,27 +167,27 @@ export default function Contact() {
 
                             <Form.Item
                                 name="title"
-                                label="Tiêu đề"
-                                rules={[{ required: true, message: "Vui lòng nhập tiêu đề" }]}
+                                label={t("profile_drawer.form.labels.addr_title")}
+                                rules={[{ required: true, message: t("profile_drawer.form.rules.required_title") }]}
                             >
-                                <Input size="large" placeholder="Nhập tiêu đề tin nhắn" className="rounded-lg" />
+                                <Input size="large" placeholder={t("contact_page.form.placeholders.subject")} className="rounded-lg" />
                             </Form.Item>
 
                             <Form.Item
                                 name="content"
-                                label="Nội dung tin nhắn"
-                                rules={[{ required: true, message: "Vui lòng nhập nội dung" }]}
+                                label={t("contact_page.form.btns.send")}
+                                rules={[{ required: true, message: t("contact_page.form.placeholders.message") }]}
                             >
                                 <TextArea
                                     rows={5}
-                                    placeholder="Nhập nội dung tin nhắn của bạn..."
+                                    placeholder={t("contact_page.form.placeholders.message")}
                                     className="rounded-lg"
                                 />
                             </Form.Item>
 
                             <div className="flex justify-end gap-3">
                                 <Button size="large" onClick={() => form.resetFields()} className="rounded-lg">
-                                    Xóa nội dung
+                                    {t("contact_page.form.btns.reset")}
                                 </Button>
                                 <Button
                                     type="primary"
@@ -194,7 +197,7 @@ export default function Contact() {
                                     icon={<Send className="w-4 h-4" />}
                                     className="rounded-lg"
                                 >
-                                    Gửi tin nhắn
+                                    {t("contact_page.form.btns.send")}
                                 </Button>
                             </div>
                         </Form>
@@ -204,18 +207,16 @@ export default function Contact() {
                     <div className="rounded-xl p-4 border border-border mt-6">
                         <Title level={4} className="font-bold mb-4 flex items-center gap-2">
                             <MapPin className="w-5 h-5 text-primary" />
-                            Vị Trí Của Chúng Tôi
+                            {t("contact_page.sidebar.location_title")}
                         </Title>
                         <div className="rounded-xl overflow-hidden border border-border">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.896245889863!2d108.20216637470624!3d16.054407884625524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219c792d2b4ff%3A0xa084d0b12304c3d!2zSMOibiBDaOG7hyDEkOG7qWMgRGFuYW5nLCBWaWV0bmFt!5e0!3m2!1svi!2s!4v1701788400000!5m2!1svi!2s
-"
+                                src="https://www.google.com/maps/embed?..." 
                                 width="100%"
                                 height="300"
                                 style={{ border: 0 }}
                                 allowFullScreen
                                 loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
                                 title="Google Maps"
                             />
                         </div>
@@ -225,10 +226,9 @@ export default function Contact() {
                 {/* Sidebar */}
                 <Col xs={24} lg={8}>
                     <div className="sticky top-4 space-y-4">
-                        {/* Social Links */}
                         <div className="border border-border p-4 rounded-2xl">
                             <Title level={4} className="font-bold mb-4">
-                                Kết Nối Với Chúng Tôi
+                                {t("contact_page.sidebar.social_title")}
                             </Title>
                             <div className="grid grid-cols-2 gap-1">
                                 {socialLinks.map(({ icon: Icon, name, url, color }) => (
@@ -237,19 +237,18 @@ export default function Contact() {
                                         href={url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`flex  border border-primary/10 items-center gap-2 p-3 rounded-lg ${color} text-foreground hover:opacity-90 transition-all`}
+                                        className={`flex border border-primary/10 items-center gap-2 p-3 rounded-lg ${color} text-white hover:opacity-90 transition-all`}
                                     >
                                         <Icon className="w-5 h-5" />
-                                        <Text className="text-foreground font-medium text-sm">{name}</Text>
+                                        <Text className="text-white font-medium text-sm">{name}</Text>
                                     </a>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Quick Links */}
                         <div className="border border-border p-4 rounded-2xl">
                             <Title level={4} className="font-bold mb-4">
-                                Liên Kết Hữu Ích
+                                {t("contact_page.sidebar.links_title")}
                             </Title>
                             <div className="space-y-2">
                                 {quickLinks.map(({ label, link }) => (
@@ -265,16 +264,15 @@ export default function Contact() {
                             </div>
                         </div>
 
-                        {/* Support CTA */}
                         <div className="border border-primary/30 bg-primary/5 p-6 rounded-2xl text-center">
                             <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
                                 <Headphones className="w-7 h-7 text-primary" />
                             </div>
                             <Title level={4} className="font-semibold mb-2">
-                                Cần Hỗ Trợ Ngay?
+                                {t("contact_page.sidebar.cta_title")}
                             </Title>
                             <Paragraph className="!text-muted-foreground mb-4">
-                                Gọi ngay hotline để được tư vấn miễn phí
+                                {t("contact_page.sidebar.cta_subtitle")}
                             </Paragraph>
                             <Button
                                 type="primary"
@@ -286,8 +284,6 @@ export default function Contact() {
                                 1900 1234 56
                             </Button>
                         </div>
-
-                        {/* Newsletter */}
                         <SigninNewletter />
                     </div>
                 </Col>

@@ -1,41 +1,53 @@
+"use client";
 import { Input } from "@/ui/input";
 import { Label } from "@/ui/label";
 import { Typography } from "antd";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
 export const CustomerInfoForm = ({ value, onChange }: any) => {
+  const { t } = useTranslation();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ ...value, [e.target.name]: e.target.value });
   };
 
   return (
     <div className="space-y-4">
-      <Title level={4} className="mb-0">1. Thông Tin Khách Hàng</Title>
+      <Title level={4} className="mb-0">
+        {t("checkout.customer_info.title")}
+      </Title>
       
       <div className="space-y-4 border border-border rounded-lg p-4 bg-card shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="firstName" className="text-sm font-medium">Họ *</Label>
+            <Label htmlFor="firstName" className="text-sm font-medium">
+              {t("checkout.customer_info.first_name")} *
+            </Label>
             <Input
               id="firstName"
               name="firstName"
               value={value.firstName}
               onChange={handleInputChange}
-              placeholder="Ví dụ: Nguyễn"
+              placeholder={t("checkout.customer_info.first_name_placeholder")}
               className="focus-visible:ring-primary"
               required
             />
-            <p className="text-[11px] text-muted-foreground italic">Vui lòng nhập họ như trên giấy tờ tùy thân</p>
+            <p className="text-[11px] text-muted-foreground italic">
+              {t("checkout.customer_info.first_name_hint")}
+            </p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="lastName" className="text-sm font-medium">Tên *</Label>
+            <Label htmlFor="lastName" className="text-sm font-medium">
+              {t("checkout.customer_info.last_name")} *
+            </Label>
             <Input
               id="lastName"
               name="lastName"
               value={value.lastName}
               onChange={handleInputChange}
-              placeholder="Ví dụ: Văn An"
+              placeholder={t("checkout.customer_info.last_name_placeholder")}
               className="focus-visible:ring-primary"
               required
             />
@@ -45,7 +57,7 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="email" className="flex items-center gap-1 text-sm font-medium">
-              Email *
+              {t("profile_drawer.form.labels.email")} *
             </Label>
             <Input
               id="email"
@@ -57,11 +69,13 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
               className="focus-visible:ring-primary"
               required
             />
-            <p className="text-[11px] text-muted-foreground italic">Dùng để nhận thông tin hành trình đơn hàng</p>
+            <p className="text-[11px] text-muted-foreground italic">
+              {t("checkout.customer_info.email_hint")}
+            </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone" className="flex items-center gap-1 text-sm font-medium">
-              Số điện thoại *
+              {t("profile_drawer.form.labels.phone")} *
             </Label>
             <Input
               id="phone"
@@ -73,7 +87,9 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
               className="focus-visible:ring-primary"
               required
             />
-            <p className="text-[11px] text-muted-foreground italic">Số dùng để liên hệ khi giao hàng</p>
+            <p className="text-[11px] text-muted-foreground italic">
+              {t("checkout.customer_info.phone_hint")}
+            </p>
           </div>
         </div>
       </div>

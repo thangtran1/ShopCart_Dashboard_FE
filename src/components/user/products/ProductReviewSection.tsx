@@ -15,6 +15,7 @@ import { Button, Input, Rate } from "antd";
 import { Textarea } from "@/ui/textarea";
 import { productService } from "@/api/services/product";
 import { PlusOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const Stars = ({
   value,
@@ -36,6 +37,7 @@ const Stars = ({
 );
 
 const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
+  const { t } = useTranslation();
   const [showReplies, setShowReplies] = useState(false);
   const [replyFormOpen, setReplyFormOpen] = useState(false);
   const [replyText, setReplyText] = useState("");
@@ -52,19 +54,25 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
     setShowReplies(true);
   };
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString(t("review.date_format"));
+  };
+
   return (
     <div className="p-4 rounded-xl border border-border">
       <div className="flex gap-3">
         <img
           src={`${API_URL}/${review.user?.avatar || "uploads/avatar-default.png"}`}
-          alt={review.user?.name || "Người dùng"}
+          alt={review.user?.name || t("review.user_anonymous")}
           className="w-10 h-10 rounded-full border-2 object-cover"
         />
 
         <div className="flex-1">
           <div className="flex justify-between flex-wrap gap-2">
             <div>
-              <p className="font-semibold text-sm">{review.user?.name || "Người dùng"}</p>
+              <p className="font-semibold text-sm">
+                {review.user?.name || t("review.user_anonymous")}
+              </p>
               <div className="flex items-center gap-2 mt-0.5">
                 <Stars value={review.rating} />
                 {review.type && (
@@ -75,7 +83,7 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
               </div>
             </div>
             <span className="text-xs text-muted-foreground">
-              {new Date(review.createdAt).toLocaleDateString("vi-VN")}
+              {formatDate(review.createdAt)}
             </span>
           </div>
 
@@ -97,9 +105,9 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
             {canReply && (
               <button
                 onClick={() => setReplyFormOpen(!replyFormOpen)}
-                className="text-primary cursor-pointer flex items-center gap-1"
+                className="text-primary cursor-pointer flex items-center gap-1 font-medium"
               >
-                <MessageCircle size={14} /> Phản hồi
+                <MessageCircle size={14} /> {t("review.reply_action")}
               </button>
             )}
             {replies.length > 0 && (
@@ -108,7 +116,7 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
                 className="text-muted-foreground cursor-pointer flex items-center gap-1"
               >
                 {showReplies ? <ChevronUp size={14} /> : <ChevronDown size={14} />}{" "}
-                {replies.length} phản hồi
+                {t("review.reply_count", { count: replies.length })}
               </button>
             )}
           </div>
@@ -120,13 +128,12 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && submitReply()}
-                placeholder="Viết phản hồi..."
+                placeholder={t("review.reply_placeholder")}
               />
               <Button
                 onClick={submitReply}
                 type="primary"
                 icon={<Send size={15} />}
-                size="large"
                 className="shrink-0"
               />
             </div>
@@ -142,19 +149,21 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
                 >
                   <img
                     src={`${API_URL}/${reply.user?.avatar || "images/avatar/avatar-default.png"}`}
-                    alt={reply.user?.name || "Người dùng"}
+                    alt={reply.user?.name || t("review.user_anonymous")}
                     className="w-10 h-10 rounded-full border-2 object-cover"
                   />
                   <div>
                     <div className="flex items-center gap-2 text-sm">
-                      <span className="font-medium">{reply.user?.name || "Người dùng"}</span>
+                      <span className="font-medium">
+                        {reply.user?.name || t("review.user_anonymous")}
+                      </span>
                       {reply.user?.isAdmin && (
-                        <span className="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded flex items-center gap-1">
-                          <Shield size={10} /> Admin
+                        <span className="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded flex items-center gap-1 font-semibold">
+                          <Shield size={10} /> {t("review.admin_badge")}
                         </span>
                       )}
                       <span className="text-xs text-muted-foreground">
-                        {new Date(reply.createdAt).toLocaleDateString("vi-VN")}
+                        {formatDate(reply.createdAt)}
                       </span>
                     </div>
                     <p className="text-sm mt-1">{reply.comment}</p>
@@ -165,9 +174,9 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
               {replies.length > 3 && !showAllReplies && (
                 <button
                   onClick={() => setShowAllReplies(true)}
-                  className="text-xs text-primary mt-2"
+                  className="text-xs text-primary mt-2 font-medium hover:underline cursor-pointer"
                 >
-                  Xem thêm {replies.length - 3} phản hồi
+                  {t("review.view_more_replies", { count: replies.length - 3 })}
                 </button>
               )}
             </div>
@@ -178,7 +187,9 @@ const ReviewCard: React.FC<any> = ({ review, canReply, onReply }) => {
   );
 };
 
+
 export default function ProductReviewSection({ product }: any) {
+  const { t } = useTranslation();
   const { accessToken } = useUserToken();
   const user = useUserInfo();
   const isLogged = Boolean(accessToken);
@@ -194,16 +205,25 @@ export default function ProductReviewSection({ product }: any) {
   const avgRating = allReviews.length
     ? (allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length).toFixed(1)
     : "0";
+
   const counts = [5, 4, 3, 2, 1].map((s) => ({
     s,
     c: allReviews.filter((r) => r.rating === s).length,
   }));
-  const labels = ["", "Rất tệ 😞", "Tệ 😕", "Bình thường 😐", "Tốt 😊", "Tuyệt vời 🤩"];
+
+  const labels = [
+    "", 
+    t("review.labels.very_bad"), 
+    t("review.labels.bad"), 
+    t("review.labels.normal"), 
+    t("review.labels.good"), 
+    t("review.labels.excellent")
+  ];
 
   const submitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!rating) return toast.error("Chọn số sao!");
-    if (!comment.trim()) return toast.error("Nhập nội dung!");
+    if (!rating) return toast.error(t("review.toast.select_star"));
+    if (!comment.trim()) return toast.error(t("review.toast.enter_content"));
     setLoading(true);
 
     try {
@@ -226,18 +246,17 @@ export default function ProductReviewSection({ product }: any) {
           })
         );
       } else {
-        toast.error("API không trả reviews trong response");
+        toast.error(t("review.toast.api_error"));
         return;
       }
 
-      toast.success("Đã gửi review!");
+      toast.success(t("review.toast.success"));
       setRating(0);
       setComment("");
       setImages([]);
       setImageInput("");
     } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Gửi thất bại!");
+      toast.error(err.message || t("review.toast.fail"));
     } finally {
       setLoading(false);
     }
@@ -245,10 +264,8 @@ export default function ProductReviewSection({ product }: any) {
 
   const addReply = async (reviewId: string, text: string) => {
     if (!text.trim()) return;
-
     try {
       const res = await productService.replyToReview(product.id, reviewId, { comment: text });
-
       setAllReviews((prev) =>
         (res.data.reviews as any[]).map((r) => {
           const oldReview = prev.find((pr) => pr._id === r._id);
@@ -263,10 +280,9 @@ export default function ProductReviewSection({ product }: any) {
           };
         })
       );
-
-      toast.success("Đã phản hồi!");
+      toast.success(t("review.toast.reply_success"));
     } catch (err) {
-      toast.error("Reply thất bại!");
+      toast.error(t("review.toast.reply_fail"));
     }
   };
 
@@ -276,7 +292,9 @@ export default function ProductReviewSection({ product }: any) {
         <div className="flex flex-col items-center md:border-r md:pr-6">
           <div className="text-4xl font-bold text-primary">{avgRating}</div>
           <Stars value={Math.round(+avgRating)} size={18} />
-          <p className="text-sm text-muted-foreground mt-1">{allReviews.length} đánh giá</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {allReviews.length} {t("review.rating_count")}
+          </p>
         </div>
         <div className="flex-1 space-y-1.5">
           {counts.map(({ s, c }) => (
@@ -294,35 +312,31 @@ export default function ProductReviewSection({ product }: any) {
         </div>
       </div>
 
-      {/* Review Form */}
       {isLogged ? (
         <form onSubmit={submitReview} className="rounded-xl p-5 border border-success space-y-3">
-          <h3 className="font-semibold">✍️ Viết đánh giá</h3>
+          <h3 className="font-semibold">✍️ {t("review.write_review")}</h3>
 
-          {/* Rating */}
           <div>
-            <label className="text-sm font-medium">Đánh giá *</label>
+            <label className="text-sm font-medium">{t("review.rating_label")}</label>
             <div className="flex items-center gap-2 mt-1">
               <Stars value={rating} size={28} interactive onRate={setRating} />
               <span className="text-sm text-muted-foreground">{labels[rating]}</span>
             </div>
           </div>
 
-          {/* Comment */}
           <div>
-            <label className="text-sm font-medium">Nội dung *</label>
+            <label className="text-sm font-medium">{t("review.content_label")}</label>
             <Textarea
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              placeholder={`Chia sẻ về ${product.name}...`}
+              onChange={(e: any) => setComment(e.target.value)}
+              placeholder={t("review.placeholder", { name: product.name })}
               className="mt-1"
               rows={3}
             />
           </div>
 
-          {/* Image URLs */}
           <div>
-            <label className="text-sm font-medium">Hình ảnh (URL)</label>
+            <label className="text-sm font-medium">{t("review.image_url_label")}</label>
             <div className="flex flex-wrap gap-2 mt-1">
               {images.map((img, i) => (
                 <div key={i} className="relative group">
@@ -339,8 +353,7 @@ export default function ProductReviewSection({ product }: any) {
               {images.length < 5 && (
                 <div className="flex gap-2 w-full">
                   <Input
-                    type="text"
-                    placeholder="Nhập URL ảnh..."
+                    placeholder={t("review.image_placeholder")}
                     value={imageInput}
                     onChange={(e) => setImageInput(e.target.value)}
                     className="flex-1"
@@ -354,8 +367,7 @@ export default function ProductReviewSection({ product }: any) {
                     }}
                     type="primary"
                     icon={<PlusOutlined />}
-                    size="large"
-                    className="shrink-0"
+                    className="shrink-0 h-[40px]"
                   />
                 </div>
               )}
@@ -363,36 +375,35 @@ export default function ProductReviewSection({ product }: any) {
           </div>
 
           <Button type="primary" htmlType="submit" size="large" icon={<Send size={16} />} loading={loading}>
-            Gửi
+            {t("review.send_btn")}
           </Button>
         </form>
       ) : (
         <div className="rounded-xl p-6 border text-center">
           <LogIn size={40} className="mx-auto mb-3 text-muted-foreground" />
-          <h3 className="font-semibold mb-1">Đăng nhập để đánh giá</h3>
-          <p className="text-sm text-muted-foreground mb-3">Chia sẻ trải nghiệm của bạn</p>
+          <h3 className="font-semibold mb-1">{t("review.login_to_review")}</h3>
+          <p className="text-sm text-muted-foreground mb-3">{t("review.login_desc")}</p>
           <Link to="/login">
             <Button type="primary" icon={<LogIn size={16} />}>
-              Đăng nhập
+              {t("review.login_btn")}
             </Button>
           </Link>
         </div>
       )}
 
-      {/* Review List */}
       <div className="space-y-3">
-        <h3 className="font-semibold">Tất cả đánh giá ({allReviews.length})</h3>
+        <h3 className="font-semibold">
+          {t("review.all_reviews")} ({allReviews.length})
+        </h3>
         <div className="space-y-3 max-h-[500px] overflow-y-auto">
           {allReviews.length === 0 ? (
             <div className="text-center border border-primary/40 rounded-lg p-3">
               <div className="text-4xl">📝</div>
-              <p className="text-lg text-foreground font-semibold">Chưa có đánh giá nào</p>
-              <p className="text-sm text-muted-foreground">
-                Sản phẩm này chưa có đánh giá. Hãy là người đầu tiên để lại phản hồi!
-              </p>
+              <p className="text-lg text-foreground font-semibold">{t("review.no_review_title")}</p>
+              <p className="text-sm text-muted-foreground">{t("review.no_review_desc")}</p>
             </div>
           ) : (
-            allReviews.map((r) => (
+            allReviews.map((r: any) => (
               <ReviewCard key={r._id} review={r} canReply={isAdmin} onReply={addReply} />
             ))
           )}

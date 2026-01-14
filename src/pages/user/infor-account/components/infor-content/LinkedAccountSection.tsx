@@ -1,9 +1,12 @@
-import { useState } from "react";
+"use client";
+
+import { useState, useMemo } from "react";
 import { Button, Modal } from "antd";
 import { DisconnectOutlined, LinkOutlined } from "@ant-design/icons";
 import { Badge } from "@/ui/badge";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface LinkedAccount {
   key: string;
@@ -14,36 +17,39 @@ interface LinkedAccount {
 }
 
 export default function LinkedAccountSection() {
+  const { t } = useTranslation();
   const { profile } = useUserProfile();
   const [loadingKey, setLoadingKey] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<LinkedAccount | null>(null);
 
-  const accountConfigs: Omit<LinkedAccount, "linked">[] = [
-    {
-      key: "google",
-      name: "Google",
-      icon: "https://www.svgrepo.com/show/475656/google-color.svg",
-      description: "Đăng nhập nhanh bằng Google",
-    },
-    {
-      key: "github",
-      name: "GitHub",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Github-desktop-logo-symbol.svg/1200px-Github-desktop-logo-symbol.svg.png",
-      description: "Liên kết tài khoản GitHub",
-    },
-    {
-      key: "local",
-      name: "Email/Local",
-      icon: "https://cdn-icons-png.flaticon.com/512/561/561127.png",
-      description: "Đăng nhập bằng email và mật khẩu",
-    },
-  ];
+  const accounts = useMemo(() => {
+    const configs = [
+      {
+        key: "google",
+        name: "Google",
+        icon: "https://www.svgrepo.com/show/475656/google-color.svg",
+        description: t("linked_accounts.providers.google"),
+      },
+      {
+        key: "github",
+        name: "GitHub",
+        icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Github-desktop-logo-symbol.svg/1200px-Github-desktop-logo-symbol.svg.png",
+        description: t("linked_accounts.providers.github"),
+      },
+      {
+        key: "local",
+        name: "Email/Local",
+        icon: "https://cdn-icons-png.flaticon.com/512/561/561127.png",
+        description: t("linked_accounts.providers.local"),
+      },
+    ];
 
-  const accounts: LinkedAccount[] = accountConfigs.map((acc) => ({
-    ...acc,
-    linked: profile?.providers?.includes(acc.key) || false,
-  }));
+    return configs.map((acc) => ({
+      ...acc,
+      linked: profile?.providers?.includes(acc.key) || false,
+    }));
+  }, [profile, t]);
 
   const handleUnlinkClick = (account: LinkedAccount) => {
     setSelectedAccount(account);
@@ -52,74 +58,79 @@ export default function LinkedAccountSection() {
 
   const handleConfirmUnlink = () => {
     setIsModalOpen(false);
+    toast.success(t("linked_accounts.actions.toast_success"));
     setSelectedAccount(null);
-    toast.success(`Hủy liên kết thành công`)
     // TODO: gọi API hủy liên kết ở đây
   };
 
-
   const handleLinkAccount = async (account: LinkedAccount) => {
     setLoadingKey(account.key);
-      if (account.key === "google") {
-        window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
-      }
-      if (account.key === "github") {
-        window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
-    };
+    if (account.key === "google") {
+      window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+    }
+    if (account.key === "github") {
+      window.location.href = `${import.meta.env.VITE_API_URL}/auth/github`;
+    }
   };
-  return (
-    <div className="rounded-xl border p-5 shadow-sm space-y-2">
-      <h2 className="text-lg font-semibold">Tài khoản liên kết</h2>
 
-      <div className="space-y-0">
-        {accounts.map((item, idx) => (
+  return (
+    <div className="rounded-2xl border border-border p-5 shadow-sm bg-card space-y-4">
+      <h2 className="text-xl font-bold tracking-tight">{t("linked_accounts.title")}</h2>
+
+      <div className="divide-y divide-border">
+        {accounts.map((item) => (
           <div
             key={item.key}
-            className={`flex flex-col sm:flex-row sm:items-center justify-between transition gap-2 
-              ${idx < accounts.length - 1 ? "border-b border-error/40 pb-4" : ""} 
-              pt-4`}
+            className="flex flex-col sm:flex-row sm:items-center justify-between transition gap-4 py-4 first:pt-0 last:pb-0"
           >
             {/* Left */}
-            <div className="flex items-center gap-3 flex-1 min-w-0 flex-wrap sm:flex-nowrap">
-              <div className="border border-border rounded-full p-2">
-                <img src={item.icon} alt={item.name} className="w-6 h-6" />
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="border border-border rounded-xl p-2.5 bg-background shrink-0 shadow-sm">
+                <img src={item.icon} alt={item.name} className="w-6 h-6 object-contain" />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-medium">{item.name}</span>
-                <span className="text-xs text-gray-500">{item.description}</span>
+              <div className="flex flex-col min-w-0 mr-2">
+                <span className="font-bold text-foreground tracking-tight">{item.name}</span>
+                <span className="text-xs text-muted-foreground line-clamp-1 italic">
+                  {item.description}
+                </span>
               </div>
 
               {item.linked ? (
-                <Badge variant="success" className="shrink-0">
-                  Đã liên kết
+                <Badge variant="success" className="shrink-0 text-[10px] uppercase font-black">
+                  {t("linked_accounts.status.linked")}
                 </Badge>
               ) : (
-                <Badge variant="error" className="shrink-0">
-                  Chưa liên kết
+                <Badge variant="error" className="shrink-0 text-[10px] uppercase font-black">
+                  {t("linked_accounts.status.not_linked")}
                 </Badge>
               )}
             </div>
 
             {/* Right action */}
-            <div className="mt-2 sm:mt-0 shrink-0">
+            <div className="shrink-0">
               {item.linked ? (
                 <Button
-                  type="link"
+                  type="text"
                   danger
+                  size="middle"
                   icon={<DisconnectOutlined />}
                   onClick={() => handleUnlinkClick(item)}
+                  className="font-bold hover:bg-destructive/10"
                 >
-                  Hủy liên kết
+                  {t("linked_accounts.actions.unlink")}
                 </Button>
               ) : (
                 <Button
-                type="link"
-                icon={<LinkOutlined />}
-                onClick={() => handleLinkAccount(item)}
-                loading={loadingKey === item.key} // hiển thị loading
-              >
-                Liên kết
-              </Button>
+                  type="primary"
+                  ghost
+                  size="middle"
+                  icon={<LinkOutlined />}
+                  onClick={() => handleLinkAccount(item)}
+                  loading={loadingKey === item.key}
+                  className="font-bold rounded-lg"
+                >
+                  {t("linked_accounts.actions.link")}
+                </Button>
               )}
             </div>
           </div>
@@ -132,36 +143,35 @@ export default function LinkedAccountSection() {
         centered
         closable={false}
         footer={null}
-        width={300}
-        className="!text-center"
+        width={350}
+        className="modal-custom"
       >
-        <h3 className="text-lg font-semibold mb-1">Huỷ liên kết tài khoản</h3>
-        <p className="text-sm text-muted-foreground mb-3">
-        Bạn có chắc chắn muốn hủy liên kết tài khoản {selectedAccount?.name} không?
-        </p>
+        <div className="text-center space-y-3">
+          <div className="mx-auto w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+            <DisconnectOutlined className="text-2xl text-destructive" />
+          </div>
+          <h3 className="text-lg font-bold">{t("linked_accounts.modal.title")}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            {t("linked_accounts.modal.description", { name: selectedAccount?.name })}
+          </p>
 
-        <div className="flex justify-center gap-2">
-          <Button
-            type="default"
-            onClick={() => {
-              handleConfirmUnlink();
-            }}
-            className="flex-1 !rounded-lg"
-
-          >
-            Hủy liên kết
-          </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-            className="flex-1 !rounded-lg"
-
-          >
-            Ở lại trang
-          </Button>
+          <div className="flex flex-col gap-2 pt-4">
+             <Button
+              type="primary"
+              danger
+              onClick={handleConfirmUnlink}
+              className="w-full h-10 font-bold rounded-xl shadow-lg shadow-red-500/20"
+            >
+              {t("linked_accounts.actions.unlink")}
+            </Button>
+            <Button
+              type="text"
+              onClick={() => setIsModalOpen(false)}
+              className="w-full h-10 font-bold text-muted-foreground"
+            >
+              {t("linked_accounts.actions.stay")}
+            </Button>
+          </div>
         </div>
       </Modal>
     </div>

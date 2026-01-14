@@ -10,14 +10,17 @@ import SelectPayment from "./components/SelectPayment";
 import OrderSummary from "./components/OrderSummary";
 import { useRouter } from "@/router/hooks";
 import { ShoppingCartOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
 const CheckoutPage = () => {
+  const { t } = useTranslation();
   const { items, totalAmount, loading: cartLoading, clearCart } = useCart();
   const { placeOrder } = useOrder();
   const navigate = useRouter();
   const [loading, setLoading] = useState(false);
+  const [isOrdering, setIsOrdering] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cod");
   const [selectedCoupon, setSelectedCoupon] = useState<any>(null);
 
@@ -31,10 +34,10 @@ const CheckoutPage = () => {
   const [shippingDetails, setShippingDetails] = useState<any>(null);
 
   useEffect(() => {
-    if (!cartLoading && items.length === 0) {
+    if (!cartLoading && items.length === 0 && !isOrdering) {
       navigate.push("/cart");
     }
-  }, [items, cartLoading, navigate]);
+  }, [items, cartLoading, navigate, isOrdering]);
 
   const handleShippingChange = useCallback((details: any) => {
     setShippingDetails(details);
@@ -49,7 +52,7 @@ const CheckoutPage = () => {
 
   const handlePlaceOrder = async () => {
     if (!shippingDetails?.isValid || !customerInfo.phone || !customerInfo.firstName) {
-      toast.error("Vui lòng nhập đầy đủ thông tin giao hàng và cá nhân!");
+      toast.error(t("checkout.messages.missing_info"));
       return;
     }
 
@@ -69,8 +72,9 @@ const CheckoutPage = () => {
 
       const result = await placeOrder(orderData);
       if (result) {
-        toast.success("Đặt hàng thành công!");
-        await clearCart();
+        setIsOrdering(true);
+        toast.success(t("checkout.messages.order_success"));
+        await clearCart(); 
         navigate.push(`/success?orderNumber=${result._id}`);
       }
     } catch (error: any) {
@@ -86,8 +90,12 @@ const CheckoutPage = () => {
           <ShoppingCartOutlined className="text-4xl text-primary animate-pulse" />
         </div>
         <div className="flex flex-col items-center gap-2">
-          <h3 className="text-xl font-bold text-slate-800 tracking-tight">Đang tải đơn hàng</h3>
-          <p className="text-slate-400 text-sm italic animate-pulse">Vui lòng đợi trong giây lát...</p>
+          <h3 className="text-xl font-bold text-slate-800 tracking-tight">
+            {t("checkout.loading_title")}
+          </h3>
+          <p className="text-slate-400 text-sm italic animate-pulse">
+            {t("checkout.loading_desc")}
+          </p>
         </div>
       </div>
     );
@@ -96,12 +104,15 @@ const CheckoutPage = () => {
   return (
     <div className="pb-8">
       <Title level={2} className="my-8">
-        Thanh Toán
+        {t("checkout.title")}
       </Title>
 
       <div className="grid lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-8">
-          <CustomerInfoForm value={customerInfo} onChange={setCustomerInfo} />
+          <CustomerInfoForm 
+             value={customerInfo} 
+             onChange={setCustomerInfo} 
+          />
 
           <ShippingAddressForm onChange={handleShippingChange} />
 
