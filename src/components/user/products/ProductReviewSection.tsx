@@ -16,6 +16,7 @@ import { Textarea } from "@/ui/textarea";
 import { productService } from "@/api/services/product";
 import { PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { EmptyState } from "@/components/common/EmptyState";
 
 const Stars = ({
   value,
@@ -212,11 +213,11 @@ export default function ProductReviewSection({ product }: any) {
   }));
 
   const labels = [
-    "", 
-    t("review.labels.very_bad"), 
-    t("review.labels.bad"), 
-    t("review.labels.normal"), 
-    t("review.labels.good"), 
+    "",
+    t("review.labels.very_bad"),
+    t("review.labels.bad"),
+    t("review.labels.normal"),
+    t("review.labels.good"),
     t("review.labels.excellent")
   ];
 
@@ -397,11 +398,11 @@ export default function ProductReviewSection({ product }: any) {
         </h3>
         <div className="space-y-3 max-h-[500px] overflow-y-auto">
           {allReviews.length === 0 ? (
-            <div className="text-center border border-primary/40 rounded-lg p-3">
-              <div className="text-4xl">📝</div>
-              <p className="text-lg text-foreground font-semibold">{t("review.no_review_title")}</p>
-              <p className="text-sm text-muted-foreground">{t("review.no_review_desc")}</p>
-            </div>
+            <EmptyState
+              height="sm"
+              title={t("review.no_review_title")}
+              description={t("review.no_review_desc")}
+            />
           ) : (
             allReviews.map((r: any) => (
               <ReviewCard key={r._id} review={r} canReply={isAdmin} onReply={addReply} />

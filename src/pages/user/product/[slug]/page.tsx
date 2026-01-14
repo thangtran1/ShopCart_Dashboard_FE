@@ -14,6 +14,7 @@ import { promotions, paymentOffers } from "@/constants/data";
 import RelatedProducts from "../components/RelatedProducts";
 import BuyNowButton from "@/components/user/BuyNowButton";
 import { useTranslation } from "react-i18next";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const SingleProductPage = () => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const SingleProductPage = () => {
     if (slug) fetchProductBySlug(slug);
   }, [slug, fetchProductBySlug]);
 
-  if (loading || !product) return <div className="p-10 text-center">{t("product_page.loading")}</div>;
+  if (loading || !product) return <PageLoading height={400} text={t("product_page.loading")} />;
 
   const items = [
     {
