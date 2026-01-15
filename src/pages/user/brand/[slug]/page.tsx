@@ -41,7 +41,7 @@ const DetailBrand = () => {
       : foundBrand?.name || slug;
 
   return (
-    <div className="container mx-auto">
+    <div>
       <Title className="text-lg mb-5 uppercase tracking-wide">
         {t("brand.page_title")}{" "}
         <span className="font-bold text-primary capitalize tracking-wide">

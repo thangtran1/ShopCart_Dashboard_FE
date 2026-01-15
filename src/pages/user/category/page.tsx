@@ -3,7 +3,7 @@
 import { Product } from "@/types";
 import { useNavigate } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Package, LayoutGrid } from "lucide-react";
+import { Package, LayoutGrid, ChevronLeft, ChevronRight } from "lucide-react"; // Thêm Chevron
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useMemo, useState } from "react";
@@ -53,13 +53,6 @@ const CategoryPage = ({
 
   const totalProductCount = products.length;
 
-  const handleRefresh = async () => {
-    if (onRefresh) {
-      await onRefresh();
-    }
-  };
-
-
   const currentCategory = categories.find(cat => cat.slug === currentSlug);
 
   const filteredProducts = useMemo(() => {
@@ -72,33 +65,40 @@ const CategoryPage = ({
   }, [products, currentSlug, currentCategory]);
 
   return (
-    <div className="pb-3 flex flex-row items-start gap-3">
-      <aside className={`rounded-lg shadow-sm border bg-background transition-all duration-300 sticky top-20 ${isSidebarCollapsed ? "w-14" : "w-64"}`}>
-        <div className="p-4 bg-primary flex justify-between items-center rounded-t-lg">
+    <div className="pb-3 flex flex-row items-start gap-4">
+      <aside className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${
+          isSidebarCollapsed ? "w-16" : "w-64"
+        }`}>
+        
+        <div className={`p-4 bg-primary flex items-center shadow-sm ${isSidebarCollapsed ? "justify-center" : "justify-between"}`}>
           {!isSidebarCollapsed && (
-            <h3 className="font-bold text-white flex items-center gap-2 truncate">
-              <Package className="w-5 h-5 flex-none" /> {t("category.sidebar_title")}
+            <h3 className="font-bold text-white flex items-center gap-2 truncate text-sm uppercase tracking-tighter">
+              <Package className="w-4 h-4 flex-none" /> {t("category.sidebar_title")}
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="text-white cursor-pointer hover:opacity-80 transition-opacity"
+            className="p-1 hover:bg-white/20 rounded-md transition-colors text-white"
           >
-            <LayoutGrid className="w-5 h-5" />
+            {isSidebarCollapsed ? (
+              <ChevronRight size={18} />
+            ) : (
+              <ChevronLeft size={18} />
+            )}
           </button>
         </div>
 
-        <nav className="flex flex-col p-1">
+        <nav className="flex flex-col p-2 max-h-[70vh] overflow-y-auto scrollbar-hide">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`group flex items-center gap-3 px-3 py-3 rounded-md mb-1 transition-all
-              ${currentSlug === "all" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
+            className={`group flex items-center gap-3 px-3 py-3 rounded-lg mb-1 transition-all
+              ${currentSlug === "all" ? "bg-primary/10 text-primary font-semibold" : "text-foreground hover:bg-accent"}`}
           >
-            <LayoutGrid className="w-5 h-5 flex-none" />
+            <LayoutGrid size={20} className="flex-none" />
             {!isSidebarCollapsed && (
               <div className="flex justify-between items-center w-full min-w-0">
-                <span className="truncate text-sm font-medium">{t("category.all_categories")}</span>
-                <span className="text-[10px] bg-primary/20 px-2 py-0.5 rounded-full">{totalProductCount}</span>
+                <span className="truncate text-sm">{t("category.all_categories")}</span>
+                <span className="text-[10px] font-bold bg-primary/20 px-2 py-0.5 rounded-full">{totalProductCount}</span>
               </div>
             )}
           </button>
@@ -107,14 +107,14 @@ const CategoryPage = ({
             <button
               key={item._id}
               onClick={() => handleCategoryChange(item.slug)}
-              className={`group flex items-center gap-3 px-3 py-3 rounded-md mb-1 transition-all
-                ${item.slug === currentSlug ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"}`}
+              className={`group flex items-center gap-3 px-3 py-3 rounded-lg mb-1 transition-all
+                ${item.slug === currentSlug ? "bg-primary/10 text-primary font-semibold" : "text-foreground hover:bg-accent"}`}
             >
-              <Package className="w-5 h-5 flex-none" />
+              <Package size={20} className="flex-none" />
               {!isSidebarCollapsed && (
                 <div className="flex justify-between items-center w-full min-w-0">
-                  <span className="truncate text-sm font-medium">{item.name}</span>
-                  <span className="text-[10px] bg-primary/10 px-2 py-0.5 rounded-full text-foreground">
+                  <span className="truncate text-sm">{item.name}</span>
+                  <span className="text-[10px] font-bold bg-primary/10 px-2 py-0.5 rounded-full">
                     {categoryCountMap[item._id] || 0}
                   </span>
                 </div>
@@ -127,11 +127,11 @@ const CategoryPage = ({
       <main className="flex-1 min-w-0">
         <motion.div
           key={currentSlug}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-4 rounded-lg shadow-sm border p-4 bg-card"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="mb-4 rounded-xl shadow-sm border p-4 bg-card"
         >
-          <h2 className="text-2xl font-bold text-primary capitalize">
+          <h2 className="text-2xl font-black text-primary uppercase">
             {currentSlug === "all" ? t("category.all_categories") : currentCategory?.name}
           </h2>
           <p className="text-muted-foreground text-sm mt-1 italic">
@@ -140,20 +140,18 @@ const CategoryPage = ({
         </motion.div>
 
         {isFetching ? (
-          <div className="min-h-[400px] flex items-center justify-center">
-            <PageLoading height={200} text={t("category.loading")} />
-          </div>
+          <PageLoading height={400} text={t("category.loading")} />
         ) : filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product, index) => (
                 <motion.div
                   key={product._id}
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2, delay: index * 0.03 }}
+                  transition={{ duration: 0.2, delay: index * 0.02 }}
                 >
                   <ProductCard product={product} />
                 </motion.div>
@@ -162,7 +160,7 @@ const CategoryPage = ({
           </div>
         ) : (
           <NoProductAvailable
-            onRefresh={handleRefresh} 
+            onRefresh={onRefresh} 
             onViewAll={() => navigate("/category")}
           />
         )}

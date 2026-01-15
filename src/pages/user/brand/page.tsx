@@ -70,16 +70,16 @@ const BrandPage = ({
           isSidebarCollapsed ? "w-16" : "w-64"
         }`}
       >
-        <div className="p-4 bg-primary flex justify-between items-center shadow-sm">
+        <div className={`p-4 bg-primary flex items-center shadow-sm ${isSidebarCollapsed ? "justify-center" : "justify-between"}`}>
           {!isSidebarCollapsed && (
-            <h3 className="font-bold text-primary-foreground flex items-center gap-2 truncate text-sm uppercase tracking-tighter">
+            <h3 className="font-bold text-foreground flex items-center gap-2 truncate text-sm uppercase tracking-tighter">
               <Package className="w-4 h-4 flex-none" />{" "}
               {t("brand.sidebar_title")}
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="p-1 hover:bg-white/20 rounded-md transition-colors text-primary-foreground mx-auto"
+            className="p-1 hover:bg-white/20 rounded-md transition-colors text-foreground"
           >
             {isSidebarCollapsed ? (
               <ChevronRight size={18} />
@@ -95,8 +95,8 @@ const BrandPage = ({
             className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all mb-1
               ${
                 currentSlug === "all"
-                  ? "bg-primary/10 text-primary font-semibold"
-                  : "text-muted-foreground hover:bg-accent"
+                  ? "bg-primary/20 text-foreground font-semibold"
+                  : "text-foreground hover:bg-accent"
               }`}
           >
             <LayoutGrid size={20} className="flex-none" />
@@ -112,8 +112,8 @@ const BrandPage = ({
               className={`group flex items-center gap-3 px-3 py-3 rounded-lg transition-all mb-1
                 ${
                   item.slug === currentSlug
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-muted-foreground hover:bg-accent"
+                    ? "bg-primary/10 text-foreground font-semibold"
+                    : "text-foreground hover:bg-accent"
                 }`}
             >
               <Package size={20} className="flex-none" />
