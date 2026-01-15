@@ -9,6 +9,7 @@ import userApi from "@/api/services/userApi";
 import { useUserActions } from "@/store/userStore";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
 
 interface SidebarProps {
   activeTab: TabKey;
@@ -48,24 +49,24 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
 
   return (
     <>
-      <aside className="flex-shrink-0 border-x border-border bg-card">
+      <aside className="flex-shrink-0 sticky top-20">
         <div
-          className={`h-full flex flex-col transition-all duration-300 ${
-            collapsed ? "md:w-14" : "md:w-64"
+          className={`border border-border rounded-2xl flex flex-col transition-all duration-300 shadow-sm overflow-hidden ${
+            collapsed ? "w-14" : "w-14 md:w-64"
           }`}
         >
-          <div className="hidden md:flex justify-end px-2 py-2">
+          <div className="hidden md:flex justify-end p-2">
             <Button
               type="text"
               size="small"
               onClick={() => setCollapsed(!collapsed)}
-              icon={collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-              className="hover:bg-muted"
+              icon={collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              className="hover:bg-muted text-foreground"
             />
           </div>
 
-          <div className="flex-1 overflow-y-auto no-scrollbar">
-            {sidebarItems.map((item, index) => {
+          <nav className="flex-1 flex flex-col p-1.5 gap-1">
+            {sidebarItems.map((item) => {
               const isActive = sidebarActiveKey === item.key;
               return (
                 <button
@@ -79,51 +80,36 @@ export function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                     setActiveTab(targetTab.key as TabKey);
                   }}
                   className={`
-                    group w-full flex items-center cursor-pointer
-                    ${collapsed ? "justify-center px-2" : "px-4"}
-                    gap-3 py-3 relative transition-all
-                    ${isActive 
-                      ? "bg-primary text-foreground shadow-sm" 
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }
-                    ${index > 0 ? "border-t border-border/50" : ""}
+                    relative group flex items-center h-11 rounded-xl transition-all
+                    justify-center ${!collapsed ? "md:justify-start md:px-3" : "md:justify-center"}
+                    ${isActive ? "text-primary font-bold" : "text-muted-foreground hover:bg-muted hover:text-foreground"}
                   `}
                 >
-                  <span className={`text-lg ${isActive ? "scale-110" : "group-hover:scale-110"} transition-transform`}>
+                  {isActive && (
+                    <motion.div
+                      layoutId="sidebar-active"
+                      className="absolute inset-0 bg-primary/10 rounded-xl"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+
+                  <span className={`relative z-10 text-xl flex-none ${isActive ? "scale-110" : ""}`}>
                     {item.icon}
                   </span>
+
                   {!collapsed && (
-                    <span className="hidden md:inline text-sm font-medium truncate">
+                    <span className="hidden md:block ml-3 text-foreground text-sm truncate relative z-10">
                       {item.label}
                     </span>
-                  )}
-                  {isActive && !collapsed && (
-                    <div className="absolute right-0 w-1 h-6 bg-primary-foreground rounded-l-full" />
                   )}
                 </button>
               );
             })}
-          </div>
+          </nav>
 
-          <div className="mt-auto border-t border-border bg-muted/30">
-            <div className={`py-4 text-center font-bold text-primary/60 text-xs
-               ${collapsed ? "block" : "block md:hidden"}`}>
-              V2.4
-            </div>
-
-            {!collapsed && (
-              <div className="hidden md:block p-4 space-y-2 animate-in fade-in duration-500">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {t("about.sidebar.server_status")}
-                  </span>
-                </div>
-                <p className="text-primary font-bold text-sm tracking-tight">
-                  © SHOP_CART TVT
-                </p>
-              </div>
-            )}
+          <div className="p-3 border-t border-border/50 text-center">
+             <span className="text-[10px] text-primary font-black">V2.4</span>
           </div>
         </div>
       </aside>

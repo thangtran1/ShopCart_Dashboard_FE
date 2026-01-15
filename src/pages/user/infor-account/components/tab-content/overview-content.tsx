@@ -141,7 +141,7 @@ export function OverviewContent() {
 
         <div className="pt-4">
           {favoriteProduct.length > 0 ? (
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {favoriteProduct.slice(0, 3).map((item: any) => (
                 <div
                   key={item._id}

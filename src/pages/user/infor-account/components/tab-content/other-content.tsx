@@ -236,7 +236,7 @@ export function ActivityContent() {
         </div>
       </div>
 
-      <div className="bg-card border rounded-2xl p-2 sm:p-4">
+      <div>
         <ActivityLogs
           fetchLogsApi={() =>
             detailActivityLogForUser(userId) as Promise<{

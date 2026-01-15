@@ -26,10 +26,10 @@ function PageContent() {
   const currentTab = useMemo(() => getTabByKey(activeTab, t), [activeTab, t]);
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen flex flex-col">
       <Header />
 
-      <div className="border-t mt-4 px-4">
+      <div className="border-t mt-4 px-2 md:px-4">
         <Tabs
           activeKey={activeTab}
           onChange={(key) => setActiveTab(key as TabKey)}
@@ -38,19 +38,20 @@ function PageContent() {
         />
       </div>
 
-      <div className="mx-auto py-6 px-4">
-        <div className="flex flex-col md:flex-row gap-6">
+      <div className="flex-1 w-full max-w-7xl mx-auto py-4 px-2 md:px-4">
+        <div className="flex flex-row items-start gap-2 md:gap-2">
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          <main className="flex-1 transition-all duration-300 min-h-[500px]">
-            {currentTab?.component}
+          <main className="flex-1 min-w-0 transition-all duration-300">
+            <div>
+              {currentTab?.component}
+            </div>
           </main>
         </div>
       </div>
     </div>
   );
 }
-
 export default function InforAccount() {
   return (
     <Suspense fallback={<div className="h-screen flex items-center justify-center">Loading...</div>}>
