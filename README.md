@@ -37,6 +37,19 @@
 | ![Admin Manager](./src/assets/screenshots/UI-Admin-manager.png) | ![Admin Profile](./src/assets/screenshots/UI-Admin-profile.png) |
 ---
 
+## 🏗️ Hệ sinh thái dự án (System Ecosystem)
+
+Dự án không chỉ là một giao diện web mà là một hệ thống hoàn chỉnh gồm 3 thành phần cốt lõi hoạt động cùng nhau:
+
+| Thành phần | Vai trò | Công nghệ chính | Repository |
+|:--- |:--- |:--- |:--- |
+| **🌐 Client Dashboard** | Giao diện người dùng (Shop) & Quản trị (Admin) | React 19, Vite, Antd | [Xem tại đây](https://github.com/thangtran1/ShopCart_Dashboard_FE) |
+| **💻 Backend API** | Xử lý Logic, Bảo mật, DB & Quản lý đơn hàng | NesJs, Express, MongoDB | (Vui lòng liên hệ quản trị viên để biết thêm thông tin sourcode bạn nhé!!!) |
+| **🛠️ Maintenance App** | Ứng dụng giám sát, bảo trì và kiểm tra hệ thống | React 19, Vite, Antd | [Xem tại đây](https://github.com/thangtran1/Maintenance-App) |
+
+
+---
+
 ## Installation
 
 ```bash
@@ -99,6 +112,20 @@ pnpm dev              # Start all apps in development mode
 
 ## 🏗️ Technology Stack
 
+### 1. Frontend (Current)
+- **Core**: React.js 19, TypeScript
+- **State**: Zustand, TanStack Query
+- **UI**: Ant Design, Tailwind CSS
+
+### 2. Backend Service
+- **Core**: Nest.js/Express (hoặc NestJS nếu bạn dùng)
+- **Database**: MongoDB/PostgreSQL
+- **Auth**: Passport.js, JWT
+
+### 3. Maintenance & DevOps
+- **App**: Maintenance Dashboard (Theo dõi Health check hệ thống)
+- **Tools**: pnpm, Scripts kiểm tra Backend tự động
+- 
 ### Core Technologies
 
 - **Framework**: React.js 19
