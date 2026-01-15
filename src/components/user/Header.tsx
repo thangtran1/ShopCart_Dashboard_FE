@@ -13,7 +13,7 @@ const Header = () => {
   const userInfo = useUserInfo();
 
   return (
-    <header className={`${contentWrapper} mx-auto sticky top-0 z-50 py-5 backdrop-blur-md border-b`}>
+    <header className={`${contentWrapper} mx-auto sticky top-0 z-50 py-5 backdrop-blur-md`}>
       <div className="flex items-center justify-between mx-auto gap-4 px-4">
       <div className="flex items-center gap-1 md:gap-0 flex-shrink-0">
           <MobileMenu />

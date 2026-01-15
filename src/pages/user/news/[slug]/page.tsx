@@ -4,7 +4,7 @@ import {
   UserOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-import { Avatar, Skeleton } from "antd";
+import { Avatar } from "antd";
 import { useEffect, useState } from "react";
 import { useNews } from "@/hooks/useNews"; 
 import {
@@ -19,6 +19,7 @@ import { INews } from "@/api/services/newsApi";
 import { Badge } from "@/ui/badge";
 import RenderHtml from "@/pages/admin/news/components/render-html";
 import { useTranslation } from "react-i18next"; 
+import PageLoading from "@/components/common/loading/PageLoading";
 
 const NewSlugDetail = () => {
   const { t, i18n } = useTranslation(); 
@@ -47,9 +48,7 @@ const NewSlugDetail = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-10">
-        <Skeleton active paragraph={{ rows: 10 }} />
-      </div>
+      <PageLoading height={500} text={t('orders.loading_text')} />
     );
   }
 

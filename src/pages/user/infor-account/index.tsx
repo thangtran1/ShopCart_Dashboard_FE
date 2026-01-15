@@ -29,7 +29,7 @@ function PageContent() {
     <div className="bg-background min-h-screen flex flex-col">
       <Header />
 
-      <div className="border-t mt-4 px-2 md:px-4">
+      <div className="mt-4">
         <Tabs
           activeKey={activeTab}
           onChange={(key) => setActiveTab(key as TabKey)}
@@ -38,11 +38,11 @@ function PageContent() {
         />
       </div>
 
-      <div className="flex-1 w-full max-w-7xl mx-auto py-4 px-2 md:px-4">
-        <div className="flex flex-row items-start gap-2 md:gap-2">
+      <div className="flex-1 w-full py-4 ">
+        <div className="flex flex-row items-start gap-4">
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-          <main className="flex-1 min-w-0 transition-all duration-300">
+          <main className="flex-1 min-w-0 transition-all duration-300 min-h-[70vh]">
             <div>
               {currentTab?.component}
             </div>

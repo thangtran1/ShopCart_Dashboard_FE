@@ -65,7 +65,7 @@ export function WarrantyContent() {
   };
 
   return (
-    <div className="text-foreground relative overflow-hidden">
+    <div className="text-foreground relative">
       <div className="absolute top-0 right-0 w-[400px] h-[400px] blur-[120px] rounded-full pointer-events-none opacity-20 bg-emerald-500/20" />
 
       <div className="relative z-10 space-y-6 mb-4">
@@ -111,7 +111,7 @@ export function WarrantyContent() {
         </div>
       </div>
 
-      <div className="max-h-[55vh] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="pr-2">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab + searchQuery}
