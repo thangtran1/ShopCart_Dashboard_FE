@@ -165,13 +165,7 @@ const Shop = () => {
 
         {/* Product Grid */}
         <div className="flex-1 pt-2">
-          <div
-            className={
-              products.length > 0
-                ? "h-[calc(100vh-160px)] overflow-y-auto pr-2 scrollbar-hide"
-                : "pr-2"
-            }
-          >
+          <div className="h-[calc(100vh-160px)] overflow-y-auto scrollbar-hide">
             {loading ? (
               <div className="p-20 flex flex-col gap-2 items-center justify-center">
                 <PageLoading

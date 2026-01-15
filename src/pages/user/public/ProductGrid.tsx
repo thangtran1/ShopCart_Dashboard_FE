@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import HomeTabbar from "./HomeTabbar";
@@ -51,16 +51,13 @@ const ProductGrid = () => {
   );
 
   // Map tab → API function
-  const tabApiMap: Record<string, () => Promise<any[]>> = {
-    all: () =>
-      extractProducts(() =>
-        productService.getActiveProducts()
-      ),
+  const tabApiMap = useMemo<Record<string, () => Promise<any[]>>>(() => ({
+    all: () => extractProducts(() => productService.getActiveProducts()),
     new: () => extractProducts(() => productService.getProductsByNew()),
     bestSeller: () => extractProducts(() => productService.getProductsByBestSeller()),
     featured: () => extractProducts(() => productService.getProductsByFeatured()),
     deal: () => extractProducts(() => productService.getProductsByDeal()),
-  };
+  }), []);
 
   const fetchProductsByTab = useCallback(async () => {
     setLoading(true);
@@ -105,25 +102,29 @@ const ProductGrid = () => {
       ) : products.length ? (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
-            {products.map(product => (
-              <AnimatePresence key={product._id}>
+            <AnimatePresence mode="popLayout"> 
+              {products.map(product => (
                 <motion.div
+                  key={product._id} 
                   layout
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <ProductCard key={product._id} product={product} />
+                  <ProductCard product={product} />
                 </motion.div>
-              </AnimatePresence>
-            ))}
+              ))}
+            </AnimatePresence>
           </div>
           <div className="mt-6 border-y border-primary/30">
             <ServiceFeatures />
           </div>
         </>
       ) : (
-        <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
+        <NoProductAvailable 
+          onRefresh={handleRefresh} 
+          onViewAll={handleViewAll} />
       )}
     </div>
   );

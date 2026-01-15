@@ -13,30 +13,32 @@ const DetailCategory = () => {
   const { slug } = useParams();
   const [category, setCategory] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchCategory = async () => {
-      const response = await categoryService.getActive();
-      if (response.success && response.data) setCategory(response.data);
-      else setCategory([]);
-    };
-    fetchCategory();
-  }, [slug]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [catRes, prodRes] = await Promise.all([
+        categoryService.getActive(),
+        productService.getActiveProducts()
+      ]);
+
+      if (catRes.success) setCategory(catRes.data);
+      if (prodRes.success) setProducts(prodRes.data);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const response = await productService.getActiveProducts();
-      if (response.success && response.data) setProducts(response.data);
-      else setProducts([]);
-    };
-    fetchProducts();
-  }, [category]);
+    fetchData();
+  }, []);
 
   const currentSlug = slug || "all";
-  
   const foundCategory = category.find(cat => cat.slug === currentSlug);
-
-  const categoryDisplayName =
-    currentSlug === "all" 
+  const categoryDisplayName = currentSlug === "all" 
       ? t("category.all_products") 
       : foundCategory?.name || slug;
 
@@ -49,7 +51,13 @@ const DetailCategory = () => {
         </span>
       </Title>
 
-      <CategoryPage categories={category} products={products} slug={currentSlug} />
+      <CategoryPage 
+        categories={category} 
+        products={products} 
+        slug={currentSlug}
+        onRefresh={fetchData} 
+        isFetching={loading}   
+      />
     </div>
   );
 };

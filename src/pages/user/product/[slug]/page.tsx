@@ -20,18 +20,38 @@ const SingleProductPage = () => {
   const { t } = useTranslation();
   const { slug } = useParams();
   const [product, setProduct] = useState<any | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [fetchingRelated, setFetchingRelated] = useState(false);
 
-  const fetchProductBySlug = useCallback(async (slug: string) => {
-    setLoading(true);
-    const response = await productService.getProductBySlug(slug);
-    if (response.success) setProduct(response.data);
-    setLoading(false);
+  const fetchRelated = useCallback(async (id: string) => {
+    setFetchingRelated(true);
+    try {
+      const res = await productService.getProductByRelated(id);
+      if (res?.success) setRelatedProducts(res.data || []);
+    } finally {
+      setFetchingRelated(false);
+    }
   }, []);
+
+  const fetchProductBySlug = useCallback(async (targetSlug: string) => {
+    setLoading(true);
+    const response = await productService.getProductBySlug(targetSlug);
+    if (response.success && response.data) {
+      setProduct(response.data);
+      fetchRelated(response.data._id);
+    }
+    setLoading(false);
+  }, [fetchRelated]);
 
   useEffect(() => {
     if (slug) fetchProductBySlug(slug);
   }, [slug, fetchProductBySlug]);
+
+  const handleRefreshRelated = async () => {
+    const id = product?._id || product?.id;
+    if (id) await fetchRelated(id);
+  };
 
   if (loading || !product) return <PageLoading height={400} text={t("product_page.loading")} />;
 
@@ -183,7 +203,11 @@ const SingleProductPage = () => {
       <div className="border-t py-5">
         <Tabs defaultActiveKey="details" items={items} size="large" />
       </div>
-      <RelatedProducts product={product} />
+      <RelatedProducts 
+        relatedProducts={relatedProducts} 
+        isFetching={fetchingRelated}
+        onRefresh={handleRefreshRelated}
+      />
     </>
   );
 };

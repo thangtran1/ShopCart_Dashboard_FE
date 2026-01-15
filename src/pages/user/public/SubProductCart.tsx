@@ -5,12 +5,14 @@ import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
 import { productService } from "@/api/services/product";
 import { ProductType } from "@/types/enum";
-import { Skeleton } from "antd";
 import { Badge } from "@/ui/badge";
 import { useTranslation } from "react-i18next";
+import PageLoading from "@/components/common/loading/PageLoading";
+import { useNavigate } from "react-router";
 
 export default function ProductsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [productsByType, setProductsByType] = useState<Record<string, any[]>>(
     {}
   );
@@ -45,13 +47,9 @@ export default function ProductsPage() {
   }, [fetchProductsByType]);
 
   const hasProducts = Object.values(productsByType).some((p) => p.length > 0);
-  const renderSkeleton = () => (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-      {Array.from({ length: 2 }).map((_, i) => (
-        <div key={i} className="!h-64 bg-muted animate-pulse rounded-2xl" />
-      ))}
-    </div>
-  );
+  const handleRefresh = useCallback(() => {
+    fetchProductsByType();
+  }, [fetchProductsByType]);
 
   return (
     <div className="space-y-6 antialiased">
@@ -77,40 +75,25 @@ export default function ProductsPage() {
       </div>
 
       {loading ? (
-        <div className="space-y-12">
-        {Array.from({ length: 2 }).map((_, idx) => (
-          <div key={idx} className="space-y-4">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <div className="border-l-4 border-border pl-3">
-                   <Skeleton.Input active className="!w-48 md:!w-64 !h-8 md:!h-10 rounded-sm" />
-                </div>
-                <Skeleton.Button active className="!w-12 !h-6 rounded-full ml-2" />
-              </div>
-              
-              <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-50 to-transparent hidden md:block" />
-            </div>
-            {renderSkeleton()}
-          </div>
-        ))}
-      </div>
+        <PageLoading height={300} text={t("shop.loading_products")} />
       ) : hasProducts ? (
         <div className="space-y-6">
           {Object.entries(productsByType)
             .filter(([_, products]) => products.length > 0)
             .map(([type, products]) => (
               <section key={type} id={type} className="scroll-mt-32">
-                <div className="flex items-center justify-between mb-3 group">
-                  <div className="flex cursor-pointer items-center gap-2">
-                    <h2 className="text-2xl md:text-4xl font-bold border-l-4 border-indigo-600 pl-3 transition-all group-hover:pl-5">
-                      {/* Dịch loại sản phẩm dựa trên enum type */}
-                      {t(`product.type_${type.toLowerCase()}`, { defaultValue: type })}
+                <div className="flex items-center justify-between mb-6 group">
+                  <div className="flex cursor-pointer items-center gap-3">
+                    <h2 className="text-2xl md:text-4xl font-bold border-l-4 border-indigo-600 pl-3 transition-all group-hover:pl-5 group-hover:border-indigo-400">
+                      {t(`product.type_${type.toLowerCase()}`, {
+                        defaultValue: type,
+                      })}
                     </h2>
-                    <Badge variant={"success"}>
+                    <Badge variant={"success"} className="h-6">
                       {t("product.count_label", { count: products.length })}
                     </Badge>
                   </div>
-                  <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-50 to-transparent hidden md:block" />
+                  <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-100 to-transparent hidden md:block opacity-50" />
                 </div>
 
                 <motion.div
@@ -121,7 +104,7 @@ export default function ProductsPage() {
                     hidden: { opacity: 0 },
                     show: {
                       opacity: 1,
-                      transition: { staggerChildren: 0.1 },
+                      transition: { staggerChildren: 0.05 },
                     },
                   }}
                   className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
@@ -130,13 +113,14 @@ export default function ProductsPage() {
                     {products.map((product) => (
                       <motion.div
                         key={product._id}
+                        layout
                         variants={{
-                          hidden: { opacity: 0, y: 30 },
+                          hidden: { opacity: 0, y: 20 },
                           show: { opacity: 1, y: 0 },
                         }}
                         transition={{
                           type: "spring",
-                          stiffness: 300,
+                          stiffness: 260,
                           damping: 20,
                         }}
                       >
@@ -149,7 +133,10 @@ export default function ProductsPage() {
             ))}
         </div>
       ) : (
-        <NoProductAvailable />
+        <NoProductAvailable 
+        onRefresh={handleRefresh}
+        onViewAll={() => navigate("/category")}
+        />
       )}
     </div>
   );

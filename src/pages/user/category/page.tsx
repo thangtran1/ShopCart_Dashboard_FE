@@ -14,19 +14,25 @@ interface Props {
   categories: any[];
   slug?: string;
   products: Product[];
+  onRefresh?: () => Promise<void>; 
+  isFetching?: boolean;         
 }
 
-const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
+const CategoryPage = ({ 
+  categories, 
+  products = [],
+  slug, 
+  onRefresh, 
+  isFetching 
+}: Props) => {
   const { t } = useTranslation();
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
-  const [loading, setLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     if (slug && slug !== currentSlug) setCurrentSlug(slug);
-  }, [slug]);
+  }, [slug, currentSlug]);
 
   const handleCategoryChange = (newSlug: string) => {
     if (newSlug === currentSlug) return;
@@ -36,153 +42,131 @@ const CategoryPage = ({ categories, products: allProducts, slug }: Props) => {
 
   const categoryCountMap = useMemo(() => {
     const map: Record<string, number> = {};
-    allProducts.forEach(p => {
+    products.forEach(p => {
       const categoryId = typeof p.category === "object" ? p.category._id : p.category;
-      if (!categoryId) return;
-      map[categoryId] = (map[categoryId] || 0) + 1;
+      if (categoryId) {
+        map[categoryId] = (map[categoryId] || 0) + 1;
+      }
     });
     return map;
-  }, [allProducts]);
+  }, [products]);
 
-  const totalProductCount = allProducts.length;
+  const totalProductCount = products.length;
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 200);
+  const handleRefresh = async () => {
+    if (onRefresh) {
+      await onRefresh();
+    }
   };
-  const handleViewAll = () => navigate("/category");
+
 
   const currentCategory = categories.find(cat => cat.slug === currentSlug);
 
-  const filteredProducts = allProducts.filter(p => {
-    if (currentSlug === "all") return true;
-    if (!currentCategory || !p.category) return false;
-    const categoryId = typeof p.category === "object" ? p.category._id : p.category;
-    return categoryId === currentCategory._id;
-  });
+  const filteredProducts = useMemo(() => {
+    if (currentSlug === "all") return products;
+    if (!currentCategory) return [];
+    return products.filter(p => {
+      const categoryId = typeof p.category === "object" ? p.category._id : p.category;
+      return categoryId === currentCategory._id;
+    });
+  }, [products, currentSlug, currentCategory]);
 
   return (
-    <div className="pb-3 flex flex-row items-start gap-2">
-      {/* Sidebar */}
-      <div className={`rounded-lg shadow-sm border transition-all duration-300 ${isSidebarCollapsed ? "w-12" : "w-54"}`}>
-        <div className="p-4 bg-primary/90 flex justify-between items-center">
+    <div className="pb-3 flex flex-row items-start gap-3">
+      <aside className={`rounded-lg shadow-sm border bg-background transition-all duration-300 sticky top-20 ${isSidebarCollapsed ? "w-14" : "w-64"}`}>
+        <div className="p-4 bg-primary flex justify-between items-center rounded-t-lg">
           {!isSidebarCollapsed && (
-            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+            <h3 className="font-bold text-white flex items-center gap-2 truncate">
               <Package className="w-5 h-5 flex-none" /> {t("category.sidebar_title")}
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="text-foreground cursor-pointer text-sm font-medium hover:text-gray-200"
+            className="text-white cursor-pointer hover:opacity-80 transition-opacity"
           >
-            {isSidebarCollapsed ? t("category.collapse_close") : t("category.collapse_open")}
+            <LayoutGrid className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex flex-col">
+        <nav className="flex flex-col p-1">
           <button
             onClick={() => handleCategoryChange("all")}
-            className={`group flex items-center gap-2 px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200 relative
-              ${currentSlug === "all" ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
+            className={`group flex items-center gap-3 px-3 py-3 rounded-md mb-1 transition-all
+              ${currentSlug === "all" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
           >
             <LayoutGrid className="w-5 h-5 flex-none" />
-            <span
-              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${isSidebarCollapsed
-                ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                : "opacity-100"
-                }`}
-            >
-              {t("category.all_categories")}
-            </span>
             {!isSidebarCollapsed && (
-              <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                {totalProductCount}
-              </span>
+              <div className="flex justify-between items-center w-full min-w-0">
+                <span className="truncate text-sm font-medium">{t("category.all_categories")}</span>
+                <span className="text-[10px] bg-primary/20 px-2 py-0.5 rounded-full">{totalProductCount}</span>
+              </div>
             )}
           </button>
 
           {categories?.map(item => (
             <button
               key={item._id}
-              onClick={() => handleCategoryChange(item.slug || "")}
-              className={`group flex cursor-pointer justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
-                ${item.slug === currentSlug ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
+              onClick={() => handleCategoryChange(item.slug)}
+              className={`group flex items-center gap-3 px-3 py-3 rounded-md mb-1 transition-all
+                ${item.slug === currentSlug ? "bg-primary/10 text-primary" : "hover:bg-muted text-muted-foreground"}`}
             >
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <Package className="w-5 h-5 flex-none" />
-                <span
-                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${isSidebarCollapsed
-                    ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                    : "opacity-100"
-                    }`}
-                >
-                  {item.name}
-                </span>
-              </div>
+              <Package className="w-5 h-5 flex-none" />
               {!isSidebarCollapsed && (
-                <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                  {categoryCountMap[item._id] || 0}
-                </span>
+                <div className="flex justify-between items-center w-full min-w-0">
+                  <span className="truncate text-sm font-medium">{item.name}</span>
+                  <span className="text-[10px] bg-primary/10 px-2 py-0.5 rounded-full text-foreground">
+                    {categoryCountMap[item._id] || 0}
+                  </span>
+                </div>
               )}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
+      </aside>
 
-      {/* Products Grid */}
-      <div className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0">
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          key={currentSlug}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-1 rounded-lg shadow-sm border p-3"
+          className="mb-4 rounded-lg shadow-sm border p-4 bg-card"
         >
-          <h2 className="text-2xl font-bold text-primary capitalize mb-1">
+          <h2 className="text-2xl font-bold text-primary capitalize">
             {currentSlug === "all" ? t("category.all_categories") : currentCategory?.name}
           </h2>
-          {currentSlug === "all" ? (
-            <p className="text-foreground text-sm">{t("category.explore_all")}</p>
-          ) : (
-            currentCategory?.description && (
-              <p className="text-foreground text-sm">{currentCategory.description}</p>
-            )
-          )}
-          {!loading && filteredProducts.length > 0 && (
-            <p className="text-sm text-primary mt-2 font-medium">
-              {t("category.products_available", { count: filteredProducts.length })}
-            </p>
-          )}
+          <p className="text-muted-foreground text-sm mt-1 italic">
+            {currentSlug === "all" ? t("category.explore_all") : currentCategory?.description}
+          </p>
         </motion.div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 min-h-80 space-y-4 text-center rounded-lg shadow-sm border">
-             <PageLoading
-              height={300}
-              text={t("category.loading")}
-              />
+        {isFetching ? (
+          <div className="min-h-[400px] flex items-center justify-center">
+            <PageLoading height={200} text={t("category.loading")} />
           </div>
         ) : filteredProducts.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 max-h-[100vh] overflow-y-auto py-2"
-          >
-            {filteredProducts.map((product, index) => (
-              <AnimatePresence key={product._id}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((product, index) => (
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  key={product._id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2, delay: index * 0.03 }}
                 >
                   <ProductCard product={product} />
                 </motion.div>
-              </AnimatePresence>
-            ))}
-          </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         ) : (
-          <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
+          <NoProductAvailable
+            onRefresh={handleRefresh} 
+            onViewAll={() => navigate("/category")}
+          />
         )}
-      </div>
+      </main>
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import { Product } from "@/types";
 import { useNavigate } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
-import { Package, LayoutGrid } from "lucide-react";
+import { Package, LayoutGrid, ChevronLeft, ChevronRight } from "lucide-react";
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
 import { useEffect, useMemo, useState } from "react";
@@ -14,19 +14,25 @@ interface Props {
   brands: any[];
   slug?: string;
   products: Product[];
+  onRefresh?: () => Promise<void>;
+  isFetching?: boolean;
 }
 
-const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
+const BrandPage = ({
+  brands,
+  products: allProducts,
+  slug,
+  onRefresh,
+  isFetching,
+}: Props) => {
   const { t } = useTranslation();
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
-  const [loading, setLoading] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
     if (slug && slug !== currentSlug) setCurrentSlug(slug);
-  }, [slug]);
+  }, [slug, currentSlug]);
 
   const handleBrandChange = (newSlug: string) => {
     if (newSlug === currentSlug) return;
@@ -36,170 +42,150 @@ const BrandPage = ({ brands, products: allProducts, slug }: Props) => {
 
   const brandCountMap = useMemo(() => {
     const map: Record<string, number> = {};
-    allProducts.forEach(p => {
+    allProducts.forEach((p) => {
       const brandId = typeof p.brand === "object" ? p.brand._id : p.brand;
-      if (!brandId) return;
-      map[brandId] = (map[brandId] || 0) + 1;
+      if (brandId) map[brandId] = (map[brandId] || 0) + 1;
     });
     return map;
   }, [allProducts]);
 
-  const totalProductCount = allProducts.length;
+  const currentBrand = useMemo(
+    () => brands.find((b) => b.slug === currentSlug),
+    [brands, currentSlug]
+  );
 
-  const currentBrand = brands.find(b => b.slug === currentSlug);
-
-  const filteredProducts = allProducts.filter(p => {
-    if (currentSlug === "all") return true;
-    if (!currentBrand || !p.brand) return false;
-    const brandId = typeof p.brand === "object" ? p.brand._id : p.brand;
-    return brandId === currentBrand._id;
-  });
-
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 200);
-  };
-  const handleViewAll = () => navigate("/brand");
+  const filteredProducts = useMemo(() => {
+    if (currentSlug === "all") return allProducts;
+    if (!currentBrand) return [];
+    return allProducts.filter((p) => {
+      const brandId = typeof p.brand === "object" ? p.brand._id : p.brand;
+      return brandId === currentBrand._id;
+    });
+  }, [allProducts, currentSlug, currentBrand]);
 
   return (
-    <div className="pb-3 flex flex-row items-start gap-2">
-      {/* Sidebar */}
-      <div
-        className={`rounded-lg shadow-sm border transition-all duration-300 ${
-          isSidebarCollapsed ? "w-12" : "w-54"
+    <div className="pb-3 flex flex-row items-start gap-4">
+      <aside
+        className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${
+          isSidebarCollapsed ? "w-16" : "w-64"
         }`}
       >
-        <div className="p-4 bg-primary/90 flex justify-between items-center">
+        <div className="p-4 bg-primary flex justify-between items-center shadow-sm">
           {!isSidebarCollapsed && (
-            <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
-              <Package className="w-5 h-5 flex-none" /> {t("brand.sidebar_title")}
+            <h3 className="font-bold text-primary-foreground flex items-center gap-2 truncate text-sm uppercase tracking-tighter">
+              <Package className="w-4 h-4 flex-none" />{" "}
+              {t("brand.sidebar_title")}
             </h3>
           )}
           <button
             onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            className="text-foreground cursor-pointer text-sm font-medium hover:text-gray-200"
+            className="p-1 hover:bg-white/20 rounded-md transition-colors text-primary-foreground mx-auto"
           >
-            {isSidebarCollapsed ? "»" : "«"}
+            {isSidebarCollapsed ? (
+              <ChevronRight size={18} />
+            ) : (
+              <ChevronLeft size={18} />
+            )}
           </button>
         </div>
 
-        <div className="flex flex-col">
+        <nav className="flex flex-col p-2 max-h-[70vh] overflow-y-auto scrollbar-hide">
           <button
             onClick={() => handleBrandChange("all")}
-            className={`group flex items-center gap-2 px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200 relative
-              ${currentSlug === "all" ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
-          >
-            <LayoutGrid className="w-5 h-5 flex-none" />
-            <span
-              className={`flex-1 truncate cursor-pointer transition-opacity duration-300 ${
-                isSidebarCollapsed
-                  ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                  : "opacity-100"
+            className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all mb-1
+              ${
+                currentSlug === "all"
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground hover:bg-accent"
               }`}
-            >
-              {t("brand.all_brands")}
-            </span>
+          >
+            <LayoutGrid size={20} className="flex-none" />
             {!isSidebarCollapsed && (
-              <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                {totalProductCount}
-              </span>
+              <span className="truncate text-sm">{t("brand.all_brands")}</span>
             )}
           </button>
 
           {brands?.map((item) => (
             <button
               key={item._id}
-              onClick={() => handleBrandChange(item.slug || "")}
-              className={`group cursor-pointer flex justify-between items-center px-3 py-3 border-b hover:bg-primary/10 transition-colors duration-200
-                ${item.slug === currentSlug ? "bg-primary/10 text-primary border-l-2 border-l-primary" : "text-foreground"}`}
+              onClick={() => handleBrandChange(item.slug)}
+              className={`group flex items-center gap-3 px-3 py-3 rounded-lg transition-all mb-1
+                ${
+                  item.slug === currentSlug
+                    ? "bg-primary/10 text-primary font-semibold"
+                    : "text-muted-foreground hover:bg-accent"
+                }`}
             >
-              <div className="flex items-center gap-2 min-w-0 flex-1">
-                <Package className="w-5 h-5 flex-none" />
-                <span
-                  className={`truncate overflow-hidden whitespace-nowrap min-w-0 ${
-                    isSidebarCollapsed
-                      ? "opacity-0 absolute left-16 shadow-md px-2 py-1 rounded-md group-hover:opacity-100 bg-background"
-                      : "opacity-100"
-                  }`}
-                >
-                  {item.name}
-                </span>
-              </div>
+              <Package size={20} className="flex-none" />
               {!isSidebarCollapsed && (
-                <span className="text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full flex-none">
-                  {brandCountMap[item._id] || 0}
-                </span>
+                <div className="flex justify-between items-center w-full min-w-0">
+                  <span className="truncate text-sm">{item.name}</span>
+                  <span className="text-[10px] font-bold bg-primary/20 text-primary px-2 py-0.5 rounded-full">
+                    {brandCountMap[item._id] || 0}
+                  </span>
+                </div>
               )}
             </button>
           ))}
-        </div>
-      </div>
+        </nav>
+      </aside>
 
-      {/* Products Grid */}
-      <div className="flex-1 min-w-0">
+      <main className="flex-1 min-w-0">
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-1 rounded-lg shadow-sm border p-3"
+          key={currentSlug}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="mb-4 rounded-xl shadow-sm border p-4 bg-card flex justify-between items-center"
         >
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold text-primary capitalize mb-1">
-                {currentSlug === "all" ? t("brand.all_brands") : currentBrand?.name}
-              </h2>
-              {currentSlug === "all" ? (
-                <p className="text-foreground text-sm">{t("brand.explore_all")}</p>
-              ) : (
-                currentBrand?.description && (
-                  <p className="text-foreground text-sm">{currentBrand.description}</p>
-                )
-              )}
-              {!loading && filteredProducts.length > 0 && (
-                <p className="text-sm text-primary mt-2 font-medium">
-                  {t("brand.products_available", { count: filteredProducts.length })}
-                </p>
-              )}
-            </div>
-
-            {currentSlug !== "all" && currentBrand?.logo && (
-              <div className="w-12 h-12 bg-gray-100 flex items-center justify-center rounded-md">
-                <img
-                  src={currentBrand.logo}
-                  alt={currentBrand.name}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-            )}
+          <div className="space-y-1">
+            <h2 className="text-2xl font-black text-primary uppercase">
+              {currentSlug === "all"
+                ? t("brand.all_brands")
+                : currentBrand?.name}
+            </h2>
+            <p className="text-muted-foreground text-sm italic">
+              {currentSlug === "all"
+                ? t("brand.explore_all")
+                : currentBrand?.description}
+            </p>
           </div>
+          {currentSlug !== "all" && currentBrand?.logo && (
+            <div className="w-16 h-16 bg-white p-2 border rounded-lg overflow-hidden flex items-center justify-center">
+              <img
+                src={currentBrand.logo}
+                alt={currentBrand.name}
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+          )}
         </motion.div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 min-h-80 space-y-4 text-center rounded-lg shadow-sm border">
-            <PageLoading height={300} text={t("brand.loading")} />
-          </div>
+        {isFetching ? (
+          <PageLoading height={400} text={t("brand.loading")} />
         ) : filteredProducts.length > 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 max-h-[100vh] overflow-y-auto py-2"
-          >
-            {filteredProducts.map((product, index) => (
-              <AnimatePresence key={product._id}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <AnimatePresence mode="popLayout">
+              {filteredProducts.map((product, index) => (
                 <motion.div
+                  key={product._id}
+                  layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ delay: index * 0.02 }}
                 >
                   <ProductCard product={product} />
                 </motion.div>
-              </AnimatePresence>
-            ))}
-          </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         ) : (
-          <NoProductAvailable onRefresh={handleRefresh} onViewAll={handleViewAll} />
+          <NoProductAvailable
+            onRefresh={onRefresh}
+            onViewAll={() => navigate("/brand")}
+          />
         )}
-      </div>
+      </main>
     </div>
   );
 };
