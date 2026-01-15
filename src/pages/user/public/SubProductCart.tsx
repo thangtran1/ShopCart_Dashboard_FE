@@ -45,6 +45,13 @@ export default function ProductsPage() {
   }, [fetchProductsByType]);
 
   const hasProducts = Object.values(productsByType).some((p) => p.length > 0);
+  const renderSkeleton = () => (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
+      {Array.from({ length: 2 }).map((_, i) => (
+        <div key={i} className="!h-64 bg-muted animate-pulse rounded-2xl" />
+      ))}
+    </div>
+  );
 
   return (
     <div className="space-y-6 antialiased">
@@ -71,26 +78,22 @@ export default function ProductsPage() {
 
       {loading ? (
         <div className="space-y-12">
-          {Array.from({ length: 2 }).map((_, idx) => (
-            <div key={idx} className="space-y-3">
-              <div className="flex items-center gap-4">
-                <Skeleton.Input active className="!w-64 !h-10 rounded-md" />
+        {Array.from({ length: 2 }).map((_, idx) => (
+          <div key={idx} className="space-y-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="border-l-4 border-border pl-3">
+                   <Skeleton.Input active className="!w-48 md:!w-64 !h-8 md:!h-10 rounded-sm" />
+                </div>
+                <Skeleton.Button active className="!w-12 !h-6 rounded-full ml-2" />
               </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-                {Array.from({ length: 2 }).map((_, i) => (
-                  <div key={i} className="flex flex-col gap-3">
-                    <Skeleton.Button
-                      active
-                      className="!w-full !h-64 rounded-xl"
-                    />
-                    <Skeleton active title={true} paragraph={{ rows: 1 }} />
-                  </div>
-                ))}
-              </div>
+              
+              <div className="h-[2px] flex-grow mx-8 bg-gradient-to-r from-indigo-50 to-transparent hidden md:block" />
             </div>
-          ))}
-        </div>
+            {renderSkeleton()}
+          </div>
+        ))}
+      </div>
       ) : hasProducts ? (
         <div className="space-y-6">
           {Object.entries(productsByType)
