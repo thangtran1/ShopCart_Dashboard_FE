@@ -1278,9 +1278,7 @@
       "no_coupon": "Chưa có mã",
       "processing": "Đang xử lý...",
       "btn_cod": "Đặt hàng (COD)",
-      "btn_online": "Thanh toán ngay",
-      "secure_payment": "Bảo mật 100%",
-      "fast_delivery": "Giao hàng nhanh"
+      "btn_online": "Thanh toán ngay"
     },
     "voucher": {
       "loading": "Đang tải mã giảm giá...",

@@ -1,7 +1,6 @@
 "use client";
 
 import { Typography } from "antd";
-import { Shield, Truck } from "lucide-react";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import VoucherSelector from "./VoucherSelector";
 import { Button } from "@/ui/button";
@@ -120,17 +119,6 @@ const OrderSummary = ({
               : t("checkout.summary.btn_online")
           )}
         </Button>
-
-        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-dashed mt-2">
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <Shield className="w-3.5 h-3.5 text-green-600" />
-            {t("checkout.summary.secure_payment")}
-          </div>
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <Truck className="w-3.5 h-3.5 text-primary" />
-            {t("checkout.summary.fast_delivery")}
-          </div>
-        </div>
       </div>
     </div>
   );

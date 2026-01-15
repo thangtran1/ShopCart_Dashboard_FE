@@ -1278,9 +1278,7 @@
       "no_coupon": "No coupon applied",
       "processing": "Processing...",
       "btn_cod": "Place Order (COD)",
-      "btn_online": "Pay Now",
-      "secure_payment": "100% Secure",
-      "fast_delivery": "Fast Delivery"
+      "btn_online": "Pay Now"
     },
     "voucher": {
       "loading": "Loading vouchers...",
