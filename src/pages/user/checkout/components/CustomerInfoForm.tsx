@@ -16,38 +16,38 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
   return (
     <div className="space-y-4">
       <Title level={4} className="mb-0">
-        {t("checkout.customer_info.title")}
+        {t("customer_info.title")}
       </Title>
       
       <div className="space-y-4 border border-border rounded-lg p-4 bg-card shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="firstName" className="text-sm font-medium">
-              {t("checkout.customer_info.first_name")} *
+              {t("customer_info.first_name")} *
             </Label>
             <Input
               id="firstName"
               name="firstName"
               value={value.firstName}
               onChange={handleInputChange}
-              placeholder={t("checkout.customer_info.first_name_placeholder")}
+              placeholder={t("customer_info.first_name_placeholder")}
               className="focus-visible:ring-primary"
               required
             />
             <p className="text-[11px] text-muted-foreground italic">
-              {t("checkout.customer_info.first_name_hint")}
+              {t("customer_info.first_name_hint")}
             </p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="lastName" className="text-sm font-medium">
-              {t("checkout.customer_info.last_name")} *
+              {t("customer_info.last_name")} *
             </Label>
             <Input
               id="lastName"
               name="lastName"
               value={value.lastName}
               onChange={handleInputChange}
-              placeholder={t("checkout.customer_info.last_name_placeholder")}
+              placeholder={t("customer_info.last_name_placeholder")}
               className="focus-visible:ring-primary"
               required
             />
@@ -70,7 +70,7 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
               required
             />
             <p className="text-[11px] text-muted-foreground italic">
-              {t("checkout.customer_info.email_hint")}
+              {t("customer_info.email_hint")}
             </p>
           </div>
           <div className="space-y-2">
@@ -88,7 +88,7 @@ export const CustomerInfoForm = ({ value, onChange }: any) => {
               required
             />
             <p className="text-[11px] text-muted-foreground italic">
-              {t("checkout.customer_info.phone_hint")}
+              {t("customer_info.phone_hint")}
             </p>
           </div>
         </div>
