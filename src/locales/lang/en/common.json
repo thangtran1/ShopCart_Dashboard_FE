@@ -345,7 +345,10 @@
     "all_products": "All Products",
     "reset_selection": "Reset selection",
     "filter_brand_title": "Brands",
-    "all_brands": "All Brands"
+    "all_brands": "All Brands",
+    "filter": "Filter",
+    "apply": "Apply",
+    "clear_all": "Clear all"
   },
   "filter": {
     "price_title": "Price Range",

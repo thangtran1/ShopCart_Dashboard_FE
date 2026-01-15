@@ -345,7 +345,10 @@
     "all_products": "Tất cả sản phẩm",
     "reset_selection": "Đặt lại lựa chọn",
     "filter_brand_title": "Thương hiệu",
-    "all_brands": "Tất cả thương hiệu"
+    "all_brands": "Tất cả thương hiệu",
+    "filter": "Bộ lọc",
+    "apply": "Áp dụng",
+    "clear_all": "Xóa hết"
   },
   "filter": {
     "price_title": "Mức giá",

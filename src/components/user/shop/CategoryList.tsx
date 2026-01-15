@@ -21,7 +21,7 @@ const CategoryList = ({
   const isAllSelected = !selectedCategory;
 
   return (
-    <div className="w-full py-3">
+    <div>
       <Title className="text-base font-bold">
         {t("shop.filter_category_title")}
       </Title>

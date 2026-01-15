@@ -14,7 +14,6 @@ export default function ShopByBrands() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Đưa extraData vào trong component để sử dụng được hàm t()
   const extraData = [
     {
       title: t("brands.extra.shipping_title"),
@@ -110,16 +109,16 @@ export default function ShopByBrands() {
                 <Link
                   key={brand._id}
                   to={`/brand/${brand.slug}`}
-                  className="group aspect-[4/3] rounded-xl flex flex-col items-center justify-center p-4 border border-primary/20 hover:border-primary/40 hover:shadow-xl transition-all duration-500"
+                  className="group aspect-[4/2] rounded-xl flex flex-col items-center justify-center border border-primary/20 hover:border-primary/40 hover:shadow-xl transition-all duration-500"
                 >
-                  <div className="relative w-full h-12 mb-2">
+                  <div className="relative w-full h-10 mb-2">
                     <img
                       src={brand.logo}
                       alt={brand.name}
                       className="w-full h-full object-contain transition-all duration-500 scale-90 group-hover:scale-100"
                     />
                   </div>
-                  <span className="text-[10px] font-bold text-muted-foreground/60 uppercase group-hover:text-primary transition-colors">
+                  <span className="text-[10px] font-bold text-foreground uppercase group-hover:text-primary transition-colors">
                     {t("brands.product_count", { count: brand.productCount })}
                   </span>
                 </Link>
