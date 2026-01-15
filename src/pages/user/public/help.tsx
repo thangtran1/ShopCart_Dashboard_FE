@@ -133,7 +133,7 @@ export default function Help() {
                         </Row>
                     </div>
 
-                    <div className="rounded-xl p-6 border border-border">
+                    <div className="rounded-xl p-4 border border-border">
                         <Title level={4} className="font-bold mb-4 flex items-center gap-2">
                             <Send className="w-5 h-5 text-primary" />
                             {t("help.form.title")}

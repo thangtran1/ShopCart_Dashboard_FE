@@ -116,7 +116,7 @@ export default function AboutUs() {
                     </div>
 
                     {/* Team Section */}
-                    <div className="rounded-xl p-6 border border-border">
+                    <div className="rounded-xl p-4 border border-border">
                         <Title level={3} className="font-bold mb-4 flex items-center gap-2">
                             <Users className="w-6 h-6 text-primary" />
                             {t("about.team.title")}

@@ -42,8 +42,8 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="mx-auto border-t relative">
-      <div className={`${contentWrapper} p-4 sm:px-6 lg:px-0 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-16`}>
+    <footer className="mx-auto border-t relative px-4">
+      <div className={`${contentWrapper} mt-4 mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-16`}>
         <div className="space-y-3">
           <Logo />
           <p className="text-muted-foreground leading-relaxed">{t("footer.discoverCuratedFurnitureCollections")}</p>

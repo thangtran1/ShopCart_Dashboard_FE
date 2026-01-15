@@ -101,7 +101,7 @@ export default function Contact() {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="rounded-xl p-6 border border-border">
+                    <div className="rounded-xl p-4 border border-border">
                         <Title level={4} className="font-bold mb-2 flex items-center gap-2">
                             <Send className="w-5 h-5 text-primary" />
                             {t("contact_page.form.title")}
@@ -264,7 +264,7 @@ export default function Contact() {
                             </div>
                         </div>
 
-                        <div className="border border-primary/30 bg-primary/5 p-6 rounded-2xl text-center">
+                        <div className="border border-primary/30 bg-primary/5 p-4 rounded-2xl text-center">
                             <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
                                 <Headphones className="w-7 h-7 text-primary" />
                             </div>
