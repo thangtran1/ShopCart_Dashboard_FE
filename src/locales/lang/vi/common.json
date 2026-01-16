@@ -1320,6 +1320,10 @@
     "shop": "Cửa hàng",
     "detail": "Chi tiết sản phẩm"
   },
+  "chat": {
+    "no_messages_yet": "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!",
+    "empty": "Trống"
+  },
   "common": {
     "seeMore": "Xem Thêm",
     "no_product": {

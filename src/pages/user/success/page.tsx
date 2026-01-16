@@ -106,7 +106,7 @@ const SuccessPageContent = () => {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Wallet className="w-4 h-4 opacity-70" />
-                  <span className="text-sm opacity-80">{t("success_page.payment_method_label")}</span>
+                  <span className="text-sm opacity-80">{t("success_page.payment_method")}</span>
                 </div>
                 <span className={`text-sm font-medium ${paymentInfo.statusColor}`}>
                   {paymentInfo.status}

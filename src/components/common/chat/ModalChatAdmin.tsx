@@ -36,36 +36,34 @@ interface ModalChatAdminProps {
 const ChatBubble = ({
   msg,
   currentUserId,
-  showTimestamp,
 }: {
   msg: ChatMessage;
   currentUserId: string;
   showTimestamp: boolean;
 }) => {
-  const isAdmin = msg.senderId === currentUserId;
-  const time = new Date(msg.timestamp);
-  const timeStr = format(time, "HH:mm");
+  const isMe = msg.senderId === currentUserId;
+  const timeStr = format(new Date(msg.timestamp), "HH:mm");
 
   return (
-    <div className={`flex mt-2 ${isAdmin ? "justify-end" : "justify-start"}`}>
+    <div className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}>
       <div
-        className={`flex flex-col max-w-[70%] ${isAdmin ? "items-end" : "items-start"
-          }`}
+        className={`max-w-[75%] px-3 py-2 rounded-2xl shadow-sm flex flex-col ${
+          isMe 
+            ? "bg-primary text-white rounded-tr-none" 
+            : "bg-muted border border-border text-foreground rounded-tl-none"
+        }`}
       >
-        <div
-          className={`p-[10px_14px] rounded-[18px] break-words shadow-[0_1px_2px_rgba(0,0,0,0.1)] 
-            ${isAdmin
-              ? "bg-primary text-primary-foreground rounded-br-[4px]"
-              : "bg-background text-muted-foreground rounded-bl-[4px]"
-            }`}
-        >
+        <div className="text-[14px] leading-relaxed break-words">
           {msg.content}
         </div>
-        {showTimestamp && (
-          <div className="text-[11px] text-muted-foreground mt-[5px] px-[5px]">
-            {timeStr}
-          </div>
-        )}
+
+        <div 
+          className={`text-[10px] mt-1 opacity-70 select-none ${
+            isMe ? "text-right text-white" : "text-left text-muted-foreground"
+          }`}
+        >
+          {timeStr}
+        </div>
       </div>
     </div>
   );
@@ -76,6 +74,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
   onClose,
   currentUser,
 }) => {
+  
   const [inputValue, setInputValue] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -284,10 +283,12 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               >
                 {Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
-                    <div className="text-center my-3">
-                      <span className="text-xs text-foreground px-[10px] py-[2px] bg-background  rounded-[12px]">
+                    <div className="flex items-center my-6 px-4">
+                      <div className="flex-1 border-t border-dashed border-primary/30"></div>
+                      <span className="mx-4 bg-muted p-2 border border-dashed rounded-2xl text-foreground text-[10px] font-bold uppercase tracking-[2px] whitespace-nowrap">
                         {formatDateHeader(date)}
                       </span>
+                      <div className="flex-1 border-t border-dashed border-primary/30"></div>
                     </div>
                     {msgs.map((msg, index) => {
                       const prevMsg = index > 0 ? msgs[index - 1] : null;

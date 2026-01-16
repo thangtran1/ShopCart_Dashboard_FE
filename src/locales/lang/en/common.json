@@ -1320,6 +1320,10 @@
     "shop": "Shop",
     "detail": "Product detail"
   },
+  "chat": {
+    "no_messages_yet": "No messages yet. Start a conversation!",
+    "empty": "Empty"
+  },
   "common": {
     "seeMore": "See More",
     "no_product": {
