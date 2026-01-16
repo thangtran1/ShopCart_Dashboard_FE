@@ -26,11 +26,11 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const userToken = useUserToken();
-
+  const API_URL = import.meta.env.VITE_API_URL || "";
   const fetchAllUsers = async () => {
     try {
       const token = userToken.accessToken;
-      const response = await fetch("/api/chat/users", {
+      const response = await fetch(`${API_URL}/chat/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
