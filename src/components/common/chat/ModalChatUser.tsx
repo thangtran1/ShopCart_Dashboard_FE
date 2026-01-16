@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Button, Input, Avatar, List, Typography, Space, Popover, Tooltip } from "antd";
-import { SendOutlined, CloseOutlined, UserOutlined, SmileOutlined, AudioOutlined, PictureOutlined, PlusCircleOutlined, CameraOutlined } from "@ant-design/icons";
+import { Button, Input, Avatar, List, Typography, Popover } from "antd";
+import { SendOutlined, CloseOutlined, UserOutlined, SmileOutlined, PictureOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import { ChatMessage, CurrentUser } from "@/types/entity";
 import { useChat } from "@/hooks/useChat";
 import { format, isToday, isYesterday } from "date-fns";
@@ -90,33 +90,42 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
   };
   return (
     <div
-    className={`fixed inset-0 bg-background/50 z-[1000] items-center justify-center ${
-      open ? "flex" : "hidden"
-    }`}
-    onClick={onClose}
-  >
-     <div
-      className="w-4/5 max-w-xl h-3/5 bg-background rounded-lg fixed right-[70px] bottom-[70px] flex flex-col overflow-hidden shadow-2xl border border-border"
-      onClick={(e) => e.stopPropagation()}
+      className={`fixed inset-0 bg-background/50 z-[1000] items-center justify-center ${
+        open ? "flex" : "hidden"
+      }`}
+      onClick={onClose}
     >
-        <div className="flex justify-between items-center px-4 py-3 border-b border-border bg-muted">
-          <div>
-            <Text strong>Chat Support</Text>
-            <div>
+      <div
+        className={`
+          bg-background flex flex-col overflow-hidden shadow-2xl border border-border transition-all duration-300
+          w-[95%] h-[85%] max-h-[90vh] rounded-xl
+          sm:w-4/5 sm:max-w-xl sm:h-3/5 sm:fixed sm:right-[70px] sm:bottom-[70px] sm:rounded-lg
+        `}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex justify-between items-center px-4 py-3 border-b border-border bg-muted flex-shrink-0">
+          <div className="min-w-0">
+            <Text strong className="block truncate">Chat Support</Text>
+            <div className="flex items-center gap-1">
               <Text
                 type={isConnected ? "success" : "danger"}
-                className="text-[12px]"
+                className="text-[12px] whitespace-nowrap"
               >
                 ● {isConnected ? "Connected" : "Disconnected"}
               </Text>
             </div>
           </div>
-          <Button className="cursor-pointer" type="text" icon={<CloseOutlined />} onClick={onClose} />
+          <Button 
+            className="flex-shrink-0" 
+            type="text" 
+            icon={<CloseOutlined />} 
+            onClick={onClose} 
+          />
         </div>
 
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden min-h-0">
           {currentUser.role === "admin" && (
-            <div className="w-64 border-r border-border flex flex-col bg-muted/20">
+            <div className="hidden sm:flex w-64 border-r border-border flex-col bg-muted/20 flex-shrink-0">
               <div className="px-3 py-2 border-b border-border">
                 <Text strong>Online Users</Text>
               </div>
@@ -142,8 +151,8 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
             </div>
           )}
 
-          <div className="flex-1 flex flex-col bg-background">
-            <div className="flex-1 p-4 overflow-auto">
+          <div className="flex-1 flex flex-col bg-background min-h-0 relative">
+            <div className="flex-1 p-4 overflow-y-auto overflow-x-hidden min-h-0 scroll-smooth">
               {messages.length === 0 ? (
                 <EmptyState height="sm" title={t('chat.empty')} description={t('chat.no_messages_yet')} />
               ) : (
@@ -160,20 +169,18 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
                     {msgs.map((message: ChatMessage) => (
                       <div
                         key={message.id}
-                        className={`flex mb-3 ${
-                          message.senderId === currentUser.id
-                            ? "justify-end"
-                            : "justify-start"
+                        className={`flex mb-4 ${
+                          message.senderId === currentUser.id ? "justify-end" : "justify-start"
                         }`}
                       >
                         <div
-                          className={`max-w-[70%] px-3 py-2 rounded-2xl shadow-sm ${
+                          className={`max-w-[85%] sm:max-w-[75%] px-3 py-2 rounded-2xl shadow-sm ${
                             message.senderId === currentUser.id
                               ? "bg-primary text-white rounded-tr-none"
                               : "bg-muted border border-border text-foreground rounded-tl-none"
                           }`}
                         >
-                          <div className="text-[14px] leading-relaxed">{message.content}</div>
+                          <div className="text-[14px] leading-relaxed break-words">{message.content}</div>
                           <div className={`text-[10px] opacity-60 mt-1 ${
                             message.senderId === currentUser.id ? "text-right" : "text-left"
                           }`}>
@@ -188,53 +195,51 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="flex items-center p-[12px_20px] bg-background border-t border-border">
-                <Space size="small">
-                  <Tooltip title="Thêm">
-                    <Button type="text" icon={<PlusCircleOutlined />} />
-                  </Tooltip>
-                  <Tooltip title="Camera">
-                    <Button type="text" icon={<CameraOutlined />} />
-                  </Tooltip>
-                  <Tooltip title="Hình ảnh">
-                    <Button type="text" icon={<PictureOutlined />} />
-                  </Tooltip>
-                  <Tooltip title="Mic">
-                    <Button type="text" icon={<AudioOutlined />} />
-                  </Tooltip>
-                </Space>
-                <div className="relative flex-1 mx-2">
+            <div className="bg-background border-t border-border p-2 sm:p-4 flex-shrink-0">
+              <div className="flex items-center gap-2">
+                <div className="hidden xs:flex gap-1">
+                  <Button type="text" size="small" icon={<PlusCircleOutlined />} className="opacity-60" />
+                  <Button type="text" size="small" icon={<PictureOutlined />} className="opacity-60" />
+                </div>
+                
+                <div className="relative flex-1">
                   <Input
-                    className="w-full rounded-[25px] px-[48px_15px_15px] bg-background border-none shadow-none outline-none"
+                    className="w-full rounded-[20px] py-1.5 px-4 pr-10 bg-muted/50 border-none focus:bg-muted focus:ring-0"
                     placeholder="Nhập tin nhắn..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyPress}
+                    autoComplete="off"
                   />
                   <Popover
                     content={
                       <EmojiPicker
                         onEmojiClick={handleEmojiClick}
                         theme={Theme.LIGHT}
-                        width={300}
-                        height={400}
+                        width={280}
+                        height={350}
+                        skinTonesDisabled
+                        searchDisabled
                       />
                     }
-                    title="Chọn emoji"
                     trigger="click"
                     placement="topRight"
                   >
-                    <SmileOutlined className="absolute right-[15px] top-1/2 -translate-y-1/2 text-[22px] text-foreground cursor-pointer" />
+                    <SmileOutlined className="absolute right-3 top-1/2 -translate-y-1/2 text-[18px] opacity-60 cursor-pointer hover:opacity-100" />
                   </Popover>
                 </div>
+
                 <Button
                   type="primary"
                   shape="circle"
                   icon={<SendOutlined />}
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim()}
+                  className="flex-shrink-0"
                 />
               </div>
+              <div className="h-1 sm:hidden"></div>
+            </div>
           </div>
         </div>
       </div>
