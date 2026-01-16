@@ -41,23 +41,43 @@ const OrderSummary = ({
       <Title level={4}>{t("checkout.summary.title")}</Title>
 
       <div className="space-y-4 border border-border rounded-lg p-4 bg-card shadow-sm">
-        <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-4 max-h-[300px] overflow-y-auto overflow-x-hidden pr-2 custom-scrollbar">
           {items.map(({ product, quantity }) => (
-            <div key={product._id} className="flex items-center gap-3">
-              <div className="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 border border-border">
-                <img src={product.image} alt={product.name} className="object-cover w-full h-full" />
-                <span className="absolute top-0 right-0 bg-primary text-white text-[10px] px-1.5 rounded-bl-md">
+            <div
+              key={product._id}
+              className="flex items-start gap-3 w-full group"
+            >
+              <div className="relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-border bg-muted">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="object-cover w-full h-full transition-transform group-hover:scale-110"
+                />
+                <span className="absolute top-0 right-0 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-bold px-1.5 py-0.5 rounded-bl-lg shadow-sm">
                   x{quantity}
                 </span>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{product.name}</p>
-                <PriceFormatter amount={product.price * quantity} className="text-xs text-muted-foreground" />
+
+              <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+                <div className="w-full">
+                  <p className="text-sm font-semibold text-foreground leading-tight line-clamp-2 break-words">
+                    {product.name}
+                  </p>
+                </div>
+
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[11px] text-muted-foreground italic">
+                    {t("Đơn giá")}: <PriceFormatter amount={product.price} />
+                  </p>
+                  <PriceFormatter
+                    amount={product.price * quantity}
+                    className="text-sm font-bold text-primary"
+                  />
+                </div>
               </div>
             </div>
           ))}
         </div>
-
         <Separator className="my-2" />
 
         <VoucherSelector
@@ -78,22 +98,33 @@ const OrderSummary = ({
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">{t("cart.discount")}</span>
             {discountAmount > 0 ? (
-              <span className="text-red-500 font-medium">- <PriceFormatter amount={discountAmount} /></span>
+              <span className="text-red-500 font-medium">
+                - <PriceFormatter amount={discountAmount} />
+              </span>
             ) : (
-              <span className="text-xs italic text-muted-foreground">{t("checkout.summary.no_coupon")}</span>
+              <span className="text-xs italic text-muted-foreground">
+                {t("checkout.summary.no_coupon")}
+              </span>
             )}
           </div>
 
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">{t("checkout.summary.shipping_fee")}</span>
-            <span className="text-green-600 font-medium">{t("checkout.summary.free")}</span>
+            <span className="text-muted-foreground">
+              {t("checkout.summary.shipping_fee")}
+            </span>
+            <span className="text-green-600 font-medium">
+              {t("checkout.summary.free")}
+            </span>
           </div>
 
           <Separator className="my-2" />
 
           <div className="flex justify-between items-center">
             <span className="font-bold text-base">{t("cart.total")}</span>
-            <PriceFormatter amount={finalTotal} className="text-xl font-bold text-primary" />
+            <PriceFormatter
+              amount={finalTotal}
+              className="text-xl font-bold text-primary"
+            />
           </div>
         </div>
 
@@ -113,10 +144,10 @@ const OrderSummary = ({
               <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full animate-spin" />
               {t("checkout.summary.processing")}
             </div>
+          ) : String(paymentMethod).toUpperCase() === "COD" ? (
+            t("checkout.summary.btn_cod")
           ) : (
-            String(paymentMethod).toUpperCase() === "COD" 
-              ? t("checkout.summary.btn_cod") 
-              : t("checkout.summary.btn_online")
+            t("checkout.summary.btn_online")
           )}
         </Button>
       </div>

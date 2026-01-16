@@ -58,14 +58,17 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
     const isExpired = new Date(expireDate) < new Date();
     return (
       <span
-        className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${isExpired
-          ? "bg-red-50 text-red-600 border-red-100"
-          : "bg-green-50 text-green-600 border-green-100"
-          }`}
+        className={`px-2 py-0.5 rounded-md text-[10px] font-medium border ${
+          isExpired
+            ? "bg-red-50 text-red-600 border-red-100"
+            : "bg-green-50 text-green-600 border-green-100"
+        }`}
       >
         {isExpired
           ? t("ordersDetail.warranty_expired")
-          : `${t("ordersDetail.warranty_until")}: ${new Date(expireDate).toLocaleDateString(i18n.language === "vi" ? "vi-VN" : "en-US")}`}
+          : `${t("ordersDetail.warranty_until")}: ${new Date(
+              expireDate
+            ).toLocaleDateString(i18n.language === "vi" ? "vi-VN" : "en-US")}`}
       </span>
     );
   };
@@ -115,10 +118,14 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             <p className="text-foreground flex items-center gap-2 text-sm">
               <Calendar className="w-4 h-4 text-muted-foreground" />
               {order.createdAt &&
-                new Date(order.createdAt).toLocaleString(i18n.language === "vi" ? "vi-VN" : "en-US")}
+                new Date(order.createdAt).toLocaleString(
+                  i18n.language === "vi" ? "vi-VN" : "en-US"
+                )}
             </p>
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">{t("ordersDetail.order_status_label")}</span>
+              <span className="text-muted-foreground">
+                {t("ordersDetail.order_status_label")}
+              </span>
               {(() => {
                 const config = ORDER_STATUS_MAP[order.status];
 
@@ -127,8 +134,10 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
 
                 return (
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${config?.className || "bg-slate-100 text-slate-700 border-slate-200"
-                      }`}
+                    className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${
+                      config?.className ||
+                      "bg-slate-100 text-slate-700 border-slate-200"
+                    }`}
                   >
                     {statusLabel}
                   </span>
@@ -162,60 +171,75 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </p>
             {order.shippingAddress.notes && (
               <p className="text-muted-foreground text-xs italic pl-6">
-                {t("ordersDetail.shipping_notes")}: {order.shippingAddress.notes}
+                {t("ordersDetail.shipping_notes")}:{" "}
+                {order.shippingAddress.notes}
               </p>
             )}
           </div>
         )}
 
         <div className="w-full rounded-lg border overflow-hidden">
-          <ScrollArea className="w-full max-h-[250px]">
+          <ScrollArea className="w-full h-[350px]">
             <div className="min-w-[1000px]">
-              <Table className="w-full border-collapse">
-                <TableHeader className="sticky top-0 z-10 bg-muted/90 backdrop-blur">
+              <Table className="border-collapse">
+                <TableHeader className="sticky top-0 z-20 bg-muted/95 backdrop-blur shadow-sm">
                   <TableRow>
-                    <TableHead>{t("ordersDetail.table_product")}</TableHead>
-                    <TableHead className="text-center">{t("ordersDetail.table_quantity")}</TableHead>
-                    <TableHead className="text-right">{t("ordersDetail.table_unit_price")}</TableHead>
-                    <TableHead className="text-right">{t("ordersDetail.table_total_price")}</TableHead>
+                    <TableHead className="w-[40%] min-w-[300px]">
+                      {t("ordersDetail.table_product")}
+                    </TableHead>
+                    <TableHead className="text-center w-[15%]">
+                      {t("ordersDetail.table_quantity")}
+                    </TableHead>
+                    <TableHead className="text-right w-[20%]">
+                      {t("ordersDetail.table_unit_price")}
+                    </TableHead>
+                    <TableHead className="text-right w-[25%] pr-6">
+                      {t("ordersDetail.table_total_price")}
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
-
                 <TableBody>
                   {order.items?.map((item: any, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell className="flex min-w-[350px] items-center gap-3 text-foreground">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="h-12 w-12 rounded-md border bg-white object-cover"
-                        />
-
-                        <div className="flex flex-col gap-1">
-                          <span className="text-sm font-medium whitespace-nowrap">
-                            {item.name}
-                          </span>
-
-                          <div className="flex items-center gap-2 whitespace-nowrap">
-                            {getWarrantyBadge(item.warrantyExpireDate)}
-                            {item.warrantyPeriod > 0 && (
-                              <span className="text-[10px] italic text-foreground/80">
-                                ({t("ordersDetail.warranty_package", { month: item.warrantyPeriod })})
-                              </span>
-                            )}
+                    <TableRow
+                      key={index}
+                      className="hover:bg-muted/30 transition-colors"
+                    >
+                      <TableCell className="py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="h-12 w-12 shrink-0 rounded-md border bg-white object-cover"
+                          />
+                          <div className="flex flex-col gap-1 min-w-0">
+                            <span className="text-sm font-semibold text-foreground truncate">
+                              {item.name}
+                            </span>
+                            <div className="flex items-center gap-2">
+                              {getWarrantyBadge(item.warrantyExpireDate)}
+                              {item.warrantyPeriod > 0 && (
+                                <span className="text-[10px] italic text-muted-foreground">
+                                  (
+                                  {t("ordersDetail.warranty_package", {
+                                    month: item.warrantyPeriod,
+                                  })}
+                                  )
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </TableCell>
 
-                      <TableCell className="text-center text-foreground whitespace-nowrap">
+                      <TableCell className="text-center text-foreground font-medium">
                         x{item.quantity}
                       </TableCell>
 
-                      <TableCell className="text-right text-foreground whitespace-nowrap">
+                      <TableCell className="text-right text-foreground">
                         <PriceFormatter amount={item.price} />
                       </TableCell>
 
-                      <TableCell className="text-right text-foreground font-medium whitespace-nowrap">
+                      <TableCell className="text-right font-bold pr-6 text-primary">
                         <PriceFormatter amount={item.price * item.quantity} />
                       </TableCell>
                     </TableRow>
@@ -225,6 +249,7 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             </div>
 
             <ScrollBar orientation="horizontal" />
+            <ScrollBar orientation="vertical" />
           </ScrollArea>
         </div>
 
@@ -238,7 +263,8 @@ const OrderDetailDialog: React.FC<OrderDetailsDialogProps> = ({
             {order.discountAmount > 0 && (
               <div className="flex justify-between w-full text-sm text-red-500 italic">
                 <span className="flex items-center gap-1">
-                  <Tag className="w-3 h-3" /> {t("ordersDetail.summary_discount")} ({order.couponCode}):
+                  <Tag className="w-3 h-3" />{" "}
+                  {t("ordersDetail.summary_discount")} ({order.couponCode}):
                 </span>
                 <span>
                   -<PriceFormatter amount={order.discountAmount} />

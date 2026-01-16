@@ -11,22 +11,35 @@ import OrderSummary from "./components/OrderSummary";
 import { useRouter } from "@/router/hooks";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { useUserInfo } from "@/store/userStore";
 
 const { Title } = Typography;
 
 const CheckoutPage = () => {
   const { t } = useTranslation();
+  const userInfo = useUserInfo()
+
   const { items, totalAmount, loading: cartLoading, clearCart } = useCart();
   const { placeOrder } = useOrder();
   const navigate = useRouter();
   const [loading, setLoading] = useState(false);
   const [isOrdering, setIsOrdering] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("cod");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [selectedCoupon, setSelectedCoupon] = useState<any>(null);
 
+
+  useEffect(() => {
+    if (userInfo) {
+      setCustomerInfo({
+        fullName: userInfo.username || "",
+        email: userInfo.email || "",
+        phone: userInfo.phone || "",
+      });
+    }
+  }, [userInfo]);
+
   const [customerInfo, setCustomerInfo] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
     phone: "",
   });
@@ -51,25 +64,39 @@ const CheckoutPage = () => {
   const finalTotal = totalAmount - discountAmount;
 
   const handlePlaceOrder = async () => {
-    if (!shippingDetails?.isValid || !customerInfo.phone || !customerInfo.firstName) {
+    if (!shippingDetails?.isValid || !customerInfo.phone || !customerInfo.fullName) {
       toast.error(t("checkout.messages.missing_info"));
       return;
     }
-
+    if (!paymentMethod) {
+      toast.error(t("checkout.messages.select_payment_method"));
+      return;
+    }
+  
     setLoading(true);
     try {
+      const detail = shippingDetails.address || ""; 
+      const ward = shippingDetails.wardName || "";   
+      const district = shippingDetails.districtName || "";
+      const addressParts = [detail];
+      if (ward && !detail.toLowerCase().includes(ward.toLowerCase())) {
+        addressParts.push(ward);
+      }
+      if (district && !detail.toLowerCase().includes(district.toLowerCase())) {
+        addressParts.push(district);
+      }
+  
       const orderData = {
         shippingAddress: {
-          fullName: `${customerInfo.firstName} ${customerInfo.lastName}`.trim(),
+          fullName: customerInfo.fullName,
           phone: customerInfo.phone,
-          address: `${shippingDetails.address}, ${shippingDetails.wardName}, ${shippingDetails.districtName}`,
+          address: addressParts.filter(Boolean).join(", "), 
           city: shippingDetails.provinceName,
           notes: shippingDetails.notes
         },
-        paymentMethod: String(paymentMethod).toUpperCase() === "COD" ? "COD" : "ONLINE",
+        paymentMethod: paymentMethod,
         couponCode: selectedCoupon?.code || "",
       };
-
       const result = await placeOrder(orderData);
       if (result) {
         setIsOrdering(true);
@@ -79,6 +106,7 @@ const CheckoutPage = () => {
       }
     } catch (error: any) {
       setLoading(false);
+      console.log(error?.response?.data?.message || "Order failed");
     }
   };
 
@@ -116,7 +144,10 @@ const CheckoutPage = () => {
 
           <ShippingAddressForm onChange={handleShippingChange} />
 
-          <SelectPayment method={paymentMethod} onChange={setPaymentMethod} />
+          <SelectPayment 
+            method={paymentMethod} 
+            onChange={setPaymentMethod} 
+          />
         </div>
 
         <div className="lg:col-span-1">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button, Typography } from "antd";
 import {
   CheckCircleOutlined,
@@ -12,51 +12,54 @@ import { useTranslation } from "react-i18next";
 const { Title } = Typography;
 
 interface SelectPaymentProps {
-  method: string | number | null;
-  onChange: (value: any) => void;
+  method: string | null;
+  onChange: (value: string) => void;
 }
 
 export default function SelectPayment({ method, onChange }: SelectPaymentProps) {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tempSelected, setTempSelected] = useState<any>(method);
+  const [tempSelected, setTempSelected] = useState<string | null>(method);
+  useEffect(() => {
+    setTempSelected(method);
+  }, [method, isModalOpen]);
 
   const paymentMethods = [
     {
-      id: 1,
+      id: "STORE",
       title: t("checkout.payment.methods.store"),
       description: t("checkout.payment.methods.store_desc"),
       icon: "https://cdn2.cellphones.com.vn/x400,webp,q100/media/payment-logo/COS.png",
     },
     {
-      id: 2,
+      id: "QR",
       title: t("checkout.payment.methods.qr"),
       icon: "https://cdn2.cellphones.com.vn/x400,webp,q100/media/wysiwyg/QRCode.png",
     },
     {
-      id: 3,
+      id: "VNPAY",
       title: "VNPAY",
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/vnpay.png",
     },
     {
-      id: 4,
+      id: "MOMO",
       title: "MoMo",
       description: t("checkout.payment.methods.momo_desc"),
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/momo_vi.png",
     },
     {
-      id: 5,
+      id: "VISA",
       title: t("checkout.payment.methods.visa"),
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/onepay.png",
     },
     {
-      id: 6,
+      id: "KREDIVO",
       title: "Kredivo",
       description: t("checkout.payment.methods.kredivo_desc"),
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/kredivo.png",
     },
     {
-      id: 7,
+      id: "COD",
       title: t("checkout.payment.methods.cod"),
       description: t("checkout.payment.methods.cod_desc"),
       icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
@@ -64,8 +67,10 @@ export default function SelectPayment({ method, onChange }: SelectPaymentProps) 
   ];
 
   const handleConfirm = () => {
-    onChange(tempSelected);
-    setIsModalOpen(false);
+    if (tempSelected) {
+      onChange(tempSelected);
+      setIsModalOpen(false);
+    }
   };
 
   const selectedPayment = paymentMethods.find((m) => m.id === method);
@@ -103,7 +108,7 @@ export default function SelectPayment({ method, onChange }: SelectPaymentProps) 
             type="primary" 
             block 
             size="large" 
-            disabled={!tempSelected} 
+            disabled={!tempSelected}
             onClick={handleConfirm}
             className="rounded-lg"
           >

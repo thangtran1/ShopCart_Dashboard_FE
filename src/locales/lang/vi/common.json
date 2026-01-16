@@ -926,10 +926,6 @@
     }
   },
   "news_page": {
-    "breadcrumb": {
-      "home": "Trang chủ",
-      "news": "Tin tức"
-    },
     "latest_title": "TIN TỨC MỚI NHẤT",
     "trending": {
       "title": "Xu hướng nổi bật",
@@ -943,10 +939,6 @@
   },
   "news_detail": {
     "not_found": "Bài viết không tồn tại hoặc đã bị gỡ bỏ.",
-    "breadcrumb": {
-      "home": "Trang chủ",
-      "news": "Tin tức"
-    },
     "meta": {
       "author": "Quản trị viên",
       "views": "lượt xem"
@@ -1235,7 +1227,8 @@
     "loading_desc": "Vui lòng đợi trong giây lát...",
     "messages": {
       "missing_info": "Vui lòng nhập đầy đủ thông tin!",
-      "order_success": "Đặt hàng thành công!"
+      "order_success": "Đặt hàng thành công!",
+      "select_payment_method": "Vui lòng chọn phương thức thanh toán"
     },
     "customer_info": {
       "title": "Thông tin khách hàng",
@@ -1292,7 +1285,7 @@
     }
   },
   "customer_info": {
-    "title": "1. Thông Tin Khách Hàng",
+    "title": "Thông Tin Khách Hàng",
     "first_name": "Họ",
     "first_name_placeholder": "Ví dụ: Nguyễn",
     "first_name_hint": "Vui lòng nhập họ như trên giấy tờ tùy thân",
@@ -1320,6 +1313,12 @@
     "loading": "Đang tải sản phẩm...",
     "page_title": "Sản phẩm theo thương hiệu:",
     "all_products": "Tất cả sản phẩm"
+  },
+  "breadcrumb": {
+    "home": "Trang chủ",
+    "news": "Tin tức",
+    "shop": "Cửa hàng",
+    "detail": "Chi tiết sản phẩm"
   },
   "common": {
     "seeMore": "Xem Thêm",

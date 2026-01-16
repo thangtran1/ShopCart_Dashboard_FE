@@ -16,7 +16,7 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand }: Props) => {
   const isAllSelected = !selectedBrand;
 
   return (
-    <div className="w-full py-2">
+    <div className="w-full">
       <Title className="text-base font-bold">
         {t("shop.filter_brand_title")}
       </Title>

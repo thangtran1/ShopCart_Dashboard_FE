@@ -7,7 +7,6 @@ import {
   RotateCcw,
   X,
   SlidersHorizontal,
-  ChevronRight,
 } from "lucide-react";
 import Title from "@/ui/title";
 import CategoryList from "@/components/user/shop/CategoryList";
@@ -20,6 +19,8 @@ import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/ui/button";
+import { Badge } from "@/ui/badge";
 
 const Shop = () => {
   const { t } = useTranslation();
@@ -114,12 +115,7 @@ const Shop = () => {
     <div className="pb-10">
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-md pb-4 border-b">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-[10px] uppercase font-bold text-muted-foreground tracking-widest">
-              <span>Home</span>
-              <ChevronRight size={10} />
-              <span className="text-primary">{t("shop.title")}</span>
-            </div>
+          <div>
             <Title className="text-2xl md:text-3xl font-black uppercase italic tracking-tighter">
               {t("shop.title")}
             </Title>
@@ -129,25 +125,25 @@ const Shop = () => {
             {activeFiltersCount > 0 && (
               <button
                 onClick={handleResetFilters}
-                className="hidden md:flex items-center gap-2 text-xs font-bold text-destructive bg-destructive/5 hover:bg-destructive/10 px-4 py-2 rounded-full transition-all"
+                className="hidden md:flex cursor-pointer items-center gap-2 text-xs font-bold text-destructive bg-destructive/5 hover:bg-destructive/10 px-4 py-2 rounded-full transition-all"
               >
                 <RotateCcw size={14} />
                 {t("shop.reset_filter")}
               </button>
             )}
 
-            <button
+            <Button
               onClick={() => setIsMobileFilterOpen(true)}
-              className="md:hidden relative flex items-center justify-center gap-2 bg-foreground text-background px-6 py-2.5 rounded-full text-sm font-bold shadow-xl shadow-foreground/10 active:scale-95 transition-transform"
+              className="md:hidden relative bg-transparent border border-primary/30 flex hover:bg-muted items-center cursor-pointer justify-center gap-2 text-foreground rounded-full text-sm font-bold active:scale-95 transition-transform"
             >
               <SlidersHorizontal size={16} />
-              {t("shop.filter") || "Lọc"}
+              {t("shop.filter")}
               {activeFiltersCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground ring-2 ring-background">
+                <Badge variant={'error'} className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full">
                   {activeFiltersCount}
-                </span>
+                </Badge>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -199,13 +195,13 @@ const Shop = () => {
               <div className="pt-4 border-t mt-auto grid grid-cols-2 gap-2">
                 <button
                   onClick={handleResetFilters}
-                  className="rounded-2xl border-border border font-bold text-xs uppercase tracking-widest text-foreground active:bg-muted"
+                  className="rounded-2xl border-error cursor-pointer border font-bold text-xs uppercase tracking-widest text-foreground active:bg-muted"
                 >
                   {t('shop.clear_all')}
                 </button>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="rounded-2xl py-3 bg-primary text-foreground font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+                  className="rounded-2xl py-3 bg-primary cursor-pointer text-foreground font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 active:scale-95 transition-transform"
                 >
                   {t('shop.apply')}
                 </button>

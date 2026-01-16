@@ -22,7 +22,7 @@ const PriceList = ({ selectedPrice, setSelectedPrice }: Props) => {
   ];
 
   return (
-    <div className="w-full py-4">
+    <div className="w-full pb-4">
       <Title className="text-base font-bold">{t("filter.price_title")}</Title>
       
       <RadioGroup className="mt-2 space-y-1" value={selectedPrice || "all"}>

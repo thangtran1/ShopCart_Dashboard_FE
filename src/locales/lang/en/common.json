@@ -926,10 +926,6 @@
     }
   },
   "news_page": {
-    "breadcrumb": {
-      "home": "Home",
-      "news": "News"
-    },
     "latest_title": "LATEST NEWS",
     "trending": {
       "title": "Trending Now",
@@ -943,10 +939,6 @@
   },
   "news_detail": {
     "not_found": "The article does not exist or has been removed.",
-    "breadcrumb": {
-      "home": "Home",
-      "news": "News"
-    },
     "meta": {
       "author": "Admin",
       "views": "views"
@@ -1235,7 +1227,8 @@
     "loading_desc": "Please wait a moment...",
     "messages": {
       "missing_info": "Please fill in all required information!",
-      "order_success": "Order placed successfully!"
+      "order_success": "Order placed successfully!",
+     "select_payment_method": "Please choose a payment method"
     },
     "customer_info": {
       "title": "Customer Information",
@@ -1292,7 +1285,7 @@
     }
   },
   "customer_info": {
-    "title": "1. Customer Information",
+    "title": "Customer Information",
     "first_name": "First Name",
     "first_name_placeholder": "e.g., John",
     "first_name_hint": "Please enter your first name as on your ID",
@@ -1320,6 +1313,12 @@
     "loading": "Loading products...",
     "page_title": "Products by Brand:",
     "all_products": "All Products"
+  },
+  "breadcrumb": {
+    "home": "Home",
+    "news": "News",
+    "shop": "Shop",
+    "detail": "Product detail"
   },
   "common": {
     "seeMore": "See More",
