@@ -35,7 +35,7 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
     selectedUserId,
     sendMessage,
     selectUser,
-  } = useChat(open ? currentUser : null);
+  } = useChat(currentUser);
 
   useEffect(() => {
     if (messagesEndRef.current) {
@@ -84,20 +84,21 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
       minute: "2-digit",
     });
 
-  if (!open) return null;
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
     setInputValue((prev) => prev + emojiData.emoji);
   };
   return (
     <div
-      className="fixed inset-0 bg-background/50 z-[1000] flex items-center justify-center"
-      onClick={onClose}
+    className={`fixed inset-0 bg-background/50 z-[1000] items-center justify-center ${
+      open ? "flex" : "hidden"
+    }`}
+    onClick={onClose}
+  >
+     <div
+      className="w-4/5 max-w-xl h-3/5 bg-background rounded-lg fixed right-[70px] bottom-[70px] flex flex-col overflow-hidden shadow-2xl border border-border"
+      onClick={(e) => e.stopPropagation()}
     >
-      <div
-        className="w-4/5 max-w-xl h-3/5 bg-background rounded-lg fixed right-[70px] bottom-[70px] flex flex-col overflow-hidden shadow-2xl border border-border"
-        onClick={(e) => e.stopPropagation()}
-      >
         <div className="flex justify-between items-center px-4 py-3 border-b border-border bg-muted">
           <div>
             <Text strong>Chat Support</Text>
