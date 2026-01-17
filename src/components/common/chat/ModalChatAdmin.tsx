@@ -261,7 +261,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               >
                 {Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
-                    <div className="flex items-center my-6 px-4">
+                    <div className="flex items-center my-4">
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                       <span className="mx-4 bg-muted p-2 border border-dashed rounded-2xl text-foreground text-[10px] font-bold uppercase tracking-[2px] whitespace-nowrap">
                         {formatDateHeader(date)}
@@ -269,10 +269,10 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                     </div>
                     {msgs.map((msg) => (
-                      <ChatBubble 
-                        key={msg.id} 
-                        msg={msg} 
-                        currentUserId={currentUser.id} 
+                      <ChatBubble
+                        key={msg.id}
+                        msg={msg}
+                        currentUserId={currentUser.id}
                       />
                     ))}
                   </div>

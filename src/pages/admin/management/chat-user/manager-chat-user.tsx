@@ -140,7 +140,7 @@ const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
               type="text"
               icon={isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               onClick={() => {
-                if (!isCollapsed) setSearchValue(""); 
+                if (!isCollapsed) setSearchValue("");
                 setIsCollapsed(!isCollapsed);
               }}
               className={`flex-shrink-0 ${isCollapsed ? "mx-auto" : ""}`}
@@ -261,7 +261,7 @@ const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
               <div className="flex-1 p-5 overflow-y-auto flex flex-col bg-muted/20" ref={listRef}>
                 {Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
-                    <div className="flex items-center my-6 px-4">
+                    <div className="flex items-center my-4">
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                       <span className="mx-4 bg-muted p-2 border border-dashed rounded-2xl text-foreground text-[10px] font-bold uppercase tracking-[2px] whitespace-nowrap">
                         {formatDateHeader(date)}
@@ -270,9 +270,9 @@ const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
                     </div>
                     {msgs.map((msg) => (
                       <ChatBubble
-                        key={msg.id} 
-                        msg={msg} 
-                        currentUserId={currentUser.id} 
+                        key={msg.id}
+                        msg={msg}
+                        currentUserId={currentUser.id}
                       />
                     ))}
                   </div>

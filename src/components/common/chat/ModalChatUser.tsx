@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Button, Input, Avatar, List, Typography, Popover } from "antd";
-import { SendOutlined, CloseOutlined, UserOutlined, SmileOutlined, PictureOutlined, PlusCircleOutlined} from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UserOutlined, SmileOutlined, PictureOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { ChatMessage, CurrentUser } from "@/types/entity";
 import { useChat } from "@/hooks/useChat";
 import { format, isToday, isYesterday } from "date-fns";
@@ -90,9 +90,8 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
   };
   return (
     <div
-      className={`fixed inset-0 bg-background/50 z-[1000] items-center justify-center ${
-        open ? "flex" : "hidden"
-      }`}
+      className={`fixed inset-0 bg-background/50 z-[1000] items-center justify-center ${open ? "flex" : "hidden"
+        }`}
       onClick={onClose}
     >
       <div
@@ -115,11 +114,11 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
               </Text>
             </div>
           </div>
-          <Button 
-            className="flex-shrink-0" 
-            type="text" 
-            icon={<CloseOutlined />} 
-            onClick={onClose} 
+          <Button
+            className="flex-shrink-0"
+            type="text"
+            icon={<CloseOutlined />}
+            onClick={onClose}
           />
         </div>
 
@@ -134,9 +133,8 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
                   dataSource={onlineUsers}
                   renderItem={(userId: string) => (
                     <List.Item
-                      className={`cursor-pointer px-3 hover:bg-muted transition-colors ${
-                        selectedUserId === userId ? "bg-primary/10 border-r-2 border-primary" : ""
-                      }`}
+                      className={`cursor-pointer px-3 hover:bg-muted transition-colors ${selectedUserId === userId ? "bg-primary/10 border-r-2 border-primary" : ""
+                        }`}
                       onClick={() => selectUser(userId)}
                     >
                       <List.Item.Meta
@@ -158,7 +156,7 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
               ) : (
                 Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
-                    <div className="flex items-center my-6 px-4">
+                    <div className="flex items-center my-4">
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                       <span className="mx-4 bg-muted p-2 border border-dashed rounded-2xl text-foreground text-[10px] font-bold uppercase tracking-[2px] whitespace-nowrap">
                         {renderDateLabel(date)}
@@ -169,21 +167,18 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
                     {msgs.map((message: ChatMessage) => (
                       <div
                         key={message.id}
-                        className={`flex mb-4 ${
-                          message.senderId === currentUser.id ? "justify-end" : "justify-start"
-                        }`}
+                        className={`flex mb-2 ${message.senderId === currentUser.id ? "justify-end" : "justify-start"
+                          }`}
                       >
                         <div
-                          className={`max-w-[85%] sm:max-w-[75%] px-3 py-2 rounded-2xl shadow-sm ${
-                            message.senderId === currentUser.id
-                              ? "bg-primary text-white rounded-tr-none"
-                              : "bg-muted border border-border text-foreground rounded-tl-none"
-                          }`}
+                          className={`max-w-[85%] sm:max-w-[75%] px-3 py-2 rounded-2xl shadow-sm ${message.senderId === currentUser.id
+                            ? "bg-primary text-white rounded-tr-none"
+                            : "bg-muted border border-border text-foreground rounded-tl-none"
+                            }`}
                         >
                           <div className="text-[14px] leading-relaxed break-words">{message.content}</div>
-                          <div className={`text-[10px] opacity-60 mt-1 ${
-                            message.senderId === currentUser.id ? "text-right" : "text-left"
-                          }`}>
+                          <div className={`text-[10px] ${message.senderId === currentUser.id ? "text-right" : "text-left"
+                            }`}>
                             {formatTime(message.timestamp)}
                           </div>
                         </div>
@@ -201,7 +196,7 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
                   <Button type="text" size="small" icon={<PlusCircleOutlined />} className="opacity-60" />
                   <Button type="text" size="small" icon={<PictureOutlined />} className="opacity-60" />
                 </div>
-                
+
                 <div className="relative flex-1">
                   <Input
                     className="w-full rounded-[20px] py-1.5 px-4 pr-10 bg-muted/50 border-none focus:bg-muted focus:ring-0"
