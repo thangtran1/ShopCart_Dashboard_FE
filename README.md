@@ -35,6 +35,18 @@
 | ![Admin Dark](./src/assets/screenshots/UI-Admin-dark.png) | ![Admin Light](./src/assets/screenshots/UI-Admin-light.png) |
 | **👨‍💼 Quản lý** | **⚙️ Hồ sơ Admin** |
 | ![Admin Manager](./src/assets/screenshots/UI-Admin-manager.png) | ![Admin Profile](./src/assets/screenshots/UI-Admin-profile.png) |
+
+---
+
+### 🔐 Xác thực & Dùng chung
+
+| | |
+|:---:|:---:|
+| **🔑 Đăng nhập** | **📝 Đăng ký** |
+| ![Login](./src/assets/screenshots/Login.png) | ![Register](./src/assets/screenshots/Register.png) |
+| **❓ Quên mật khẩu** | **📝 Login Auth Google && Github** |
+| ![Forgot Password](./src/assets/screenshots/forgotPass.png) | ![Social Login](./src/assets/screenshots/LoginGIthubGoogle.png) |
+
 ---
 
 ## 🏗️ Hệ sinh thái dự án (System Ecosystem)
