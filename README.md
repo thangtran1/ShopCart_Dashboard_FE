@@ -136,14 +136,17 @@ pnpm dev              # Start all apps in development mode
 ## 🏗️ Technology Stack
 
 ### 1. Frontend (Current)
-- **Core**: React.js 19, TypeScript
-- **State**: Zustand, TanStack Query
-- **UI**: Ant Design, Tailwind CSS
+- **Core**: React.js 19, TypeScript, Vite 6
+- **State**: Zustand, TanStack Query v5
+- **UI**: Ant Design 5, Tailwind CSS 4, HeroUI
+- **Animations**: Animations: Framer Motion 12, Motion
 
 ### 2. Backend Service
-- **Core**: Nest.js/Express (hoặc NestJS nếu bạn dùng)
-- **Database**: MongoDB/PostgreSQL
-- **Auth**: Passport.js, JWT
+- **Core**: Nest.js 11, TypeScript
+- **Database**: MongoDB (Mongoose ODM)
+- **Auth & Security**: Passport.js (JWT & Google OAuth2), Bcryptjs (Mã hóa mật mã)
+- **Real-time**: Socket.io (Websockets) với Admin UI tích hợp
+- **Communications**: Nodemailer (Gửi email xác thực, thông báo)
 
 ### 3. Maintenance & DevOps
 - **App**: Maintenance Dashboard (Theo dõi Health check hệ thống)
@@ -151,7 +154,7 @@ pnpm dev              # Start all apps in development mode
 - 
 ### Core Technologies
 
-- **Framework**: React.js 19
+- **Framework**: React 18, Vite 6, TypeScript.
 - **Language**: TypeScript
 - **Package Manager**: pnpm
 - **Styling**: Tailwind CSS, Antd
