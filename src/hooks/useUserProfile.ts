@@ -35,6 +35,7 @@ export const useUserProfile = () => {
     queryFn: getUserProfile,
     enabled: !!accessToken && !!refreshToken, // Chỉ gọi khi có token
     staleTime: 1000 * 60 * 5, // Dữ liệu được coi là mới trong 5 phút
+    gcTime: 0, // Xóa khỏi cache ngay khi query không còn được active
   });
 
   useEffect(() => {

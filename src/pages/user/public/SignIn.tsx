@@ -9,9 +9,11 @@ import userApi from "@/api/services/userApi";
 import { useTranslation } from "react-i18next";
 import Logo from "@/ui/logo";
 import NoticeContent from "@/layouts/dashboard/components/notice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SignIn = () => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { profile, refetch } = useUserProfile();
   const { accessToken } = useUserToken();
@@ -32,12 +34,23 @@ const SignIn = () => {
     try {
       const res = await userApi.logout();
       if (res.data?.success) {
+        // Xóa sạch Cache của React Query
+        // Xóa mọi dữ liệu 'profile' cũ đang lưu trong RAM
+        queryClient.clear(); 
+
+        // 2. Xóa thông tin trong Zustand Store (Local Storage)
         clearUserInfoAndToken();
+
         toast.success(t("auth.login.logoutSuccess"));
+        
         navigate("/login", { replace: true });
-      } else toast.error(res.data?.message);
+      } else {
+        toast.error(res.data?.message);
+      }
     } catch (error) {
       console.log(error);
+      queryClient.clear();
+      clearUserInfoAndToken();
     }
   };
 
