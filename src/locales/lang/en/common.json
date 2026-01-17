@@ -1322,7 +1322,11 @@
   },
   "chat": {
     "no_messages_yet": "No messages yet. Start a conversation!",
-    "empty": "Empty"
+    "empty": "Empty",
+    "no-user-found": "No users found",
+    "manager-chat-user": "Customer List",
+    "search-user": "Search customers...",
+    "enter-message": "Nhập tin nhắn..."
   },
   "common": {
     "seeMore": "See More",

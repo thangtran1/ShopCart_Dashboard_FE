@@ -26,6 +26,8 @@ import { ChatMessage, CurrentUser, Conversation } from "@/types/entity";
 import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
 import { vi } from "date-fns/locale";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
+import { useTranslation } from "react-i18next";
+import { EmptyState } from "../EmptyState";
 
 interface ModalChatAdminProps {
   open: boolean;
@@ -47,20 +49,18 @@ const ChatBubble = ({
   return (
     <div className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[75%] px-3 py-2 rounded-2xl shadow-sm flex flex-col ${
-          isMe 
-            ? "bg-primary text-white rounded-tr-none" 
-            : "bg-muted border border-border text-foreground rounded-tl-none"
-        }`}
+        className={`max-w-[75%] px-3 py-2 rounded-2xl shadow-sm flex flex-col ${isMe
+          ? "bg-primary text-white rounded-tr-none"
+          : "bg-muted border border-border text-foreground rounded-tl-none"
+          }`}
       >
         <div className="text-[14px] leading-relaxed break-words">
           {msg.content}
         </div>
 
-        <div 
-          className={`text-[10px] mt-1 opacity-70 select-none ${
-            isMe ? "text-right text-white" : "text-left text-muted-foreground"
-          }`}
+        <div
+          className={`text-[10px] mt-1 opacity-70 select-none ${isMe ? "text-right text-white" : "text-left text-muted-foreground"
+            }`}
         >
           {timeStr}
         </div>
@@ -74,7 +74,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
   onClose,
   currentUser,
 }) => {
-  
+  const { t } = useTranslation()
   const [inputValue, setInputValue] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -175,7 +175,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
       >
         <div className="w-[35%] border-r border-border flex flex-col">
           <div className="p-[15px_20px] border-b border-border flex justify-between items-center">
-            <span className="text-lg font-semibold">Danh sách khách hàng</span>
+            <span className="text-lg font-semibold">{t('chat.manager-chat-user')}</span>
             <Button
               type="text"
               size="small"
@@ -185,7 +185,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
           </div>
           <div className="p-[10px] border-b border-border">
             <Input
-              placeholder="Tìm kiếm khách hàng..."
+              placeholder={t('chat.search-user')}
               prefix={<SearchOutlined />}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -195,38 +195,50 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
             className="flex-1 overflow-y-auto"
             key={`user-list-${filteredConversations.length}`}
           >
-            {filteredConversations.map((conversation: Conversation) => (
-              <div
-                key={conversation.userId}
-                className={`cursor-pointer gap-2 p-[12px_20px] rounded-[8px] m-[4px_8px] transition-colors duration-200 border-none flex items-center
-                  ${selectedUserId === conversation.userId
-                    ? "bg-primary/10"
-                    : "hover:bg-muted/40"
-                  }`}
-                onClick={() => selectUser(conversation.userId)}
-              >
-                <Avatar
-                  size={40}
-                  className={`mr-3 ${onlineUsers.includes(conversation.userId)
-                      ? "bg-success"
-                      : "bg-gray-400"
+            {filteredConversations.length > 0 ? (
+              filteredConversations.map((conversation: Conversation) => (
+                <div
+                  key={conversation.userId}
+                  className={`cursor-pointer gap-2 p-[12px_20px] rounded-[8px] m-[4px_8px] transition-all duration-200 border-none flex items-center
+          ${selectedUserId === conversation.userId
+                      ? "bg-primary/10"
+                      : "hover:bg-muted/40"
                     }`}
+                  onClick={() => selectUser(conversation.userId)}
                 >
-                  {conversation.userEmail.charAt(0).toUpperCase()}
-                </Avatar>
-                <div className="flex-1">
-                  <div className="font-medium">
-                    {conversation.userName || conversation.userEmail}
+                  <div className="relative">
+                    <Avatar
+                      size={40}
+                      className={`mr-1 ${onlineUsers.includes(conversation.userId)
+                        ? "bg-success ring-2 ring-background"
+                        : "bg-gray-400"
+                        }`}
+                    >
+                      {conversation.userEmail.charAt(0).toUpperCase()}
+                    </Avatar>
+                    {onlineUsers.includes(conversation.userId) && (
+                      <span className="absolute bottom-0 right-1 w-3 h-3 bg-success border-2 border-background rounded-full"></span>
+                    )}
                   </div>
-                  <div className="text-xs text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
-                    {conversation.lastMessage?.content ||
-                      (conversation.hasConversation
-                        ? "Chưa có tin nhắn"
-                        : "Chưa bắt đầu chat")}
+
+                  <div className="flex-1 min-w-0 ml-2">
+                    <div className="font-medium truncate text-sm">
+                      {conversation.userName || conversation.userEmail}
+                    </div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {conversation.lastMessage?.content ||
+                        (conversation.hasConversation
+                          ? t('chat.no-message')
+                          : t('chat.not-started'))}
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="p-2">
+                <EmptyState height="sm" title={t('chat.empty')} description={t('chat.no-user-found')} />
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -238,8 +250,8 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                   <Avatar
                     size={40}
                     className={`mr-3 ${onlineUsers.includes(activeConversation.userId)
-                        ? "bg-success"
-                        : "bg-gray-400"
+                      ? "bg-success"
+                      : "bg-gray-400"
                       }`}
                   >
                     {activeConversation.userEmail.charAt(0).toUpperCase()}
@@ -251,27 +263,26 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                     </div>
                     <div
                       className={`text-xs transition-colors ${onlineUsers.includes(activeConversation.userId)
-                          ? "text-success"
-                          : "text-foreground"
+                        ? "text-success"
+                        : "text-foreground"
                         }`}
                     >
                       {onlineUsers.includes(activeConversation.userId)
-                        ? "Trực tuyến"
-                        : "Ngoại tuyến"}
+                        ? t("management.chat.online") : t("management.chat.offline")}
                     </div>
                   </div>
                 </div>
                 <Space>
-                  <Tooltip title="Gọi video">
+                  <Tooltip title={t("management.chat.call-video")}>
                     <Button type="text" icon={<VideoCameraOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Gọi thoại">
+                  <Tooltip title={t("management.chat.call-phone")}>
                     <Button type="text" icon={<PhoneOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Thêm vào yêu thích">
+                  <Tooltip title={t("management.chat.add-to-favorites")}>
                     <Button type="text" icon={<HeartOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Thêm">
+                  <Tooltip title={t("management.chat.add")}>
                     <Button type="text" icon={<EllipsisOutlined />} />
                   </Tooltip>
                 </Space>
@@ -315,23 +326,23 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
 
               <div className="flex items-center p-[12px_20px] bg-background border-t border-border">
                 <Space size="small">
-                  <Tooltip title="Thêm">
+                  <Tooltip title={t("management.chat.add")}>
                     <Button type="text" icon={<PlusCircleOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Camera">
+                  <Tooltip title={t("management.chat.camera")}>
                     <Button type="text" icon={<CameraOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Hình ảnh">
+                  <Tooltip title={t("management.chat.image")}>
                     <Button type="text" icon={<PictureOutlined />} />
                   </Tooltip>
-                  <Tooltip title="Mic">
+                  <Tooltip title={t("management.chat.mic")}>
                     <Button type="text" icon={<AudioOutlined />} />
                   </Tooltip>
                 </Space>
                 <div className="relative flex-1 mx-2">
                   <Input
                     className="w-full rounded-[25px] px-[48px_15px_15px] bg-background border-none shadow-none outline-none"
-                    placeholder="Nhập tin nhắn..."
+                    placeholder={t('chat.enter-message')}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyPress}
@@ -362,8 +373,11 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               </div>
             </>
           ) : (
-            <div className="flex-1 flex justify-center items-center text-muted-foreground text-sm">
-              Chọn một khách hàng để bắt đầu trò chuyện
+            <div className="flex-1 flex flex-col justify-center items-center text-muted-foreground p-10 bg-muted/5">
+              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4">
+                <SendOutlined className="text-3xl opacity-20" />
+              </div>
+              <p className="text-lg font-medium">{t("management.chat.select-user-to-start-chat")}</p>
             </div>
           )}
         </div>

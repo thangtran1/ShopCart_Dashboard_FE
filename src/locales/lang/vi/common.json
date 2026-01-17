@@ -1322,7 +1322,11 @@
   },
   "chat": {
     "no_messages_yet": "Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!",
-    "empty": "Trống"
+    "empty": "Trống",
+    "no-user-found": "Không tìm thấy kết quả nào cho tìm kiếm của bạn",
+    "manager-chat-user": "Danh sách khách hàng",
+    "search-user": "Tìm kiếm khách hàng...",
+    "enter-message": "Nhập tin nhắn..."
   },
   "common": {
     "seeMore": "Xem Thêm",

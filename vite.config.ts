@@ -64,7 +64,7 @@ export default defineConfig(({ mode }) => {
       target: "esnext",
       minify: "esbuild",
       cssCodeSplit: true,
-      chunkSizeWarningLimit: 1700,
+      chunkSizeWarningLimit: 2000,
       rollupOptions: {
         output: {
           manualChunks: {

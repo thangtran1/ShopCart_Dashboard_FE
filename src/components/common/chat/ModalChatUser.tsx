@@ -205,7 +205,7 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
                 <div className="relative flex-1">
                   <Input
                     className="w-full rounded-[20px] py-1.5 px-4 pr-10 bg-muted/50 border-none focus:bg-muted focus:ring-0"
-                    placeholder="Nhập tin nhắn..."
+                    placeholder={t('chat.enter-message')}
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyPress}
