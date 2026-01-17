@@ -31,44 +31,11 @@ import EmojiPicker, { Theme } from "emoji-picker-react";
 import { useUserInfo } from "@/store/userStore";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "@/components/common/EmptyState";
+import ChatBubble from "@/components/common/chat/ChatBubble";
 
 const { Title } = Typography;
 
 interface ManagerChatUserProps { }
-
-const ChatBubble = ({
-  msg,
-  currentAdminId,
-}: {
-  msg: ChatMessage;
-  currentAdminId: string;
-  showTimestamp?: boolean;
-}) => {
-  const isAdmin = msg.senderId === currentAdminId;
-  const timeStr = format(new Date(msg.timestamp), "HH:mm");
-
-  return (
-    <div className={`flex mb-3 ${isAdmin ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[75%] px-3 py-2 rounded-2xl shadow-sm flex flex-col ${isAdmin
-          ? "bg-primary text-white rounded-tr-none"
-          : "bg-muted border border-border text-foreground rounded-tl-none"
-          }`}
-      >
-        <div className="text-[14px] leading-relaxed break-words">
-          {msg.content}
-        </div>
-
-        <div
-          className={`text-[10px] mt-1 opacity-70 select-none ${isAdmin ? "text-right text-white" : "text-left text-muted-foreground"
-            }`}
-        >
-          {timeStr}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
   const userInfo = useUserInfo();
@@ -302,7 +269,11 @@ const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                     </div>
                     {msgs.map((msg) => (
-                      <ChatBubble key={msg.id} msg={msg} currentAdminId={currentUser.id} />
+                      <ChatBubble
+                        key={msg.id} 
+                        msg={msg} 
+                        currentUserId={currentUser.id} 
+                      />
                     ))}
                   </div>
                 ))}

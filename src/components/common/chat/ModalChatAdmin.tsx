@@ -23,51 +23,18 @@ import {
 import { useChat } from "@/hooks/useChat";
 import { ChatMessage, CurrentUser, Conversation } from "@/types/entity";
 
-import { format, isToday, isYesterday, differenceInMinutes } from "date-fns";
+import { format, isToday, isYesterday } from "date-fns";
 import { vi } from "date-fns/locale";
 import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import { useTranslation } from "react-i18next";
 import { EmptyState } from "../EmptyState";
+import ChatBubble from "./ChatBubble";
 
 interface ModalChatAdminProps {
   open: boolean;
   onClose: () => void;
   currentUser: CurrentUser;
 }
-
-const ChatBubble = ({
-  msg,
-  currentUserId,
-}: {
-  msg: ChatMessage;
-  currentUserId: string;
-  showTimestamp: boolean;
-}) => {
-  const isMe = msg.senderId === currentUserId;
-  const timeStr = format(new Date(msg.timestamp), "HH:mm");
-
-  return (
-    <div className={`flex mb-3 ${isMe ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[75%] px-3 py-2 rounded-2xl shadow-sm flex flex-col ${isMe
-          ? "bg-primary text-white rounded-tr-none"
-          : "bg-muted border border-border text-foreground rounded-tl-none"
-          }`}
-      >
-        <div className="text-[14px] leading-relaxed break-words">
-          {msg.content}
-        </div>
-
-        <div
-          className={`text-[10px] mt-1 opacity-70 select-none ${isMe ? "text-right text-white" : "text-left text-muted-foreground"
-            }`}
-        >
-          {timeStr}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
   open,
@@ -228,8 +195,8 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                     <div className="text-xs text-muted-foreground truncate">
                       {conversation.lastMessage?.content ||
                         (conversation.hasConversation
-                          ? t('chat.no-message')
-                          : t('chat.not-started'))}
+                          ? t('management.chat.no-message')
+                          : t('management.chat.no-start-chat'))}
                     </div>
                   </div>
                 </div>
@@ -301,25 +268,13 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                       </span>
                       <div className="flex-1 border-t border-dashed border-primary/30"></div>
                     </div>
-                    {msgs.map((msg, index) => {
-                      const prevMsg = index > 0 ? msgs[index - 1] : null;
-                      const currentTime = new Date(msg.timestamp);
-                      const prevTime = prevMsg
-                        ? new Date(prevMsg.timestamp)
-                        : null;
-                      const showTimestamp =
-                        !prevTime ||
-                        differenceInMinutes(currentTime, prevTime) >= 5;
-
-                      return (
-                        <ChatBubble
-                          key={msg.id}
-                          msg={msg}
-                          currentUserId={currentUser.id}
-                          showTimestamp={showTimestamp}
-                        />
-                      );
-                    })}
+                    {msgs.map((msg) => (
+                      <ChatBubble 
+                        key={msg.id} 
+                        msg={msg} 
+                        currentUserId={currentUser.id} 
+                      />
+                    ))}
                   </div>
                 ))}
               </div>
