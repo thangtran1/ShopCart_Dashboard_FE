@@ -49,6 +49,17 @@
 
 ---
 
+### 🚀 Real-time & System Core
+
+| | |
+|:---:|:---:|
+| **Socket Client (User)** | **🛡️ Socket Monitor (Admin)** |
+| ![Client](./src/assets/screenshots/sockerUser.png) | ![Monitor](./src/assets/screenshots/socketadmin.png) |
+| **⚡ Full Stack Real-time** | **Custom Theme & Icons** |
+| ![Real-time](./src/assets/screenshots/fullsocket.png) | ![Custom](./src/assets/screenshots/IconSocket.png) |
+
+---
+
 ## 🏗️ Hệ sinh thái dự án (System Ecosystem)
 
 Dự án không chỉ là một giao diện web mà là một hệ thống hoàn chỉnh gồm 3 thành phần cốt lõi hoạt động cùng nhau:
