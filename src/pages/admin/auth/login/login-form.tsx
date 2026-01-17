@@ -156,7 +156,7 @@ export function LoginForm() {
             </Button>
           </div>
 
-          <Button type="submit" className="w-full cursor-pointer">
+          <Button type="submit" className="w-full text-white cursor-pointer">
             {t("auth.login.loginButton")}
           </Button>
 

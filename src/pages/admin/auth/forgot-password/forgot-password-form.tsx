@@ -147,7 +147,7 @@ function ForgotPasswordForm() {
           </div>
           <Button
             type="submit"
-            className="w-full cursor-pointer text-foreground font-medium"
+            className="w-full cursor-pointer text-white font-medium"
           >
             {t("auth.forgot-password.sendEmailButton")}
           </Button>

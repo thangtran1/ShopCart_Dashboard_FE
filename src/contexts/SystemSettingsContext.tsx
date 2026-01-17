@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { getSystemSettings, SystemSettings } from "@/api/services/profileApi";
 import { useTranslation } from "react-i18next";
+import { StorageEnum } from "@/types/enum";
 
 interface SystemSettingsContextType {
   settings: SystemSettings | null;
@@ -34,8 +35,12 @@ export const SystemSettingsProvider: React.FC<SystemSettingsProviderProps> = ({
       setLoading(true);
       const data = await getSystemSettings();
       setSettings(data);
-
-      if (data.defaultLanguage && i18n.language !== data.defaultLanguage) {
+  
+      // Kiểm tra xem LocalStorage đã có ngôn ngữ chưa
+      const savedLng = localStorage.getItem(StorageEnum.I18N);
+  
+      // CHỈ đổi ngôn ngữ từ API nếu CHƯA CÓ lựa chọn riêng trong LocalStorage
+      if (!savedLng && data.defaultLanguage && i18n.language !== data.defaultLanguage) {
         await i18n.changeLanguage(data.defaultLanguage);
       }
     } catch (error) {
