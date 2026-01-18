@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useUserActions } from "@/store/userStore";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,6 @@ const { VITE_APP_ADMIN: HOMEPAGE } = import.meta.env;
 export default function GitHubSuccess() {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { setUserToken, setUserInfo } = useUserActions();
   const { backToLogin } = useLoginStateContext();
   useEffect(() => {
@@ -33,8 +32,8 @@ export default function GitHubSuccess() {
 
           toast.success(t("auth.login.githubLoginSuccess"));
 
-          if (payload.role === "user") navigate("/", { replace: true });
-          else navigate(HOMEPAGE, { replace: true });
+          const target = payload.role === "user" ? "/" : (HOMEPAGE || "/admin");
+          window.location.href = target;
         } catch (error) {
           backToLogin();
         }
