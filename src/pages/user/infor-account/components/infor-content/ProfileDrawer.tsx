@@ -184,13 +184,13 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
   return (
     <Drawer
       open={open}
-      width={380}
+      width={350}
       closable={false}
       onClose={onClose}
       title={
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold">
+            <h3 className="text-lg font-semibold leading-none">
               {t(`profile_drawer.titles.${type}`)}
             </h3>
 
@@ -228,83 +228,96 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             onClick={handleSubmit}
             disabled={type === "addAddress" && isMaxAddress}
           >
-            {type === "addAddress" && isMaxAddress 
-              ? t("profile_drawer.form.limit_reached") 
+            {type === "addAddress" && isMaxAddress
+              ? t("profile_drawer.form.limit_reached")
               : t("profile_drawer.form.save")}
           </Button>
         </div>
       }
     >
-      <Form form={form} layout="vertical" className="space-y-4">
+      {/* Thêm requiredMark={false} và layout="vertical" đồng nhất */}
+      <Form
+        form={form}
+        layout="vertical"
+        requiredMark={false}
+        className="flex flex-col"
+      >
         {(type === "addAddress" || type === "updateAddress") && (
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <Label>{t("profile_drawer.form.labels.addr_title")}</Label>
-              <Form.Item
-                name="title"
-                rules={[{ required: true, message: t("profile_drawer.form.rules.required_title") }]}
+          <div className="flex flex-col">
+            <Form.Item
+              label={t("profile_drawer.form.labels.addr_title")}
+              name="title"
+              rules={[{ required: true, message: t("profile_drawer.form.rules.required_title") }]}
+              className="!mb-4"
+            >
+              <Input size="large" placeholder={t("profile_drawer.form.placeholders.addr_title")} />
+            </Form.Item>
+
+            <Form.Item
+              label={t("profile_drawer.form.labels.province")}
+              name="province_id"
+              rules={[{ required: true }]}
+              className="!mb-4"
+            >
+              <Select
+                size="large"
+                placeholder={t("profile_drawer.form.placeholders.province")}
+                onChange={handleProvinceChange}
               >
-                <Input size="large" placeholder={t("profile_drawer.form.placeholders.addr_title")} />
-              </Form.Item>
-            </div>
+                {provinces.map((p) => (
+                  <Option key={p.province_id} value={p.province_id}>{p.province_name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-            <div className="space-y-1">
-              <Label>{t("profile_drawer.form.labels.province")}</Label>
-              <Form.Item name="province_id" rules={[{ required: true }]}>
-                <Select
-                  size="large"
-                  placeholder={t("profile_drawer.form.placeholders.province")}
-                  onChange={handleProvinceChange}
-                >
-                  {provinces.map((p) => (
-                    <Option key={p.province_id} value={p.province_id}>{p.province_name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </div>
+            <Form.Item
+              label={t("profile_drawer.form.labels.district")}
+              name="district_id"
+              rules={[{ required: true }]}
+              className="!mb-4"
+            >
+              <Select
+                size="large"
+                placeholder={t("profile_drawer.form.placeholders.district")}
+                onChange={handleDistrictChange}
+                disabled={!watchProvinceId}
+              >
+                {districts.map((d) => (
+                  <Option key={d.district_id} value={d.district_id}>{d.district_name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-            <div className="space-y-1">
-              <Label>{t("profile_drawer.form.labels.district")}</Label>
-              <Form.Item name="district_id" rules={[{ required: true }]}>
-                <Select
-                  size="large"
-                  placeholder={t("profile_drawer.form.placeholders.district")}
-                  onChange={handleDistrictChange}
-                  disabled={!watchProvinceId}
-                >
-                  {districts.map((d) => (
-                    <Option key={d.district_id} value={d.district_id}>{d.district_name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </div>
+            <Form.Item
+              label={t("profile_drawer.form.labels.ward")}
+              name="ward_id"
+              rules={[{ required: true }]}
+              className="!mb-4"
+            >
+              <Select
+                size="large"
+                placeholder={t("profile_drawer.form.placeholders.ward")}
+                disabled={!watchDistrictId}
+              >
+                {wards.map((w) => (
+                  <Option key={w.ward_id} value={w.ward_id}>{w.ward_name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-            <div className="space-y-1">
-              <Label>{t("profile_drawer.form.labels.ward")}</Label>
-              <Form.Item name="ward_id" rules={[{ required: true }]}>
-                <Select
-                  size="large"
-                  placeholder={t("profile_drawer.form.placeholders.ward")}
-                  disabled={!watchDistrictId}
-                >
-                  {wards.map((w) => (
-                    <Option key={w.ward_id} value={w.ward_id}>{w.ward_name}</Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </div>
+            <Form.Item
+              label={t("profile_drawer.form.labels.detail")}
+              name="address"
+              rules={[{ required: true }]}
+              className="!mb-4"
+            >
+              <Input size="large" placeholder={t("profile_drawer.form.placeholders.detail")} />
+            </Form.Item>
 
-            <div className="space-y-1">
-              <Label>{t("profile_drawer.form.labels.detail")}</Label>
-              <Form.Item name="address" rules={[{ required: true }]}>
-                <Input size="large" placeholder={t("profile_drawer.form.placeholders.detail")} />
-              </Form.Item>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <Label className="whitespace-nowrap">{t("profile_drawer.form.labels.addr_type")}</Label>
+            <div className="flex items-center justify-between py-2">
+              <Label className="text-sm font-medium">{t("profile_drawer.form.labels.addr_type")}</Label>
               <Form.Item name="type" initialValue={AddressType.HOME} noStyle>
-                <Radio.Group className="flex gap-6">
+                <Radio.Group className="flex gap-4">
                   <Radio value={AddressType.HOME}>{t("profile_drawer.form.address_types.home")}</Radio>
                   <Radio value={AddressType.OFFICE}>{t("profile_drawer.form.address_types.office")}</Radio>
                 </Radio.Group>
@@ -312,7 +325,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
             </div>
 
             <div className="flex items-center justify-between pt-4 border-t">
-              <Label>{t("profile_drawer.form.labels.set_default")}</Label>
+              <Label className="text-sm font-medium">{t("profile_drawer.form.labels.set_default")}</Label>
               <Form.Item name="is_default" valuePropName="checked" noStyle>
                 <Switch />
               </Form.Item>
@@ -321,11 +334,12 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
         )}
 
         {type === "updateUser" && (
-          <>
+          <div className="flex flex-col">
             <Form.Item
               label={t("profile_drawer.form.labels.name")}
               name="name"
               rules={[{ required: true, message: t("profile_drawer.form.rules.required_name") }]}
+              className="!mb-4"
             >
               <Input size="large" />
             </Form.Item>
@@ -334,6 +348,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
               label={t("profile_drawer.form.labels.gender")}
               name="gender"
               rules={[{ required: true, message: t("profile_drawer.form.rules.required_gender") }]}
+              className="!mb-4"
             >
               <Select size="large" placeholder={t("profile_drawer.form.placeholders.gender")}>
                 <Option value="male">{t("profile_drawer.form.gender_options.male")}</Option>
@@ -342,22 +357,24 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
               </Select>
             </Form.Item>
 
-            <Form.Item label={t("profile_drawer.form.labels.dob")} name="dateOfBirth">
+            <Form.Item label={t("profile_drawer.form.labels.dob")} name="dateOfBirth" className="!mb-4">
               <DatePicker size="large" className="w-full" format="DD/MM/YYYY" />
             </Form.Item>
 
-            <Form.Item label={t("profile_drawer.form.labels.phone")} name="phone">
+            <Form.Item label={t("profile_drawer.form.labels.phone")} name="phone" className="!mb-4">
               <Input size="large" />
             </Form.Item>
-            <Form.Item label={t("profile_drawer.form.labels.email")} name="email">
+
+            <Form.Item label={t("profile_drawer.form.labels.email")} name="email" className="!mb-4">
               <Input size="large" disabled />
             </Form.Item>
-            <Form.Item label={t("profile_drawer.form.labels.bio")} name="bio">
+
+            <Form.Item label={t("profile_drawer.form.labels.bio")} name="bio" className="!mb-4">
               <Input size="large" placeholder={t("profile_drawer.form.placeholders.bio")} />
             </Form.Item>
 
-            <div className="mt-6 pt-4 border-t">
-              <div className="flex items-center justify-between mb-2">
+            <div className="mt-2 pt-4 border-t">
+              <div className="flex items-center justify-between mb-3">
                 <Label className="font-semibold text-primary">
                   {t("profile_drawer.form.labels.default_shipping")}
                 </Label>
@@ -370,6 +387,7 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                 <Form.Item
                   name="address_id"
                   help={t("profile_drawer.form.labels.address_hint")}
+                  className="!mb-4"
                 >
                   <Select
                     size="large"
@@ -378,29 +396,18 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                     optionLabelProp="label"
                   >
                     {addressList.map((addr: any) => (
-                      <Select.Option
-                        key={addr._id}
-                        value={addr._id}
-                        label={addr.full_address}
-                      >
+                      <Select.Option key={addr._id} value={addr._id} label={addr.full_address}>
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex flex-col">
-                            <span className="text-sm font-medium line-clamp-2">
-                              {addr.full_address}
-                            </span>
-
+                            <span className="text-sm font-medium line-clamp-2">{addr.full_address}</span>
                             {addr.is_default && (
                               <span className="text-[11px] text-muted-foreground mt-0.5">
                                 {t("profile_drawer.form.address_types.currently_default")}
                               </span>
                             )}
                           </div>
-
                           {addr.is_default && (
-                            <Badge
-                              variant="secondary"
-                              className="shrink-0 text-[10px]"
-                            >
+                            <Badge variant="secondary" className="shrink-0 text-[10px]">
                               {t("profile_drawer.form.address_types.is_default")}
                             </Badge>
                           )}
@@ -410,77 +417,57 @@ export default function ProfileDrawer({ open, type, data, onClose }: Props) {
                   </Select>
                 </Form.Item>
               ) : (
-                <div className="mt-3 rounded-lg border border-dashed bg-muted/40 p-4">
+                <div className="rounded-lg border border-dashed bg-muted/40 p-4">
                   <p className="text-xs text-muted-foreground italic">
                     {t("profile_drawer.form.labels.empty_address")}
                   </p>
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
 
         {type === "updatePassword" && (
-          <div className="space-y-4">
+          <div className="flex flex-col">
             <Form.Item
               label={t("profile_drawer.form.labels.current_pass")}
               name="currentPassword"
-              rules={[
-                { required: true, message: t("profile_drawer.form.rules.required_pass") },
-              ]}
+              rules={[{ required: true, message: t("profile_drawer.form.rules.required_pass") }]}
+              className="!mb-4"
             >
-              <Input.Password
-                size="large"
-                placeholder={t("profile_drawer.form.placeholders.current_pass")}
-              />
+              <Input.Password size="large" placeholder={t("profile_drawer.form.placeholders.current_pass")} />
             </Form.Item>
 
             <Form.Item
               label={t("profile_drawer.form.labels.new_pass")}
               name="newPassword"
-              extra={
-                <span className="text-[12px] text-muted-foreground">
-                  {t("profile_drawer.form.rules.pass_extra")}
-                </span>
-              }
+              extra={<span className="text-[12px]">{t("profile_drawer.form.rules.pass_extra")}</span>}
               rules={[
                 { required: true, message: t("profile_drawer.form.rules.required_pass") },
                 { min: 8, message: t("profile_drawer.form.rules.pass_min") },
               ]}
+              className="!mb-4"
             >
-              <Input.Password
-                size="large"
-                placeholder={t("profile_drawer.form.placeholders.new_pass")}
-              />
+              <Input.Password size="large" placeholder={t("profile_drawer.form.placeholders.new_pass")} />
             </Form.Item>
 
             <Form.Item
               label={t("profile_drawer.form.labels.confirm_pass")}
               name="confirmPassword"
               dependencies={["newPassword"]}
-              extra={
-                <span className="text-[12px] text-muted-foreground">
-                  {t("profile_drawer.form.rules.confirm_extra")}
-                </span>
-              }
+              extra={<span className="text-[12px]">{t("profile_drawer.form.rules.confirm_extra")}</span>}
               rules={[
                 { required: true, message: t("profile_drawer.form.rules.required_pass") },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
-                    if (!value || getFieldValue("newPassword") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error(t("profile_drawer.form.rules.pass_mismatch"))
-                    );
+                    if (!value || getFieldValue("newPassword") === value) return Promise.resolve();
+                    return Promise.reject(new Error(t("profile_drawer.form.rules.pass_mismatch")));
                   },
                 }),
               ]}
+              className="!mb-4"
             >
-              <Input.Password
-                size="large"
-                placeholder={t("profile_drawer.form.placeholders.confirm_pass")}
-              />
+              <Input.Password size="large" placeholder={t("profile_drawer.form.placeholders.confirm_pass")} />
             </Form.Item>
           </div>
         )}

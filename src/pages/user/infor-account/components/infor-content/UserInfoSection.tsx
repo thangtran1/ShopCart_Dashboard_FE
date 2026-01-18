@@ -11,17 +11,17 @@ export default function UserInfoSection({ profile, onEdit, addresses }: any) {
   const defaultAddress = addresses?.find((addr: any) => addr.is_default === true);
 
   const genderConfigs: Record<string, { label: string; variant: any }> = {
-    [Gender.MALE]: { 
-      label: t("profile_drawer.form.gender_options.male"), 
-      variant: "info" 
+    [Gender.MALE]: {
+      label: t("profile_drawer.form.gender_options.male"),
+      variant: "info"
     },
-    [Gender.FEMALE]: { 
-      label: t("profile_drawer.form.gender_options.female"), 
-      variant: "destructive" 
+    [Gender.FEMALE]: {
+      label: t("profile_drawer.form.gender_options.female"),
+      variant: "destructive"
     },
-    [Gender.OTHER]: { 
-      label: t("profile_drawer.form.gender_options.other"), 
-      variant: "secondary" 
+    [Gender.OTHER]: {
+      label: t("profile_drawer.form.gender_options.other"),
+      variant: "secondary"
     },
   };
 
@@ -66,15 +66,15 @@ export default function UserInfoSection({ profile, onEdit, addresses }: any) {
           value={
             profile?.dateOfBirth
               ? new Date(profile.dateOfBirth).toLocaleDateString(
-                  t("profile_drawer.section.date_locale")
-                )
+                t("profile_drawer.section.date_locale")
+              )
               : undefined
           }
         />
 
-        <InfoItem 
-          label={t("profile_drawer.form.labels.default_shipping")} 
-          value={defaultAddress?.full_address} 
+        <InfoItem
+          label={t("profile_drawer.form.labels.default_shipping")}
+          value={defaultAddress?.full_address}
         />
       </div>
     </div>
@@ -84,14 +84,14 @@ export default function UserInfoSection({ profile, onEdit, addresses }: any) {
 function InfoItem({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
   const { t } = useTranslation();
   const fallback = (
-    <span className="text-muted-foreground/60 italic font-normal">
+    <span className="text-foreground italic font-normal">
       {t("profile_drawer.section.not_updated")}
     </span>
   );
 
   return (
     <div className="border-b border-border pb-2 flex flex-col sm:flex-row sm:justify-between sm:items-end min-h-[50px]">
-      <p className="text-muted-foreground text-sm mb-1 sm:mb-0 whitespace-nowrap">
+      <p className="text-foreground text-sm mb-1 sm:mb-0 whitespace-nowrap">
         {label}:
       </p>
       <div className="text-foreground font-medium text-sm text-left sm:text-right break-words max-w-full sm:max-w-[300px]">
