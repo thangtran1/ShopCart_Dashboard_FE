@@ -239,7 +239,7 @@ const NotificationManagement: React.FC = () => {
               {t("notification.management-description")}
             </p>
           </div>
-          <Link to="/notifications/new-notification">
+          <Link to="/admin/notifications/new-notification">
             <Button
               type="primary"
               size="large"

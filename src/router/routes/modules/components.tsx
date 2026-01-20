@@ -37,7 +37,7 @@ const components: AppRouteObject = {
           <MultiLanguage />
         </Suspense>
       ),
-      meta: { label: "siderbar-labels.i18n", key: "/components/i18n" },
+      meta: { label: "siderbar-labels.i18n", key: "/admin/components/i18n" },
     },
     {
       path: "chart",
@@ -46,7 +46,7 @@ const components: AppRouteObject = {
           <Chart />
         </Suspense>
       ),
-      meta: { label: "siderbar-labels.chart", key: "/components/chart" },
+      meta: { label: "siderbar-labels.chart", key: "/admin/components/chart" },
     },
   ],
 };

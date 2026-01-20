@@ -42,7 +42,7 @@ const maintenance: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.maintenance",
-        key: "/maintenance",
+        key: "/admin/maintenance",
       },
     },
     {
@@ -54,7 +54,7 @@ const maintenance: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.created-new-maintenance",
-        key: "/maintenance/created-new-maintenance",
+        key: "/admin/maintenance/created-new-maintenance",
         hideMenu: true,
       },
     },

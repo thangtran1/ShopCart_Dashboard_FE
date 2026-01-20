@@ -47,7 +47,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.management-user",
-        key: "/management/user",
+        key: "/admin/management/user",
       },
     },
     {
@@ -59,7 +59,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.auth-session",
-        key: "/management/auth-session",
+        key: "/admin/management/auth-session",
       },
     },
 
@@ -72,7 +72,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.created-new-user",
-        key: "/management/user/created-new-user",
+        key: "/admin/management/user/created-new-user",
         hideMenu: true,
       },
     },
@@ -85,7 +85,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.user-detail",
-        key: "/management/user/:userId",
+        key: "/admin/management/user/:userId",
         hideMenu: true,
       },
     },
@@ -98,7 +98,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.manager-banner",
-        key: "/management/banner-config",
+        key: "/admin/management/banner-config",
       },
     },
     {
@@ -110,7 +110,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.manager-chat-user",
-        key: "/management/chat-user",
+        key: "/admin/management/chat-user",
       },
     },
     {
@@ -122,7 +122,7 @@ const management: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.database",
-        key: "/management/database",
+        key: "/admin/management/database",
       },
     },
   ],

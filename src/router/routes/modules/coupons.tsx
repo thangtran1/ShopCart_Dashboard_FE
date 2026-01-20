@@ -37,7 +37,7 @@ const coupons: AppRouteObject = {
       ),
       meta: {
         label: "Mã giảm giá",
-        key: "/coupons",
+        key: "/admin/coupons",
       },
     },
   ],

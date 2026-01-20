@@ -37,7 +37,7 @@ const news: AppRouteObject = {
       ),
       meta: {
         label: "Tin tức",
-        key: "/news",
+        key: "/admin/news",
       },
     },
   ],

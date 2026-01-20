@@ -15,7 +15,7 @@ export default function CreatedNewMaintenance() {
     <Card className="!bg-background">
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
-          <Link to="/maintenance">{t("maintenance.title")}</Link>
+          <Link to="/admin/maintenance">{t("maintenance.title")}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           {t("maintenance.create-new-maintenance")}

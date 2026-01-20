@@ -62,7 +62,7 @@ export default function UserManagement() {
           </div>
 
           <div className="flex gap-3">
-            <Link to="/management/user/created-new-user">
+            <Link to="/admin/management/user/created-new-user">
               <Button
                 type="primary"
                 size="large"

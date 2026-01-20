@@ -30,7 +30,7 @@ const errors: AppRouteObject[] = [
         element: <Page403 />,
         meta: {
           label: "siderbar-labels.error.403",
-          key: "/error/403",
+          key: "/admin/error/403",
         },
       },
       {
@@ -38,7 +38,7 @@ const errors: AppRouteObject[] = [
         element: <Page404 />,
         meta: {
           label: "siderbar-labels.error.404",
-          key: "/error/404",
+          key: "/admin/error/404",
         },
       },
       {
@@ -46,7 +46,7 @@ const errors: AppRouteObject[] = [
         element: <Page500 />,
         meta: {
           label: "siderbar-labels.error.500",
-          key: "/error/500",
+          key: "/admin/error/500",
         },
       },
     ],

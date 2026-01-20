@@ -90,7 +90,7 @@ export default function AccountDropdown() {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild className="rounded-lg cursor-pointer group py-2">
-            <NavLink to="/dashboard/profile" className="flex items-center justify-between w-full">
+            <NavLink to="/admin/dashboard/profile" className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 opacity-70 group-hover:opacity-100" />
                 <span className="font-medium text-sm">{t("auth.login.profile")}</span>
@@ -100,7 +100,7 @@ export default function AccountDropdown() {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild className="rounded-lg cursor-pointer group py-2">
-            <NavLink to="/dashboard/workbench" className="flex items-center justify-between w-full">
+            <NavLink to="/admin/dashboard/workbench" className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
                 <LayoutDashboard className="h-4 w-4 opacity-70 group-hover:opacity-100" />
                 <span className="font-medium text-sm">Dashboard</span>

@@ -1,22 +1,19 @@
-import DashboardLayout from "@/layouts/dashboard";
-import PageError from "@/pages/admin/sys/error/PageError";
-import LoginPage from "@/pages/admin/auth";
-import { usePermissionRoutes } from "@/router/hooks";
-import { ERROR_ROUTE } from "@/router/routes/error-routes";
+import { Navigate, type RouteObject, createBrowserRouter, RouterProvider } from "react-router";
 import { ErrorBoundary } from "react-error-boundary";
-import { Navigate, type RouteObject, createBrowserRouter } from "react-router";
-import { RouterProvider } from "react-router/dom";
-import type { AppRouteObject } from "#/router";
+import DashboardLayout from "@/layouts/dashboard";
+import UserLayout from "@/layouts/user/user-layout";
+import ProtectedRoute from "./components/protected-route";
+import MaintenanceGuard from "./components/maintenance-guard";
+import { LoginProvider } from "@/pages/admin/auth/login/providers/login-provider";
+import LoginPage from "@/pages/admin/auth";
 import ResetPassword from "@/pages/admin/auth/reset-passworđ/resetPassword";
+import PageError from "@/pages/admin/sys/error/PageError";
+import Page404 from "@/pages/admin/sys/error/Page404";
 import GoogleSuccess from "@/pages/admin/auth/login/pages/google-success";
 import GoogleError from "@/pages/admin/auth/login/pages/google-error";
 import GitHubSuccess from "@/pages/admin/auth/login/pages/github-success";
 import GitHubError from "@/pages/admin/auth/login/pages/github-error";
 import UserHomePage from "@/pages/user";
-import UserLayout from "@/layouts/user/user-layout";
-import ProtectedRoute from "./components/protected-route";
-import MaintenanceGuard from "./components/maintenance-guard";
-import { LoginProvider } from "@/pages/admin/auth/login/providers/login-provider";
 import Contact from "@/pages/user/contact";
 import Shop from "@/pages/user/shop";
 import WishListPage from "@/pages/user/wishlist/page";
@@ -34,18 +31,21 @@ import NewsPage from "@/pages/user/news/page";
 import NewSlugDetail from "@/pages/user/news/[slug]/page";
 import DetailBrand from "@/pages/user/brand/[slug]/page";
 import InforAccount from "@/pages/user/infor-account";
+import { usePermissionRoutes } from "@/router/hooks";
+import { ERROR_ROUTE } from "@/router/routes/error-routes";
+import type { AppRouteObject } from "#/router";
 
-const { VITE_APP_ADMIN: HOMEPAGE, VITE_API_URL_MAINTENANCE: MAIN_APP } =
-  import.meta.env;
+const { VITE_APP_ADMIN: HOMEPAGE, VITE_API_URL_MAINTENANCE: MAIN_APP } = import.meta.env;
 
-const PUBLIC_ROUTE: AppRouteObject = {
-  path: "/login",
-  element: (
-    <ErrorBoundary FallbackComponent={PageError}>
-      <LoginPage />
-    </ErrorBoundary>
-  ),
-};
+// 1. CỤM AUTH & PUBLIC (Login, Reset Pass, Social)
+const AUTH_ROUTES: AppRouteObject[] = [
+  { path: "/login", element: <ErrorBoundary FallbackComponent={PageError}><LoginPage /></ErrorBoundary> },
+  { path: "/reset-password", element: <ErrorBoundary FallbackComponent={PageError}><LoginProvider><ResetPassword /></LoginProvider></ErrorBoundary> },
+  { path: "/auth/google/success", element: <GoogleSuccess /> },
+  { path: "/auth/google/error", element: <GoogleError /> },
+  { path: "/auth/github/success", element: <GitHubSuccess /> },
+  { path: "/auth/github/error", element: <GitHubError /> },
+];
 
 const NO_MATCHED_ROUTE: AppRouteObject = {
   path: "*",
@@ -55,65 +55,19 @@ const NO_MATCHED_ROUTE: AppRouteObject = {
 export default function Router() {
   const permissionRoutes = usePermissionRoutes();
 
-  const PROTECTED_ROUTE: AppRouteObject = {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <DashboardLayout />
-      </ProtectedRoute>
-    ),
+  // 2. CỤM ADMIN (Trong /admin)
+  const ADMIN_SECTION: AppRouteObject = {
+    path: "/admin",
+    element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
     children: [
       { index: true, element: <Navigate to={HOMEPAGE} replace /> },
       ...permissionRoutes,
+      { path: "*", element: <Page404 /> },
     ],
   };
-  const RESET_PASSWORD_ROUTE: AppRouteObject = {
-    path: "/reset-password",
-    element: (
-      <ErrorBoundary FallbackComponent={PageError}>
-        <LoginProvider>
-          <ResetPassword />
-        </LoginProvider>
-      </ErrorBoundary>
-    ),
-  };
 
-  const AUTH_ROUTES: AppRouteObject[] = [
-    {
-      path: "/auth/google/success",
-      element: (
-        <ErrorBoundary FallbackComponent={PageError}>
-          <GoogleSuccess />
-        </ErrorBoundary>
-      ),
-    },
-    {
-      path: "/auth/google/error",
-      element: (
-        <ErrorBoundary FallbackComponent={PageError}>
-          <GoogleError />
-        </ErrorBoundary>
-      ),
-    },
-    {
-      path: "/auth/github/success",
-      element: (
-        <ErrorBoundary FallbackComponent={PageError}>
-          <GitHubSuccess />
-        </ErrorBoundary>
-      ),
-    },
-    {
-      path: "/auth/github/error",
-      element: (
-        <ErrorBoundary FallbackComponent={PageError}>
-          <GitHubError />
-        </ErrorBoundary>
-      ),
-    },
-  ];
-
-  const APP_HOMEPAGE_USER: AppRouteObject = {
+  // 3. USER PUBLIC (Không cần login)
+  const USER_PUBLIC_SECTION: AppRouteObject = {
     path: "/",
     element: (
       <MaintenanceGuard redirectUrl={MAIN_APP}>
@@ -124,97 +78,49 @@ export default function Router() {
     ),
     children: [
       { index: true, element: <UserHomePage /> },
-      {
-        path: "infor-account",
-        children: [{ index: true, element: <InforAccount /> }],
-      },
-      {
-        path: "all-news",
-        children: [
-          { index: true, element: <NewsPage /> },
-          {
-            path: ":slug", // <--- bỏ dấu /
-            element: <NewSlugDetail />,
-          },
-        ],
-      },
-      {
-        path: "contact",
-        children: [{ index: true, element: <Contact /> }],
-      },
-      {
-        path: "shop",
-        children: [{ index: true, element: <Shop /> }],
-      },
-      {
-        path: "wishlist",
-        children: [{ index: true, element: <WishListPage /> }],
-      },
-      {
-        path: "cart",
-        children: [{ index: true, element: <CartPage /> }],
-      },
-      {
-        path: "product/:slug",
-        element: <SingleProductPage />,
-      },
-      {
-        path: "category",
-        element: <DetailCategory />,
-        children: [
-          { path: ":slug", element: <DetailCategory /> },
-        ],
-      },
-      {
-        path: "brand",
-        element: <DetailBrand />,
-        children: [
-          { path: ":slug", element: <DetailBrand /> },
-        ],
-      },
-      {
-        path: "checkout",
-        element: <CheckoutPage />,
-      },
-      {
-        path: "success",
-        element: <SuccessPage />,
-      },
-      {
-        path: "orders",
-        element: <OrdersPage />,
-      },
-      {
-        path: "terms",
-        element: <TermsPage />,
-      },
-      {
-        path: "about",
-        element: <AboutUs />,
-      },
-      {
-        path: "faqs",
-        element: <FAQs />,
-      },
-      {
-        path: "help",
-        element: <Help />,
-      },
+      { path: "contact", element: <Contact /> },
+      { path: "shop", element: <Shop /> },
+      { path: "wishlist", element: <WishListPage /> },
+      { path: "cart", element: <CartPage /> },
+      { path: "orders", element: <OrdersPage /> },
+      { path: "product/:slug", element: <SingleProductPage /> },
+      { path: "terms", element: <TermsPage /> },
+      { path: "about", element: <AboutUs /> },
+      { path: "faqs", element: <FAQs /> },
+      { path: "help", element: <Help /> },
+      { path: "all-news", children: [{ index: true, element: <NewsPage /> }, { path: ":slug", element: <NewSlugDetail /> }] },
+      { path: "category", children: [{ index: true, element: <Navigate to="/shop" replace /> }, { path: ":slug", element: <DetailCategory /> }] },
+      { path: "brand", children: [{ index: true, element: <Navigate to="/shop" replace /> }, { path: ":slug", element: <DetailBrand /> }] },
     ],
   };
 
+  // 4. USER PRIVATE (Phải login mới hiện Layout)
+  const USER_PRIVATE_SECTION: AppRouteObject = {
+    element: (
+      <ProtectedRoute>
+        <MaintenanceGuard redirectUrl={MAIN_APP}>
+          <ErrorBoundary FallbackComponent={PageError}><UserLayout /></ErrorBoundary>
+        </MaintenanceGuard>
+      </ProtectedRoute>
+    ),
+    children: [
+      { path: "infor-account", element: <InforAccount /> },
+      { path: "checkout", element: <CheckoutPage /> },
+      { path: "success", element: <SuccessPage /> },
+    ],
+  };
+
+  // 5. TỔNG HỢP ROUTER
   const routes = [
-    PUBLIC_ROUTE,
-    RESET_PASSWORD_ROUTE,
     ...AUTH_ROUTES,
-    APP_HOMEPAGE_USER,
-    PROTECTED_ROUTE,
+    ADMIN_SECTION,
+    USER_PUBLIC_SECTION,
+    USER_PRIVATE_SECTION,
     ERROR_ROUTE,
     NO_MATCHED_ROUTE,
   ] as RouteObject[];
 
-  const router = createBrowserRouter(routes);
+  return <RouterProvider router={createBrowserRouter(routes)} />;
   // thêm dấu # createHashRouter vd http://localhost:/#/3000/
 
-  return <RouterProvider router={router} />;
 }

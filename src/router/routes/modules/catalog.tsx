@@ -37,7 +37,7 @@ const catalog: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.catalog-management",
-        key: "/catalog",
+        key: "/admin/catalog",
       },
     },
   ],

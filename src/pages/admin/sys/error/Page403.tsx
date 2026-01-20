@@ -120,7 +120,7 @@ export default function Page403() {
           </m.div>
 
           <NavLink to={"/"}>
-            <Button size="lg">{t("sys.goHome")}</Button>
+            <Button className="cursor-pointer text-white" size="lg">{t("sys.goHome")}</Button>
           </NavLink>
         </MotionContainer>
       </div>

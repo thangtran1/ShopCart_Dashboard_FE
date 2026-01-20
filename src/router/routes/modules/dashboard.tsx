@@ -35,7 +35,7 @@ const dashboard: AppRouteObject = {
       element: <HomePage />,
       meta: {
         label: "siderbar-labels.workbench",
-        key: "/dashboard/workbench",
+        key: "/admin/dashboard/workbench",
       },
     },
     {
@@ -43,7 +43,7 @@ const dashboard: AppRouteObject = {
       element: <Analysis />,
       meta: {
         label: "siderbar-labels.analysis",
-        key: "/dashboard/analysis",
+        key: "/admin/dashboard/analysis",
       },
     },
     {
@@ -51,7 +51,7 @@ const dashboard: AppRouteObject = {
       element: <ProfilePage />,
       meta: {
         label: "siderbar-labels.profile",
-        key: "/dashboard/profile",
+        key: "/admin/dashboard/profile",
         hideMenu: true,
       },
     },

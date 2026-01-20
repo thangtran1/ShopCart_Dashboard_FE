@@ -37,7 +37,7 @@ const coupons: AppRouteObject = {
       ),
       meta: {
         label: "Đơn hàng",
-        key: "/orders-manager",
+        key: "/admin/orders-manager",
       },
     },
   ],

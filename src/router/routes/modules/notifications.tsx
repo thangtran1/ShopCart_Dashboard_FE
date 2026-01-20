@@ -43,7 +43,7 @@ const notifications: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.notification-title",
-        key: "/notifications",
+        key: "/admin/notifications",
       },
     },
     {
@@ -55,7 +55,7 @@ const notifications: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.new-notification",
-        key: "/notifications/new-notification",
+        key: "/admin/notifications/new-notification",
         hideMenu: true,
       },
     },
@@ -68,7 +68,7 @@ const notifications: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.notification-detail",
-        key: "/notifications/:id",
+        key: "/admin/notifications/:id",
         hideMenu: true,
       },
     },

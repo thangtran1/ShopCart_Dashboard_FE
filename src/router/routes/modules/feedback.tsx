@@ -37,7 +37,7 @@ const feedback: AppRouteObject = {
       ),
       meta: {
         label: "siderbar-labels.feedback-title",
-        key: "/feedback",
+        key: "/admin/feedback",
       },
     },
   ],

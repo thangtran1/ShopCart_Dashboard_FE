@@ -32,14 +32,14 @@ const menulevel: AppRouteObject = {
       element: <MenuLevel />,
       meta: {
         label: "siderbar-labels.menulevel.1a",
-        key: "/menu_level/menu_level_1a",
+        key: "/admin/menu_level/menu_level_1a",
       },
     },
     {
       path: "menu_level_1b",
       meta: {
         label: "siderbar-labels.menulevel.1b.index",
-        key: "/menu_level/menu_level_1b",
+        key: "/admin/menu_level/menu_level_1b",
       },
       children: [
         {
@@ -51,14 +51,14 @@ const menulevel: AppRouteObject = {
           element: <MenuLevel2a />,
           meta: {
             label: "siderbar-labels.menulevel.1b.2a",
-            key: "/menu_level/menu_level_1b/menu_level_2a",
+            key: "/admin/menu_level/menu_level_1b/menu_level_2a",
           },
         },
         {
           path: "menu_level_2b",
           meta: {
             label: "siderbar-labels.menulevel.1b.2b.index",
-            key: "/menu_level/menu_level_1b/menu_level_2b",
+            key: "/admin/menu_level/menu_level_1b/menu_level_2b",
           },
           children: [
             {
@@ -70,7 +70,7 @@ const menulevel: AppRouteObject = {
               element: <MenuLevel3a />,
               meta: {
                 label: "siderbar-labels.menulevel.1b.2b.3a",
-                key: "/menu_level/menu_level_1b/menu_level_2b/menu_level_3a",
+                key: "/admin/menu_level/menu_level_1b/menu_level_2b/menu_level_3a",
               },
             },
           ],

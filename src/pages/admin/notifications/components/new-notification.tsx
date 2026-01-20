@@ -84,7 +84,7 @@ const NewNotification: React.FC = () => {
     <Card className="!bg-background">
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
-          <Link to="/notifications">{t("notification.management")}</Link>
+          <Link to="/admin/notifications">{t("notification.management")}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>{t("notification.new-notification")}</Breadcrumb.Item>
       </Breadcrumb>

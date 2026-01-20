@@ -51,7 +51,7 @@ export default function MaintenceSystemPage() {
           </div>
 
           <div>
-            <Link to="/maintenance/created-new-maintenance">
+            <Link to="/admin/maintenance/created-new-maintenance">
               <Button
                 type="primary"
                 size="large"

@@ -115,7 +115,7 @@ const SignIn = () => {
               <div className="px-3 pb-2 grid grid-cols-2 gap-2">
                 {profile?.role === "admin" && (
                   <button
-                    onClick={() => router.push("/dashboard/workbench")}
+                    onClick={() => router.push("/admin/dashboard/workbench")}
                     className="flex flex-col border border-border items-center justify-center gap-1.5 py-3 rounded-2xl bg-muted/50 hover:bg-amber-500 hover:text-white transition-all group cursor-pointer"
                   >
                     <Shield size={16} className="text-amber-500 group-hover:text-white" />

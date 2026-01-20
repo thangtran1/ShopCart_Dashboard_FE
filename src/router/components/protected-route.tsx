@@ -1,29 +1,13 @@
-import { useCallback, useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-
+import { Navigate, useLocation, Outlet } from "react-router";
 import { useUserToken } from "@/store/userStore";
 
-import PageError from "@/pages/admin/sys/error/PageError";
-import { useRouter } from "../hooks";
-
-type Props = {
-  children: React.ReactNode;
-};
-export default function ProtectedRoute({ children }: Props) {
-  const router = useRouter();
+export default function ProtectedRoute({ children }: { children?: React.ReactNode }) {
   const { accessToken } = useUserToken();
+  const location = useLocation();
+  
+  if (!accessToken) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-  const check = useCallback(() => {
-    if (!accessToken) {
-      router.replace("/login");
-    }
-  }, [router, accessToken]);
-
-  useEffect(() => {
-    check();
-  }, [check]);
-
-  return (
-    <ErrorBoundary FallbackComponent={PageError}>{children}</ErrorBoundary>
-  );
+  return children ? <>{children}</> : <Outlet />;
 }

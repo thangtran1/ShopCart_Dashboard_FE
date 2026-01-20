@@ -241,7 +241,7 @@ export default function PageError({
             </svg>
           </m.div>
 
-          <Button size="lg" onClick={goHome}>
+          <Button className="cursor-pointer text-white" size="lg" onClick={goHome}>
             {t("sys.goHome")}
           </Button>
         </MotionContainer>

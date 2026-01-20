@@ -37,7 +37,7 @@ const products: AppRouteObject = {
       ),
       meta: {
         label: "products.product",
-        key: "/products",
+        key: "/admin/products",
       },
     },
   ],
