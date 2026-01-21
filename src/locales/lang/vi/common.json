@@ -1228,7 +1228,8 @@
     "messages": {
       "missing_info": "Vui lòng nhập đầy đủ thông tin!",
       "order_success": "Đặt hàng thành công!",
-      "select_payment_method": "Vui lòng chọn phương thức thanh toán"
+      "select_payment_method": "Vui lòng chọn phương thức thanh toán",
+      "redirecting_to_momo": "Đang chuyển hướng đến cổng thanh toán MoMo..."
     },
     "customer_info": {
       "title": "Thông tin khách hàng",
@@ -1259,10 +1260,7 @@
       "methods": {
         "store": "Thanh toán tại cửa hàng",
         "store_desc": "CellphoneS giữ sản phẩm 24h.",
-        "qr": "Chuyển khoản ngân hàng qua mã QR",
         "momo_desc": "Giảm 2% tối đa 200k",
-        "visa": "Qua thẻ Visa/Master/JCB/Napas",
-        "kredivo_desc": "Giảm 7% tối đa 1.000.000đ",
         "cod": "Thanh toán khi nhận hàng",
         "cod_desc": "Thanh toán trực tiếp khi nhận hàng (COD)"
       }

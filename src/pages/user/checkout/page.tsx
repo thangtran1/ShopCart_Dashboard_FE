@@ -50,7 +50,7 @@ const CheckoutPage = () => {
     if (!cartLoading && items.length === 0 && !isOrdering) {
       navigate.push("/cart");
     }
-  }, [items, cartLoading, navigate, isOrdering]);
+  }, [items.length, cartLoading, navigate, isOrdering]); 
 
   const handleShippingChange = useCallback((details: any) => {
     setShippingDetails(details);
@@ -75,8 +75,8 @@ const CheckoutPage = () => {
   
     setLoading(true);
     try {
-      const detail = shippingDetails.address || ""; 
-      const ward = shippingDetails.wardName || "";   
+      const detail = shippingDetails.address || "";
+      const ward = shippingDetails.wardName || "";
       const district = shippingDetails.districtName || "";
       const addressParts = [detail];
       if (ward && !detail.toLowerCase().includes(ward.toLowerCase())) {
@@ -90,23 +90,37 @@ const CheckoutPage = () => {
         shippingAddress: {
           fullName: customerInfo.fullName,
           phone: customerInfo.phone,
-          address: addressParts.filter(Boolean).join(", "), 
+          address: addressParts.filter(Boolean).join(", "),
           city: shippingDetails.provinceName,
-          notes: shippingDetails.notes
+          notes: shippingDetails.notes,
         },
         paymentMethod: paymentMethod,
         couponCode: selectedCoupon?.code || "",
       };
       const result = await placeOrder(orderData);
       if (result) {
-        setIsOrdering(true);
-        toast.success(t("checkout.messages.order_success"));
+        setIsOrdering(true); 
+
+        const orderNum = result.order?.orderNumber || result.order?._id;
+
         await clearCart(); 
-        navigate.push(`/success?orderNumber=${result._id}`);
+
+        if (paymentMethod === "MOMO" && result.paymentUrl) {
+          toast.info(t("checkout.messages.redirecting_to_momo"));
+          window.location.href = result.paymentUrl;
+        } else {
+          toast.success(t("checkout.messages.order_success"));
+          navigate.push(`/success?orderNumber=${orderNum}&payment=${paymentMethod}`);
+        }
+
+        await clearCart();
       }
     } catch (error: any) {
       setLoading(false);
-      console.log(error?.response?.data?.message || "Order failed");
+      toast.error(error?.response?.data?.message || "Order failed");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,16 +151,16 @@ const CheckoutPage = () => {
 
       <div className="grid lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-8">
-          <CustomerInfoForm 
-             value={customerInfo} 
-             onChange={setCustomerInfo} 
+          <CustomerInfoForm
+            value={customerInfo}
+            onChange={setCustomerInfo}
           />
 
           <ShippingAddressForm onChange={handleShippingChange} />
 
-          <SelectPayment 
-            method={paymentMethod} 
-            onChange={setPaymentMethod} 
+          <SelectPayment
+            method={paymentMethod}
+            onChange={setPaymentMethod}
           />
         </div>
 

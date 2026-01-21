@@ -135,19 +135,19 @@ const OrderSummary = ({
             if (!loading) onPlaceOrder();
           }}
           disabled={loading}
-          className={`w-full h-10 text-lg text-foreground font-semibold mt-4 ${
-            loading ? "cursor-not-allowed opacity-80" : "cursor-pointer"
+          className={`w-full h-10 text-lg text-foreground font-semibold mt-4 transition-all ${
+            loading ? "cursor-not-allowed opacity-80" : "cursor-pointer hover:scale-[1.02]"
           }`}
         >
           {loading ? (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border-2 border-border border-t-transparent rounded-full animate-spin" />
+            <div className="flex items-center gap-2 justify-center">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               {t("checkout.summary.processing")}
             </div>
-          ) : String(paymentMethod).toUpperCase() === "COD" ? (
-            t("checkout.summary.btn_cod")
-          ) : (
+          ) : (paymentMethod || "").toUpperCase() === "MOMO" ? (
             t("checkout.summary.btn_online")
+          ) : (
+            t("checkout.summary.btn_cod")
           )}
         </Button>
       </div>

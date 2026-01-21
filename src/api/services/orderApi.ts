@@ -30,10 +30,18 @@ export const orderService = {
   //                USER ACTIONS
   // ==========================================
 
-  createOrder: async (orderData: CreateOrderRequest): Promise<OrderConfig> => {
+  createOrder: async (orderData: CreateOrderRequest): Promise<any> => {
     const response = await apiClient.post({ 
       url: API_URL.ORDERS.CREATE, 
       data: orderData 
+    });
+    return response.data.data;
+  },
+
+  testPaymentMoMo: async (amount: string): Promise<any> => {
+    const response = await apiClient.post({
+      url: `${API_URL.ORDERS.CREATE}/payment`,
+      data: { amount }
     });
     return response.data.data;
   },
@@ -87,5 +95,13 @@ export const orderService = {
     await apiClient.delete({ 
       url: API_URL.ORDERS.ADMIN_DELETE(id) 
     });
+  },
+
+  confirmMomoPayment: async (orderNumber: string, resultCode: string): Promise<any> => {
+    const response = await apiClient.patch({
+      url: API_URL.ORDERS.CONFIRM_MOMO(orderNumber), 
+      data: { resultCode }
+    });
+    return response.data.data;
   },
 };

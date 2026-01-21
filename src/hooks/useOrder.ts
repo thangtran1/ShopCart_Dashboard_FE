@@ -52,6 +52,18 @@ export const useOrder = (param?: string | AdminOrderQuery) => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders", "admin"] }),
   });
 
+  const rePaymentMutation = useMutation({
+    mutationFn: (amount: string) => orderService.testPaymentMoMo(amount),
+  });
+
+  const confirmMomoPaymentMutation = useMutation({
+    mutationFn: ({ orderNumber, resultCode }: { orderNumber: string; resultCode: string }) => 
+      orderService.confirmMomoPayment(orderNumber, resultCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+
   return { 
     orders, 
     adminOrders: adminOrdersData?.data || [],
@@ -66,6 +78,12 @@ export const useOrder = (param?: string | AdminOrderQuery) => {
     placeOrder: placeOrderMutation.mutateAsync,
     cancelOrder: cancelOrderMutation.mutateAsync, 
     updateOrderAdmin: updateOrderAdminMutation.mutateAsync,
-    deleteOrder: deleteOrderMutation.mutateAsync
+    deleteOrder: deleteOrderMutation.mutateAsync,
+
+    confirmMomoPayment: confirmMomoPaymentMutation.mutateAsync,
+    isConfirming: confirmMomoPaymentMutation.isPending,
+
+    rePayment: rePaymentMutation.mutateAsync,
+    isRePaying: rePaymentMutation.isPending,
   };
 };

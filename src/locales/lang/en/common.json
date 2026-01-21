@@ -1228,7 +1228,8 @@
     "messages": {
       "missing_info": "Please fill in all required information!",
       "order_success": "Order placed successfully!",
-     "select_payment_method": "Please choose a payment method"
+      "select_payment_method": "Please choose a payment method",
+      "redirecting_to_momo": "Redirecting to MoMo payment gateway..."
     },
     "customer_info": {
       "title": "Customer Information",
@@ -1259,10 +1260,7 @@
       "methods": {
         "store": "Pay at Store",
         "store_desc": "Item held for 24h.",
-        "qr": "Bank Transfer via QR Code",
         "momo_desc": "2% off, max 200k",
-        "visa": "Via Visa/Master/JCB/Napas",
-        "kredivo_desc": "7% off, max 1,000,000đ",
         "cod": "Cash on Delivery",
         "cod_desc": "Pay directly upon receipt (COD)"
       }

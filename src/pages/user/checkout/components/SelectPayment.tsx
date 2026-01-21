@@ -32,31 +32,10 @@ export default function SelectPayment({ method, onChange }: SelectPaymentProps) 
       icon: "https://cdn2.cellphones.com.vn/x400,webp,q100/media/payment-logo/COS.png",
     },
     {
-      id: "QR",
-      title: t("checkout.payment.methods.qr"),
-      icon: "https://cdn2.cellphones.com.vn/x400,webp,q100/media/wysiwyg/QRCode.png",
-    },
-    {
-      id: "VNPAY",
-      title: "VNPAY",
-      icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/vnpay.png",
-    },
-    {
       id: "MOMO",
       title: "MoMo",
       description: t("checkout.payment.methods.momo_desc"),
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/momo_vi.png",
-    },
-    {
-      id: "VISA",
-      title: t("checkout.payment.methods.visa"),
-      icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/onepay.png",
-    },
-    {
-      id: "KREDIVO",
-      title: "Kredivo",
-      description: t("checkout.payment.methods.kredivo_desc"),
-      icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/kredivo.png",
     },
     {
       id: "COD",

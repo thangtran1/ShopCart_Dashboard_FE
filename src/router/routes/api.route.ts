@@ -197,6 +197,8 @@ export const API_URL = {
     GET_BY_ID: (id: string) => `${ORDERS_PREFIX}/${id}`,
     CANCEL_STATUS_PENDING: (id: string) => `${ORDERS_PREFIX}/${id}/cancel`,
 
+    CONFIRM_MOMO: (orderNumber: string) => `${ORDERS_PREFIX}/confirm-momo/${orderNumber}`,
+
     // ADMIN ROUTES
     ADMIN_GET_ALL: `${ORDERS_PREFIX}/admin/all`,
     ADMIN_UPDATE: (id: string) => `${ORDERS_PREFIX}/admin/${id}`,
