@@ -15,8 +15,6 @@ interface Props {
 
 const BrandList = ({ brands, selectedBrand, setSelectedBrand, loading }: Props) => {
   const { t } = useTranslation();
-  const isAllSelected = !selectedBrand;
-
   if (loading) {
     return (
       <div className="w-full space-y-3">
@@ -32,25 +30,21 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand, loading }: Props) 
 
   return (
     <div className="w-full">
-      <Title className="text-base font-bold">
+      <Title className="text-base font-bold mt-6">
         {t("shop.filter_brand_title")}
       </Title>
 
-      <RadioGroup value={selectedBrand || "all"} className="mt-2 space-y-1">
-        <div
-          onClick={() => setSelectedBrand(null)}
-          className="flex items-center space-x-2 hover:cursor-pointer group py-1"
-        >
-          <RadioGroupItem
-            value="all"
-            id="all-brands"
-            className="rounded-sm"
-            checked={isAllSelected}
-          />
+      <RadioGroup 
+        value={selectedBrand || "all"} 
+        onValueChange={(val) => setSelectedBrand(val === "all" ? null : val)}
+        className="mt-2"
+      >
+        <div className="flex items-center space-x-2 hover:cursor-pointer group py-1">
+          <RadioGroupItem value="all" id="all-brands" className="rounded-sm" />
           <Label
             htmlFor="all-brands"
             className={`cursor-pointer transition-colors ${
-              isAllSelected ? "font-semibold text-primary" : "font-normal group-hover:text-primary"
+              !selectedBrand ? "font-semibold text-primary" : "font-normal group-hover:text-primary"
             }`}
           >
             {t("shop.all_brands")}
@@ -58,11 +52,7 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand, loading }: Props) 
         </div>
 
         {brands?.map((brand) => (
-          <div
-            key={brand?._id}
-            onClick={() => setSelectedBrand(brand?.slug as string)}
-            className="flex items-center space-x-2 hover:cursor-pointer group py-1"
-          >
+          <div key={brand?._id} className="flex items-center space-x-2 hover:cursor-pointer group py-1">
             <RadioGroupItem
               value={brand?.slug as string}
               id={brand?.slug}
@@ -80,17 +70,18 @@ const BrandList = ({ brands, selectedBrand, setSelectedBrand, loading }: Props) 
             </Label>
           </div>
         ))}
-
-        {selectedBrand && (
-          <button
-            type="button"
-            onClick={() => setSelectedBrand(null)}
-            className="text-sm cursor-pointer font-medium mt-3 underline underline-offset-2 decoration-[1px] hover:text-primary text-left transition-colors"
-          >
-            {t("shop.reset_selection")}
-          </button>
-        )}
       </RadioGroup>
+      
+      {/* Nút reset để riêng bên ngoài RadioGroup */}
+      {selectedBrand && (
+        <button
+          type="button"
+          onClick={() => setSelectedBrand(null)}
+          className="text-sm cursor-pointer font-medium mt-3 underline underline-offset-2 decoration-[1px] hover:text-primary text-left transition-colors"
+        >
+          {t("shop.reset_selection")}
+        </button>
+      )}
     </div>
   );
 };

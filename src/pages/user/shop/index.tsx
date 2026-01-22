@@ -14,21 +14,23 @@ import BrandList from "@/components/user/shop/BrandList";
 import PriceList from "@/components/user/shop/PriceList";
 import ProductCard from "@/pages/user/public/ProductCard";
 import NoProductAvailable from "../public/NoProductAvailable";
-import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/ui/button";
 import { Badge } from "@/ui/badge";
 import { useBrand } from "@/hooks/useBrand";
+import { useCategory } from "@/hooks/useCategory";
 
 const Shop = () => {
   const { t } = useTranslation();
   const { useActiveBrands } = useBrand();
+  const { useActiveCategories } = useCategory();
   const { data: brandsData, isLoading: brandsLoading } = useActiveBrands();
+  const { data: categoriesData, isLoading: categoriesLoading } = useActiveCategories();
   const brands = useMemo(() => brandsData || [], [brandsData]);
+  const categories = useMemo<any[]>(() => categoriesData || [], [categoriesData]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [categories, setCategories] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -56,18 +58,6 @@ const Shop = () => {
   const setSelectedCategory = (v: string | null) => updateFilter("category", v);
   const setSelectedBrand = (v: string | null) => updateFilter("brand", v);
   const setSelectedPrice = (v: string | null) => updateFilter("price", v);
-
-  useEffect(() => {
-    const fetchMetadata = async () => {
-      try {
-        const catRes = await categoryService.getActive();
-        if (catRes.success) setCategories(catRes.data);
-      } catch (error) {
-        console.error("Metadata fetch error:", error);
-      }
-    };
-    fetchMetadata();
-  }, []);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -152,8 +142,9 @@ const Shop = () => {
             categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
+            loading={categoriesLoading}
           />
-         <BrandList
+          <BrandList
             brands={brands}
             loading={brandsLoading}
             selectedBrand={selectedBrand}

@@ -3,22 +3,37 @@ import Title from "../../../ui/title";
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group";
 import { Label } from "@/ui/label";
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "antd";
 
 interface Props {
   categories: any[];
   selectedCategory?: string | null;
   setSelectedCategory: (value: string | null) => void;
+  loading?: boolean; 
 }
 
 const CategoryList = ({
   categories,
   selectedCategory,
   setSelectedCategory,
+  loading 
 }: Props) => {
   const { t } = useTranslation();
 
-  // Khi selectedCategory là null hoặc undefined → "Tất cả" được active
   const isAllSelected = !selectedCategory;
+
+  if (loading) {
+    return (
+      <div className="w-full space-y-3">
+        <Skeleton.Input active size="small" block />
+        <div className="space-y-2">
+          {[1, 2, 3].map((i) => (
+            <Skeleton.Button key={i} active size="small" block className="h-4" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>

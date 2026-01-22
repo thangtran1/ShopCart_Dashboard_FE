@@ -3,41 +3,36 @@
 import Title from "@/ui/title";
 import { useParams } from "react-router";
 import CategoryPage from "@/pages/user/category/page";
-import { useEffect, useState } from "react";
-import { categoryService } from "@/api/services/category";
-import { productService } from "@/api/services/product";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useCategory } from "@/hooks/useCategory"; 
 
 const DetailCategory = () => {
   const { t } = useTranslation();
   const { slug } = useParams();
-  const [category, setCategory] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  
+  const { useActiveCategories, useCategoryProducts } = useCategory();
+  
+  const { 
+    data: categoriesData, 
+    isLoading: catLoading 
+  } = useActiveCategories();
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const [catRes, prodRes] = await Promise.all([
-        categoryService.getActive(),
-        productService.getActiveProducts()
-      ]);
+  const { 
+    data: productsData, 
+    isLoading: prodLoading, 
+    refetch: refetchProducts 
+  } = useCategoryProducts();
 
-      if (catRes.success) setCategory(catRes.data);
-      if (prodRes.success) setProducts(prodRes.data);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
+  const categories = useMemo(() => categoriesData || [], [categoriesData]);
+  const products = useMemo(() => productsData || [], [productsData]);
+  
   const currentSlug = slug || "all";
-  const foundCategory = category.find(cat => cat.slug === currentSlug);
+  const foundCategory = useMemo(() => 
+    categories.find(cat => cat.slug === currentSlug), 
+    [categories, currentSlug]
+  );
+
   return (
     <div>
       <Title className="text-lg mb-5 uppercase tracking-wide">
@@ -48,11 +43,11 @@ const DetailCategory = () => {
       </Title>
 
       <CategoryPage 
-        categories={category} 
+        categories={categories} 
         products={products} 
         slug={currentSlug}
-        onRefresh={fetchData} 
-        isFetching={loading}   
+        onRefresh={async () => { await refetchProducts(); }} 
+        isFetching={catLoading || prodLoading}   
       />
     </div>
   );

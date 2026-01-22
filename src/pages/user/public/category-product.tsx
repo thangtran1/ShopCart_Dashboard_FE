@@ -1,40 +1,18 @@
 "use client";
 import { Link } from "react-router";
 import SeeMore from "@/ui/see-more";
-import { Category, categoryService } from "@/api/services/category";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useTranslation } from "react-i18next";
+import { useCategory } from "@/hooks/useCategory";
 
 const CategoryProduct = () => {
   const { t } = useTranslation();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  
+  const { useActiveCategories } = useCategory();
+  const { data: categoriesData, isLoading, isError } = useActiveCategories();
 
-  const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      setError(false);
-      const response = await categoryService.getActive();
-
-      if (response.success) {
-        setCategories(response.data || []);
-      } else {
-        setError(true);
-        setCategories([]);
-      }
-    } catch {
-      setError(true);
-      setCategories([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const categories = useMemo(() => categoriesData || [], [categoriesData]);
 
   const renderSkeleton = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -58,7 +36,7 @@ const CategoryProduct = () => {
             </h3>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                {t("categoryProduct.product_count", { count: category.productCount })}
+                {t("categoryProduct.product_count", { count: category.productCount || 0 })}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground group-hover:translate-x-1 transition-transform duration-300">
@@ -99,7 +77,7 @@ const CategoryProduct = () => {
       </div>
 
       <div>
-        {loading || error ? (
+        {isLoading || isError ? (
           renderSkeleton()
         ) : categories.length === 0 ? (
           <EmptyState

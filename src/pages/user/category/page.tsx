@@ -1,6 +1,5 @@
 "use client";
 
-import { Product } from "@/types";
 import { useNavigate } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { Package, LayoutGrid, ChevronLeft, ChevronRight } from "lucide-react"; // Thêm Chevron
@@ -13,7 +12,7 @@ import { useTranslation } from "react-i18next";
 interface Props {
   categories: any[];
   slug?: string;
-  products: Product[];
+  products: any[];
   onRefresh?: () => Promise<void>; 
   isFetching?: boolean;         
 }
