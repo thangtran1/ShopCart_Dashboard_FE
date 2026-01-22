@@ -1,110 +1,95 @@
 "use client";
-import { INews, newsService, NewsPaginationResponse, INewsFilters } from "@/api/services/newsApi";
-import { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { INews, newsService, INewsFilters } from "@/api/services/newsApi";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 export const useNews = () => {
-  const { t } = useTranslation(); 
-  const [news, setNews] = useState<INews[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  // 1. Lấy danh sách tin tức cho Public
-  const fetchPublicNews = useCallback(async (sort?: string) => {
-    setLoading(true);
-    try {
-      const res = await newsService.getPublic(sort);
-      if (res.success) {
-        setNews(res.data);
-      }
-      return res;
-    } catch (err) {
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchPublicNews();
-  }, [fetchPublicNews]);
-
-  // 2. Lấy chi tiết tin tức
-  const getNewsDetail = async (slug: string) => {
-    try {
-      const res = await newsService.getDetail(slug);
-      return res.data;
-    } catch (err) {
-      console.log(t("news.error.not_found"));
-      return null;
-    }
+  const usePublicNews = (sort?: string) => {
+    return useQuery({
+      queryKey: ["news", "public", sort],
+      queryFn: async () => {
+        const res = await newsService.getPublic(sort);
+        return res.data as INews[];
+      },
+      staleTime: 1000 * 60 * 5, 
+    });
   };
 
-  // 3. Lấy tất cả tin tức cho Admin
-  const fetchAdminNews = useCallback(
-    async (filters: INewsFilters): Promise<NewsPaginationResponse | null> => {
-      setLoading(true);
-      setError(null);
-      try {
-        const res = await newsService.getAllAdmin(filters);
-        return res;
-      } catch (err) {
-        console.error("Lỗi lấy danh sách admin:", err);
-        toast.error(t("news.toast.fetch_admin_error"));
-        return null;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [t] 
-  );
+  const useNewsDetail = (slug: string) => {
+    return useQuery({
+      queryKey: ["news", "detail", slug],
+      queryFn: async () => {
+        const res = await newsService.getDetail(slug);
+        return res.data as INews;
+      },
+      enabled: !!slug, 
+      staleTime: 1000 * 60 * 10,
+    });
+  };
 
-  // 4. Tạo mới tin tức
-  const createNews = async (data: Partial<INews>) => {
-    try {
-      const res = await newsService.create(data);
+  const useAdminNews = (filters: INewsFilters) => {
+    return useQuery({
+      queryKey: ["news", "admin", filters],
+      queryFn: () => newsService.getAllAdmin(filters),
+      placeholderData: (previousData) => previousData, 
+    });
+  };
+
+  const createNewsMutation = useMutation({
+    mutationFn: (data: Partial<INews>) => newsService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["news"] });
       toast.success(t("news.toast.create_success"));
-      return res;
-    } catch (err: any) {
+    },
+    onError: (err: any) => {
       toast.error(err.response?.data?.message || t("news.toast.create_error"));
-      throw err;
-    }
-  };
+    },
+  });
 
-  // 5. Cập nhật tin tức
-  const updateNews = async (id: string, data: Partial<INews>) => {
-    try {
-      const res = await newsService.update(id, data);
+  const updateNewsMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<INews> }) =>
+      newsService.update(id, data),
+    onSuccess: (_,) => {
+      queryClient.invalidateQueries({ queryKey: ["news"] });
+      queryClient.invalidateQueries({ queryKey: ["news", "detail"] });
       toast.success(t("news.toast.update_success"));
-      return res;
-    } catch (err: any) {
+    },
+    onError: (err: any) => {
       toast.error(err.response?.data?.message || t("news.toast.update_error"));
-      throw err;
-    }
-  };
+    },
+  });
 
   // 6. Xóa tin tức
-  const deleteNews = async (id: string) => {
-    try {
-      await newsService.delete(id);
+  const deleteNewsMutation = useMutation({
+    mutationFn: (id: string) => newsService.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["news"] });
       toast.success(t("news.toast.delete_success"));
-      return true;
-    } catch (err) {
+    },
+    onError: () => {
       toast.error(t("news.toast.delete_error"));
-      return false;
-    }
-  };
+    },
+  });
 
   return {
-    news,
-    loading,
-    error,
-    refreshNews: fetchPublicNews,
-    getNewsDetail,
-    fetchAdminNews,
-    createNews,
-    updateNews,
-    deleteNews,
+    // Hook truy vấn (Dùng cho UI)
+    usePublicNews,
+    useNewsDetail,
+    useAdminNews,
+
+    // Hàm hành động (Dùng cho Form/Button)
+    createNews: createNewsMutation.mutateAsync,
+    updateNews: updateNewsMutation.mutateAsync,
+    deleteNews: deleteNewsMutation.mutateAsync,
+
+    // Trạng thái loading chung cho các hành động
+    isActionLoading: 
+      createNewsMutation.isPending || 
+      updateNewsMutation.isPending || 
+      deleteNewsMutation.isPending,
   };
 };

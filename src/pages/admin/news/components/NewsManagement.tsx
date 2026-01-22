@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useNews } from "@/hooks/useNews";
 import { Button, Popconfirm, Tooltip } from "antd";
 import {
@@ -22,7 +22,6 @@ import { Separator } from "@/ui/separator";
 import { Badge } from "@/ui/badge";
 import { INews, INewsFilters } from "@/api/services/newsApi";
 
-
 const initialFilters: INewsFilters = {
   page: 1,
   limit: 10,
@@ -31,30 +30,18 @@ const initialFilters: INewsFilters = {
 };
 
 export default function NewsManagement() {
-  const { fetchAdminNews, deleteNews, loading } = useNews();
-
+  const { useAdminNews, deleteNews } = useNews();
   const [filters, setFilters] = useState<INewsFilters>(initialFilters);
-  const [dataSource, setDataSource] = useState<INews[]>([]);
-  const [total, setTotal] = useState(0);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNews, setEditingNews] = useState<INews | null>(null);
 
-  const loadAdminData = useCallback(async () => {
-    const res = await fetchAdminNews(filters); 
-    
-    if (res && res.success) {
-      setDataSource(res.data);
-      setTotal(res?.total || 0);
-    }
-  }, [filters, fetchAdminNews]);
-
-  useEffect(() => {
-    loadAdminData();
-  }, [loadAdminData]);
+  const { data: adminData, isLoading } = useAdminNews(filters);
+  
+  const dataSource = adminData?.data || [];
+  const total = adminData?.total || 0;
 
   const handleFilterChange = (key: keyof INewsFilters, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
   };
 
   const handleClearFilters = () => {
@@ -72,8 +59,7 @@ export default function NewsManagement() {
   };
 
   const handleDelete = async (id: string) => {
-    const ok = await deleteNews(id);
-    if (ok) loadAdminData();
+    await deleteNews(id);
   };
 
   const columns: ColumnsType<INews> = useMemo(
@@ -84,7 +70,7 @@ export default function NewsManagement() {
         width: 350,
         render: (_, record) => (
           <div className="flex items-center gap-3">
-            <div className="relative flex-shrink-0 w-16 h-10 overflow-hidden rounded-lg border border-border shadow-sm">
+            <div className="relative flex-shrink-0 w-16 h-10 overflow-hidden rounded-lg border border-border shadow-sm bg-muted">
               <img
                 src={record.thumbnail}
                 alt={record.title}
@@ -196,7 +182,7 @@ export default function NewsManagement() {
         ),
       },
     ],
-    [handleOpenEditModal, handleDelete]
+    [] 
   );
 
   return (
@@ -236,7 +222,7 @@ export default function NewsManagement() {
           <TableAntd
             columns={columns}
             data={dataSource}
-            loading={loading}
+            loading={isLoading}
             pagination={{
               page: filters.page,
               limit: filters.limit,
@@ -258,7 +244,6 @@ export default function NewsManagement() {
         news={editingNews}
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => {
-          loadAdminData();
           setIsModalOpen(false);
         }}
       />

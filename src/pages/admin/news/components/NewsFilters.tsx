@@ -94,9 +94,9 @@ export default function NewsFilters({
       </div>
 
       <div className="flex justify-end mt-4 border-b border-dashed border-border">
-      <Button size="large" className="mb-4" danger onClick={onClearFilters}>
-      Xóa bộ lọc
-          </Button>
+        <Button size="large" className="mb-4" danger onClick={onClearFilters}>
+          Xóa bộ lọc
+        </Button>
       </div>
     </div>
   );

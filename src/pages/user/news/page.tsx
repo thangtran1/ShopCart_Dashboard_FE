@@ -1,33 +1,21 @@
 "use client";
 
-import { Avatar, Pagination } from "antd";
+import { Avatar, Pagination, Skeleton } from "antd";
 import { ClockCircleOutlined, UserOutlined, FireOutlined } from "@ant-design/icons";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Badge } from "@/ui/badge";
 import { Link } from "react-router";
 import { useNews } from "@/hooks/useNews";
-import { INews } from "@/api/services/newsApi";
 import { useTranslation } from "react-i18next";
-import PageLoading from "@/components/common/loading/PageLoading";
 
 export default function NewsPage() {
-  const { refreshNews, loading } = useNews();
-  const [allNews, setAllNews] = useState<INews[]>([]);
-  const { t, i18n } = useTranslation()
+  const { usePublicNews } = useNews();
+  const { t, i18n } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await refreshNews()
-      if (res && res.data) {
-        setAllNews(res.data);
-      }
-    };
-    fetchData();
-  }, [refreshNews]);
+  const { data: allNews = [], isLoading } = usePublicNews();
 
-  // Tin nổi bật (3 bài có views cao nhất)
   const featuredNews = useMemo(() => {
     return [...allNews].sort((a, b) => b.views - a.views).slice(0, 3);
   }, [allNews]);
@@ -39,17 +27,32 @@ export default function NewsPage() {
   const startIndex = (currentPage - 1) * pageSize;
   const paginatedNews = allNews.slice(startIndex, startIndex + pageSize);
 
-  if (loading && allNews.length === 0) {
-    return (
-      <PageLoading
-        height={300}
-        text="Đang tải tin tức ..."
-      />
-    );
-  }
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US');
   };
+
+  if (isLoading && allNews.length === 0) {
+    return (
+      <div className="space-y-6 mt-4">
+        <Skeleton.Button active style={{ width: 200 }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+          {[1, 2, 3].map((i) => (
+            <Skeleton.Button key={i} active style={{ height: 220, width: '100%' }} />
+          ))}
+        </div>
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex-1 space-y-4">
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} active avatar paragraph={{ rows: 2 }} />
+            ))}
+          </div>
+          <div className="w-80 hidden lg:block">
+            <Skeleton active paragraph={{ rows: 10 }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -67,6 +70,7 @@ export default function NewsPage() {
             <img
               src={news.thumbnail}
               alt={news.title}
+              loading="lazy"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -89,7 +93,7 @@ export default function NewsPage() {
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-2">
+      <div className="flex flex-col lg:flex-row gap-4">
         <div className="flex-1 flex flex-col gap-4">
           {paginatedNews.map((news) => (
             <article
@@ -97,10 +101,11 @@ export default function NewsPage() {
               className="group rounded-xl border border-border bg-card p-4 transition-all hover:shadow-lg hover:border-primary/30"
             >
               <Link to={`/all-news/${news.slug}`} className="flex flex-col sm:flex-row gap-5">
-                <div className="relative h-[180px] w-full sm:w-[260px] flex-shrink-0 overflow-hidden rounded-lg">
+                <div className="relative h-[180px] w-full sm:w-[260px] flex-shrink-0 overflow-hidden rounded-lg bg-muted">
                   <img
                     src={news.thumbnail}
                     alt={news.title}
+                    loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
@@ -198,4 +203,4 @@ export default function NewsPage() {
       </div>
     </div>
   );
-};
+}
