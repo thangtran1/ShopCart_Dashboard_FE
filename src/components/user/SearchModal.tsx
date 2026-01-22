@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "antd";
 import { Trans, useTranslation } from "react-i18next";
 import { useCategory } from "@/hooks/useCategory";
+import { useProduct } from "@/hooks/useProducts";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -22,7 +23,8 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const { useActiveCategories, useSearchProducts } = useCategory();
+  const { useActiveCategories } = useCategory();
+  const { useSearchProducts } = useProduct();
   const { data: categoriesData } = useActiveCategories();
   const categories = useMemo(() => categoriesData || [], [categoriesData]);
 
