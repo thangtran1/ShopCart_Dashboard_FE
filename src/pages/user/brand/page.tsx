@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Package, LayoutGrid, ChevronLeft, ChevronRight } from "lucide-react";
 import NoProductAvailable from "@/pages/user/public/NoProductAvailable";
 import ProductCard from "@/pages/user/public/ProductCard";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { useTranslation } from "react-i18next";
 
@@ -56,6 +56,21 @@ const BrandPage = ({
     return allProducts.filter((p) => p.brand?._id === currentBrand._id);
   }, [allProducts, slug, currentBrand]);
 
+  // Auto thu nhỏ màn hình
+  useEffect(() => {
+    const handleResize = () => {
+      // Nếu màn hình nhỏ hơn 768px
+      if (window.innerWidth < 768) {
+        setIsSidebarCollapsed(true);
+      } else {
+        setIsSidebarCollapsed(false);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  
   return (
     <div className="pb-3 flex flex-row items-start gap-4">
       <aside

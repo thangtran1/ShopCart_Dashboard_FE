@@ -62,6 +62,22 @@ const CategoryPage = ({
     });
   }, [products, currentSlug, currentCategory]);
 
+
+  // Auto thu nhỏ màn hình
+  useEffect(() => {
+    const handleResize = () => {
+      // Nếu màn hình nhỏ hơn 768px
+      if (window.innerWidth < 768) {
+        setIsSidebarCollapsed(true);
+      } else {
+        setIsSidebarCollapsed(false);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="pb-3 flex flex-row items-start gap-4">
       <aside className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${
