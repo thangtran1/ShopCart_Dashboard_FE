@@ -1,30 +1,20 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { useSearchParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import HomeTabbar from "./HomeTabbar";
 import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
-import { productService } from "@/api/services/product";
 import { useTranslation } from "react-i18next";
 import ServiceFeatures from "./ServiceFeatures";
 import PageLoading from "@/components/common/loading/PageLoading";
-
-const extractProducts = async (apiCall: () => Promise<any>): Promise<any[]> => {
-  const res = await apiCall();
-
-  if (Array.isArray(res)) return res;
-
-  if (res?.data && Array.isArray(res.data)) return res.data;
-
-  if (res?.data?.data && Array.isArray(res.data.data)) return res.data.data;
-
-  return [];
-};
+import { useProduct } from "@/hooks/useProducts";
 
 const ProductGrid = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { useProductsByTab } = useProduct();
 
   const productTabs = [
     { title: t("product.all"), value: "all" },
@@ -34,78 +24,47 @@ const ProductGrid = () => {
     { title: t("product.deal"), value: "deal" },
   ];
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const defaultTab = "all";
+  const selectedTab = searchParams.get("tab") || defaultTab;
 
-  const defaultTab = productTabs[0]?.value || "all";
-  const tabFromUrl = searchParams.get("tab");
-  const selectedTab =
-    tabFromUrl && productTabs.some(t => t.value === tabFromUrl)
-      ? tabFromUrl
-      : defaultTab;
+  const { 
+    data: products = [], 
+    isLoading, 
+    refetch 
+  } = useProductsByTab(selectedTab);
 
   const handleTabSelect = useCallback(
     (tab: string) => setSearchParams({ tab }),
     [setSearchParams]
   );
 
-  // Map tab → API function
-  const tabApiMap = useMemo<Record<string, () => Promise<any[]>>>(() => ({
-    all: () => extractProducts(() => productService.getActiveProducts()),
-    new: () => extractProducts(() => productService.getProductsByNew()),
-    bestSeller: () => extractProducts(() => productService.getProductsByBestSeller()),
-    featured: () => extractProducts(() => productService.getProductsByFeatured()),
-    deal: () => extractProducts(() => productService.getProductsByDeal()),
-  }), []);
-
-  const fetchProductsByTab = useCallback(async () => {
-    setLoading(true);
-    try {
-      const fetchFn = tabApiMap[selectedTab] || tabApiMap.all;
-      const data = await fetchFn();
-      setProducts(data);
-    } catch (error) {
-      console.error("Product fetching Error", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedTab]);
-
-  useEffect(() => {
-    fetchProductsByTab();
-  }, [selectedTab, fetchProductsByTab]);
-
-  const handleRefresh = useCallback(() => fetchProductsByTab(), [fetchProductsByTab]);
-  const handleViewAll = useCallback(() => setSearchParams({ tab: defaultTab }), [
-    setSearchParams,
-    defaultTab,
-  ]);
+  const handleViewAll = () => setSearchParams({ tab: defaultTab });
 
   return (
     <div className="flex flex-col lg:px-0 mb-2">
       <div className="mb-2">
-        <img className="rounded-lg  w-full" alt="img" src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:90/plain/https://dashboard.cellphones.com.vn/storage/s-edu-2-0-special-desk.gif" />
+        <img 
+          className="rounded-lg w-full" 
+          alt="banner" 
+          src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1200:75/q:90/plain/https://dashboard.cellphones.com.vn/storage/s-edu-2-0-special-desk.gif" 
+        />
       </div>
+
       <HomeTabbar
         productType={productTabs}
         selectedTab={selectedTab}
         onTabSelect={handleTabSelect}
       />
 
-      {loading ? (
-        <PageLoading
-        height={300}
-        text={t('shop.loading_products')}
-      />
-      ) : products.length ? (
+      {isLoading ? (
+        <PageLoading height={300} text={t('shop.loading_products')} />
+      ) : products.length > 0 ? (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-2">
-            <AnimatePresence mode="popLayout"> 
-              {products.map(product => (
+            <AnimatePresence mode="popLayout">
+              {products.map((product: any) => (
                 <motion.div
-                  key={product._id} 
+                  key={product._id}
                   layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -122,9 +81,7 @@ const ProductGrid = () => {
           </div>
         </>
       ) : (
-        <NoProductAvailable 
-          onRefresh={handleRefresh} 
-          onViewAll={handleViewAll} />
+        <NoProductAvailable onRefresh={refetch} onViewAll={handleViewAll} />
       )}
     </div>
   );

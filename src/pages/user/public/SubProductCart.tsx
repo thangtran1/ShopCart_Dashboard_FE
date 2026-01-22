@@ -1,55 +1,25 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "./ProductCard";
 import NoProductAvailable from "./NoProductAvailable";
-import { productService } from "@/api/services/product";
-import { ProductType } from "@/types/enum";
 import { Badge } from "@/ui/badge";
 import { useTranslation } from "react-i18next";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { useNavigate } from "react-router";
+import { useProduct } from "@/hooks/useProducts";
 
 export default function ProductsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [productsByType, setProductsByType] = useState<Record<string, any[]>>(
-    {}
-  );
-  const [loading, setLoading] = useState(true);
+  const { useProductsByAllTypes } = useProduct();
 
-  const fetchProductsByType = useCallback(async () => {
-    setLoading(true);
-    try {
-      const types = Object.values(ProductType);
-      const responses = await Promise.all(
-        types.map((type) =>
-          productService
-            .getActiveProducts({ productType: type })
-            .then((res) => ({ type, data: res.data }))
-            .catch(() => ({ type, data: [] }))
-        )
-      );
-      const results = responses.reduce((acc, curr) => {
-        acc[curr.type] = curr.data;
-        return acc;
-      }, {} as Record<string, any[]>);
-      setProductsByType(results);
-    } catch (error) {
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { data: productsByType, isLoading, refetch } = useProductsByAllTypes();
 
-  useEffect(() => {
-    fetchProductsByType();
-  }, [fetchProductsByType]);
-
-  const hasProducts = Object.values(productsByType).some((p) => p.length > 0);
-  const handleRefresh = useCallback(() => {
-    fetchProductsByType();
-  }, [fetchProductsByType]);
+  // 2. Tính toán trạng thái dựa trên dữ liệu cache
+  const hasProducts = useMemo(() => 
+    Object.values(productsByType).some((p) => p.length > 0), 
+  [productsByType]);
 
   return (
     <div className="space-y-6 antialiased">
@@ -74,7 +44,7 @@ export default function ProductsPage() {
         </motion.p>
       </div>
 
-      {loading ? (
+      {isLoading ? (
         <PageLoading height={300} text={t("shop.loading_products")} />
       ) : hasProducts ? (
         <div className="space-y-6">
@@ -134,8 +104,8 @@ export default function ProductsPage() {
         </div>
       ) : (
         <NoProductAvailable 
-        onRefresh={handleRefresh}
-        onViewAll={() => navigate("/category")}
+          onRefresh={refetch}
+          onViewAll={() => navigate("/category")}
         />
       )}
     </div>
