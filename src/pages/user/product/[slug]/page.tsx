@@ -1,5 +1,5 @@
-import { useParams } from "react-router";
-import { Button, Tabs } from "antd";
+import { Link, useParams } from "react-router";
+import { Tabs } from "antd";
 
 import ImageView from "@/components/user/products/ImageView";
 import PriceView from "@/components/user/products/PriceView";
@@ -136,66 +136,70 @@ const SingleProductPage = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-10 mb-2">
+      <div className="flex flex-col md:flex-row gap-4 mb-2">
         {product?.images && (
           <ImageView images={product.images} product={product} isStock={product.stock} />
         )}
 
-        <div className="w-full md:w-1/2 flex flex-col gap-5 mt-4">
-          <PriceView
-            price={product?.price}
-            discount={product?.discount}
-            stock={product?.stock}
-            className="text-lg font-bold"
-          />
+        <div className="w-full md:w-1/2 flex flex-col gap-4 mt-4">
+          <div className="flex flex-col gap-1">
+            <PriceView
+              price={product?.price}
+              discount={product?.discount}
+              stock={product?.stock}
+              className="text-2xl font-bold text-primary"
+            />
+          </div>
 
-          <div className="border border-red-200 rounded-lg p-4 bg-red-50">
-            <h3 className="text-xl font-bold text-gray-900 flex items-center mb-3">
-              <span className="mr-2">🎁</span>
+          <div className="relative overflow-hidden border border-red-100 rounded-2xl bg-gradient-to-br from-red-50 to-white p-5">
+            <div className="absolute top-0 right-0 p-2 opacity-10">
+              <span className="text-6xl">🎁</span>
+            </div>
+            <h3 className="text-lg font-bold text-red-600 flex items-center gap-2 mb-4">
+              <span className="p-1.5 bg-red-100 rounded-lg">🔥</span>
               {t("product_page.promotions.title")}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-3 relative z-10">
               {promotions.map((promo) => (
-                <li key={promo.id} className="flex items-start">
-                  <span className="flex-shrink-0 w-5 h-5 bg-blue-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5">
+                <li key={promo.id} className="flex items-start gap-3 group">
+                  <div className="mt-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shrink-0">
                     {promo.id}
-                  </span>
-                  <p className="text-sm text-gray-700">
+                  </div>
+                  <p className="text-sm text-gray-700 leading-snug">
                     {promo.text}
-                    <a href={promo.link} className="text-blue-600 ml-1 font-medium hover:underline">
+                    <Link to={promo.link} className="text-blue-600 ml-1 font-semibold hover:underline decoration-2">
                       {t("product_page.promotions.view_detail")}
-                    </a>
+                    </Link>
                   </p>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="flex flex-wrap flex-col sm:flex-row items-stretch justify-start !w-full gap-3">
-            <Button color="primary" variant="outlined" className="flex-1 min-h-[50px]">
-              <span className="font-bold">{t("product_page.payment.installment")}</span>
-            </Button>
-            <BuyNowButton product={product} />
-            <AddToCartButton product={product} className="flex-1 min-h-[50px]" />
-          </div>
-
-          <div className={cn("border border-primary/40 rounded-lg p-4 bg-[#f1f6ff]")}>
-            <h3 className="text-xl font-bold text-gray-900 flex items-center pb-2">
-              <span className="mr-2 text-red-600">🎁</span>
+          <div className="border border-primary/10 rounded-2xl bg-success p-5">
+            <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-4">
+              <span className="p-1.5 bg-blue-100 rounded-lg">💳</span>
               {t("product_page.payment.title")}
             </h3>
-            <ul className="space-y-3">
+            <div className="grid grid-cols-1 gap-3">
               {paymentOffers.map((offer) => (
-                <li key={offer.id} className="flex items-start text-sm text-gray-700">
-                  <Check className="flex-shrink-0 w-4 h-4 text-green-600 mr-2 mt-0.5" />
-                  <p className="leading-relaxed">
-                    <span className={cn({ "text-blue-600 font-medium hover:underline": offer.isLink })}>
-                      {offer.text}
-                    </span>
-                  </p>
-                </li>
+                <div key={offer.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-blue-50/50 shadow-sm">
+                  <Check className="w-4 h-4 text-green-500 shrink-0" />
+                  <span className={cn("text-sm font-medium", offer.isLink ? "text-blue-600 cursor-pointer" : "text-gray-600")}>
+                    {offer.text}
+                  </span>
+                </div>
               ))}
-            </ul>
+            </div>
+          </div>
+          <div className="flex [&>div]:!h-12 [&>div_button]:!h-12 items-center gap-3 w-full mt-2">
+            <div className="flex-1 [&>button]:w-full">
+              <BuyNowButton product={product} />
+            </div>
+
+            <div className="flex-1 [&>div]:w-full [&>div_button]:w-full">
+              <AddToCartButton product={product} />
+            </div>
           </div>
         </div>
       </div>
@@ -203,8 +207,8 @@ const SingleProductPage = () => {
       <div className="border-t py-5">
         <Tabs defaultActiveKey="details" items={items} size="large" />
       </div>
-      <RelatedProducts 
-        relatedProducts={relatedProducts} 
+      <RelatedProducts
+        relatedProducts={relatedProducts}
         isFetching={fetchingRelated}
         onRefresh={handleRefreshRelated}
       />

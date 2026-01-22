@@ -921,8 +921,7 @@
       "view_detail": "View details"
     },
     "payment": {
-      "title": "Payment Offers",
-      "installment": "0% Installment"
+      "title": "Payment Offers"
     }
   },
   "news_page": {

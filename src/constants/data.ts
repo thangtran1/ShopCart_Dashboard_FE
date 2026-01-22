@@ -51,36 +51,6 @@ export const paymentOffers = [
   },
   { 
     id: 5, 
-    logo: "vib", 
-    text: "Mở thẻ VIB nhận E-Voucher đến 600K", 
-    isLink: false 
-  },
-  { 
-    id: 6, 
-    logo: "hdbank", 
-    text: "Giảm 500K khi thanh toán bằng thẻ tín dụng HDBank", 
-    isLink: false 
-  },
-  { 
-    id: 7, 
-    logo: "homecredit", 
-    text: "Giảm 400K khi thanh toán bằng thẻ tín dụng Home Credit", 
-    isLink: false 
-  },
-  { 
-    id: 8, 
-    logo: "tpbank", 
-    text: "Trả góp 0 lãi, phí + tặng 500K khi mở thẻ TPBANK EVO", 
-    isLink: false 
-  },
-  { 
-    id: 9, 
-    logo: "vnpay", 
-    text: "Giảm đến 300K khi thanh toán qua VNPAY-QR", 
-    isLink: false 
-  },
-  { 
-    id: 10, 
     logo: "", // Không có logo
     text: "Liên hệ B2B để được tư vấn giá tốt nhất cho khách hàng doanh nghiệp khi mua số lượng nhiều", 
     isLink: false 

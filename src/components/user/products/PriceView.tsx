@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
   price?: number;
-  discount?: number;
+  discount?: number | undefined;
   className?: string;
   stock?: number | undefined;
 }
@@ -62,7 +62,7 @@ const PriceView = ({ price, discount, className, stock }: Props) => {
               />
             )}
           </div>
-          {discount && (
+          {!!discount && discount > 0 && (
             <p className="mt-2 text-red-600 text-base flex justify-end font-semibold text-center">
               {t("product.discount_label", { percent: discount })}
             </p>
@@ -72,7 +72,7 @@ const PriceView = ({ price, discount, className, stock }: Props) => {
 
       <div className="text-center mt-4">
         <p
-          className={`px-4 py-1.5 text-sm font-semibold rounded-lg ${
+          className={`px-4 py-3 text-sm font-semibold rounded-lg ${
             stock === 0
               ? "bg-red-100 text-red-600"
               : "bg-green-100 text-green-600"

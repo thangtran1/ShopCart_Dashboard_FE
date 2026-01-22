@@ -130,7 +130,7 @@ const SignIn = () => {
                 >
                   {profile?.role === 'admin' ? <Settings size={16} /> : <Logo iconClassName="w-5 h-5 group-hover:brightness-200" hideText />}
                   <span className="text-[9px] font-black uppercase tracking-widest">
-                    {profile?.role === 'admin' ? t("user.settings") : t("user.access_tmember")}
+                    {profile?.role === 'admin' ? t("user.profile") : t("user.access_tmember")}
                   </span>
                 </button>
               </div>

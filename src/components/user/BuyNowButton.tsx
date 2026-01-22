@@ -44,7 +44,7 @@ const BuyNowButton = ({ product }: { product: any }) => {
     <Button
       type="primary"
       danger
-      className="flex-1 min-h-[50px] font-bold text-base"
+      className="flex-1 font-bold text-base"
       onClick={handleBuyNow}
       loading={isProcessing}
     >
