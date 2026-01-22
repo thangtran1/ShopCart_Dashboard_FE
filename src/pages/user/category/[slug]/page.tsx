@@ -38,16 +38,12 @@ const DetailCategory = () => {
 
   const currentSlug = slug || "all";
   const foundCategory = category.find(cat => cat.slug === currentSlug);
-  const categoryDisplayName = currentSlug === "all" 
-      ? t("category.all_products") 
-      : foundCategory?.name || slug;
-
   return (
     <div>
       <Title className="text-lg mb-5 uppercase tracking-wide">
         {t("category.page_title")}{" "}
-        <span className="font-bold text-primary capitalize tracking-wide">
-          {categoryDisplayName}
+        <span className="font-bold text-primary">
+          {currentSlug === "all" ? t("category.all_products") : foundCategory?.name}
         </span>
       </Title>
 

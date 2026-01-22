@@ -1,21 +1,14 @@
 "use client";
 
-import { Avatar, Pagination, Skeleton } from "antd";
+import { Avatar, Pagination } from "antd";
 import { ClockCircleOutlined, UserOutlined, FireOutlined } from "@ant-design/icons";
 import { useState, useEffect, useMemo } from "react";
 import { Badge } from "@/ui/badge";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/ui/breadcrumb";
 import { Link } from "react-router";
 import { useNews } from "@/hooks/useNews";
 import { INews } from "@/api/services/newsApi";
 import { useTranslation } from "react-i18next";
+import PageLoading from "@/components/common/loading/PageLoading";
 
 export default function NewsPage() {
   const { refreshNews, loading } = useNews();
@@ -48,14 +41,10 @@ export default function NewsPage() {
 
   if (loading && allNews.length === 0) {
     return (
-      <div className="space-y-4">
-        <Skeleton active/>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Skeleton.Button active block style={{ height: 200 }} />
-          <Skeleton.Button active block style={{ height: 200 }} />
-          <Skeleton.Button active block style={{ height: 200 }} />
-        </div>
-      </div>
+      <PageLoading
+        height={300}
+        text="Đang tải tin tức ..."
+      />
     );
   }
   const formatDate = (dateString: string) => {
@@ -64,23 +53,11 @@ export default function NewsPage() {
 
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">{t("news_page.breadcrumb.home")}</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>{t("news_page.breadcrumb.news")}</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
       <h2 className="text-2xl font-bold my-4 flex items-center gap-2">
         {t("news_page.latest_title")}
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-6">
         {featuredNews.map((news) => (
           <Link
             key={news._id}
@@ -112,7 +89,7 @@ export default function NewsPage() {
         ))}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col lg:flex-row gap-2">
         <div className="flex-1 flex flex-col gap-4">
           {paginatedNews.map((news) => (
             <article

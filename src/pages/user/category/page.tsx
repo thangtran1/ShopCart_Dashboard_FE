@@ -36,7 +36,6 @@ const CategoryPage = ({
 
   const handleCategoryChange = (newSlug: string) => {
     if (newSlug === currentSlug) return;
-    setCurrentSlug(newSlug);
     navigate(newSlug === "all" ? "/category" : `/category/${newSlug}`);
   };
 
@@ -129,7 +128,7 @@ const CategoryPage = ({
           key={currentSlug}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="mb-4 rounded-xl shadow-sm border p-4 bg-card"
+          className="mb-2 rounded-xl shadow-sm border p-4"
         >
           <h2 className="text-2xl font-black text-primary uppercase">
             {currentSlug === "all" ? t("category.all_categories") : currentCategory?.name}
@@ -142,7 +141,7 @@ const CategoryPage = ({
         {isFetching ? (
           <PageLoading height={400} text={t("category.loading")} />
         ) : filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product, index) => (
                 <motion.div

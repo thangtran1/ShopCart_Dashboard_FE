@@ -36,23 +36,19 @@ const DetailBrand = () => {
   const currentSlug = slug || "all";
   const foundBrand = brands.find(b => b.slug === currentSlug);
 
-  const brandDisplayName = currentSlug === "all" 
-      ? t("brand.all_products") 
-      : foundBrand?.name || slug;
-
   return (
     <div>
       <Title className="text-lg mb-5 uppercase tracking-wide">
         {t("brand.page_title")}{" "}
-        <span className="font-bold text-primary capitalize tracking-wide">
-          {brandDisplayName}
+        <span className="font-bold text-primary">
+          {currentSlug === "all" ? t("brand.all_products") : foundBrand?.name}
         </span>
       </Title>
 
       <BrandPage 
         brands={brands} 
         products={products} 
-        slug={currentSlug} 
+        slug={currentSlug}
         onRefresh={fetchData} 
         isFetching={isFetching}
       />

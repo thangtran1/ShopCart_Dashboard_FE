@@ -89,8 +89,8 @@ export default function Router() {
       { path: "faqs", element: <FAQs /> },
       { path: "help", element: <Help /> },
       { path: "all-news", children: [{ index: true, element: <NewsPage /> }, { path: ":slug", element: <NewSlugDetail /> }] },
-      { path: "category", children: [{ index: true, element: <Navigate to="/shop" replace /> }, { path: ":slug", element: <DetailCategory /> }] },
-      { path: "brand", children: [{ index: true, element: <Navigate to="/shop" replace /> }, { path: ":slug", element: <DetailBrand /> }] },
+      { path: "category", element: <DetailCategory />, children: [{ path: ":slug", element: <DetailCategory /> }]},
+      { path: "brand", element: <DetailBrand />, children: [{ path: ":slug", element: <DetailBrand /> }]},
     ],
   };
 

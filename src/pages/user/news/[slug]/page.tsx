@@ -65,11 +65,11 @@ const NewSlugDetail = () => {
       <Breadcrumb className="mb-6">
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/">{t("news_detail.breadcrumb.home")}</BreadcrumbLink>
+            <BreadcrumbLink href="/">{t("breadcrumb.home")}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/all-news">{t("news_detail.breadcrumb.news")}</BreadcrumbLink>
+            <BreadcrumbLink href="/all-news">{t("breadcrumb.news")}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
