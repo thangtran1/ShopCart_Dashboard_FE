@@ -3,38 +3,32 @@
 import Title from "@/ui/title";
 import { useParams } from "react-router";
 import BrandPage from "@/pages/user/brand/page";
-import { useEffect, useState, useCallback } from "react";
-import { productService } from "@/api/services/product";
-import { brandService } from "@/api/services/brands";
 import { useTranslation } from "react-i18next";
+import { useBrand } from "@/hooks/useBrand";
+import { useQuery } from "@tanstack/react-query";
+import { productService } from "@/api/services/product";
+import { Product } from "@/types";
 
 const DetailBrand = () => {
   const { t } = useTranslation();
   const { slug } = useParams();
-  const [brands, setBrands] = useState<any[]>([]);
-  const [products, setProducts] = useState<any[]>([]);
-  const [isFetching, setIsFetching] = useState(false);
-
-  const fetchData = useCallback(async () => {
-    setIsFetching(true);
-    try {
-      const [brandRes, prodRes] = await Promise.all([
-        brandService.getActive(),
-        productService.getActiveProducts()
-      ]);
-      if (brandRes.success) setBrands(brandRes.data);
-      if (prodRes.success) setProducts(prodRes.data);
-    } finally {
-      setIsFetching(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const { useActiveBrands } = useBrand();
+  const { data: brands = [], isLoading: isBrandLoading } = useActiveBrands();
+  const { 
+    data: products = [], 
+    isLoading: isProductLoading,
+    refetch: refetchProducts 
+  } = useQuery({
+    queryKey: ["products", "active"],
+    queryFn: async () => {
+      const res = await productService.getActiveProducts();
+      return res.data as unknown as Product[]; 
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 
   const currentSlug = slug || "all";
-  const foundBrand = brands.find(b => b.slug === currentSlug);
+  const foundBrand = brands.find((b: any) => b.slug?.current === currentSlug);
 
   return (
     <div>
@@ -49,8 +43,8 @@ const DetailBrand = () => {
         brands={brands} 
         products={products} 
         slug={currentSlug}
-        onRefresh={fetchData} 
-        isFetching={isFetching}
+        onRefresh={async () => { await refetchProducts(); }} 
+        isFetching={isBrandLoading || isProductLoading}
       />
     </div>
   );

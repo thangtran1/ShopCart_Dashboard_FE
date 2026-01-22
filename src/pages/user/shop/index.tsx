@@ -14,19 +14,21 @@ import BrandList from "@/components/user/shop/BrandList";
 import PriceList from "@/components/user/shop/PriceList";
 import ProductCard from "@/pages/user/public/ProductCard";
 import NoProductAvailable from "../public/NoProductAvailable";
-import { brandService } from "@/api/services/brands";
 import { categoryService } from "@/api/services/category";
 import { productService } from "@/api/services/product";
 import PageLoading from "@/components/common/loading/PageLoading";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/ui/button";
 import { Badge } from "@/ui/badge";
+import { useBrand } from "@/hooks/useBrand";
 
 const Shop = () => {
   const { t } = useTranslation();
+  const { useActiveBrands } = useBrand();
+  const { data: brandsData, isLoading: brandsLoading } = useActiveBrands();
+  const brands = useMemo(() => brandsData || [], [brandsData]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<any[]>([]);
-  const [brands, setBrands] = useState<any[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -58,12 +60,8 @@ const Shop = () => {
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const [catRes, brandRes] = await Promise.all([
-          categoryService.getActive(),
-          brandService.getActive()
-        ]);
+        const catRes = await categoryService.getActive();
         if (catRes.success) setCategories(catRes.data);
-        if (brandRes.success) setBrands(brandRes.data);
       } catch (error) {
         console.error("Metadata fetch error:", error);
       }
@@ -82,7 +80,7 @@ const Shop = () => {
         if (cat) filtered = filtered.filter((p: any) => p.category?._id === cat._id);
       }
       if (selectedBrand) {
-        const br = brands.find((b) => b.slug === selectedBrand);
+        const br = brands.find((b: any) => b.slug === selectedBrand);
         if (br) filtered = filtered.filter((p: any) => p.brand?._id === br._id);
       }
       if (selectedPrice) {
@@ -155,8 +153,9 @@ const Shop = () => {
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />
-          <BrandList
+         <BrandList
             brands={brands}
+            loading={brandsLoading}
             selectedBrand={selectedBrand}
             setSelectedBrand={setSelectedBrand}
           />
