@@ -1337,5 +1337,34 @@
       "help_text": "Cần hỗ trợ? Liên hệ với chúng tôi qua"
     },
     "updating": "Tính năng đang cập nhật 😅"
+  },
+  "shop-feedback": {
+    "title": "KHẢO SÁT",
+    "description": "Bạn có hài lòng với trải nghiệm trên trang chủ Shop Cart TVT không?",
+    "improve_title": "Bạn mong muốn Shop_Cart TVT cải thiện điều gì?",
+    "placeholder": "Vui lòng nhập nội dung góp ý tại đây...",
+    "error_min_option": "Vui lòng chọn ít nhất một câu trả lời.",
+    "error_empty_feedback": "Vui lòng nhập nội dung góp ý.",
+    "button": {
+      "satisfied": "Hài lòng",
+      "unsatisfied": "Không hài lòng",
+      "next": "Tiếp theo",
+      "submit": "Gửi phản hồi",
+      "close": "Đóng",
+      "sending": "Đang gửi..."
+    },
+    "success_modal": {
+      "title": "Cảm ơn bạn đã dành thời gian phản hồi!",
+      "desc": "Ý kiến của bạn là nguồn cảm hứng để Shop Cart TVT tiếp tục cải thiện và phục vụ tốt hơn mỗi ngày."
+    },
+    "toast": {
+      "submit_error": "Gửi phản hồi thất bại, vui lòng thử lại.",
+      "create_success": "Tạo câu hỏi thành công!",
+      "create_error": "Lỗi khi tạo câu hỏi.",
+      "update_success": "Cập nhật câu hỏi thành công!",
+      "update_error": "Lỗi khi cập nhật câu hỏi.",
+      "delete_success": "Đã xóa câu hỏi!",
+      "delete_error": "Lỗi khi xóa câu hỏi."
+    }
   }
 }
