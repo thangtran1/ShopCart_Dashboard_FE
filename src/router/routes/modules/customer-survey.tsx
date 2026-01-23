@@ -39,19 +39,7 @@ const customerSurvey: AppRouteObject = {
         label: "Quản lý Câu hỏi",
         key: "/admin/customer-survey",
       },
-    },
-    {
-      index: true,
-      element: (
-        <Suspense fallback={<LineLoading />}>
-          <CustomerSurveyManagement />
-        </Suspense>
-      ),
-      meta: {
-        label: "Danh sách Phản hồi",
-        key: "/admin/customer-survey",
-      },
-    },
+    }
   ],
 };
 

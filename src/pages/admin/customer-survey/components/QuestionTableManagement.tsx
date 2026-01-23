@@ -1,0 +1,224 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { useNews } from "@/hooks/useNews";
+import { Button, Popconfirm, Tooltip } from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  FileTextOutlined,
+} from "@ant-design/icons";
+import type { ColumnsType } from "antd/es/table";
+import TableAntd from "@/components/common/tables/custom-table-antd";
+import dayjs from "dayjs";
+
+import { Badge } from "@/ui/badge";
+import { INews, INewsFilters } from "@/api/services/newsApi";
+import CustomerSurveyFilters from "./CustomerSurveyFilters";
+import CustomerSurveyModal from "./CustomerSurveyModal";
+
+const initialFilters: INewsFilters = {
+  page: 1,
+  limit: 10,
+  search: "",
+  category: "",
+};
+
+export default function QuestionTableManagement() {
+  const { useAdminNews, deleteNews } = useNews();
+  const [filters, setFilters] = useState<INewsFilters>(initialFilters);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingNews, setEditingNews] = useState<INews | null>(null);
+
+  const { data: adminData, isLoading } = useAdminNews(filters);
+
+  const dataSource = adminData?.data || [];
+  const total = adminData?.total || 0;
+
+  const handleFilterChange = (key: keyof INewsFilters, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+  };
+
+  const handleClearFilters = () => {
+    setFilters(initialFilters);
+  };
+
+  const handleOpenAddModal = () => {
+    setEditingNews(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (record: INews) => {
+    setEditingNews(record);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteNews(id);
+  };
+
+  const columns: ColumnsType<INews> = useMemo(
+    () => [
+      {
+        title: "BÀI VIẾT",
+        key: "news",
+        width: 350,
+        render: (_, record) => (
+          <div className="flex items-center gap-3">
+            <div className="relative flex-shrink-0 w-16 h-10 overflow-hidden rounded-lg border border-border shadow-sm bg-muted">
+              <img
+                src={record.thumbnail}
+                alt={record.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-foreground line-clamp-1 leading-tight">
+                {record.title}
+              </span>
+              <span className="text-[10px] text-muted-foreground truncate italic">
+                {record.slug}
+              </span>
+            </div>
+          </div>
+        ),
+      },
+      {
+        title: "DANH MỤC",
+        dataIndex: "category",
+        width: 140,
+        render: (category: string) => (
+          <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 uppercase text-[10px]">
+            {category || "Chưa phân loại"}
+          </Badge>
+        ),
+      },
+      {
+        title: "TRẠNG THÁI",
+        dataIndex: "isPublished",
+        width: 130,
+        align: "center",
+        render: (isPublished: boolean) => (
+          isPublished ? (
+            <Badge variant="success" className="gap-1">
+              CÔNG KHAI
+            </Badge>
+          ) : (
+            <Badge variant="outline">BẢN NHÁP</Badge>
+          )
+        ),
+      },
+      {
+        title: "THỐNG KÊ",
+        key: "stats",
+        width: 150,
+        render: (_, record) => (
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-xs text-foreground">
+              <EyeOutlined className="text-primary" />
+              <span>{record.views?.toLocaleString()} lượt xem</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] text-foreground">
+              <FileTextOutlined />
+              <span>{record.tags?.length || 0} thẻ (tags)</span>
+            </div>
+          </div>
+        ),
+      },
+      {
+        title: "NGÀY TẠO",
+        dataIndex: "createdAt",
+        width: 140,
+        sorter: (a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
+        render: (date) => (
+          <div className="flex flex-col text-muted-foreground">
+            <span className="text-xs font-semibold text-foreground">
+              {dayjs(date).format("DD/MM/YYYY")}
+            </span>
+            <span className="text-[10px]">
+              {dayjs(date).format("HH:mm")}
+            </span>
+          </div>
+        ),
+      },
+      {
+        title: "THAO TÁC",
+        key: "actions",
+        width: 100,
+        fixed: "right",
+        align: "center",
+        render: (_, record) => (
+          <div className="flex items-center justify-center gap-1">
+            <Tooltip title="Chỉnh sửa">
+              <Button
+                type="text"
+                size="small"
+                className="text-indigo-600 hover:bg-indigo-50 rounded-lg"
+                icon={<EditOutlined className="text-lg" />}
+                onClick={() => handleOpenEditModal(record)}
+              />
+            </Tooltip>
+            <Popconfirm
+              title="Xóa bài viết?"
+              description="Hành động này sẽ xóa vĩnh viễn dữ liệu."
+              onConfirm={() => handleDelete(record._id)}
+              okText="Xóa"
+              cancelText="Hủy"
+              okButtonProps={{ danger: true, className: "bg-rose-500" }}
+            >
+              <Button
+                type="text"
+                size="small"
+                danger
+                icon={<DeleteOutlined className="text-lg" />}
+              />
+            </Popconfirm>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  return (
+    <div>
+      <div className="space-y-6">
+        <CustomerSurveyFilters
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onClearFilters={handleClearFilters}
+        />
+
+        <div className="mt-4 overflow-hidden">
+          <TableAntd
+            columns={columns}
+            data={dataSource}
+            loading={isLoading}
+            pagination={{
+              page: filters.page,
+              limit: filters.limit,
+              total,
+            }}
+            onPageChange={(p, l) => {
+              setFilters((prev) => ({
+                ...prev,
+                page: p,
+                limit: l || prev.limit,
+              }));
+            }}
+          />
+        </div>
+      </div>
+
+      <CustomerSurveyModal
+        open={isModalOpen}
+        news={editingNews}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => {
+          setIsModalOpen(false);
+        }}
+      />
+    </div>
+  );
+}

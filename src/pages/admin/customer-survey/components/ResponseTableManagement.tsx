@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import { useNews } from "@/hooks/useNews";
 import { Button, Popconfirm, Tooltip } from "antd";
 import {
-  PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
@@ -14,9 +13,6 @@ import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import dayjs from "dayjs";
 
-import { CardTitle } from "@/ui/card";
-import { Icon } from "@/components/icon";
-import { Separator } from "@/ui/separator";
 import { Badge } from "@/ui/badge";
 import { INews, INewsFilters } from "@/api/services/newsApi";
 import CustomerSurveyFilters from "./CustomerSurveyFilters";
@@ -29,14 +25,14 @@ const initialFilters: INewsFilters = {
   category: "",
 };
 
-export default function CustomerSurveyManagement() {
+export default function ResponseTableManagement() {
   const { useAdminNews, deleteNews } = useNews();
   const [filters, setFilters] = useState<INewsFilters>(initialFilters);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingNews, setEditingNews] = useState<INews | null>(null);
 
   const { data: adminData, isLoading } = useAdminNews(filters);
-  
+
   const dataSource = adminData?.data || [];
   const total = adminData?.total || 0;
 
@@ -182,36 +178,12 @@ export default function CustomerSurveyManagement() {
         ),
       },
     ],
-    [] 
+    []
   );
 
   return (
-    <div className="py-4">
+    <div>
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
-              <Icon icon="lucide:newspaper" className="h-7 w-7 text-primary" />
-              Quản lý Tin tức
-            </CardTitle>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Sáng tạo nội dung, quản lý bài viết và theo dõi lượt tương tác của độc giả.
-            </p>
-          </div>
-
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            size="large"
-            className="h-11 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-md font-bold transition-all hover:-translate-y-0.5"
-            onClick={handleOpenAddModal}
-          >
-            Đăng bài mới
-          </Button>
-        </div>
-
-        <Separator />
-
         <CustomerSurveyFilters
           filters={filters}
           onFilterChange={handleFilterChange}
