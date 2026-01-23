@@ -1337,5 +1337,34 @@
       "help_text": "Need help? Contact us via"
     },
     "updating": "Feature under development 😅"
+  },
+  "shop-feedback": {
+    "title": "SURVEY",
+    "description": "Are you satisfied with your experience on Shop Cart TVT homepage?",
+    "improve_title": "What would you like Shop_Cart TVT to improve?",
+    "placeholder": "Please enter your feedback here...",
+    "error_min_option": "Please select at least one answer.",
+    "error_empty_feedback": "Please enter your feedback content.",
+    "button": {
+      "satisfied": "Satisfied",
+      "unsatisfied": "Unsatisfied",
+      "next": "Next",
+      "submit": "Submit Feedback",
+      "close": "Close",
+      "sending": "Sending..."
+    },
+    "success_modal": {
+      "title": "Thank you for your feedback!",
+      "desc": "Your opinion is the inspiration for Shop Cart TVT to continue improving and serving you better every day."
+    },
+    "toast": {
+      "submit_error": "Failed to submit feedback. Please try again.",
+      "create_success": "Question created successfully!",
+      "create_error": "Error creating question.",
+      "update_success": "Question updated successfully!",
+      "update_error": "Error updating question.",
+      "delete_success": "Question deleted successfully!",
+      "delete_error": "Error deleting question."
+    }
   }
 }

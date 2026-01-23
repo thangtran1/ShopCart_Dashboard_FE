@@ -16,6 +16,7 @@ const CARTS_PREFIX = "/cart";
 const ORDERS_PREFIX = "/orders";
 const COUPONS_PREFIX = "/coupons";
 const NEWS_PREFIX = "/news";
+const CUSTOMER_SURVEY = "customer-survey";
 
 export const API_URL = {
   BANNER: {
@@ -224,4 +225,12 @@ export const API_URL = {
     UPDATE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,
     DELETE: (id: string) => `${NEWS_PREFIX}/admin/news/${id}`,
   },
+  CUSTOMER_SURVEY: {
+    GET_QUESTIONS: `${CUSTOMER_SURVEY}/questions`,
+    CREATE_QUESTION: `${CUSTOMER_SURVEY}/questions`,
+    UPDATE_QUESTION: (id: string) => `${CUSTOMER_SURVEY}/questions/${id}`,
+    DELETE_QUESTION: (id: string) => `${CUSTOMER_SURVEY}/questions/${id}`,
+    SUBMIT: `${CUSTOMER_SURVEY}/submit`,
+    GET_RESPONSES: `${CUSTOMER_SURVEY}/responses`,
+  }
 };
