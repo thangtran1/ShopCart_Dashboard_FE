@@ -4,6 +4,7 @@ import ProductGrid from "./public/ProductGrid";
 import HomeBanner from "./public/HomeBanner";
 import NewsPage from "@/components/user/NewsCard";
 import SubProductCard from "./public/SubProductCart";
+import { ShopFeedBack } from "@/components/user/ShopFeedback";
 const UserHomePage = () => {
   return (
     <div className="flex flex-col gap-6">
@@ -13,6 +14,7 @@ const UserHomePage = () => {
       <CategoryProduct />
       <ShopByBrands />
       <NewsPage />
+      <ShopFeedBack />
     </div>
   );
 };

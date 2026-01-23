@@ -28,8 +28,8 @@ const HomeNewsSection = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="border border-border rounded-xl p-3">
-               <Skeleton.Image active className="!w-full !h-40 mb-3" />
-               <Skeleton active paragraph={{ rows: 2 }} title={false} />
+              <Skeleton.Image active className="!w-full !h-40 mb-3" />
+              <Skeleton active paragraph={{ rows: 2 }} title={false} />
             </div>
           ))}
         </div>
@@ -38,7 +38,7 @@ const HomeNewsSection = () => {
   }
 
   return (
-    <section className="mb-12">
+    <section>
       <div className="flex items-center justify-between my-4">
         <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
           {t("news.title_main")}{" "}
@@ -56,7 +56,7 @@ const HomeNewsSection = () => {
           description={t("news.empty_description")}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
           {newsList.slice(0, 8).map((blog) => (
             <div
               key={blog._id}
