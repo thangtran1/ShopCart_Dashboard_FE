@@ -204,7 +204,7 @@ const NotificationManagement: React.FC = () => {
       render: (record: Notification) => {
         return (
           <Space>
-            <Link to={`/notifications/${record._id}`}>
+            <Link to={`/admin/management/notifications/${record._id}`}>
               <Button type="text" icon={<EyeOutlined />} />
             </Link>
             <Button
@@ -239,7 +239,7 @@ const NotificationManagement: React.FC = () => {
               {t("notification.management-description")}
             </p>
           </div>
-          <Link to="/admin/notifications/new-notification">
+          <Link to="/admin/management/notifications/new-notification">
             <Button
               type="primary"
               size="large"

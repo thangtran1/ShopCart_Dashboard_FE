@@ -13,8 +13,8 @@ import {
   BreadcrumbSeparator,
 } from "@/ui/breadcrumb";
 import { Badge } from "@/ui/badge";
-import RenderHtml from "@/pages/admin/news/components/render-html";
 import { useTranslation } from "react-i18next"; 
+import RenderHtml from "@/pages/admin/management/news/components/render-html";
 
 const NewSlugDetail = () => {
   const { t, i18n } = useTranslation(); 

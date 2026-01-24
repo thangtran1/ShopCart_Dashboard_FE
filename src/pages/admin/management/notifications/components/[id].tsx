@@ -99,7 +99,7 @@ const Notification: React.FC = () => {
     <Card>
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
-          <Link to="/admin/notifications">{t("notification.management")}</Link>
+          <Link to="/admin/management/notifications">{t("notification.management")}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>{t("notification.detail")}</Breadcrumb.Item>
       </Breadcrumb>

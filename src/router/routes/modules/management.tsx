@@ -18,6 +18,38 @@ const UserDetailPage = lazy(() => import("@/pages/admin/management/user/[id]"));
 const AuthSessionManagement = lazy(
   () => import("@/pages/admin/management/auth-session")
 );
+const CatalogManagement = lazy(
+  () => import("@/pages/admin/management/catalog/index")
+);
+const CouponsManagement = lazy(
+  () => import("@/pages/admin/management/coupons/index")
+);
+const CustomerSurveyManagement = lazy(
+  () => import("@/pages/admin/management/customer-survey/index")
+);
+const NewsManagement = lazy(
+  () => import("@/pages/admin/management/news/index")
+);
+const FeedbackManagement = lazy(
+  () => import("@/pages/admin/management/feedback/index")
+);
+// nottification
+const NotificationManagement = lazy(
+  () => import("@/pages/admin/management/notifications/index")
+);
+const NewNotification = lazy(
+  () => import("@/pages/admin/management/notifications/components/new-notification")
+);
+const NotificationDetail = lazy(
+  () => import("@/pages/admin/management/notifications/components/[id]")
+);
+const OrdersManagement = lazy(
+  () => import("@/pages/admin/management/orders/index")
+);
+const ProductsManagement = lazy(
+  () => import("@/pages/admin/management/products/index")
+);
+
 const management: AppRouteObject = {
   order: 2,
   path: "management",
@@ -123,6 +155,129 @@ const management: AppRouteObject = {
       meta: {
         label: "siderbar-labels.database",
         key: "/admin/management/database",
+      },
+    },
+    {
+      path: "catalog",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <CatalogManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.catalog-management",
+        key: "/admin/management/catalog",
+      },
+    },
+    {
+      path: "coupons",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <CouponsManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "Mã giảm giá",
+        key: "/admin/management/coupons",
+      },
+    },
+    {
+      path: "customer-survey",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <CustomerSurveyManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "Quản lý Câu hỏi và Phản hồi",
+        key: "/admin/management/customer-survey",
+      },
+    },
+    {
+      path: "news",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <NewsManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "Quản lý tin tức",
+        key: "/admin/management/news",
+      },
+    },
+    {
+      path: "feedback",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <FeedbackManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.feedback-title",
+        key: "/admin/management/feedback",
+      },
+    },
+    // notification
+    {
+      path: "notifications",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <NotificationManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.notification-title",
+        key: "/admin/management/notifications",
+      },
+    },
+    {
+      path: "notifications/new-notification",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <NewNotification />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.new-notification",
+        key: "/admin/management/notifications/new-notification",
+        hideMenu: true,
+      },
+    },
+    {
+      path: "notifications/:id",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <NotificationDetail />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.notification-detail",
+        key: "/admin/management/notifications/:id",
+        hideMenu: true,
+      },
+    },
+    {
+      path: "orders-manager",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <OrdersManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "Quản lý đơn hàng",
+        key: "/admin/management/orders-manager",
+      },
+    },
+    {
+      path: "products",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <ProductsManagement />
+        </Suspense>
+      ),
+      meta: {
+        label: "Quản lý sản phẩm",
+        key: "/admin/management/products",
       },
     },
   ],
