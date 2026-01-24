@@ -66,6 +66,12 @@ axiosInstance.interceptors.response.use(
     const { response, message, config } = error || {};
     const originalRequest = config as any;
 
+    // Nếu là API login mà bị 401 thì trả lỗi về luôn cho LoginForm, không chạy xuống logic Refresh bên dưới
+    if (originalRequest.url?.includes("/login") || originalRequest.url?.includes("/signin")) {
+      return Promise.reject(error);
+    }
+    
+
     if (response?.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {

@@ -51,6 +51,10 @@ export function LoginForm() {
       setUserInfo(user);
       toast.success(t("auth.login.signInSuccess"));
     },
+    onError: () => {
+      const errorMessage = t("auth.login.signInError");
+      toast.error(errorMessage);
+    },
   });
 
   if (token.accessToken) {

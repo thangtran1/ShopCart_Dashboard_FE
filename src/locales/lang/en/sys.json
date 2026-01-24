@@ -50,6 +50,7 @@
       "googleLoginSuccess": "Login with Google successful!",
       "logoutSuccess": "Logout successful!",
       "signInSuccess": "Login successful!",
+      "signInError": "Invalid email or password.",
       "loggingIn": "Logging in...",
       "signInFormTitle": "Login to your account",
       "signInFormDescription": "Enter your account to login",

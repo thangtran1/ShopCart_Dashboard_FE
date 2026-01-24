@@ -50,6 +50,7 @@
       "googleLoginSuccess": "Đăng nhập Google thành công!",
       "logoutSuccess": "Đăng xuất thành công!",
       "signInSuccess": "Đăng nhập thành công!",
+      "signInError": "Email hoặc mật khẩu không chính xác.",
       "loggingIn": "Đang đăng nhập...",
       "signInFormTitle": "Đăng nhập vào tài khoản của bạn",
       "signInFormDescription": "Nhập tài khoản để đăng nhập",
