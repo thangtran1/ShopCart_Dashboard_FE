@@ -1,42 +1,34 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useNews } from "@/hooks/useNews";
-import { Button, Popconfirm, Tooltip } from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  FileTextOutlined,
-} from "@ant-design/icons";
+import { Button, Tooltip, Tag, Popconfirm } from "antd";
+import { EyeOutlined, MessageOutlined, CalendarOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import dayjs from "dayjs";
-
-import { Badge } from "@/ui/badge";
-import { INews, INewsFilters } from "@/api/services/newsApi";
+import { useCustomerSurvey } from "@/hooks/user-customer-survey";
+import { SurveyFilters } from "@/api/services/customer-survey";
 import CustomerSurveyFilters from "./CustomerSurveyFilters";
-import CustomerSurveyModal from "./CustomerSurveyModal";
+import ResponseDetailModal from "./ResponseDetailModal";
+import { Separator } from "@/ui/separator";
 
-const initialFilters: INewsFilters = {
+const initialFilters: SurveyFilters = {
   page: 1,
   limit: 10,
   search: "",
-  category: "",
 };
 
 export default function ResponseTableManagement() {
-  const { useAdminNews, deleteNews } = useNews();
-  const [filters, setFilters] = useState<INewsFilters>(initialFilters);
+  const { useAllResponses, deleteResponses } = useCustomerSurvey();
+  const [filters, setFilters] = useState<SurveyFilters>(initialFilters);
+  const [selectedResponse, setSelectedResponse] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingNews, setEditingNews] = useState<INews | null>(null);
 
-  const { data: adminData, isLoading } = useAdminNews(filters);
+  const { data: responseData, isLoading } = useAllResponses(filters);
+  const dataSource = responseData?.data?.data || [];
+  const total = responseData?.data?.total || 0;
 
-  const dataSource = adminData?.data || [];
-  const total = adminData?.total || 0;
-
-  const handleFilterChange = (key: keyof INewsFilters, value: any) => {
+  const handleFilterChange = (key: keyof SurveyFilters, value: any) => {
     setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
   };
 
@@ -44,136 +36,101 @@ export default function ResponseTableManagement() {
     setFilters(initialFilters);
   };
 
-  const handleOpenAddModal = () => {
-    setEditingNews(null);
+  const handleViewDetail = (record: any) => {
+    setSelectedResponse(record);
     setIsModalOpen(true);
   };
 
-  const handleOpenEditModal = (record: INews) => {
-    setEditingNews(record);
-    setIsModalOpen(true);
+  const handleDeleteResponse = async (id: string) => {
+    await deleteResponses(id);
   };
 
-  const handleDelete = async (id: string) => {
-    await deleteNews(id);
-  };
-
-  const columns: ColumnsType<INews> = useMemo(
+  const columns: ColumnsType<any> = useMemo(
     () => [
       {
-        title: "BÀI VIẾT",
-        key: "news",
-        width: 350,
-        render: (_, record) => (
-          <div className="flex items-center gap-3">
-            <div className="relative flex-shrink-0 w-16 h-10 overflow-hidden rounded-lg border border-border shadow-sm bg-muted">
-              <img
-                src={record.thumbnail}
-                alt={record.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="font-bold text-foreground line-clamp-1 leading-tight">
-                {record.title}
-              </span>
-              <span className="text-[10px] text-muted-foreground truncate italic">
-                {record.slug}
-              </span>
-            </div>
-          </div>
-        ),
-      },
-      {
-        title: "DANH MỤC",
-        dataIndex: "category",
-        width: 140,
-        render: (category: string) => (
-          <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 uppercase text-[10px]">
-            {category || "Chưa phân loại"}
-          </Badge>
-        ),
-      },
-      {
-        title: "TRẠNG THÁI",
-        dataIndex: "isPublished",
-        width: 130,
-        align: "center",
-        render: (isPublished: boolean) => (
-          isPublished ? (
-            <Badge variant="success" className="gap-1">
-              CÔNG KHAI
-            </Badge>
-          ) : (
-            <Badge variant="outline">BẢN NHÁP</Badge>
-          )
-        ),
-      },
-      {
-        title: "THỐNG KÊ",
-        key: "stats",
-        width: 150,
+        title: "PHẢN HỒI KHÁCH HÀNG",
+        key: "feedback",
+        width: 400,
         render: (_, record) => (
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 text-xs text-foreground">
-              <EyeOutlined className="text-primary" />
-              <span>{record.views?.toLocaleString()} lượt xem</span>
+            <div className="flex items-center gap-2">
+              <MessageOutlined className="text-primary" />
+              <span className="font-bold text-foreground line-clamp-1">
+                {record.customerFeedback || "Không có nội dung góp ý"}
+              </span>
             </div>
-            <div className="flex items-center gap-2 text-[10px] text-foreground">
-              <FileTextOutlined />
-              <span>{record.tags?.length || 0} thẻ (tags)</span>
-            </div>
+            <span className="text-[11px] text-muted-foreground italic">
+              ID: {record._id}
+            </span>
           </div>
         ),
       },
       {
-        title: "NGÀY TẠO",
+        title: "SỐ CÂU TRẢ LỜI",
+        dataIndex: "surveyData",
+        width: 150,
+        align: "center",
+        render: (surveyData: any[]) => (
+          <Tag color="blue" className="rounded-full px-3">
+            {surveyData?.length || 0} Câu hỏi
+          </Tag>
+        ),
+      },
+      {
+        title: "THỜI GIAN GỬI",
         dataIndex: "createdAt",
-        width: 140,
+        width: 180,
         sorter: (a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
         render: (date) => (
-          <div className="flex flex-col text-muted-foreground">
-            <span className="text-xs font-semibold text-foreground">
-              {dayjs(date).format("DD/MM/YYYY")}
-            </span>
-            <span className="text-[10px]">
-              {dayjs(date).format("HH:mm")}
-            </span>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <CalendarOutlined className="text-[12px]" />
+            <div className="flex flex-col">
+              <span className="text-xs font-semibold text-foreground">
+                {dayjs(date).format("DD/MM/YYYY")}
+              </span>
+              <span className="text-[10px]">
+                {dayjs(date).format("HH:mm:ss")}
+              </span>
+            </div>
           </div>
         ),
       },
       {
         title: "THAO TÁC",
         key: "actions",
-        width: 100,
+        width: 120, 
         fixed: "right",
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-1">
-            <Tooltip title="Chỉnh sửa">
+            <Tooltip title="Xem chi tiết câu trả lời">
               <Button
                 type="text"
                 size="small"
-                className="text-indigo-600 hover:bg-indigo-50 rounded-lg"
-                icon={<EditOutlined className="text-lg" />}
-                onClick={() => handleOpenEditModal(record)}
+                className="text-primary hover:bg-primary/10 rounded-lg"
+                icon={<EyeOutlined className="text-lg" />}
+                onClick={() => handleViewDetail(record)}
               />
             </Tooltip>
-            <Popconfirm
-              title="Xóa bài viết?"
-              description="Hành động này sẽ xóa vĩnh viễn dữ liệu."
-              onConfirm={() => handleDelete(record._id)}
-              okText="Xóa"
-              cancelText="Hủy"
-              okButtonProps={{ danger: true, className: "bg-rose-500" }}
-            >
-              <Button
-                type="text"
-                size="small"
-                danger
-                icon={<DeleteOutlined className="text-lg" />}
-              />
-            </Popconfirm>
+      
+            <Tooltip title="Xóa phản hồi">
+              <Popconfirm
+                title="Xóa phản hồi này?"
+                description="Hành động này không thể hoàn tác."
+                onConfirm={() => handleDeleteResponse(record._id)}
+                okText="Xóa"
+                cancelText="Hủy"
+                okButtonProps={{ danger: true, className: "bg-rose-500" }}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  danger
+                  className="hover:bg-rose-50 rounded-lg"
+                  icon={<DeleteOutlined className="text-lg" />}
+                />
+              </Popconfirm>
+            </Tooltip>
           </div>
         ),
       },
@@ -182,42 +139,41 @@ export default function ResponseTableManagement() {
   );
 
   return (
-    <div>
-      <div className="space-y-6">
-        <CustomerSurveyFilters
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          onClearFilters={handleClearFilters}
-        />
+    <div className="space-y-4">
+      <CustomerSurveyFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onClearFilters={handleClearFilters}
+        placeholder="Tìm kiếm nội dung phản hồi..."
+      />
 
-        <div className="mt-4 overflow-hidden">
-          <TableAntd
-            columns={columns}
-            data={dataSource}
-            loading={isLoading}
-            pagination={{
-              page: filters.page,
-              limit: filters.limit,
-              total,
-            }}
-            onPageChange={(p, l) => {
-              setFilters((prev) => ({
-                ...prev,
-                page: p,
-                limit: l || prev.limit,
-              }));
-            }}
-          />
-        </div>
+      <Separator />
+
+
+      <div className="overflow-hidden">
+        <TableAntd
+          columns={columns}
+          data={dataSource}
+          loading={isLoading}
+          pagination={{
+            page: filters.page ?? 1,
+            limit: filters.limit ?? 10,
+            total: total,
+          }}
+          onPageChange={(p, l) => {
+            setFilters((prev) => ({
+              ...prev,
+              page: p,
+              limit: l ?? 10,
+            }));
+          }}
+        />
       </div>
 
-      <CustomerSurveyModal
+      <ResponseDetailModal
         open={isModalOpen}
-        news={editingNews}
+        data={selectedResponse}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={() => {
-          setIsModalOpen(false);
-        }}
       />
     </div>
   );

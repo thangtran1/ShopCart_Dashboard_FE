@@ -1,11 +1,17 @@
 import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
+export interface SurveyFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
 export interface SurveyQuestion {
   _id: string;
   title: string;
   options: string[];
   order: number;
+  type: 'single' | 'multiple'; 
 }
 
 export interface SurveyAnswer {
@@ -28,9 +34,12 @@ export interface SurveyResponse {
 
 export const customerSurveyService = {
   // 1. Lấy danh sách câu hỏi (Dùng cho cả khách trả lời và Admin quản lý)
-  getQuestions: async () => {
-    const response = await apiClient.get({ url: API_URL.CUSTOMER_SURVEY.GET_QUESTIONS });
-    return response.data;
+  getQuestions: async (params?: SurveyFilters) => {
+    const response = await apiClient.get({
+      url: API_URL.CUSTOMER_SURVEY.GET_QUESTIONS,
+      params,
+    });
+    return response;
   },
 
   // 2. Tạo câu hỏi mới (Admin)
@@ -51,6 +60,12 @@ export const customerSurveyService = {
     return response.data;
   },
 
+  // 4. Xóa câu trả lời (Admin)
+  deleteResponse: async (id: string) => {
+    const response = await apiClient.delete({ url: API_URL.CUSTOMER_SURVEY.DELETE_RESPONSE(id) });
+    return response.data;
+  },
+
   // 5. Gửi kết quả khảo sát (Khách hàng)
   submitSurvey: async (data: SubmitSurveyDto) => {
     const response = await apiClient.post({ url: API_URL.CUSTOMER_SURVEY.SUBMIT, data });
@@ -58,8 +73,11 @@ export const customerSurveyService = {
   },
 
   // 6. Lấy danh sách tất cả phản hồi (Admin)
-  getAllResponses: async () => {
-    const response = await apiClient.get({ url: API_URL.CUSTOMER_SURVEY.GET_RESPONSES });
-    return response.data;
+  getAllResponses: async (params?: SurveyFilters) => {
+    const response = await apiClient.get({
+      url: API_URL.CUSTOMER_SURVEY.GET_RESPONSES,
+      params,
+    });
+    return response;
   },
 };

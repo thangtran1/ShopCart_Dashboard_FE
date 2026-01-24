@@ -230,6 +230,7 @@ export const API_URL = {
     CREATE_QUESTION: `${CUSTOMER_SURVEY}/questions`,
     UPDATE_QUESTION: (id: string) => `${CUSTOMER_SURVEY}/questions/${id}`,
     DELETE_QUESTION: (id: string) => `${CUSTOMER_SURVEY}/questions/${id}`,
+    DELETE_RESPONSE: (id: string) => `${CUSTOMER_SURVEY}/responses/${id}`,
     SUBMIT: `${CUSTOMER_SURVEY}/submit`,
     GET_RESPONSES: `${CUSTOMER_SURVEY}/responses`,
   }
