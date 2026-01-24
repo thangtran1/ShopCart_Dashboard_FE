@@ -5,15 +5,18 @@ import { Modal, Form, Input, InputNumber, Select, Button, message } from "antd";
 import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useCustomerSurvey } from "@/hooks/user-customer-survey";
 import { Textarea } from "@/ui/textarea";
+import { useTranslation } from "react-i18next";
+import { SurveyQuestion } from "@/api/services/customer-survey";
 
 interface Props {
   open: boolean;
-  question: any | null;
+  question: SurveyQuestion | null;
   onClose: () => void;
   onSuccess: () => void;
 }
 
 export default function QuestionDetailModal({ open, question, onClose, onSuccess }: Props) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const { createQuestion, updateQuestion, isActionLoading } = useCustomerSurvey();
 
@@ -33,10 +36,10 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
       const values = await form.validateFields();
       if (question?._id) {
         await updateQuestion({ id: question._id, data: values });
-        message.success("Cập nhật thành công");
+        message.success(t('management.customer-survey.messages.update_success'));
       } else {
         await createQuestion(values);
-        message.success("Thêm mới thành công");
+        message.success(t('management.customer-survey.messages.create_success'));
       }
       onSuccess();
     } catch (error) {
@@ -48,15 +51,15 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
     <Modal
       title={
         <span className="text-xl font-bold italic uppercase text-primary">
-          {question ? "Chỉnh sửa câu hỏi" : "Thêm câu hỏi khảo sát"}
+          {question ? t('management.customer-survey.form.edit_title') : t('management.customer-survey.form.add_title')}
         </span>
       }
       open={open}
       onCancel={onClose}
       onOk={handleSubmit}
       confirmLoading={isActionLoading}
-      okText={question ? "Lưu thay đổi" : "Tạo câu hỏi"}
-      cancelText="Hủy"
+      okText={question ? t('management.customer-survey.form.btn_save') : t('management.customer-survey.form.btn_create')}
+      cancelText={t('management.customer-survey.form.btn_cancel')}
       width={600}
       centered
       styles={{ body: { paddingTop: "20px" } }}
@@ -72,36 +75,40 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
       <Form form={form} layout="vertical" requiredMark={false}>
         <div className="grid grid-cols-4 gap-4">
           <Form.Item
-            label={<span className="font-bold text-xs uppercase">Thứ tự</span>}
+            label={<span className="font-bold text-xs uppercase">{t('management.customer-survey.form.label_order')}</span>}
             name="order"
             className="col-span-1"
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: t('management.customer-survey.messages.error_required') }]}
           >
             <InputNumber min={1} className="w-full rounded-lg" size="large" />
           </Form.Item>
 
           <Form.Item
-            label={<span className="font-bold text-xs uppercase">Loại câu hỏi</span>}
+            label={<span className="font-bold text-xs uppercase">{t('management.customer-survey.form.label_type')}</span>}
             name="type"
             className="col-span-3"
             rules={[{ required: true }]}
           >
             <Select size="large" className="rounded-lg">
-              <Select.Option value="single">Chọn một (Radio)</Select.Option>
-              <Select.Option value="multiple">Chọn nhiều (Checkbox)</Select.Option>
+              <Select.Option value="single">{t('management.customer-survey.filters.type_single')}</Select.Option>
+              <Select.Option value="multiple">{t('management.customer-survey.filters.type_multiple')}</Select.Option>
             </Select>
           </Form.Item>
         </div>
 
         <Form.Item
-          label={<span className="font-bold text-xs uppercase">Tiêu đề câu hỏi</span>}
+          label={<span className="font-bold text-xs uppercase">{t('management.customer-survey.form.label_title')}</span>}
           name="title"
-          rules={[{ required: true, message: "Vui lòng nhập nội dung câu hỏi" }]}
+          rules={[{ required: true, message: t('management.customer-survey.messages.error_required') }]}
         >
-          <Textarea rows={2} placeholder="Nhập câu hỏi..." className="rounded-lg" />
+          <Textarea 
+            rows={2} 
+            placeholder={t('management.customer-survey.form.placeholder_title')} 
+            className="rounded-lg" 
+          />
         </Form.Item>
 
-        <Separator label="Danh sách lựa chọn (Options)" />
+        <Separator label={t('management.customer-survey.form.label_options_list')} />
 
         <Form.List
           name="options"
@@ -109,7 +116,7 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
             {
               validator: async (_, names) => {
                 if (!names || names.length < 2) {
-                  return Promise.reject(new Error("Phải có ít nhất 2 lựa chọn"));
+                  return Promise.reject(new Error(t('management.customer-survey.messages.error_min_options')));
                 }
               },
             },
@@ -127,10 +134,14 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
                     <Form.Item
                       {...fieldConfig}
                       validateTrigger={["onChange", "onBlur"]}
-                      rules={[{ required: true, whitespace: true, message: "Không được để trống" }]}
+                      rules={[{ required: true, whitespace: true, message: t('management.customer-survey.messages.error_required') }]}
                       noStyle
                     >
-                      <Input placeholder={`Lựa chọn ${index + 1}`} className="rounded-lg" size="large" />
+                      <Input 
+                        placeholder={`${t('management.customer-survey.form.placeholder_option')} ${index + 1}`} 
+                        className="rounded-lg" 
+                        size="large" 
+                      />
                     </Form.Item>
                     {fields.length > 1 && (
                       <Button
@@ -153,7 +164,7 @@ export default function QuestionDetailModal({ open, question, onClose, onSuccess
                 icon={<PlusOutlined />}
                 className="rounded-lg h-10 border-primary text-primary"
               >
-                Thêm lựa chọn
+                {t('management.customer-survey.form.btn_add_option')}
               </Button>
               <Form.ErrorList errors={errors} className="text-red-500 text-xs mt-1" />
             </div>

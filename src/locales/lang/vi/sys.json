@@ -537,7 +537,7 @@
       "delete-backup-confirm-description": "Bạn có chắc chắn muốn xóa bản sao lưu này?"
     },
     "chat": {
-      "manager-chat-user": "Quản lý đoạn chat người dùng",
+      "manager-chat-user": "Quản lý đoạn chat",
       "manager-chat-user-description": "Hỗ trợ khách hàng qua chat",
       "conversation": "Cuộc trò chuyện",
       "search": "Tìm kiếm",
@@ -642,6 +642,80 @@
       "clear-filter": "Xóa bộ lọc",
       "user-id": "ID người dùng",
       "ip": "Địa chỉ IP"
+    },
+    "customer-survey": {
+      "title": "Quản lý khảo sát khách hàng",
+      "description": "Các câu hỏi trắc nghiệm và xem ý kiến đóng góp từ người dùng.",
+      "tabs": {
+        "questions": "Thiết lập câu hỏi",
+        "responses": "Phản hồi khách hàng"
+      },
+      "button": {
+        "add_question": "Thêm câu hỏi"
+      },
+      "filters": {
+        "search_placeholder": "Tìm kiếm câu hỏi...",
+        "reset": "Làm mới",
+        "type_all": "Tất cả loại",
+        "type_single": "Chọn một (Radio)",
+        "type_multiple": "Chọn nhiều (Checkbox)"
+      },
+      "table": {
+        "order": "THỨ TỰ",
+        "type": "LOẠI CÂU HỎI",
+        "question": "CÂU HỎI KHẢO SÁT",
+        "options": "CÁC LỰA CHỌN",
+        "created_at": "NGÀY TẠO",
+        "actions": "THAO TÁC",
+        "edit": "Chỉnh sửa",
+        "delete_confirm": "Xóa câu hỏi này?",
+        "delete_desc": "Hành động này sẽ ảnh hưởng đến dữ liệu báo cáo cũ.",
+        "delete_ok": "Xóa",
+        "delete_cancel": "Hủy"
+      },
+      "response_table": {
+        "customer_feedback": "PHẢN HỒI KHÁCH HÀNG",
+        "no_content": "Không có nội dung góp ý",
+        "answer_count": "SỐ CÂU TRẢ LỜI",
+        "questions_suffix": "Câu hỏi",
+        "submitted_time": "THỜI GIAN GỬI",
+        "actions": "THAO TÁC",
+        "view_detail": "Xem chi tiết câu trả lời",
+        "delete_tooltip": "Xóa phản hồi",
+        "delete_confirm": "Xóa phản hồi này?",
+        "delete_desc": "Hành động này không thể hoàn tác.",
+        "delete_ok": "Xóa",
+        "delete_cancel": "Hủy"
+      },
+      "form": {
+        "add_title": "Thêm câu hỏi khảo sát",
+        "edit_title": "Chỉnh sửa câu hỏi",
+        "label_order": "Thứ tự",
+        "label_type": "Loại câu hỏi",
+        "label_title": "Tiêu đề câu hỏi",
+        "label_options_list": "Danh sách lựa chọn (Options)",
+        "placeholder_title": "Nhập nội dung câu hỏi khảo sát...",
+        "placeholder_option": "Lựa chọn",
+        "btn_add_option": "Thêm lựa chọn",
+        "btn_create": "Tạo câu hỏi",
+        "btn_save": "Lưu thay đổi",
+        "btn_cancel": "Hủy"
+      },
+      "messages": {
+        "create_success": "Thêm mới thành công",
+        "update_success": "Cập nhật thành công",
+        "error_validate": "Vui lòng kiểm tra lại thông tin",
+        "error_min_options": "Phải có ít nhất 2 lựa chọn",
+        "error_required": "Vui lòng không bỏ trống trường này"
+      },
+      "response_detail": {
+        "title": "Chi tiết phản hồi khảo sát",
+        "customer_feedback": "Ý kiến khách hàng:",
+        "submitted_at": "Gửi lúc",
+        "specific_answers": "CÁC CÂU TRẢ LỜI CỤ THỂ",
+        "unknown_question": "Câu hỏi không xác định",
+        "no_feedback": "Không có ý kiến đóng góp"
+      }
     }
   },
   "menu-level": {
@@ -820,14 +894,18 @@
     "dashboard": "Bảng điều khiển",
     "workbench": "Bàn làm việc",
     "analysis": "Phân tích",
-
     "maintenance": "Bảo trì hệ thống",
+    "coupons-management": "Quản lý mã giảm giá",
+    "customer-survey": "Quản lý Câu hỏi và Phản hồi",
+    "news-manager": "Quản lý tin tức",
+    "orders-manager": "Quản lý đơn hàng",
+    "products-manager": "Quản lý sản phẩm",
 
     "management": "Quản lý",
     "management-user": "Quản lý người dùng",
     "auth-session": "Quản lý phiên đăng nhập",
     "manager-banner": "Quản lý banner",
-    "manager-chat-user": "Quản lý đoạn chat người dùng",
+    "manager-chat-user": "Quản lý đoạn chat",
     "database": "Quản lý cơ sở dữ liệu",
 
     "components": "Thành phần",

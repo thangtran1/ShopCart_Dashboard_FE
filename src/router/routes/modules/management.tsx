@@ -177,7 +177,7 @@ const management: AppRouteObject = {
         </Suspense>
       ),
       meta: {
-        label: "Mã giảm giá",
+        label: "siderbar-labels.coupons-management",
         key: "/admin/management/coupons",
       },
     },
@@ -189,7 +189,7 @@ const management: AppRouteObject = {
         </Suspense>
       ),
       meta: {
-        label: "Quản lý Câu hỏi và Phản hồi",
+        label: "siderbar-labels.customer-survey",
         key: "/admin/management/customer-survey",
       },
     },
@@ -201,7 +201,7 @@ const management: AppRouteObject = {
         </Suspense>
       ),
       meta: {
-        label: "Quản lý tin tức",
+        label: "siderbar-labels.news-manager",
         key: "/admin/management/news",
       },
     },
@@ -264,7 +264,7 @@ const management: AppRouteObject = {
         </Suspense>
       ),
       meta: {
-        label: "Quản lý đơn hàng",
+        label: "siderbar-labels.orders-manager",
         key: "/admin/management/orders-manager",
       },
     },
@@ -276,7 +276,7 @@ const management: AppRouteObject = {
         </Suspense>
       ),
       meta: {
-        label: "Quản lý sản phẩm",
+        label: "siderbar-labels.products-manager",
         key: "/admin/management/products",
       },
     },

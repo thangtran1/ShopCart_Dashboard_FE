@@ -9,8 +9,10 @@ import { Separator } from "@/ui/separator";
 import { CardTitle } from "@/ui/card";
 import { Icon } from "@/components/icon";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const CustomerSurveyManagement = () => {
+    const { t } = useTranslation()
     const [activeTab, setActiveTab] = useState("questions");
     const [triggerAdd, setTriggerAdd] = useState(0);
 
@@ -20,7 +22,7 @@ const CustomerSurveyManagement = () => {
             label: (
                 <div className="flex items-center gap-2">
                     <ListChecks size={18} />
-                    <span>Thiết lập câu hỏi</span>
+                    <span>{t('management.customer-survey.tabs.questions')}</span>
                 </div>
             ),
             children: <QuestionTableManagement addTrigger={triggerAdd} />,
@@ -30,7 +32,7 @@ const CustomerSurveyManagement = () => {
             label: (
                 <div className="flex items-center gap-2">
                     <MessageSquareQuote size={18} />
-                    <span>Phản hồi khách hàng</span>
+                    <span>{t('management.customer-survey.tabs.responses')}</span>
                 </div>
             ),
             children: <ResponseTableManagement />,
@@ -44,10 +46,10 @@ const CustomerSurveyManagement = () => {
                     <div>
                         <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
                             <Icon icon="lucide:message-square-text" className="h-7 w-7 text-primary" />
-                            Quản lý khảo sát khách hàng
+                            {t('management.customer-survey.title')}
                         </CardTitle>
                         <p className="text-muted-foreground mt-1">
-                            Các câu hỏi trắc nghiệm và xem ý kiến đóng góp từ người dùng.
+                        {t('management.customer-survey.description')}
                         </p>
                     </div>
                     <div className="flex gap-3">
@@ -59,7 +61,7 @@ const CustomerSurveyManagement = () => {
                                 className="h-11 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-md font-bold transition-all hover:-translate-y-0.5"
                                 onClick={() => setTriggerAdd(prev => prev + 1)} 
                             >
-                                Thêm câu hỏi
+                                {t('management.customer-survey.button.add_question')}
                             </Button>
                         )}
                     </div>

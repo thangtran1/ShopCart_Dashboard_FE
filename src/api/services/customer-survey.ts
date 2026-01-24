@@ -2,9 +2,10 @@ import { API_URL } from "@/router/routes/api.route";
 import apiClient from "../apiClient";
 
 export interface SurveyFilters {
+  search?: string;
+  type?: 'single' | 'multiple';
   page?: number;
   limit?: number;
-  search?: string;
 }
 export interface SurveyQuestion {
   _id: string;
@@ -12,6 +13,7 @@ export interface SurveyQuestion {
   options: string[];
   order: number;
   type: 'single' | 'multiple'; 
+  createdAt?: string
 }
 
 export interface SurveyAnswer {

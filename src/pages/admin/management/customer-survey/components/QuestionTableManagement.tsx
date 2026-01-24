@@ -12,10 +12,11 @@ import TableAntd from "@/components/common/tables/custom-table-antd";
 import dayjs from "dayjs";
 
 import { useCustomerSurvey } from "@/hooks/user-customer-survey";
-import { SurveyFilters } from "@/api/services/customer-survey";
+import { SurveyFilters, SurveyQuestion } from "@/api/services/customer-survey";
 import CustomerSurveyFilters from "./CustomerSurveyFilters";
 import QuestionDetailModal from "./QuestionDetailModal";
 import { Separator } from "@/ui/separator";
+import { useTranslation } from "react-i18next";
 
 const initialFilters: SurveyFilters = {
   page: 1,
@@ -24,6 +25,7 @@ const initialFilters: SurveyFilters = {
 };
 
 export default function QuestionTableManagement({ addTrigger }: { addTrigger?: number }) {
+  const { t } = useTranslation()
   const { useQuestions, deleteQuestion } = useCustomerSurvey();
   const [filters, setFilters] = useState<SurveyFilters>(initialFilters);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,27 +64,30 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
     await deleteQuestion(id);
   };
 
-  const columns: ColumnsType<any> = useMemo(
+  const columns: ColumnsType<SurveyQuestion> = useMemo(
     () => [
       {
-        title: "THỨ TỰ",
+        title: t('management.customer-survey.table.order'),
         dataIndex: "order",
         width: 80,
         align: "center",
         render: (order) => <b className="text-primary">#{order}</b>,
       },
       {
-        title: 'Loại câu hỏi',
+        title: t('management.customer-survey.table.type'),
         dataIndex: 'type',
         key: 'type',
-        render: (type: string) => (
+        width: 150,
+        render: (type: SurveyQuestion['type']) => (
           <Tag color={type === 'multiple' ? 'blue' : 'green'}>
-            {type === 'multiple' ? 'Chọn nhiều' : 'Chọn một'}
+            {type === 'multiple'
+              ? t('management.customer-survey.filters.type_multiple')
+              : t('management.customer-survey.filters.type_single')}
           </Tag>
         ),
       },
       {
-        title: "CÂU HỎI KHẢO SÁT",
+        title: t('management.customer-survey.table.question'),
         key: "question",
         width: 400,
         render: (_, record) => (
@@ -95,14 +100,16 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
                 {record.title}
               </span>
               <span className="text-[11px] text-muted-foreground line-clamp-1 italic mt-1">
-                Loại: {record.type === 'multiple' ? 'Chọn nhiều' : 'Chọn một'}
+                {t('management.customer-survey.table.type')}: {record.type === 'multiple' 
+                  ? t('management.customer-survey.filters.type_multiple') 
+                  : t('management.customer-survey.filters.type_single')}
               </span>
             </div>
           </div>
         ),
       },
       {
-        title: "CÁC LỰA CHỌN",
+        title: t('management.customer-survey.table.options'),
         dataIndex: "options",
         width: 300,
         render: (options: string[]) => (
@@ -116,7 +123,7 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
         ),
       },
       {
-        title: "NGÀY TẠO",
+        title: t('management.customer-survey.table.created_at'),
         dataIndex: "createdAt",
         width: 140,
         sorter: (a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
@@ -132,14 +139,14 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
         ),
       },
       {
-        title: "THAO TÁC",
+        title: t('management.customer-survey.table.actions'),
         key: "actions",
         width: 120,
         fixed: "right",
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-1">
-            <Tooltip title="Chỉnh sửa">
+            <Tooltip title={t('management.customer-survey.table.edit')}>
               <Button
                 type="text"
                 size="small"
@@ -149,11 +156,11 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
               />
             </Tooltip>
             <Popconfirm
-              title="Xóa câu hỏi này?"
-              description="Hành động này sẽ ảnh hưởng đến dữ liệu báo cáo cũ."
+              title={t('management.customer-survey.table.delete_confirm')}
+              description={t('management.customer-survey.table.delete_desc')}
               onConfirm={() => handleDelete(record._id)}
-              okText="Xóa"
-              cancelText="Hủy"
+              okText={t('management.customer-survey.table.delete_ok')}
+              cancelText={t('management.customer-survey.table.delete_cancel')}
               okButtonProps={{ danger: true, className: "bg-rose-500" }}
             >
               <Button
@@ -167,7 +174,7 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
         ),
       },
     ],
-    []
+    [t]
   );
 
   return (
@@ -177,7 +184,6 @@ export default function QuestionTableManagement({ addTrigger }: { addTrigger?: n
             filters={filters}
             onFilterChange={handleFilterChange}
             onClearFilters={handleClearFilters}
-            placeholder="Tìm kiếm tiêu đề câu hỏi..."
           />
           <Separator />
 

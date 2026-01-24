@@ -11,6 +11,7 @@ import { SurveyFilters } from "@/api/services/customer-survey";
 import CustomerSurveyFilters from "./CustomerSurveyFilters";
 import ResponseDetailModal from "./ResponseDetailModal";
 import { Separator } from "@/ui/separator";
+import { useTranslation } from "react-i18next";
 
 const initialFilters: SurveyFilters = {
   page: 1,
@@ -19,6 +20,7 @@ const initialFilters: SurveyFilters = {
 };
 
 export default function ResponseTableManagement() {
+  const { t } = useTranslation()
   const { useAllResponses, deleteResponses } = useCustomerSurvey();
   const [filters, setFilters] = useState<SurveyFilters>(initialFilters);
   const [selectedResponse, setSelectedResponse] = useState<any>(null);
@@ -48,7 +50,7 @@ export default function ResponseTableManagement() {
   const columns: ColumnsType<any> = useMemo(
     () => [
       {
-        title: "PHẢN HỒI KHÁCH HÀNG",
+        title: t('management.customer-survey.response_table.customer_feedback'),
         key: "feedback",
         width: 400,
         render: (_, record) => (
@@ -56,7 +58,7 @@ export default function ResponseTableManagement() {
             <div className="flex items-center gap-2">
               <MessageOutlined className="text-primary" />
               <span className="font-bold text-foreground line-clamp-1">
-                {record.customerFeedback || "Không có nội dung góp ý"}
+                {record.customerFeedback || t('management.customer-survey.response_table.no_content')}
               </span>
             </div>
             <span className="text-[11px] text-muted-foreground italic">
@@ -66,18 +68,18 @@ export default function ResponseTableManagement() {
         ),
       },
       {
-        title: "SỐ CÂU TRẢ LỜI",
+        title: t('management.customer-survey.response_table.answer_count'),
         dataIndex: "surveyData",
         width: 150,
         align: "center",
         render: (surveyData: any[]) => (
           <Tag color="blue" className="rounded-full px-3">
-            {surveyData?.length || 0} Câu hỏi
+            {surveyData?.length || 0} {t('management.customer-survey.response_table.questions_suffix')}
           </Tag>
         ),
       },
       {
-        title: "THỜI GIAN GỬI",
+        title: t('management.customer-survey.response_table.submitted_time'),
         dataIndex: "createdAt",
         width: 180,
         sorter: (a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
@@ -96,14 +98,14 @@ export default function ResponseTableManagement() {
         ),
       },
       {
-        title: "THAO TÁC",
+        title: t('management.customer-survey.response_table.actions'),
         key: "actions",
         width: 120, 
         fixed: "right",
         align: "center",
         render: (_, record) => (
           <div className="flex items-center justify-center gap-1">
-            <Tooltip title="Xem chi tiết câu trả lời">
+            <Tooltip title={t('management.customer-survey.response_table.view_detail')}>
               <Button
                 type="text"
                 size="small"
@@ -113,13 +115,13 @@ export default function ResponseTableManagement() {
               />
             </Tooltip>
       
-            <Tooltip title="Xóa phản hồi">
+            <Tooltip title={t('management.customer-survey.response_table.delete_tooltip')}>
               <Popconfirm
-                title="Xóa phản hồi này?"
-                description="Hành động này không thể hoàn tác."
+                title={t('management.customer-survey.response_table.delete_confirm')}
+                description={t('management.customer-survey.response_table.delete_desc')}
                 onConfirm={() => handleDeleteResponse(record._id)}
-                okText="Xóa"
-                cancelText="Hủy"
+                okText={t('management.customer-survey.response_table.delete_ok')}
+                cancelText={t('management.customer-survey.response_table.delete_cancel')}
                 okButtonProps={{ danger: true, className: "bg-rose-500" }}
               >
                 <Button
@@ -135,7 +137,7 @@ export default function ResponseTableManagement() {
         ),
       },
     ],
-    []
+    [t]
   );
 
   return (
@@ -144,7 +146,6 @@ export default function ResponseTableManagement() {
         filters={filters}
         onFilterChange={handleFilterChange}
         onClearFilters={handleClearFilters}
-        placeholder="Tìm kiếm nội dung phản hồi..."
       />
 
       <Separator />

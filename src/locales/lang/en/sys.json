@@ -642,6 +642,80 @@
       "clear-filter": "Clear filters",
       "user-id": "User ID",
       "ip": "IP address"
+    },
+    "customer-survey": {
+      "title": "Customer Survey Management",
+      "description": "Manage multiple-choice questions and view feedback from users.",
+      "tabs": {
+        "questions": "Question Setup",
+        "responses": "Customer Feedback"
+      },
+      "button": {
+        "add_question": "Add Question"
+      },
+      "filters": {
+        "search_placeholder": "Search by title...",
+        "reset": "Reset",
+        "type_all": "All types",
+        "type_single": "Single Choice",
+        "type_multiple": "Multiple Choice"
+      },
+      "table": {
+        "order": "ORDER",
+        "type": "QUESTION TYPE",
+        "question": "SURVEY QUESTION",
+        "options": "OPTIONS",
+        "created_at": "CREATED DATE",
+        "actions": "ACTIONS",
+        "edit": "Edit Question",
+        "delete_confirm": "Delete this question?",
+        "delete_desc": "This action will affect old report data.",
+        "delete_ok": "Delete",
+        "delete_cancel": "Cancel"
+      },
+      "response_table": {
+        "customer_feedback": "CUSTOMER FEEDBACK",
+        "no_content": "No feedback content",
+        "answer_count": "ANSWERS",
+        "questions_suffix": "Questions",
+        "submitted_time": "SUBMITTED TIME",
+        "actions": "ACTIONS",
+        "view_detail": "View response details",
+        "delete_tooltip": "Delete response",
+        "delete_confirm": "Delete this response?",
+        "delete_desc": "This action cannot be undone.",
+        "delete_ok": "Delete",
+        "delete_cancel": "Cancel"
+      },
+      "form": {
+        "add_title": "Add Survey Question",
+        "edit_title": "Edit Question",
+        "label_order": "Order",
+        "label_type": "Question Type",
+        "label_title": "Question Title",
+        "label_options_list": "Options List",
+        "placeholder_title": "Enter survey question content...",
+        "placeholder_option": "Option",
+        "btn_add_option": "Add Option",
+        "btn_create": "Create Question",
+        "btn_save": "Save Changes",
+        "btn_cancel": "Cancel"
+      },
+      "messages": {
+        "create_success": "Created successfully",
+        "update_success": "Updated successfully",
+        "error_validate": "Please check the information again",
+        "error_min_options": "Must have at least 2 options",
+        "error_required": "This field is required"
+      },
+      "response_detail": {
+        "title": "Survey Response Details",
+        "customer_feedback": "Customer Feedback:",
+        "submitted_at": "Submitted at",
+        "specific_answers": "SPECIFIC ANSWERS",
+        "unknown_question": "Unknown question",
+        "no_feedback": "No feedback provided"
+      }
     }
   },
   "menu-level": {
@@ -820,8 +894,12 @@
     "dashboard": "Dashboard",
     "workbench": "Workbench",
     "analysis": "Analysis",
-
     "maintenance": "Maintenance",
+    "coupons-management": "Coupon Management",
+    "customer-survey": "Customer Survey Management",
+    "news-manager": "News Management",
+    "orders-manager": "Orders Management",
+    "products-manager": "Products Management",
 
     "management": "Management",
     "management-user": "Management user",
