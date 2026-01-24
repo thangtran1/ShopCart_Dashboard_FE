@@ -22,7 +22,7 @@ const errors: AppRouteObject[] = [
       icon: (
         <Icon icon="bxs:error-alt" className="ant-menu-item-icon" size="24" />
       ),
-      key: "/error",
+      key: "/admin/error",
     },
     children: [
       {

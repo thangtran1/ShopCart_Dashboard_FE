@@ -24,7 +24,7 @@ const menulevel: AppRouteObject = {
         size="24"
       />
     ),
-    key: "/menu_level",
+    key: "/admin/menu_level",
   },
   children: [
     {

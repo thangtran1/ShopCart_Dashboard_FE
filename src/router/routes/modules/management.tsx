@@ -67,7 +67,7 @@ const management: AppRouteObject = {
         size="24"
       />
     ),
-    key: "/management",
+    key: "/admin/management",
   },
   children: [
     {

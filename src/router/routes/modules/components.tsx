@@ -27,7 +27,7 @@ const components: AppRouteObject = {
         size="24"
       />
     ),
-    key: "/components",
+    key: "/admin/components",
   },
   children: [
     {

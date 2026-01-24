@@ -1,3 +1,5 @@
+"use client";
+
 import { EmptyState } from "@/components/common/EmptyState";
 import { Icon } from "@/components/icon";
 import { useFlattenedRoutes, useRouter } from "@/router/hooks";
@@ -38,6 +40,10 @@ const SearchBar = () => {
     return Array.from(map.values());
   }, [flattenedRoutes]);
 
+  const checkHasChildren = (key: string) => {
+    return processedRoutes.some(r => r.key !== key && r.key.startsWith(key + "/"));
+  };
+
   const visibleRoutes = useMemo(() => {
     return processedRoutes.filter(item => {
       const matchSearch = t(item.label).toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -45,7 +51,9 @@ const SearchBar = () => {
       if (!matchSearch) return false;
 
       if (!searchQuery) {
-        const depth = (item.key.match(/\//g) || []).length - 1;
+        const parts = item.key.split('/').filter(Boolean);
+        const depth = Math.max(0, parts.length - 2); 
+
         if (depth > 0) {
           const parentPath = item.key.substring(0, item.key.lastIndexOf('/'));
           return parentPath && expandedKeys.includes(parentPath);
@@ -80,7 +88,6 @@ const SearchBar = () => {
     if (activeItem) activeItem.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [selectedIndex]);
 
-  // Reset search text khi đóng/mở modal
   useEffect(() => {
     if (!search) {
       setSearchQuery("");
@@ -88,16 +95,12 @@ const SearchBar = () => {
     }
   }, [search]);
 
-  const checkHasChildren = (key: string) => {
-    return processedRoutes.some(r => r.key.startsWith(key + "/") && r.key !== key);
-  };
-
   const handleItemClick = (item: any) => {
     const hasChildren = checkHasChildren(item.key);
-    if (!hasChildren || searchQuery) {
-      goToPage(item.key);
-    } else {
+    if (hasChildren && !searchQuery) {
       toggleExpand(item.key);
+    } else {
+      goToPage(item.key);
     }
   };
 
@@ -155,16 +158,14 @@ const SearchBar = () => {
         <ScrollArea className="h-[50vh]">
           {visibleRoutes.length === 0 ? (
             <div className="px-4">
-              <EmptyState 
-                height="sm" 
-                title={t("search.empty.title")} 
-                description={t("search.empty.description")} 
-              />
+              <EmptyState height="sm" title={t("search.empty.title")} description={t("search.empty.description")} />
             </div>
           ) : (
             <div className="flex flex-col gap-1 p-2" ref={scrollRef}>
               {visibleRoutes.map((item, index) => {
-                const depth = (item.key.match(/\//g) || []).length - 1;
+                const parts = item.key.split('/').filter(Boolean);
+                const depth = Math.max(0, parts.length - 2); 
+
                 const hasChildren = checkHasChildren(item.key);
                 const isExpanded = expandedKeys.includes(item.key);
                 const isActive = index === selectedIndex;
@@ -179,7 +180,7 @@ const SearchBar = () => {
                   >
                     <div className="flex items-center gap-3 w-full group">
                       <div className="w-4 flex items-center justify-center">
-                        {hasChildren && (
+                        {hasChildren && !searchQuery && (
                           <Icon 
                             icon={isExpanded ? "solar:alt-arrow-down-bold" : "solar:alt-arrow-right-bold"} 
                             size="12" 
@@ -249,7 +250,6 @@ const StyledItem = styled.div<{ $depth: number; $isActive: boolean }>`
   cursor: pointer;
   transition: all 0.2s ease;
   
-  /* Màu nền Warning (Vàng/Cam nhạt) khi được chọn */
   background-color: ${props => props.$isActive ? 'rgba(255, 171, 0, 0.15)' : 'transparent'};
   border: 1px solid ${props => props.$isActive ? 'rgba(255, 171, 0, 0.3)' : 'transparent'};
 

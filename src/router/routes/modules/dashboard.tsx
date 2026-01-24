@@ -23,7 +23,7 @@ const dashboard: AppRouteObject = {
     icon: (
       <Icon icon="local:ic-analysis" className="ant-menu-item-icon" size="24" />
     ),
-    key: "/dashboard",
+    key: "/admin/dashboard",
   },
   children: [
     {

@@ -30,7 +30,7 @@ const maintenance: AppRouteObject = {
       size={24}
     />
     ),
-    key: "/maintenance",
+    key: "/admin/maintenance",
   },
   children: [
     {
