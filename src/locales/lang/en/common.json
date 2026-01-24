@@ -304,14 +304,14 @@
     "empty_title": "Empty",
     "empty_description": "No brands available yet",
     "extra": {
-      "shipping_title": "Free Shipping",
-      "shipping_desc": "Free shipping for orders over $100",
-      "return_title": "Free Returns",
-      "return_desc": "30-day return guarantee",
-      "support_title": "Customer Support",
-      "support_desc": "Friendly 24/7 support team",
-      "guarantee_title": "Money Back Guarantee",
-      "guarantee_desc": "Quality tested products"
+      "shipping_title": "Trusted Brands",
+      "shipping_desc": "Officially imported with genuine warranty",
+      "return_title": "Easy Returns",
+      "return_desc": "In accordance with TVT Shop return policy",
+      "support_title": "Nationwide Delivery",
+      "support_desc": "Door-to-door shipping across the country",
+      "guarantee_title": "Quality Products",
+      "guarantee_desc": "Guaranteed compatibility and long-lasting durability"
     }
   },
   "news": {

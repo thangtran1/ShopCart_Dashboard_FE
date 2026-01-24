@@ -5,6 +5,7 @@ import HomeBanner from "./public/HomeBanner";
 import NewsPage from "@/components/user/NewsCard";
 import SubProductCard from "./public/SubProductCart";
 import { ShopFeedBack } from "@/components/user/ShopFeedback";
+import Shipping from "./public/Shipping";
 const UserHomePage = () => {
   return (
     <div className="flex flex-col gap-6">
@@ -15,6 +16,7 @@ const UserHomePage = () => {
       <ShopByBrands />
       <NewsPage />
       <ShopFeedBack />
+      <Shipping />
     </div>
   );
 };

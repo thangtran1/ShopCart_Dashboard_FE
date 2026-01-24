@@ -304,14 +304,14 @@
     "empty_title": "Trống",
     "empty_description": "Hiện chưa có thương hiệu nào",
     "extra": {
-      "shipping_title": "Giao hàng miễn phí",
-      "shipping_desc": "Miễn phí vận chuyển cho đơn hàng trên $100",
-      "return_title": "Đổi trả miễn phí",
-      "return_desc": "Cam kết đổi trả trong vòng 30 ngày",
-      "support_title": "Hỗ trợ khách hàng",
-      "support_desc": "Đội ngũ hỗ trợ thân thiện 24/7",
-      "guarantee_title": "Đảm bảo hoàn tiền",
-      "guarantee_desc": "Chất lượng sản phẩm được kiểm định"
+      "shipping_title": "Thương hiệu đảm bảo",
+      "shipping_desc": "Nhập khẩu, bảo hành chính hãng",
+      "return_title": "Đổi trả dễ dàng",
+      "return_desc": "Theo chính sách đổi trả tại Shop Cart TVT Shop",
+      "support_title": "Giao hàng tận nơi",
+      "support_desc": "Trên toàn quốc",
+      "guarantee_title": "Sản phẩm chất lượng",
+      "guarantee_desc": "Đảm bảo tương thích và độ bền cao"
     }
   },
   "news": {
