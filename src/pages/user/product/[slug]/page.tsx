@@ -15,6 +15,7 @@ import RelatedProducts from "../components/RelatedProducts";
 import BuyNowButton from "@/components/user/BuyNowButton";
 import { useTranslation } from "react-i18next";
 import PageLoading from "@/components/common/loading/PageLoading";
+import useStore from "@/store/store";
 
 const SingleProductPage = () => {
   const { t } = useTranslation();
@@ -23,6 +24,15 @@ const SingleProductPage = () => {
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchingRelated, setFetchingRelated] = useState(false);
+
+  const { addViewedProduct } = useStore();
+
+  useEffect(() => {
+    if (product) {
+      // Mỗi khi product thay đổi (người dùng vào trang mới), lưu vào lịch sử
+      addViewedProduct(product);
+    }
+  }, [product, addViewedProduct]);
 
   const fetchRelated = useCallback(async (id: string) => {
     setFetchingRelated(true);

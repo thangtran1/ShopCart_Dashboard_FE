@@ -1366,5 +1366,17 @@
       "delete_success": "Question deleted successfully!",
       "delete_error": "Error deleting question."
     }
+  },
+  "recently-viewed": {
+    "clear_success": "Recently viewed products have been cleared",
+    "clear_error": "Something went wrong. Please try again",
+    "viewed": "Recently Viewed Products",
+    "clear_all": "Clear all",
+    "modal": {
+      "title": "Clear all recently viewed products?",
+      "decs": "All products in your recently viewed list will be removed.",
+      "delete": "Clear",
+      "cancel": "Cancel"
+    }
   }
 }

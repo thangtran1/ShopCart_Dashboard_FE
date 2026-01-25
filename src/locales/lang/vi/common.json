@@ -1366,5 +1366,18 @@
       "delete_success": "Đã xóa câu hỏi!",
       "delete_error": "Lỗi khi xóa câu hỏi."
     }
+  },
+  "recently-viewed": {
+    "clear_success": "Đã xóa danh sách sản phẩm đã xem",
+    "clear_error": "Có lỗi xảy ra, vui lòng thử lại",
+    "viewed": "Sản phẩm đã xem",
+    "clear_all": "Xóa tất cả",
+    "modal": {
+      "title": "Xóa tất cả sản phẩm đã xem?",
+      "decs": "Toàn bộ sản phẩm trong danh sách đã xem gần đây sẽ được xóa.",
+      "delete": "Xóa",
+      "cancel": "Hủy"
+    }
   }
+
 }
