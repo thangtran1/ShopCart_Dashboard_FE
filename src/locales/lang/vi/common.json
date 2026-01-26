@@ -39,16 +39,14 @@
     "type_ipad": "Máy tính bảng iPad",
     "type_watch": "Đồng hồ Apple Watch",
     "type_accessory": "Phụ kiện công nghệ",
-    "commitment_title": "Cam kết sản phẩm",
+    "commitment_title": "Chính sách sản phẩm",
     "favorite": "Yêu thích",
     "specifications": "Thông số",
     "commitment": {
-      "quality": "Chất lượng đảm bảo",
-      "quality_desc": "Sản phẩm chính hãng 100%",
-      "return": "Đổi trả linh hoạt",
-      "return_desc": "Hỗ trợ đổi trả trong 7 ngày",
-      "service": "Dịch vụ tốt nhất",
-      "service_desc": "Tư vấn & hỗ trợ nhanh chóng"
+      "feature_1": "Hàng chính hãng - Bảo hành 12 tháng",
+      "feature_2": "Miễn phí giao hàng toàn quốc",
+      "feature_3": "Hư gì đổi nấy 1 tháng đầu",
+      "feature_4": "Kỹ thuật viên hỗ trợ trực tuyến"
     },
     "price_label": "Giá sản phẩm",
     "or": "hoặc",
@@ -914,14 +912,15 @@
       "no_desc_detail": "Chưa có mô tả chi tiết"
     },
     "specs": {
-      "title": "Thông số kỹ thuật"
+      "title": "Thông số kỹ thuật",
+      "view_all": "Xem tất cả thông số"
     },
     "promotions": {
       "title": "Khuyến mãi hấp dẫn",
       "view_detail": "Xem chi tiết"
     },
-    "payment": {
-      "title": "Ưu đãi thanh toán"
+    "button": {
+      "close": "Đóng"
     }
   },
   "news_page": {

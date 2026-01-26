@@ -8,9 +8,7 @@ import ProductReviewSection from "@/components/user/products/ProductReviewSectio
 import AddToCartButton from "@/components/user/AddToCartButton";
 import { useCallback, useEffect, useState } from "react";
 import { productService } from "@/api/services/product";
-import { Check } from "lucide-react";
-import { cn } from "@/utils";
-import { promotions, paymentOffers } from "@/constants/data";
+import { promotions } from "@/constants/data";
 import RelatedProducts from "../components/RelatedProducts";
 import BuyNowButton from "@/components/user/BuyNowButton";
 import { useTranslation } from "react-i18next";
@@ -122,18 +120,6 @@ const SingleProductPage = () => {
               )}
             </div>
           </div>
-
-          {/* Thông số kỹ thuật */}
-          {product?.specifications && (
-            <div className="md:col-span-2">
-              <h3 className="text-lg font-semibold mb-3">{t("product_page.specs.title")}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                {(product.specifications as string[]).map((item, idx) => (
-                  <div key={idx} className="p-3 border bg-muted rounded-lg">{item}</div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       ),
     },
@@ -146,12 +132,14 @@ const SingleProductPage = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row gap-4 mb-2">
-        {product?.images && (
-          <ImageView images={product.images} product={product} isStock={product.stock} />
-        )}
+    <div className="grid grid-cols-1 lg:grid-cols-[56%_1fr] gap-8 mb-6 items-start">
+        <div className="w-full">
+          {product?.images && (
+            <ImageView images={product.images} product={product} isStock={product.stock} />
+          )}
+        </div>
 
-        <div className="w-full md:w-1/2 flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-5 mt-2">
           <div className="flex flex-col gap-1">
             <PriceView
               price={product?.price}
@@ -184,23 +172,6 @@ const SingleProductPage = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div className="border border-primary/10 rounded-2xl bg-success p-5">
-            <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-4">
-              <span className="p-1.5 bg-blue-100 rounded-lg">💳</span>
-              {t("product_page.payment.title")}
-            </h3>
-            <div className="grid grid-cols-1 gap-3">
-              {paymentOffers.map((offer) => (
-                <div key={offer.id} className="flex items-center gap-3 p-3 bg-white rounded-xl border border-blue-50/50 shadow-sm">
-                  <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span className={cn("text-sm font-medium", offer.isLink ? "text-blue-600 cursor-pointer" : "text-gray-600")}>
-                    {offer.text}
-                  </span>
-                </div>
-              ))}
-            </div>
           </div>
           <div className="flex [&>div]:!h-12 [&>div_button]:!h-12 items-center gap-3 w-full mt-2">
             <div className="flex-1 [&>button]:w-full">

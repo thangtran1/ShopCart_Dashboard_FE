@@ -39,16 +39,14 @@
     "type_ipad": "iPad",
     "type_watch": "Apple Watch",
     "type_accessory": "Accessories",
-    "commitment_title": "Product Commitment",
+    "commitment_title": "Product Policy",
     "favorite": "Favorite",
     "specifications": "Specifications",
     "commitment": {
-      "quality": "Guaranteed Quality",
-      "quality_desc": "100% Genuine Product",
-      "return": "Flexible Returns",
-      "return_desc": "7-day return support",
-      "service": "Best Service",
-      "service_desc": "Quick advice & support"
+      "feature_1": "Genuine product - 12 months warranty",
+      "feature_2": "Free nationwide shipping",
+      "feature_3": "Exchange any defect within the first month",
+      "feature_4": "Online technician support"
     },
     "price_label": "Product Price",
     "or": "or",
@@ -914,14 +912,15 @@
       "no_desc_detail": "No detailed description available"
     },
     "specs": {
-      "title": "Specifications"
+      "title": "Specifications",
+      "view_all": "View all specifications"
     },
     "promotions": {
       "title": "Hot Promotions",
       "view_detail": "View details"
     },
-    "payment": {
-      "title": "Payment Offers"
+    "button": {
+      "close": "Close"
     }
   },
   "news_page": {

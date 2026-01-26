@@ -6,8 +6,14 @@ import { useState } from "react";
 import { useRouter } from "@/router/hooks";
 import { useUserToken } from "@/store/userStore";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils"; 
 
-const BuyNowButton = ({ product }: { product: any }) => {
+interface BuyNowButtonProps {
+  product: any;
+  className?: string; 
+}
+
+const BuyNowButton = ({ product, className }: BuyNowButtonProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -44,7 +50,7 @@ const BuyNowButton = ({ product }: { product: any }) => {
     <Button
       type="primary"
       danger
-      className="flex-1 font-bold text-base"
+      className={cn("flex-1 font-bold text-base", className)} 
       onClick={handleBuyNow}
       loading={isProcessing}
     >
