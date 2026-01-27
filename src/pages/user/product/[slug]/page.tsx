@@ -16,6 +16,7 @@ import useStore from "@/store/store";
 import { Separator } from "@/ui/separator";
 import ProductSpecsModal from "../components/ProductSpecsModal";
 import { LayoutGrid } from "lucide-react";
+import { Button } from "@/ui/button";
 
 const SingleProductPage = () => {
   const { t } = useTranslation();
@@ -80,7 +81,7 @@ const SingleProductPage = () => {
                 {t("product_page.info.title")}
               </h3>
 
-              <div className="grid grid-cols-2 gap-3 h-full">
+              <div className="grid grid-cols-2 gap-2 h-full">
                 {[
                   { label: t("product_page.info.brand"), value: product?.brand?.name },
                   { label: t("product_page.info.category"), value: product?.category?.name },
@@ -99,7 +100,7 @@ const SingleProductPage = () => {
                 ].map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 bg-muted/40 border border-border/50 rounded-2xl flex flex-col justify-center hover:bg-muted/60 transition-colors"
+                    className="p-4 bg-muted/40 border border-primary/10 rounded-2xl flex flex-col justify-center bg-gradient-to-br from-primary/5 to-transparent transition-colors"
                   >
                     <span className="text-xs text-foreground uppercase font-semibold tracking-wider mb-1">
                       {item.label}
@@ -141,13 +142,14 @@ const SingleProductPage = () => {
                 </div>
 
                 {(product?.specifications?.length || 0) > 4 && (
-                  <button
-                    onClick={() => setIsSpecsOpen(true)}
-                    className="w-full py-2 bg-background border border-primary/10 text-primary font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 shadow-md flex items-center justify-center gap-2"
+                  <Button 
+                  className="w-full rounded-2xl text-white cursor-pointer"
+                  size='lg'
+                  onClick={() => setIsSpecsOpen(true)}
                   >
                     <LayoutGrid size={16} />
                     {t("product_page.specs.view_all")}
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -275,12 +277,12 @@ const SingleProductPage = () => {
               ))}
             </div>
           </div>
-          <div className="flex [&>div]:!h-12 [&>div_button]:!h-12 items-center gap-3 w-full mt-2">
-            <div className="flex-1 [&>button]:w-full">
+          <div className="flex items-center gap-3 w-full mt-2">
+            <div className="flex-1">
               <BuyNowButton product={product} />
             </div>
 
-            <div className="flex-1 [&>div]:w-full [&>div_button]:w-full">
+            <div className="flex-1">
               <AddToCartButton product={product} />
             </div>
           </div>

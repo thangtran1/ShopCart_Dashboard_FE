@@ -133,7 +133,6 @@ const ProductCard = ({ product }: { product: any }) => {
         <div className="mt-2">
           <AddToCartButton
             product={product}
-            className="w-full rounded-xl py-2 flex items-center justify-center text-xs font-bold uppercase tracking-tight"
           />
         </div>
       </div>
