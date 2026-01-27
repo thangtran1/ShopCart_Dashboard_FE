@@ -1,87 +1,75 @@
 "use client";
 import PriceFormatter from "@/components/user/PriceFormatter";
-import { Separator } from "@/ui/separator";
 import { useTranslation } from "react-i18next";
 
 interface Props {
   price?: number;
-  discount?: number | undefined;
+  discount?: number;
+  stock?: number;
   className?: string;
-  stock?: number | undefined;
 }
 
-const PriceView = ({ price, discount, className, stock }: Props) => {
+const PriceView = ({ price = 0, discount = 0, stock = 0, className }: Props) => {
   const { t } = useTranslation();
-  const oldPrice =
-    price && discount ? price + (discount * price) / 100 : undefined;
+  const hasDiscount = discount > 0;
+  const finalPrice = hasDiscount ? price - (price * discount) / 100 : price;
+  const installmentPerMonth = Math.round(finalPrice / 12);
+  const isOutOfStock = stock <= 0;
 
   return (
-    <div
-      className={`rounded-xl p-5 border border-success/40 shadow-sm ${
-        className || ""
-      }`}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-        <div className="flex flex-col justify-center">
-          <p className="text-foreground mb-1">{t("product.price_label")}</p>
-          {price !== undefined && (
-            <PriceFormatter
-              amount={price}
-              className="text-3xl font-bold text-foreground"
-            />
+    <div className={`w-full bg-gradient-to-br from-primary/30 to-transparent border border-primary/20 rounded-2xl p-5 shadow-sm ${className || ""}`}>
+      
+      <div className="flex items-center gap-2 mb-3">
+        <div className={`relative flex h-2 w-2`}>
+          {!isOutOfStock && (
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
           )}
-          {oldPrice && (
-            <PriceFormatter
-              amount={oldPrice}
-              className="line-through text-sm text-muted-foreground mt-1"
-            />
-          )}
+          <span className={`relative inline-flex rounded-full h-2 w-2 ${isOutOfStock ? "bg-red-500" : "bg-green-500"}`}></span>
         </div>
-
-        <div className="flex items-center w-full">
-          <div className="flex items-center w-full">
-            <Separator className="flex-1" />
-            <span className="px-2 text-muted-foreground font-normal text-sm lowercase">
-              {t("product.or")}
-            </span>
-            <Separator className="flex-1" />
-          </div>
-        </div>
-
-        <div className="flex flex-col justify-center">
-          <div className="flex justify-end mb-2">
-            <span className="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-              {t("product.trade_in_label")}
-            </span>
-          </div>
-          <div className="flex justify-end">
-            {price !== undefined && (
-              <PriceFormatter
-                amount={price}
-                className="text-3xl font-bold text-foreground"
-              />
-            )}
-          </div>
-          {!!discount && discount > 0 && (
-            <p className="mt-2 text-red-600 text-base flex justify-end font-semibold text-center">
-              {t("product.discount_label", { percent: discount })}
-            </p>
-          )}
-        </div>
+        <span className={`text-[11px] font-bold uppercase tracking-wider ${isOutOfStock ? "text-red-600" : "text-foreground"}`}>
+          {isOutOfStock 
+            ? t("product.info.out_of_stock") 
+            : t("product.info.in_stock", { count: stock })
+          }
+        </span>
       </div>
 
-      <div className="text-center mt-4">
-        <p
-          className={`px-4 py-3 text-sm font-semibold rounded-lg ${
-            stock === 0
-              ? "bg-red-100 text-red-600"
-              : "bg-green-100 text-green-600"
-          }`}
-        >
-          {stock === undefined || stock > 0 
-            ? t("product.in_stock") 
-            : t("product.out_of_stock")}
-        </p>
+      <div className="relative flex items-center justify-between gap-4">
+        
+        <div className="flex-1">
+          <PriceFormatter
+            amount={finalPrice}
+            className="text-2xl font-black text-foreground tracking-tighter leading-none"
+          />
+          {hasDiscount && (
+            <div className="flex items-center gap-2 mt-1.5">
+              <PriceFormatter amount={price} className="text-xs text-foreground line-through decoration-[1px]" />
+              <span className="text-red-600 text-[11px] font-black">-{discount}%</span>
+            </div>
+          )}
+        </div>
+
+        <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center h-full py-1">
+          <div className="w-[1px] h-full bg-gray-200 border-l border-dashed border-gray-300" />
+          <span className="absolute top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/10 to-transparent border border-primary/40 px-2 py-0.5 rounded-full text-[9px] text-foreground font-bold uppercase z-10 shadow-sm">
+            {t("product.common.or")}
+          </span>
+        </div>
+
+        <div className="flex-1 text-right">
+          <p className="text-[10px] font-bold text-foreground uppercase tracking-tight mb-1">
+            {t("product.info.installment_online")}
+          </p>
+          <div className="flex items-baseline justify-end gap-0.5">
+            <PriceFormatter 
+                amount={installmentPerMonth} 
+                className="text-xl font-bold tracking-tighter" 
+            />
+            <span className="text-[10px] text-foreground font-bold uppercase">
+                /{t("product.common.month")}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

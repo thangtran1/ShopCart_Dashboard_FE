@@ -112,7 +112,7 @@ const SingleProductPage = () => {
                 ))}
 
                 <div className="col-span-2 p-4 bg-primary/5 border border-dashed border-primary/20 rounded-2xl flex items-center justify-center">
-                  <p className="text-xs text-primary font-medium italic">
+                  <p className="text-sm text-primary font-medium italic">
                     ✨ {t("Sản phẩm chính hãng 100%")}
                   </p>
                 </div>
@@ -223,7 +223,6 @@ const SingleProductPage = () => {
               price={product?.price}
               discount={product?.discount}
               stock={product?.stock}
-              className="text-2xl font-bold text-primary"
             />
           </div>
 
