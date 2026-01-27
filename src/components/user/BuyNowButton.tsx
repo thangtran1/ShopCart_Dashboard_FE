@@ -1,19 +1,17 @@
 "use client";
 import { toast } from "sonner";
-import { Button } from "antd";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { useRouter } from "@/router/hooks";
 import { useUserToken } from "@/store/userStore";
 import { useTranslation } from "react-i18next";
-import { cn } from "@/lib/utils"; 
+import { Button } from "@/ui/button";
 
 interface BuyNowButtonProps {
   product: any;
-  className?: string; 
 }
 
-const BuyNowButton = ({ product, className }: BuyNowButtonProps) => {
+const BuyNowButton = ({ product }: BuyNowButtonProps) => {
   const { t } = useTranslation();
   const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -47,12 +45,13 @@ const BuyNowButton = ({ product, className }: BuyNowButtonProps) => {
   };
 
   return (
+
     <Button
-      type="primary"
-      danger
-      className={cn("flex-1 font-bold text-base", className)} 
-      onClick={handleBuyNow}
+      className="w-full rounded-xl text-white cursor-pointer"
+      size='lg'
+      variant='destructive'
       loading={isProcessing}
+      onClick={handleBuyNow}
     >
       {t("product.buy_now")}
     </Button>

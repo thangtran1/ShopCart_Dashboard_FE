@@ -77,7 +77,12 @@
       "no_reviews": "Chưa có đánh giá",
       "stock": "Kho",
       "in_stock": "{{count}} sản phẩm",
-      "out_of_stock": "Hết hàng"
+      "out_of_stock": "Hết hàng",
+      "installment_online": "Trả góp online"
+    },
+    "common": {
+      "or": "Hoặc",
+      "month": "tháng"
     },
     "related_title": "Sản phẩm liên quan",
     "related_desc": "Yếu tố để có sản phẩm liên quan: Cùng danh mục | cùng thương hiệu | cùng tags"
@@ -888,7 +893,7 @@
     "loading": "Đang tải...",
     "tabs": {
       "details": "Mô tả sản phẩm",
-      "reviews": "Đánh giá"
+      "reviews": "Đánh giá và bình luận"
     },
     "info": {
       "title": "Thông tin sản phẩm",

@@ -1,22 +1,20 @@
 "use client";
 import { Product } from "@/types";
-import { cn } from "@/lib/utils";
 import { ShoppingBag, Loader2 } from "lucide-react";
 import PriceFormatter from "@/components/user/PriceFormatter";
 import QuantityButtons from "@/components/user/QuantityButtons";
 import { toast } from "sonner";
-import { Button } from "@/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { useUserToken } from "@/store/userStore";
 import { useTranslation } from "react-i18next";
+import { Button } from "@/ui/button";
 
 interface Props {
   product: Product;
-  className?: string;
 }
 
-const AddToCartButton = ({ product, className }: Props) => {
+const AddToCartButton = ({ product }: Props) => {
   const { t } = useTranslation();
   const { items, addToCart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
@@ -67,10 +65,8 @@ const AddToCartButton = ({ product, className }: Props) => {
         <Button
           onClick={handleAddToCart}
           disabled={isOutOfStock || isLoading}
-          className={cn(
-            "!w-full shadow-none dark:text-foreground font-semibold hover:bg-primary/80 cursor-pointer",
-            className
-          )}
+          className="w-full rounded-xl text-white cursor-pointer"
+          size='lg'
         >
           {isLoading ? (
             <>

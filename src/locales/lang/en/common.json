@@ -77,7 +77,12 @@
       "no_reviews": "No reviews",
       "stock": "Stock",
       "in_stock": "{{count}} items",
-      "out_of_stock": "Out of stock"
+      "out_of_stock": "Out of stock",
+      "installment_online": "Online Installment"
+    },
+    "common": {
+      "or": "Or",
+      "month": "month"
     },
     "related_title": "Related Products",
     "related_desc": "Factors for related products: Same category | same brand | same tags"
@@ -888,7 +893,7 @@
     "loading": "Loading...",
     "tabs": {
       "details": "Product Description",
-      "reviews": "Reviews"
+      "reviews": "Reviews and Comments"
     },
     "info": {
       "title": "Product Information",

@@ -146,7 +146,6 @@ const WishListProducts = () => {
                       <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-auto">
                         <AddToCartButton
                           product={product}
-                          className="rounded-lg font-bold shadow-sm"
                         />
 
                         <div className="h-4 w-[1px] bg-border hidden sm:block" />

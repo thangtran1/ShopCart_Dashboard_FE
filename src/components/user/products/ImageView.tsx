@@ -13,12 +13,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/ui/breadcrumb";
-import { CheckCircle2, Info, LayoutGrid, StarIcon, X } from "lucide-react";
+import { Info, StarIcon } from "lucide-react";
 import ProductSideMenu from "@/pages/user/public/ProductSideMenu";
 import { useTranslation } from "react-i18next";
-import { Separator } from "@/ui/separator";
-import { motion, AnimatePresence } from "framer-motion";
-
 
 interface ImageViewProps {
   images?: { url: string; alt?: string }[];
@@ -36,8 +33,6 @@ export default function ImageView({
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const specs = (product?.specifications as string[]) || [];
 
   useEffect(() => {
     setIsClient(true);
