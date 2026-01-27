@@ -54,9 +54,7 @@
     "discount_label": "Discount up to {{percent}}%",
     "in_stock": "In Stock",
     "out_of_stock": "Out of Stock",
-    "characteristics": "Characteristics",
     "brand": "Brand",
-    "manufacturing_year": "Manufacturing Year",
     "category": "Category",
     "status": "Status",
     "available": "Available",
@@ -902,10 +900,6 @@
       "out_of_stock": "Out of Stock",
       "updating": "Updating",
       "months": "months"
-    },
-    "highlights": {
-      "title": "Highlights",
-      "no_desc": "No description available"
     },
     "full_desc": {
       "title": "Detailed Description",
