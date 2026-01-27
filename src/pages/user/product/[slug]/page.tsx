@@ -3,7 +3,6 @@ import { Tabs } from "antd";
 
 import ImageView from "@/components/user/products/ImageView";
 import PriceView from "@/components/user/products/PriceView";
-import ProductCharacteristics from "@/components/user/products/ProductCharacteristics";
 import ProductReviewSection from "@/components/user/products/ProductReviewSection";
 import AddToCartButton from "@/components/user/AddToCartButton";
 import { useCallback, useEffect, useState } from "react";
@@ -14,6 +13,9 @@ import BuyNowButton from "@/components/user/BuyNowButton";
 import { useTranslation } from "react-i18next";
 import PageLoading from "@/components/common/loading/PageLoading";
 import useStore from "@/store/store";
+import { Separator } from "@/ui/separator";
+import ProductSpecsModal from "../components/ProductSpecsModal";
+import { LayoutGrid } from "lucide-react";
 
 const SingleProductPage = () => {
   const { t } = useTranslation();
@@ -22,6 +24,7 @@ const SingleProductPage = () => {
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetchingRelated, setFetchingRelated] = useState(false);
+  const [isSpecsOpen, setIsSpecsOpen] = useState(false);
 
   const { addViewedProduct } = useStore();
 
@@ -68,55 +71,105 @@ const SingleProductPage = () => {
       key: "details",
       label: t("product_page.tabs.details"),
       children: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Thông tin sản phẩm */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">{t("product_page.info.title")}</h3>
-            <div className="space-y-3 p-4 bg-muted border rounded-lg text-sm">
-              {[
-                { label: t("product_page.info.brand"), value: product?.brand?.name },
-                { label: t("product_page.info.category"), value: product?.category?.name },
-                {
-                  label: t("product_page.info.status"),
-                  value: product?.stock === 0 ? t("product_page.info.out_of_stock") : t("product_page.info.in_stock"),
-                },
-                {
-                  label: t("product_page.info.warranty"),
-                  value: product?.warrantyPeriod || `12 ${t("product_page.info.months")}`,
-                },
-              ].map((item, idx) => (
-                <div key={idx} className="flex justify-between border-b pb-2 last:border-none last:pb-0">
-                  <span>{item.label}</span>
-                  <span className="font-medium">{item.value || t("product_page.info.updating")}</span>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+
+            <div className="flex flex-col">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <span className="w-1 h-5 bg-primary rounded-full"></span>
+                {t("product_page.info.title")}
+              </h3>
+
+              <div className="grid grid-cols-2 gap-3 h-full">
+                {[
+                  { label: t("product_page.info.brand"), value: product?.brand?.name },
+                  { label: t("product_page.info.category"), value: product?.category?.name },
+                  {
+                    label: t("product_page.info.status"),
+                    value: product?.stock === 0
+                      ? t("product_page.info.out_of_stock")
+                      : t("product_page.info.in_stock"),
+                    isStatus: true,
+                    stock: product?.stock
+                  },
+                  {
+                    label: t("product_page.info.warranty"),
+                    value: product?.warrantyPeriod ? `${product.warrantyPeriod} ${t("product_page.info.months")}` : `12 ${t("product_page.info.months")}`,
+                  },
+                ].map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-muted/40 border border-border/50 rounded-2xl flex flex-col justify-center hover:bg-muted/60 transition-colors"
+                  >
+                    <span className="text-xs text-foreground uppercase font-semibold tracking-wider mb-1">
+                      {item.label}
+                    </span>
+                    <span className={`text-sm text-muted-foreground font-bold ${item.isStatus ? (item.stock === 0 ? 'text-red-500' : 'text-green-600') : 'text-foreground'}`}>
+                      {item.value || t("product_page.info.updating")}
+                    </span>
+                  </div>
+                ))}
+
+                <div className="col-span-2 p-4 bg-primary/5 border border-dashed border-primary/20 rounded-2xl flex items-center justify-center">
+                  <p className="text-xs text-primary font-medium italic">
+                    ✨ {t("Sản phẩm chính hãng 100%")}
+                  </p>
                 </div>
-              ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col">
+              <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                <span className="w-1 h-5 bg-primary rounded-full"></span>
+                {t("product_page.specs.title")}
+              </h3>
+
+              <div className="p-4 border border-primary/20 rounded-2xl bg-gradient-to-br from-primary/5 to-transparent shadow-sm h-full flex flex-col">
+                <div className="space-y-4 mb-6 flex-1">
+                  {(product?.specifications || []).slice(0, 4).map((item: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-3">
+                      <div className="mt-0.5 p-1 bg-background rounded-md shadow-sm border border-border shrink-0">
+                        <LayoutGrid className="w-3.5 h-3.5 text-primary/70" />
+                      </div>
+                      <span className="text-sm font-medium leading-relaxed line-clamp-2">{item}</span>
+                    </div>
+                  ))}
+
+                  {(!product?.specifications || product.specifications.length === 0) && (
+                    <p className="text-sm italic text-muted-foreground">{t("product_page.info.updating")}</p>
+                  )}
+                </div>
+
+                {(product?.specifications?.length || 0) > 4 && (
+                  <button
+                    onClick={() => setIsSpecsOpen(true)}
+                    className="w-full py-2 bg-background border border-primary/10 text-primary font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 shadow-md flex items-center justify-center gap-2"
+                  >
+                    <LayoutGrid size={16} />
+                    {t("product_page.specs.view_all")}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Đặc điểm nổi bật */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">{t("product_page.highlights.title")}</h3>
-            <div className="text-sm mb-3 leading-relaxed bg-muted p-4 border rounded-lg">
-              {product?.description ? (
-                <p className="whitespace-pre-line">{product.description}</p>
-              ) : (
-                <p className="italic">{t("product_page.highlights.no_desc")}</p>
-              )}
-            </div>
-            <ProductCharacteristics product={product as any} />
-          </div>
-
-          {/* Mô tả chi tiết */}
-          <div className="md:col-span-2">
+          <ProductSpecsModal
+            isOpen={isSpecsOpen}
+            onClose={() => setIsSpecsOpen(false)}
+            specs={product?.specifications || []}
+          />
+          <div className="md:col-span-2 mt-4">
             <h3 className="text-lg font-semibold mb-3">{t("product_page.full_desc.title")}</h3>
-            <div className="p-4 border rounded-lg bg-muted text-sm leading-relaxed">
+            <div className="p-4 border bg-muted rounded-2xl shadow-sm text-sm leading-relaxed overflow-hidden">
               {product?.description ? (
                 <div
-                  className="prose max-w-full"
+                  className="prose prose-blue max-w-full"
                   dangerouslySetInnerHTML={{ __html: product.description }}
                 />
               ) : (
-                <p className="italic">{t("product_page.full_desc.no_desc_detail")}</p>
+                <p className="italic text-muted-foreground text-center py-10">
+                  {t("product_page.full_desc.no_desc_detail")}
+                </p>
               )}
             </div>
           </div>
@@ -130,9 +183,32 @@ const SingleProductPage = () => {
     },
   ];
 
+  const commitmentList = [
+    {
+      id: 1,
+      iconUrl: "https://cdn2.fptshop.com.vn/svg/Type_Bao_hanh_chinh_hang_4afa1cb34d.svg",
+      text: t('product.commitment.feature_1'),
+    },
+    {
+      id: 2,
+      iconUrl: "https://cdn2.fptshop.com.vn/svg/Type_Giao_hang_toan_quoc_318e6896b4.svg",
+      text: t('product.commitment.feature_2'),
+    },
+    {
+      id: 3,
+      iconUrl: "https://cdn2.fptshop.com.vn/svg/Type_Doi_tra_ff3d266f2b.svg",
+      text: t('product.commitment.feature_3'),
+    },
+    {
+      id: 4,
+      iconUrl: "https://cdn2.fptshop.com.vn/svg/icon_ktv_8c9caa2c06.svg",
+      text: t('product.commitment.feature_4'),
+    },
+  ];
+
   return (
     <>
-    <div className="grid grid-cols-1 lg:grid-cols-[56%_1fr] gap-8 mb-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[56%_1fr] gap-8 mb-6 items-start">
         <div className="w-full">
           {product?.images && (
             <ImageView images={product.images} product={product} isStock={product.stock} />
@@ -172,6 +248,32 @@ const SingleProductPage = () => {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <Separator className="mt-2" />
+
+          <div>
+            <div className="mb-4">
+              <h3 className="text-lg font-bold text-foreground tracking-tight">
+                {t('product.commitment_title')}
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+              {commitmentList.map((policy) => (
+                <div key={policy.id} className="flex items-center gap-3.5 group">
+                  <div className="shrink-0 w-6 h-6 flex items-center justify-center transition-transform group-hover:scale-110">
+                    <img
+                      src={policy.iconUrl}
+                      alt="policy-icon"
+                      className="w-full h-full object-contain dark:invert dark:brightness-200 transition-all duration-300"
+                    />
+                  </div>
+                  <span className="text-[14.5px] font-medium text-foreground leading-snug">
+                    {policy.text}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="flex [&>div]:!h-12 [&>div_button]:!h-12 items-center gap-3 w-full mt-2">
             <div className="flex-1 [&>button]:w-full">

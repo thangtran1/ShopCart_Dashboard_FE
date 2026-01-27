@@ -54,9 +54,7 @@
     "discount_label": "Giảm giá lên đến {{percent}}%",
     "in_stock": "Còn hàng",
     "out_of_stock": "Hết hàng",
-    "characteristics": "Đặc điểm nổi bật",
     "brand": "Thương hiệu",
-    "manufacturing_year": "Năm sản xuất",
     "category": "Loại sản phẩm",
     "status": "Tình trạng",
     "available": "Sẵn hàng",
@@ -902,10 +900,6 @@
       "out_of_stock": "Hết hàng",
       "updating": "Đang cập nhật",
       "months": "tháng"
-    },
-    "highlights": {
-      "title": "Đặc điểm nổi bật",
-      "no_desc": "Chưa có mô tả"
     },
     "full_desc": {
       "title": "Mô tả chi tiết",
