@@ -80,6 +80,7 @@ export default function CouponsManagement() {
       {
         title: "CHIẾN DỊCH",
         key: "code",
+        dataIndex: "code",
         width: 250,
         render: (_, record) => (
           <div className="flex items-center gap-3">
@@ -100,6 +101,7 @@ export default function CouponsManagement() {
       {
         title: "LOẠI ƯU ĐÃI",
         key: "discount",
+        dataIndex: "discountValue",
         width: 160,
         render: (_, record) => (
           <div className="space-y-1">

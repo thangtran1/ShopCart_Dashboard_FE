@@ -999,5 +999,12 @@
   },
   "products": {
     "product": "Product"
+  },
+  "custom-table": {
+    "rowsPerPage": "Rows per page:",
+    "total": "Total",
+    "items": "items",
+    "copySuccess": "Copied successfully",
+    "content": "content"
   }
 }
