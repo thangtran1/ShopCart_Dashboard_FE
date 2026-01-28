@@ -6,10 +6,6 @@ import { HistoryOutlined } from "@ant-design/icons";
 import Contact from "@/pages/user/contact";
 import TermsPage from "@/pages/user/public/terms";
 import ActivityLogs from "@/pages/admin/management/user/[id]/tabs/activity-log";
-import {
-  ActivityLog,
-  detailActivityLogForUser,
-} from "@/api/services/activity-logApi";
 import { useUserInfo } from "@/store/userStore";
 import { useOrder } from "@/hooks/useOrder";
 import dayjs from "dayjs";
@@ -19,6 +15,7 @@ import { Badge } from "@/ui/badge";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useTranslation } from "react-i18next";
+import { useActivityLog } from "@/hooks/useActivityLog";
 
 export function WarrantyContent() {
   const { t, i18n } = useTranslation();
@@ -216,6 +213,7 @@ export function ActivityContent() {
   const user = useUserInfo();
   const userId = user?.id;
   if (!userId) return null;
+  const { data: logs, isLoading } = useActivityLog(userId);
 
   return (
     <div className="space-y-6">
@@ -237,14 +235,11 @@ export function ActivityContent() {
       </div>
 
       <div>
-        <ActivityLogs
-          fetchLogsApi={() =>
-            detailActivityLogForUser(userId) as Promise<{
-              data: { success: boolean; message: string; data: ActivityLog[] };
-            }>
-          }
-        />
-      </div>
+      <ActivityLogs 
+        logs={logs} 
+        isLoading={isLoading} 
+      />
+  </div>
     </div>
   );
 }
