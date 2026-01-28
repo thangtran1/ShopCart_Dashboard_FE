@@ -82,7 +82,7 @@ export default function ImageView({
       </Breadcrumb>
 
       <div className="mt-2">
-        <h2 className="text-2xl font-bold line-clamp-1 text-black">{product?.name}</h2>
+        <h2 className="text-2xl font-bold line-clamp-1 text-foreground">{product?.name}</h2>
         <p className="text-sm mt-1 text-muted-foreground line-clamp-1 italic">
           {product?.shortDescription}
         </p>
@@ -91,10 +91,10 @@ export default function ImageView({
       <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-b py-3">
         <div className="flex relative items-center gap-1 group cursor-pointer">
           <ProductSideMenu className="relative top-0 right-0" product={product} />
-          <span className="group-hover:text-primary transition-colors text-black">{t("product.favorite")}</span>
+          <span className="group-hover:text-primary transition-colors text-foreground">{t("product.favorite")}</span>
         </div>
 
-        <div className="flex items-center gap-1 cursor-pointer hover:text-green-500 transition-colors text-black">
+        <div className="flex items-center gap-1 cursor-pointer hover:text-green-500 transition-colors text-foreground">
           <Info size={15} />
           <span>{t("product.specifications")}</span>
         </div>
@@ -108,7 +108,7 @@ export default function ImageView({
               fill="#3b9c3c"
             />
           ))}
-          <p className="font-semibold ml-1 text-black">(120)</p>
+          <p className="font-semibold ml-1 text-foreground">(120)</p>
         </div>
       </div>
 
@@ -163,7 +163,7 @@ export default function ImageView({
         <div className="flex-1 overflow-hidden">
           <div
             ref={scrollRef}
-            className="flex gap-3 overflow-x-auto no-scrollbar py-2 scroll-smooth snap-x"
+            className="flex gap-2 overflow-x-auto no-scrollbar py-2 scroll-smooth snap-x"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {images.map((img, i) => (

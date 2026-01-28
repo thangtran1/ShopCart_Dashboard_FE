@@ -998,5 +998,12 @@
   },
   "products": {
     "product": "Sản phẩm"
+  },
+  "custom-table": {
+    "rowsPerPage": "Số hàng mỗi trang:",
+    "total": "Tổng cộng",
+    "items": "mục",
+    "copySuccess": "Đã copy",
+    "content": "nội dung"
   }
 }

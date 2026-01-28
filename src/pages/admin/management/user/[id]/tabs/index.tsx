@@ -1,20 +1,19 @@
 import { Tabs } from "antd";
 import { useSearchParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Information from "./information";
 import { useTranslation } from "react-i18next";
 import ActivityLogs from "./activity-log";
 import { Icon } from "@/components/icon";
-import {
-  ActivityLog,
-  detailActivityLogForUser,
-} from "@/api/services/activity-logApi";
 import Address from "./address";
+import { useActivityLog } from "@/hooks/useActivityLog"; 
 
 export default function UserDetailTabs({ userId }: { userId: string }) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeKey, setActiveKey] = useState("information");
+
+  const { data: logs, isLoading: isLogsLoading } = useActivityLog(userId);
 
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab");
@@ -23,7 +22,7 @@ export default function UserDetailTabs({ userId }: { userId: string }) {
     }
   }, [searchParams]);
 
-  const tabItems = [
+  const tabItems = useMemo(() => [
     {
       key: "information",
       label: (
@@ -42,16 +41,7 @@ export default function UserDetailTabs({ userId }: { userId: string }) {
           {t("management.user.user-detail.activity-log")}
         </span>
       ),
-
-      children: (
-        <ActivityLogs
-          fetchLogsApi={() =>
-            detailActivityLogForUser(userId) as Promise<{
-              data: { success: boolean; message: string; data: ActivityLog[] };
-            }>
-          }
-        />
-      ),
+      children: <ActivityLogs logs={logs} isLoading={isLogsLoading} />,
     },
     {
       key: "address",
@@ -63,15 +53,19 @@ export default function UserDetailTabs({ userId }: { userId: string }) {
       ),
       children: <Address userId={userId} />,
     },
-  ];
+  ], [userId, t, logs, isLogsLoading]); 
 
   const handleChange = (key: string) => {
     setActiveKey(key);
-    searchParams.set("tab", key);
-    setSearchParams(searchParams);
+    setSearchParams({ tab: key });
   };
 
   return (
-    <Tabs items={tabItems} activeKey={activeKey} onChange={handleChange} />
+    <Tabs 
+        items={tabItems} 
+        activeKey={activeKey} 
+        onChange={handleChange} 
+        destroyInactiveTabPane={false} 
+    />
   );
 }

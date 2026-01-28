@@ -22,7 +22,7 @@ export default function ActiveUsersTab() {
 
   const navigate = useNavigate();
   const handleView = async (userId: string) => {
-    navigate(`/management/user/${userId}`);
+    navigate(`/admin/management/user/${userId}`);
   };
 
   return (

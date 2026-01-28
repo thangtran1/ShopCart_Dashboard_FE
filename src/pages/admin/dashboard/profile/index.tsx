@@ -10,21 +10,17 @@ import PersonalInfoTab from "./components/PersonalInfoTab";
 import SecurityTab from "./components/SecurityTab";
 import PreferencesTab from "./components/PreferencesTab";
 import { useTranslation } from "react-i18next";
-import {
-  ActivityLog,
-  getActivityLogsAdmin,
-} from "@/api/services/activity-logApi";
 import ActivityLogs from "../../management/user/[id]/tabs/activity-log";
+import { useAdminActivityLog } from "@/hooks/useActivityLog";
 
 export default function ProfilePage() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { profile, updateProfile } = useUserProfile();
+  
+  const { data: adminLogs, isLoading: isAdminLogsLoading } = useAdminActivityLog();
 
-  const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(
-    null
-  );
-
+  const [systemSettings, setSystemSettings] = useState<SystemSettings | null>(null);
   const activeTab = searchParams.get("tab") || "profile";
 
   const handleTabChange = (tab: string) => {
@@ -62,12 +58,9 @@ export default function ProfilePage() {
         </span>
       ),
       children: (
-        <ActivityLogs
-          fetchLogsApi={() =>
-            getActivityLogsAdmin() as Promise<{
-              data: { success: boolean; message: string; data: ActivityLog[] };
-            }>
-          }
+        <ActivityLogs 
+          logs={adminLogs} 
+          isLoading={isAdminLogsLoading} 
         />
       ),
     },
