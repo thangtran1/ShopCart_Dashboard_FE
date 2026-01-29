@@ -228,7 +228,7 @@ export default function BannerSettings() {
               </div>
             </div>
 
-            <div className="flex gap-3 justify-end pt-4">
+            <div className="flex gap-3 justify-end py-4">
               <Button
                 danger
                 size="large"

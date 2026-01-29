@@ -378,6 +378,7 @@ export default function MaintenanceTable({
         onUpdate={onUpdate}
       />
       <TableAntd
+        hiddenCopy={true}
         columns={columns}
         data={maintenances}
         loading={loading}

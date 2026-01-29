@@ -92,24 +92,20 @@ export default function ResultCard({
               </div>
             </div>
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-2 justify-center">
               <Button
                 size="large"
                 color="primary"
                 variant="outlined"
                 onClick={onReset}
-                className="min-w-[140px]"
               >
-                <Icon icon="lucide:refresh-cw" className="h-5 w-5" />
                 {t("management.user.create-new-bulk")}
               </Button>
               {onBackToManagement && (
                 <Button
                   size="large"
                   onClick={onBackToManagement}
-                  className="min-w-[140px]"
                 >
-                  <Icon icon="lucide:arrow-left" className="h-5 w-5" />
                   {t("management.user.back-to-management")}
                 </Button>
               )}

@@ -51,7 +51,7 @@ export default function Address({ userId }: { userId: string }) {
     };
 
     return (
-        <div className="w-full rounded-2xl p-4 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-border">
+        <div className="w-full shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
             <div className="flex items-center justify-between mb-4">
                 <div>
                     <h2 className="text-2xl font-bold">Sổ địa chỉ</h2>
@@ -63,7 +63,7 @@ export default function Address({ userId }: { userId: string }) {
 
             {addresses.length === 0 ? (
                 <EmptyState
-                    height="md" 
+                    height="sm" 
                     title="Trống" 
                     description="Người dùng chưa có địa chỉ nào" 
                 />

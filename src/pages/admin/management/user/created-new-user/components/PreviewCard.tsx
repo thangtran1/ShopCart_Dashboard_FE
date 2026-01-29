@@ -114,6 +114,8 @@ export default function PreviewCard({
     {
       title: t("management.user.error-details"),
       dataIndex: "error",
+      width: 120,
+      align: 'center',
       key: "error",
       render: (error: string) =>
         error ? (
@@ -251,7 +253,7 @@ export default function PreviewCard({
         />
       </div>
 
-      <div className="flex gap-4 justify-center pt-4">
+      <div className="flex gap-2 justify-center pt-4">
         <Button size="large" onClick={onBack} className="min-w-[140px]">
           <Icon icon="lucide:refresh-cw" className="h-5 w-5" />
           {t("management.user.reload-file")}

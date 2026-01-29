@@ -103,22 +103,24 @@ export default function UserInformation({ userId }: { userId: string }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="bg-card text-card-foreground p-4 flex flex-col gap-6 rounded-md border shadow-sm">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
+          {/* Avatar + Info */}
+          <div className="flex items-center gap-3 w-full md:w-auto">
             <Avatar
               size={84}
               icon={<UserOutlined />}
               className="border border-gray-200 shadow-sm"
             />
-            <div>
-              <Title level={3} className="!mb-0">
+            <div className="flex-1 min-w-0">
+              <Title level={3} className="!mb-0 truncate">
                 {userData?.name}
               </Title>
-              <Text type="secondary">{userData?.email}</Text>
-              <div className="mt-1 flex gap-2">
+              <Text type="secondary" className="truncate block">
+                {userData?.email}
+              </Text>
+              <div className="mt-1 flex flex-wrap gap-2">
                 <div
-                  className={`capitalize rounded-md px-2 py-1 text-sm border ${statusColor[userData?.status as UserStatus]
-                    }`}
+                  className={`capitalize rounded-md px-2 py-1 text-sm border ${statusColor[userData?.status as UserStatus]}`}
                 >
                   {userData?.status}
                 </div>
@@ -129,18 +131,22 @@ export default function UserInformation({ userId }: { userId: string }) {
             </div>
           </div>
 
-          <Button
-            type={isEditing ? "default" : "primary"}
-            icon={isEditing ? <CloseOutlined /> : <EditOutlined />}
-            size="large"
-            onClick={() => setIsEditing(!isEditing)}
-            className="rounded-full px-6 font-medium"
-          >
-            {isEditing
-              ? t("management.user.user-detail.cancel-edit")
-              : t("management.user.user-detail.edit-information")}
-          </Button>
+          {/* Button */}
+          <div className="w-full md:w-auto flex justify-start md:justify-end mt-2 md:mt-0">
+            <Button
+              type={isEditing ? "default" : "primary"}
+              icon={isEditing ? <CloseOutlined /> : <EditOutlined />}
+              size="large"
+              onClick={() => setIsEditing(!isEditing)}
+              className="rounded-full px-6 font-medium whitespace-nowrap"
+            >
+              {isEditing
+                ? t("management.user.user-detail.cancel-edit")
+                : t("management.user.user-detail.edit-information")}
+            </Button>
+          </div>
         </div>
+
 
         <Separator />
 
@@ -148,9 +154,10 @@ export default function UserInformation({ userId }: { userId: string }) {
           form={form}
           layout="vertical"
           onFinish={handleSubmit}
+          className="!mb-0"
           disabled={!isEditing}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <Form.Item
               name="name"
               label={t("management.user.user-detail.name")}

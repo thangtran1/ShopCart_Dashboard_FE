@@ -145,7 +145,7 @@ export default function CouponsManagement() {
         render: (_, record) => {
           const isExpired = dayjs().isAfter(dayjs(record.expiryDate));
           const isOutOfStock = record.usageLimit > 0 && record.usedCount >= record.usageLimit;
-      
+
           if (isExpired) return <Badge variant="error">Hết hạn</Badge>;
           if (isOutOfStock) return <Badge variant="info">Hết lượt</Badge>;
           return <Badge variant="success">Khả dụng</Badge>;
@@ -174,13 +174,12 @@ export default function CouponsManagement() {
               </div>
               <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-border">
                 <div
-                  className={`h-full transition-all duration-700 rounded-full ${
-                    percent >= 90
+                  className={`h-full transition-all duration-700 rounded-full ${percent >= 90
                       ? "bg-rose-500"
                       : percent >= 70
-                      ? "bg-amber-500"
-                      : "bg-indigo-500"
-                  }`}
+                        ? "bg-amber-500"
+                        : "bg-indigo-500"
+                    }`}
                   style={{ width: `${record.usageLimit === 0 ? 0 : percent}%` }}
                 ></div>
               </div>
@@ -203,11 +202,11 @@ export default function CouponsManagement() {
           const d = dayjs(date);
           const isExpired = dayjs().isAfter(d);
           const isOutOfStock = record.usageLimit > 0 && record.usedCount >= record.usageLimit;
-      
+
           let textColor = "text-teal-600";
           if (isExpired || isOutOfStock) textColor = "text-red-600";
           else if (!record.isActive) textColor = "text-purple-600";
-      
+
           return (
             <div className={`flex flex-col ${textColor}`}>
               <span className="text-xs font-bold">
@@ -262,7 +261,7 @@ export default function CouponsManagement() {
   return (
     <div>
       <div className="space-y-8 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
           <div>
             <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
               <Icon icon="lucide:ticket" className="h-7 w-7 text-primary" />
@@ -273,7 +272,7 @@ export default function CouponsManagement() {
             </p>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex mt-3 md:mt-0">
             <Button
               type="primary"
               icon={<PlusCircleOutlined />}
@@ -285,6 +284,7 @@ export default function CouponsManagement() {
             </Button>
           </div>
         </div>
+
 
         <Separator className="my-0" />
 

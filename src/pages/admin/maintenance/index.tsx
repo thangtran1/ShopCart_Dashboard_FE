@@ -39,30 +39,32 @@ export default function MaintenceSystemPage() {
   return (
     <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
       <div className="space-y-6">
-        <div className="flex pt-4 items-center justify-between">
+        <div className="flex flex-col gap-4 pt-4 md:flex-row md:items-center md:justify-between">
           <div>
             <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
               <Icon icon="lucide:wrench" className="h-7 w-7 text-primary" />
               {t("maintenance.title")}
             </CardTitle>
+
             <p className="text-muted-foreground mt-1">
-              {t("maintenance.description-text")} 
+              {t("maintenance.description-text")}
             </p>
           </div>
 
-          <div>
+          <div className="md:flex-shrink-0">
             <Link to="/admin/maintenance/created-new-maintenance">
               <Button
                 type="primary"
                 size="large"
                 icon={<PlusCircleOutlined />}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 w-full md:w-auto"
               >
                 {t("maintenance.add-maintenance")}
               </Button>
             </Link>
           </div>
         </div>
+
 
         <Separator className="mb-0" />
 

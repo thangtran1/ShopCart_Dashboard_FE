@@ -21,7 +21,7 @@ export default function CreatedFormMaintenace() {
       if (res.data.success) {
         toast.success(t("maintenance.create-success"));
         form.resetFields();
-        navigate("/maintenance");
+        navigate("/admin/maintenance");
       } else {
         toast.error(res.data.message);
       }
@@ -197,7 +197,7 @@ export default function CreatedFormMaintenace() {
               size="large"
               type="text"
               color="danger" variant="outlined"
-              onClick={() => navigate("/maintenance")}
+              onClick={() => navigate("/admin/maintenance")}
               disabled={createMaintenanceMutation.isPending}
             >
               {t("maintenance.cancel")}

@@ -268,7 +268,7 @@ const FeedbackManagement: React.FC = () => {
     <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
               🔔 {t("feedback.management")}
@@ -277,8 +277,9 @@ const FeedbackManagement: React.FC = () => {
               {t("feedback.management-description")}
             </p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="bg-primary px-4 py-2 rounded-lg">
+
+          <div className="mt-3 md:mt-0">
+            <div className="bg-primary px-4 py-2 rounded-lg flex items-center">
               <span className="text-foreground font-semibold text-lg">
                 {pagination.total}
               </span>
@@ -289,6 +290,7 @@ const FeedbackManagement: React.FC = () => {
           </div>
         </div>
       </div>
+
 
       <Separator />
 

@@ -183,6 +183,7 @@ export default function UserTable({
 
   return (
     <TableAntd
+      hiddenCopy={true}
       columns={columns}
       data={users}
       loading={loading}

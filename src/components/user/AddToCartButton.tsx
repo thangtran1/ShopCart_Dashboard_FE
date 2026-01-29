@@ -75,7 +75,7 @@ const AddToCartButton = ({ product }: Props) => {
             </>
           ) : (
             <>
-              <ShoppingBag className="h-4 w-4 mr-2" />
+              <ShoppingBag className="h-4 w-4" />
               {isOutOfStock ? t("cart.out_of_stock") : t("cart.add_to_cart")}
             </>
           )}

@@ -41,13 +41,13 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
       form={form}
       layout="vertical"
       onFinish={handleSubmit}
-      className="space-y-4"
+      className="mb-0"
       initialValues={{
         role: "user",
         status: "active",
       }}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
         <Form.Item
           name="name"
           label={t("management.user.name")}
@@ -88,7 +88,7 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
         </Form.Item>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
         <Form.Item
           name="role"
           label={t("management.user.role")}
@@ -134,6 +134,7 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
         </Form.Item>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6">
       <Form.Item
         name="password"
         label={t("management.user.password")}
@@ -155,6 +156,7 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
       <Form.Item name="phone" label={t("management.user.phone")}>
         <Input size="large" placeholder={t("management.user.phone")} />
       </Form.Item>
+      </div>
 
       <Form.Item name="bio" label={t("management.user.bio")}>
         <Input.TextArea rows={3} placeholder={t("management.user.bio")} />

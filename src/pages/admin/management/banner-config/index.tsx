@@ -42,15 +42,16 @@ export default function BannerConfigPage() {
     <div className="bg-card text-card-foreground px-6 flex flex-col gap-4 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-3xl font-bold text-foreground flex flex-wrap items-center gap-2">
               🎯 {t("management.banner.manager-banner")}
             </h1>
             <p className="text-muted-foreground mt-2">
               {t("management.banner.manager-banner-config-description")}
             </p>
           </div>
+
           <Button
             type="primary"
             size="large"
@@ -61,12 +62,13 @@ export default function BannerConfigPage() {
               const event = new CustomEvent("openCreateModal");
               window.dispatchEvent(event);
             }}
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-blue-600 hover:bg-blue-700 whitespace-nowrap"
           >
             {t("management.banner.manager-banner-config-create")}
           </Button>
         </div>
       </div>
+
 
       <Separator className="my-0" />
 

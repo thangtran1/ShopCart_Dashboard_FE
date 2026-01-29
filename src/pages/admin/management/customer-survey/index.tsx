@@ -42,30 +42,32 @@ const CustomerSurveyManagement = () => {
     return (
         <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
             <div className="space-y-6 mt-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
                     <div>
                         <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
                             <Icon icon="lucide:message-square-text" className="h-7 w-7 text-primary" />
                             {t('management.customer-survey.title')}
                         </CardTitle>
                         <p className="text-muted-foreground mt-1">
-                        {t('management.customer-survey.description')}
+                            {t('management.customer-survey.description')}
                         </p>
                     </div>
-                    <div className="flex gap-3">
-                        {activeTab === "questions" && (
+
+                    {activeTab === "questions" && (
+                        <div className="flex mt-3 md:mt-0">
                             <Button
                                 type="primary"
                                 icon={<PlusCircleOutlined />}
                                 size="large"
                                 className="h-11 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-md font-bold transition-all hover:-translate-y-0.5"
-                                onClick={() => setTriggerAdd(prev => prev + 1)} 
+                                onClick={() => setTriggerAdd(prev => prev + 1)}
                             >
                                 {t('management.customer-survey.button.add_question')}
                             </Button>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
+
 
                 <Separator className="my-0" />
 

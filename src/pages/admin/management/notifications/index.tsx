@@ -176,8 +176,8 @@ const NotificationManagement: React.FC = () => {
           {type === "system"
             ? t("notification.system")
             : type === "news"
-            ? t("notification.news")
-            : t("notification.maintenance")}
+              ? t("notification.news")
+              : t("notification.maintenance")}
         </Tag>
       ),
     },
@@ -230,16 +230,17 @@ const NotificationManagement: React.FC = () => {
     <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">
+            <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
               🔔 {t("notification.management")}
             </h1>
             <p className="text-muted-foreground mt-2">
               {t("notification.management-description")}
             </p>
           </div>
-          <Link to="/admin/management/notifications/new-notification">
+
+          <Link to="/admin/management/notifications/new-notification" className="mt-3 md:mt-0">
             <Button
               type="primary"
               size="large"
@@ -251,6 +252,7 @@ const NotificationManagement: React.FC = () => {
           </Link>
         </div>
       </div>
+
       <Separator />
 
       <div className="pb-2">

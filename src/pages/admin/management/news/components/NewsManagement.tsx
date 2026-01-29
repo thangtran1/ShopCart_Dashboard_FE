@@ -14,7 +14,7 @@ import type { ColumnsType } from "antd/es/table";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import dayjs from "dayjs";
 
-import NewsModal from "./NewsModal"; 
+import NewsModal from "./NewsModal";
 import NewsFilters from "./NewsFilters";
 import { CardTitle } from "@/ui/card";
 import { Icon } from "@/components/icon";
@@ -36,7 +36,7 @@ export default function NewsManagement() {
   const [editingNews, setEditingNews] = useState<INews | null>(null);
 
   const { data: adminData, isLoading } = useAdminNews(filters);
-  
+
   const dataSource = adminData?.data || [];
   const total = adminData?.total || 0;
 
@@ -182,13 +182,13 @@ export default function NewsManagement() {
         ),
       },
     ],
-    [] 
+    []
   );
 
   return (
     <div className="py-4">
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
           <div>
             <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
               <Icon icon="lucide:newspaper" className="h-7 w-7 text-primary" />
@@ -199,16 +199,19 @@ export default function NewsManagement() {
             </p>
           </div>
 
-          <Button
-            type="primary"
-            icon={<PlusCircleOutlined />}
-            size="large"
-            className="h-11 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-md font-bold transition-all hover:-translate-y-0.5"
-            onClick={handleOpenAddModal}
-          >
-            Đăng bài mới
-          </Button>
+          <div className="mt-3 md:mt-0">
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              size="large"
+              className="h-11 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 shadow-md font-bold transition-all hover:-translate-y-0.5"
+              onClick={handleOpenAddModal}
+            >
+              Đăng bài mới
+            </Button>
+          </div>
         </div>
+
 
         <Separator />
 

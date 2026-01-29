@@ -33,6 +33,7 @@ const ProductGrid = () => {
     refetch 
   } = useProductsByTab(selectedTab);
 
+
   const handleTabSelect = useCallback(
     (tab: string) => setSearchParams({ tab }),
     [setSearchParams]
