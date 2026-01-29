@@ -18,16 +18,6 @@ export const RecentlyViewed = () => {
     const carouselRef = useRef<any>(null);
     const [slidesToShow, setSlidesToShow] = useState(5);
 
-    const handleConfirmClear = () => {
-        try {
-            clearRecentlyViewed();
-            setOpenClearModal(false);
-            toast.success(t("recently-viewed.clear_success"));
-        } catch (error) {
-            toast.error(t("recently-viewed.clear_error"));
-        }
-    };
-
     useEffect(() => {
         setMounted(true);
         const updateSlidesToShow = () => {
@@ -43,6 +33,16 @@ export const RecentlyViewed = () => {
         window.addEventListener("resize", updateSlidesToShow);
         return () => window.removeEventListener("resize", updateSlidesToShow);
     }, []);
+
+    const handleConfirmClear = () => {
+        try {
+            clearRecentlyViewed();
+            setOpenClearModal(false);
+            toast.success(t("recently-viewed.clear_success"));
+        } catch (error) {
+            toast.error(t("recently-viewed.clear_error"));
+        }
+    };
 
     if (!mounted || viewedProducts.length === 0) return null;
 
@@ -84,57 +84,47 @@ export const RecentlyViewed = () => {
                 </div>
 
                 <div className="relative">
-                    {isCarouselActive ? (
-                        <>
-                            <button
-                                onClick={() => carouselRef.current?.prev()}
-                                className={`absolute -left-4 top-1/2 -translate-y-1/2 z-30 
-                                    w-7 h-14 flex items-center justify-center
-                                    backdrop-blur-md bg-muted/90 border border-l-0 border-primary/30
-                                    rounded-r-full shadow-lg text-foreground
-                                    transition-all duration-300
-                                    ${canGoPrev
-                                        ? "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
-                                        : "opacity-0 pointer-events-none"}`}
-                            >
-                                <LeftOutlined className="text-lg -ml-1" />
-                            </button>
+                    <button
+                        onClick={() => carouselRef.current?.prev()}
+                        className={`absolute -left-4 top-1/2 -translate-y-1/2 z-30 
+                            w-7 h-14 flex items-center justify-center
+                            backdrop-blur-md bg-muted/90 border border-l-0 border-primary/30
+                            rounded-r-full shadow-lg text-foreground
+                            transition-all duration-300
+                            ${isCarouselActive && canGoPrev
+                                ? "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
+                                : "opacity-0 pointer-events-none"}`}
+                    >
+                        <LeftOutlined className="text-lg -ml-1" />
+                    </button>
 
-                            <Carousel
-                                key={slidesToShow}
-                                ref={carouselRef}
-                                slidesToShow={slidesToShow}
-                                {...carouselSettings}
-                                className="px-2"
-                            >
-                                {viewedProducts.map((product) => (
-                                    <div key={product._id} className="px-1">
-                                        <ProductCard product={product} />
-                                    </div>
-                                ))}
-                            </Carousel>
+                    <Carousel
+                        key={slidesToShow}
+                        ref={carouselRef}
+                        slidesToShow={slidesToShow}
+                        {...carouselSettings}
+                        className="px-2"
+                    >
+                        {viewedProducts.map((product) => (
+                            <div key={product._id} className="px-1">
+                                <ProductCard product={product} />
+                            </div>
+                        ))}
+                    </Carousel>
 
-                            <button
-                                onClick={() => carouselRef.current?.next()}
-                                className={`absolute -right-4 top-1/2 -translate-y-1/2 z-30 
-                                    w-7 h-14 flex items-center justify-center
-                                    backdrop-blur-md bg-muted/90 border border-r-0 border-primary/30
-                                    rounded-l-full shadow-lg text-foreground
-                                    transition-all duration-300
-                                    ${canGoNext
-                                        ? "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
-                                        : "opacity-0 pointer-events-none"}`}
-                            >
-                                <RightOutlined className="text-lg -mr-1" />
-                            </button>
-                        </>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                            {viewedProducts.map((product) => (
-                                <ProductCard key={product._id} product={product} />
-                            ))}
-                        </div>
-                    )}
+                    <button
+                        onClick={() => carouselRef.current?.next()}
+                        className={`absolute -right-4 top-1/2 -translate-y-1/2 z-30 
+                            w-7 h-14 flex items-center justify-center
+                            backdrop-blur-md bg-muted/90 border border-r-0 border-primary/30
+                            rounded-l-full shadow-lg text-foreground
+                            transition-all duration-300
+                            ${isCarouselActive && canGoNext
+                                ? "opacity-100 sm:opacity-0 sm:group-hover:opacity-100 cursor-pointer"
+                                : "opacity-0 pointer-events-none"}`}
+                    >
+                        <RightOutlined className="text-lg -mr-1" />
+                    </button>
                 </div>
             </section>
 
@@ -147,30 +137,13 @@ export const RecentlyViewed = () => {
                 width={320}
                 className="!text-center"
             >
-                <h3 className="text-lg font-semibold mb-1">
-                    {t("recently-viewed.modal.title")}
-                </h3>
-
-                <p className="text-sm text-muted-foreground mb-4">
-                    {t("recently-viewed.modal.decs")}
-                </p>
-
+                <h3 className="text-lg font-semibold mb-1">{t("recently-viewed.modal.title")}</h3>
+                <p className="text-sm text-muted-foreground mb-4">{t("recently-viewed.modal.decs")}</p>
                 <div className="flex justify-center gap-2">
-                    <Button
-                        type="primary"
-                        danger
-                        className="flex-1 !rounded-lg"
-                        onClick={handleConfirmClear}
-                    >
+                    <Button type="primary" danger className="flex-1 !rounded-lg" onClick={handleConfirmClear}>
                         {t("recently-viewed.modal.delete")}
-
                     </Button>
-
-                    <Button
-                        type="default"
-                        className="flex-1 !rounded-lg"
-                        onClick={() => setOpenClearModal(false)}
-                    >
+                    <Button type="default" className="flex-1 !rounded-lg" onClick={() => setOpenClearModal(false)}>
                         {t("recently-viewed.modal.cancel")}
                     </Button>
                 </div>
@@ -178,6 +151,3 @@ export const RecentlyViewed = () => {
         </>
     );
 };
-
-
-
