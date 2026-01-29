@@ -31,7 +31,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(searchQuery);
-    }, 300); 
+    }, 300);
     return () => clearTimeout(handler);
   }, [searchQuery]);
 
@@ -74,7 +74,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   const handleSearchSubmit = () => {
     if (!searchQuery.trim()) return;
     saveRecentSearch(searchQuery);
-    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    navigate('#');
     onClose();
   };
 
@@ -92,7 +92,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent hideClose className="!max-w-2xl max-h-[70vh] p-0 overflow-hidden flex flex-col">
-        
+
         <DialogHeader className="p-0 border-b shrink-0">
           <div className="flex items-center gap-2 p-4">
             <Input
@@ -130,7 +130,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
           {searchQuery ? (
             <div key="search-results-section">
               <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                <ShoppingBag className="w-4 h-4" /> 
+                <ShoppingBag className="w-4 h-4" />
                 {isSearching ? t("search.searching") : t("search.results_count", { count: searchResults.length })}
               </h3>
 
@@ -221,7 +221,7 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                   <TrendingUp className="w-4 h-4" /> {t("search.popular_categories")}
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
-                  {categories.slice(0, 4).map((c: any) => (
+                  {categories.slice(0, 8).map((c: any) => (
                     <button
                       key={c._id}
                       onClick={() => handleSuggestionClick(c.name)}
@@ -260,16 +260,16 @@ const SearchModal = ({ isOpen, onClose }: SearchModalProps) => {
                   <span className="text-primary">💡</span> {t("search.tips.title")}
                 </h4>
                 <ul className="text-xs text-muted-foreground space-y-1.5">
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-foreground">
                     <span className="text-primary">•</span>
                     <Trans i18nKey="search.tips.by_name">
-                      Tìm theo <span className="font-medium text-foreground">tên</span>: "iPhone 15"
+                      Tìm theo <span>tên</span>: "iPhone 15"
                     </Trans>
                   </li>
-                  <li className="flex items-start gap-2">
+                  <li className="flex items-start gap-2 text-foreground">
                     <span className="text-primary">•</span>
                     <Trans i18nKey="search.tips.by_brand">
-                      Tìm theo <span className="font-medium text-foreground">nhãn hiệu</span>: "Apple"
+                      Tìm theo <span>nhãn hiệu</span>: "Apple"
                     </Trans>
                   </li>
                 </ul>
