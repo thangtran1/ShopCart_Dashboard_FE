@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Table, Pagination, Select, Checkbox, Popover, Button } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
+import { Table, Pagination, Select, Checkbox, Popover } from "antd";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import { Settings2 } from "lucide-react";
+import { Button } from "@/ui/button";
 
 interface TableAntdProps {
   columns: any[];
@@ -27,39 +28,42 @@ const TableAntd: React.FC<TableAntdProps> = ({
   onPageChange,
   onRowClick,
   onRowHover,
-  hiddenCopy = false,
+  hiddenCopy = true,
   tableId,
 }) => {
   const { t } = useTranslation();
-
   // Tạo ID duy nhất cho bảng để tránh lưu chồng chéo
   const uniqueId = useMemo(() => tableId || window.location.pathname.replace(/\//g, "_"), [tableId]);
 
-  // 1. Lấy danh sách các key có thể ẩn/hiện (Chỉ lấy cột có title là string, bỏ qua checkbox selection)
+  // 1. Helper nhận diện cột select
+  const isSelectionCol = (col: any) => col.key === "select" || col.type === "selection";
+
+  const getColKey = (col: any) => {
+    if (isSelectionCol(col)) return "selection-col";
+    return col.key || col.dataIndex || (typeof col.title === "string" ? col.title : "unnamed-col");
+  };
+
+  // 2. Danh sách các key có thể ẩn/hiện
   const filterableKeys = useMemo(() =>
     columns
-      .filter((col) => col.title && typeof col.title === "string" && col.type !== "selection")
-      .map((col) => col.key || col.dataIndex || col.title),
+      .filter((col) => (col.title && typeof col.title === "string") || isSelectionCol(col) || !col.title)
+      .map((col) => getColKey(col)),
     [columns]
   );
 
-  // 2. State quản lý các cột hiển thị
   const [visibleColumns, setVisibleColumns] = useState<string[]>([]);
 
-  // 3. Effect: Load cấu hình từ Object tập trung trong localStorage
+  // 3. Load/Save localStorage
   useEffect(() => {
     const fullConfig = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const savedConfig = fullConfig[uniqueId];
-
     if (savedConfig && Array.isArray(savedConfig)) {
       setVisibleColumns(savedConfig);
     } else {
-      // MẶC ĐỊNH: Hiện tất cả nếu chưa có cấu hình lưu trữ
       setVisibleColumns(filterableKeys);
     }
   }, [uniqueId, filterableKeys]);
 
-  // Hàm cập nhật cấu hình vào Object chung
   const handleUpdateVisibleColumns = (newKeys: string[]) => {
     setVisibleColumns(newKeys);
     const fullConfig = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -69,40 +73,47 @@ const TableAntd: React.FC<TableAntdProps> = ({
 
   // 4. Logic cho checkbox "Chọn tất cả"
   const isAllChecked = filterableKeys.length > 0 && visibleColumns.length === filterableKeys.length;
-  const isIndeterminate = visibleColumns.length > 0 && visibleColumns.length < filterableKeys.length;
 
   const onCheckAllChange = (e: any) => {
     handleUpdateVisibleColumns(e.target.checked ? filterableKeys : []);
   };
 
-  // 5. GIỮ NGUYÊN LOGIC CŨ: Filter và Map logic copy cho columns
+  // 5. Logic Columns (Chỉ Filter, KHÔNG sửa UI cột Select ở bảng)
   const enhancedColumns = useMemo(() => {
     return columns
       .filter((col) => {
-        // Luôn hiện cột selection, thao tác hoặc cột không có title string
-        if (!col.title || typeof col.title !== "string" || col.key === "actions" || col.type === "selection" || col.title === "THAO TÁC") {
-          return true;
-        }
-        const key = col.key || col.dataIndex || col.title;
-        return visibleColumns.includes(key);
+        const canFilter = (col.title && typeof col.title === "string") || isSelectionCol(col);
+        if (!canFilter) return true;
+        return visibleColumns.includes(getColKey(col));
       })
       .map((col) => {
-        // Logic copy cũ của bạn giữ nguyên
-        if (hiddenCopy || col.key === "actions" || col.title === "THAO TÁC" || col.type === "selection") return col;
+        // 1. Nếu tắt copy HOẶC là cột selection HOẶC là cột Action (không có dataIndex/key) thì không thêm logic copy
+        if (hiddenCopy || isSelectionCol(col) || (!col.dataIndex && !col.key)) {
+          return col;
+        }
 
         return {
           ...col,
           onCell: (record: any) => ({
             onClick: (e: React.MouseEvent) => {
               e.stopPropagation();
-              const value = col.dataIndex ? record[col.dataIndex] : record.title;
+              
+              // Lấy giá trị data
+              const value = col.dataIndex ? record[col.dataIndex] : null;
+              if (value === null || value === undefined) return;
+
+              // Định dạng ngày tháng nếu là ISO Date
               const isISODate = typeof value === "string" && value.includes("T") && value.endsWith("Z");
               const formattedValue = isISODate ? dayjs(value).format("DD/MM/YYYY HH:mm") : value;
-              const content = String(formattedValue || "").trim();
+              const content = String(formattedValue).trim();
 
               if (content) {
                 navigator.clipboard.writeText(content);
-                toast.success(`${t("custom-table.copySuccess")} ${col.title}`, {
+                
+                // Lấy tên cột để hiển thị Toast (Xử lý nếu title là JSX)
+                const columnTitle = typeof col.title === "string" ? col.title : (col.key || "dữ liệu");
+                
+                toast.success(`${t("custom-table.copySuccess")} ${columnTitle}`, {
                   description: content,
                   duration: 2000,
                 });
@@ -114,15 +125,19 @@ const TableAntd: React.FC<TableAntdProps> = ({
       });
   }, [columns, visibleColumns, hiddenCopy, t]);
 
-  // 6. Giao diện Menu Popover
+  // 6. Giao diện Popover (Có Chọn tất cả + Chữ "Cột chọn")
   const columnSelectionMenu = (
     <div className="p-1 min-w-[200px]">
-      <div className="mb-2 font-bold text-[11px] text-gray-400 uppercase tracking-wider border-b pb-1">
-        {t("custom-table.displayConfig", "Cấu hình hiển thị")}
+      <div className="mb-2 font-bold text-[11px] text-foreground uppercase tracking-wider border-b pb-1">
+        {t("custom-table.displayConfig")}
       </div>
+      
       <div className="py-2 border-b mb-2">
-        <Checkbox indeterminate={isIndeterminate} onChange={onCheckAllChange} checked={isAllChecked}>
-          <span className="text-[13px] font-bold">Chọn tất cả hiển thị</span>
+        <Checkbox 
+          onChange={onCheckAllChange} 
+          checked={isAllChecked}
+        >
+          <span className="text-[13px] font-bold">{t("custom-table.selectAll")}</span>
         </Checkbox>
       </div>
       <div style={{ maxHeight: "300px", overflowY: "auto" }}>
@@ -132,12 +147,17 @@ const TableAntd: React.FC<TableAntdProps> = ({
           onChange={(v) => handleUpdateVisibleColumns(v as string[])}
         >
           {columns
-            .filter((col) => col.title && typeof col.title === "string" && col.type !== "selection")
+            .filter((col) => (col.title && typeof col.title === "string") || isSelectionCol(col) || !col.title)
             .map((col) => {
-              const key = col.key || col.dataIndex || col.title;
+              const key = getColKey(col);
+              let label = typeof col.title === "string" ? col.title : "";
+              
+              if (isSelectionCol(col)) label = t("custom-table.selectCol");
+              if (!label && !isSelectionCol(col)) label = t("custom-table.action");
+
               return (
                 <Checkbox key={key} value={key}>
-                  <span className="text-[13px]">{col.title}</span>
+                  <span className="text-[13px]">{label}</span>
                 </Checkbox>
               );
             })}
@@ -158,24 +178,13 @@ const TableAntd: React.FC<TableAntdProps> = ({
         `}</style>
       )}
 
-      <div className="flex justify-between items-center mb-4 gap-3">
-        {/* Nút Cấu hình cột */}
-        <Popover content={columnSelectionMenu} trigger="click" placement="bottomLeft" arrow={false}>
-          <Button icon={<SettingOutlined />} className="flex items-center">
-            {t("custom-table.columns", "Cấu hình cột")}
+      <div className="flex justify-end items-center mb-4">
+        <Popover content={columnSelectionMenu} trigger="click" placement="bottomRight" arrow={false}>
+          <Button className="cursor-pointer hover:bg-primary/10" variant="secondary">
+            <Settings2 className="w-4 h-4 mr-2" />
+            {t("custom-table.columns")}
           </Button>
         </Popover>
-
-        <div className="flex items-center gap-3">
-          <div className="font-medium text-muted-foreground">{t("custom-table.rowsPerPage")}</div>
-          <Select value={pagination?.limit} onChange={(value) => onPageChange(1, value)} style={{ width: 80 }}>
-            {[10, 20, 50, 100].map((size) => (
-              <Select.Option key={size} value={size}>
-                {size}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
       </div>
 
       <Table
@@ -195,9 +204,18 @@ const TableAntd: React.FC<TableAntdProps> = ({
         })}
         footer={() => (
           <div className="flex justify-between items-center px-2">
+            <div className="flex gap-5 items-center">
             <div>
               {t("custom-table.total")}{" "}
               <span className="font-semibold text-primary">{pagination?.total || 0}</span> {t("custom-table.items")}
+            </div>
+              <Select value={pagination?.limit} onChange={(value) => onPageChange(1, value)} style={{ width: 80 }}>
+                {[10, 20, 50, 100].map((size) => (
+                  <Select.Option key={size} value={size}>
+                    {size}
+                  </Select.Option>
+                ))}
+              </Select>
             </div>
             <Pagination
               current={pagination?.page}

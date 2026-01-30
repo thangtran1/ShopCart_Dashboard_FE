@@ -1000,10 +1000,15 @@
     "product": "Sản phẩm"
   },
   "custom-table": {
-    "rowsPerPage": "Số hàng mỗi trang:",
+    "rowsPerPage": "Số dòng/trang:",
     "total": "Tổng cộng",
     "items": "mục",
     "copySuccess": "Đã copy",
-    "content": "nội dung"
+    "content": "nội dung",
+    "columns": "Cột hiển thị",
+    "displayConfig": "Hiển thị cột",
+    "selectAll": "Chọn tất cả",
+    "selectCol": "Cột chọn",
+    "action": "Thao tác"
   }
 }

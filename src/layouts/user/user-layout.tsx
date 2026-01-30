@@ -33,11 +33,11 @@ export default function UserLayout() {
         </div>
       </div>
 
-      <div className="bg-background text-foreground flex flex-col min-h-[calc(100vh-40px)]">
+      <div className="bg-background text-foreground">
         <Header />
 
-        <main className={`${contentWrapper} flex-1 px-4 pb-4 mx-auto`}>
-          <Separator className="mb-4" />
+        <main className={`${contentWrapper} px-4 pb-4 mx-auto`}>
+            <Separator className="mb-4" />
           <Outlet />
         </main>
 

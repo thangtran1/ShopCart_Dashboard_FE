@@ -1005,6 +1005,12 @@
     "total": "Total",
     "items": "items",
     "copySuccess": "Copied successfully",
-    "content": "content"
+    "content": "content",
+    "columns": "Visible columns",
+    "displayConfig": "Display Columns",
+    "selectAll": "Select All",
+    "selectCol": "Select Col",
+    "action": "Action"
+
   }
 }
