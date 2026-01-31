@@ -130,7 +130,7 @@ const NotificationManagement: React.FC = () => {
       title: t("notification.title"),
       dataIndex: "title",
       key: "title",
-      width: 150,
+      width: 250,
       ellipsis: true,
       render: (text: string) => renderWithTooltip(text),
     },
@@ -138,7 +138,7 @@ const NotificationManagement: React.FC = () => {
       title: t("notification.content"),
       dataIndex: "content",
       key: "content",
-      width: 150,
+      width: 350,
       ellipsis: true,
       render: (text: string) => renderWithTooltip(text),
     },
@@ -170,7 +170,7 @@ const NotificationManagement: React.FC = () => {
       title: t("notification.type"),
       dataIndex: "type",
       key: "type",
-      width: 120,
+      width: 140,
       render: (type: string) => (
         <Tag color={type === "system" ? "blue" : "green"}>
           {type === "system"
@@ -185,13 +185,14 @@ const NotificationManagement: React.FC = () => {
       title: t("notification.read-by-users"),
       dataIndex: "readByUsers",
       key: "readByUsers",
-      width: 120,
+      width: 140,
       render: (readByUsers?: string[]) => readByUsers?.length || 0,
     },
     {
       title: t("notification.created-at"),
       dataIndex: "createdAt",
       key: "createdAt",
+      width: 140,
       render: (date: string) =>
         renderWithTooltip(dayjs(date).format("DD/MM/YYYY HH:mm")),
     },

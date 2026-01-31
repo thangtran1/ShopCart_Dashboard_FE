@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Space, Popconfirm, Tag } from "antd";
-import {
-  EyeOutlined,
-  DeleteOutlined,
-  MailOutlined,
-  PhoneOutlined,
-  UserOutlined,
-  MessageOutlined,
-} from "@ant-design/icons";
+import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import dayjs from "dayjs";
 import { toast } from "sonner";
@@ -124,12 +117,7 @@ const FeedbackManagement: React.FC = () => {
 
   const columns = [
     {
-      title: (
-        <span className="flex items-center gap-1">
-          <MessageOutlined className="text-blue-500" />
-          {t("feedback.title")}
-        </span>
-      ),
+      title: t("feedback.title"),
       dataIndex: "title",
       key: "title",
       width: 180,
@@ -139,12 +127,7 @@ const FeedbackManagement: React.FC = () => {
       ),
     },
     {
-      title: (
-        <span className="flex items-center gap-1">
-          <UserOutlined className="text-green-500" />
-          {t("feedback.name")}
-        </span>
-      ),
+      title: t("feedback.name"),
       dataIndex: "fullName",
       key: "fullName",
       width: 150,
@@ -156,12 +139,7 @@ const FeedbackManagement: React.FC = () => {
       ),
     },
     {
-      title: (
-        <span className="flex items-center gap-1">
-          <PhoneOutlined className="text-orange-500" />
-          {t("feedback.phone")}
-        </span>
-      ),
+      title: t("feedback.phone"),
       dataIndex: "phone",
       key: "phone",
       width: 130,
@@ -172,12 +150,7 @@ const FeedbackManagement: React.FC = () => {
       ),
     },
     {
-      title: (
-        <span className="flex items-center gap-1">
-          <MailOutlined className="text-purple-500" />
-          {t("feedback.email")}
-        </span>
-      ),
+      title: t("feedback.email"),
       dataIndex: "email",
       key: "email",
       width: 180,

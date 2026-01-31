@@ -65,7 +65,7 @@ export default function NewsManagement() {
   const columns: ColumnsType<INews> = useMemo(
     () => [
       {
-        title: "BÀI VIẾT",
+        title: "Bài viết",
         key: "news",
         width: 350,
         render: (_, record) => (
@@ -89,7 +89,7 @@ export default function NewsManagement() {
         ),
       },
       {
-        title: "DANH MỤC",
+        title: "Danh mục",
         dataIndex: "category",
         width: 140,
         render: (category: string) => (
@@ -99,7 +99,7 @@ export default function NewsManagement() {
         ),
       },
       {
-        title: "TRẠNG THÁI",
+        title: "Trạng thái",
         dataIndex: "isPublished",
         width: 130,
         align: "center",
@@ -114,7 +114,7 @@ export default function NewsManagement() {
         ),
       },
       {
-        title: "THỐNG KÊ",
+        title: "Thống kê",
         key: "stats",
         width: 150,
         render: (_, record) => (
@@ -131,7 +131,7 @@ export default function NewsManagement() {
         ),
       },
       {
-        title: "NGÀY TẠO",
+        title: "Ngày tạo",
         dataIndex: "createdAt",
         width: 140,
         sorter: (a, b) => dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix(),
@@ -147,7 +147,7 @@ export default function NewsManagement() {
         ),
       },
       {
-        title: "THAO TÁC",
+        title: "Thao tác",
         key: "actions",
         width: 120,
         fixed: "right",

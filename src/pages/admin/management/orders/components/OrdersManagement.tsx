@@ -94,7 +94,7 @@ export default function OrdersManagement() {
   const columns: ColumnsType<any> = useMemo(
     () => [
       {
-        title: "ĐƠN HÀNG",
+        title: "Đơn hàng",
         key: "orderNumber",
         width: 180,
         render: (_, record) => (
@@ -120,7 +120,7 @@ export default function OrdersManagement() {
         ),
       },
       {
-        title: "SẢN PHẨM",
+        title: "Sản phẩm",
         key: "items",
         width: 220,
         render: (_, record) => (
@@ -178,7 +178,7 @@ export default function OrdersManagement() {
         ),
       },
       {
-        title: "KHÁCH HÀNG",
+        title: "Khách hàng",
         key: "customer",
         width: 200,
         render: (_, record) => (
@@ -197,18 +197,18 @@ export default function OrdersManagement() {
         ),
       },
       {
-        title: "THANH TOÁN",
+        title: "Thanh toán",
         key: "total",
         width: 160,
         render: (_, record) => {
           const isOnline = record.paymentMethod === "ONLINE";
-      
+
           return (
             <div className="flex flex-col gap-1">
               <span className="font-extrabold text-[15px] text-primary leading-none">
                 {record.totalAmount?.toLocaleString()}đ
               </span>
-      
+
               <Tag
                 color={isOnline ? "green" : "orange"}
                 icon={isOnline ? <CreditCardOutlined /> : <WalletOutlined />}
@@ -221,7 +221,7 @@ export default function OrdersManagement() {
         },
       },
       {
-        title: "TRẠNG THÁI",
+        title: "Trạng tháiI",
         dataIndex: "status",
         width: 160,
         render: (status: string, record) => {
@@ -231,7 +231,7 @@ export default function OrdersManagement() {
               value={status}
               size="middle"
               disabled={isFinal}
-              variant="outlined" 
+              variant="outlined"
               className="w-full min-w-[140px]"
               onChange={(val) => handleUpdateStatusQuickly(record._id, val)}
               labelInValue={false}
@@ -242,9 +242,9 @@ export default function OrdersManagement() {
                   <Select.Option key={key} value={key} disabled={isDisabled}>
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span 
-                          className="w-2 h-2 rounded-full" 
-                          style={{ backgroundColor: cfg.color }} 
+                        <span
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: cfg.color }}
                         />
                         <span className="text-sm">{cfg.label}</span>
                       </div>
@@ -258,7 +258,7 @@ export default function OrdersManagement() {
         }
       },
       {
-        title: "THAO TÁC",
+        title: "Thao tác",
         key: "actions",
         width: 120,
         fixed: "right",

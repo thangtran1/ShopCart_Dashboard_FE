@@ -78,7 +78,7 @@ export default function CouponsManagement() {
   const columns: ColumnsType<any> = useMemo(
     () => [
       {
-        title: "CHIẾN DỊCH",
+        title: "Chiến dịch",
         key: "code",
         dataIndex: "code",
         width: 250,
@@ -99,7 +99,7 @@ export default function CouponsManagement() {
         ),
       },
       {
-        title: "LOẠI ƯU ĐÃI",
+        title: "Loại ưu đãi",
         key: "discount",
         dataIndex: "discountValue",
         width: 160,
@@ -117,7 +117,7 @@ export default function CouponsManagement() {
         ),
       },
       {
-        title: "KÍCH HOẠT",
+        title: "Trạng thái",
         dataIndex: "isActive",
         width: 120,
         align: "center",
@@ -139,7 +139,7 @@ export default function CouponsManagement() {
         ),
       },
       {
-        title: "TÌNH TRẠNG",
+        title: "Tình trạng",
         key: "actualStatus",
         width: 140,
         render: (_, record) => {
@@ -152,7 +152,7 @@ export default function CouponsManagement() {
         },
       },
       {
-        title: "SỬ DỤNG / TỔNG",
+        title: "Sử dụng / Tổng",
         key: "usage",
         width: 220,
         render: (_, record) => {
@@ -175,10 +175,10 @@ export default function CouponsManagement() {
               <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden border border-border">
                 <div
                   className={`h-full transition-all duration-700 rounded-full ${percent >= 90
-                      ? "bg-rose-500"
-                      : percent >= 70
-                        ? "bg-amber-500"
-                        : "bg-indigo-500"
+                    ? "bg-rose-500"
+                    : percent >= 70
+                      ? "bg-amber-500"
+                      : "bg-indigo-500"
                     }`}
                   style={{ width: `${record.usageLimit === 0 ? 0 : percent}%` }}
                 ></div>
@@ -194,7 +194,7 @@ export default function CouponsManagement() {
         },
       },
       {
-        title: "HẾT HẠN",
+        title: "Ngày hết hạn",
         dataIndex: "expiryDate",
         width: 130,
         sorter: (a, b) => dayjs(a.expiryDate).unix() - dayjs(b.expiryDate).unix(),
@@ -220,7 +220,7 @@ export default function CouponsManagement() {
         },
       },
       {
-        title: "THAO TÁC",
+        title: "Thao tác",
         key: "actions",
         width: 120,
         fixed: "right",

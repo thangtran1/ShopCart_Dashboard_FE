@@ -97,7 +97,7 @@ const TableAntd: React.FC<TableAntdProps> = ({
           onCell: (record: any) => ({
             onClick: (e: React.MouseEvent) => {
               e.stopPropagation();
-              
+
               // Lấy giá trị data
               const value = col.dataIndex ? record[col.dataIndex] : null;
               if (value === null || value === undefined) return;
@@ -109,10 +109,10 @@ const TableAntd: React.FC<TableAntdProps> = ({
 
               if (content) {
                 navigator.clipboard.writeText(content);
-                
+
                 // Lấy tên cột để hiển thị Toast (Xử lý nếu title là JSX)
                 const columnTitle = typeof col.title === "string" ? col.title : (col.key || "dữ liệu");
-                
+
                 toast.success(`${t("custom-table.copySuccess")} ${columnTitle}`, {
                   description: content,
                   duration: 2000,
@@ -131,10 +131,10 @@ const TableAntd: React.FC<TableAntdProps> = ({
       <div className="mb-2 font-bold text-[11px] text-foreground uppercase tracking-wider border-b pb-1">
         {t("custom-table.displayConfig")}
       </div>
-      
+
       <div className="py-2 border-b mb-2">
-        <Checkbox 
-          onChange={onCheckAllChange} 
+        <Checkbox
+          onChange={onCheckAllChange}
           checked={isAllChecked}
         >
           <span className="text-[13px] font-bold">{t("custom-table.selectAll")}</span>
@@ -151,7 +151,7 @@ const TableAntd: React.FC<TableAntdProps> = ({
             .map((col) => {
               const key = getColKey(col);
               let label = typeof col.title === "string" ? col.title : "";
-              
+
               if (isSelectionCol(col)) label = t("custom-table.selectCol");
               if (!label && !isSelectionCol(col)) label = t("custom-table.action");
 
@@ -205,17 +205,20 @@ const TableAntd: React.FC<TableAntdProps> = ({
         footer={() => (
           <div className="flex justify-between items-center px-2">
             <div className="flex gap-5 items-center">
-            <div>
-              {t("custom-table.total")}{" "}
-              <span className="font-semibold text-primary">{pagination?.total || 0}</span> {t("custom-table.items")}
-            </div>
-              <Select value={pagination?.limit} onChange={(value) => onPageChange(1, value)} style={{ width: 80 }}>
-                {[10, 20, 50, 100].map((size) => (
-                  <Select.Option key={size} value={size}>
-                    {size}
-                  </Select.Option>
-                ))}
-              </Select>
+              <div>
+                {t("custom-table.total")}{" "}
+                <span className="font-semibold text-primary">{pagination?.total || 0}</span> {t("custom-table.items")}
+              </div>
+              <div className="flex items-center justify-center gap-2 ml-1">
+                {t("custom-table.rowsPerPage")}
+                <Select value={pagination?.limit} onChange={(value) => onPageChange(1, value)} style={{ width: 80 }}>
+                  {[10, 20, 50, 100].map((size) => (
+                    <Select.Option key={size} value={size}>
+                      {size}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
             </div>
             <Pagination
               current={pagination?.page}

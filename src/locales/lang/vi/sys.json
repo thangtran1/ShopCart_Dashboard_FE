@@ -662,12 +662,12 @@
         "type_multiple": "Chọn nhiều (Checkbox)"
       },
       "table": {
-        "order": "THỨ TỰ",
-        "type": "LOẠI CÂU HỎI",
-        "question": "CÂU HỎI KHẢO SÁT",
-        "options": "CÁC LỰA CHỌN",
-        "created_at": "NGÀY TẠO",
-        "actions": "THAO TÁC",
+        "order": "Thứ tự",
+        "type": "Loại câu hỏi",
+        "question": "Câu hỏi khảo sát",
+        "options": "Các lựa chọn",
+        "created_at": "Ngày tạo",
+        "actions": "Thao tác",
         "edit": "Chỉnh sửa",
         "delete_confirm": "Xóa câu hỏi này?",
         "delete_desc": "Hành động này sẽ ảnh hưởng đến dữ liệu báo cáo cũ.",

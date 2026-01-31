@@ -662,12 +662,12 @@
         "type_multiple": "Multiple Choice"
       },
       "table": {
-        "order": "ORDER",
-        "type": "QUESTION TYPE",
-        "question": "SURVEY QUESTION",
-        "options": "OPTIONS",
-        "created_at": "CREATED DATE",
-        "actions": "ACTIONS",
+        "order": "Order",
+        "type": "Question type",
+        "question": "Survey question",
+        "options": "Options",
+        "created_at": "Created date",
+        "actions": "Actions",
         "edit": "Edit Question",
         "delete_confirm": "Delete this question?",
         "delete_desc": "This action will affect old report data.",

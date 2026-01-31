@@ -5,19 +5,11 @@ import { useTranslation } from "react-i18next";
 import { CardTitle } from "@/ui/card";
 import CategoriesManagement from "./components/CategoriesManagement";
 import BrandsManagement from "./components/BrandsManagement";
-import CatalogOverview from "./components/CatalogOverview";
-import { Separator } from "@/ui/separator";
 import { useSearchParams } from "react-router";
 
-type TabType = "overview" | "categories" | "brands";
+type TabType = "categories" | "brands";
 
 const tabConfig = [
-  {
-    key: "overview" as TabType,
-    label: "catalog.overview",
-    icon: "solar:chart-2-bold-duotone",
-    component: <CatalogOverview />,
-  },
   {
     key: "categories" as TabType,
     label: "catalog.categories",
@@ -35,12 +27,12 @@ const tabConfig = [
 export default function CatalogManagement() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState<TabType>("overview");
+  const [activeTab, setActiveTab] = useState<TabType>("categories");
 
   // Đồng bộ tab với URL
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab") as TabType;
-    if (tabFromUrl && ["overview", "categories", "brands"].includes(tabFromUrl)) {
+    if (tabFromUrl && ["categories", "brands"].includes(tabFromUrl)) {
       setActiveTab(tabFromUrl);
     }
   }, [searchParams]);
@@ -73,16 +65,7 @@ export default function CatalogManagement() {
         <CardTitle className="text-2xl font-bold text-foreground">
           {t("catalog.title", "Quản lý Danh mục & Thương hiệu")}
         </CardTitle>
-        <p className="text-muted-foreground mt-2">
-          {t(
-            "catalog.subtitle",
-            "Quản lý danh mục sản phẩm và thương hiệu một cách hiệu quả"
-          )}
-        </p>
       </div>
-
-      {/* Tabs */}
-      <Separator className="mt-4" />
 
       <Tabs
         size="large"
