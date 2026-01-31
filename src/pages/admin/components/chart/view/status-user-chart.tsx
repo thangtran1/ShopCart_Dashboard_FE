@@ -9,6 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { ResponseStats, StatsPeriod, statsService } from "@/api/services/chartApi";
+import { CardTitle } from "@/ui/card";
 export default function StatusUserChart() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState<StatsPeriod>(StatsPeriod.MONTH);
@@ -53,7 +54,8 @@ export default function StatusUserChart() {
 
   return (
     <div className="bg-card text-card-foreground p-3 flex flex-col gap-4 rounded-xl border shadow-sm">
-      <div className="flex justify-end">
+      <CardTitle className="flex justify-between items-center">
+        <span>{t("components.chart.user-activity-statistics")}</span>
         <Select
           onValueChange={(value) => setPeriod(value as StatsPeriod)}
           defaultValue={period.toString()}
@@ -76,7 +78,7 @@ export default function StatusUserChart() {
             </SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </CardTitle>
       <div className="flex flex-col md:flex-row gap-2">
         <div className="flex-1">
           <TotalCard

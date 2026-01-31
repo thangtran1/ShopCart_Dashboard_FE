@@ -143,7 +143,9 @@ export default function BackupList({
     {
       title: t("management.database.actions"),
       key: "actions",
-      align: "center" as "center",
+      align: "center",
+      width: 120,
+      fixed: "right",
       render: (_: any, record: Backup) => (
         <Space>
           <Button

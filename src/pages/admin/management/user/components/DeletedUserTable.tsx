@@ -115,7 +115,9 @@ export default function DeletedUserTable({
     {
       title: t("management.user.actions"),
       key: "actions",
+      align: "center",
       width: 120,
+      fixed: "right",
       render: (_: React.ReactNode, user: User) => (
         <Space>
           <Popconfirm

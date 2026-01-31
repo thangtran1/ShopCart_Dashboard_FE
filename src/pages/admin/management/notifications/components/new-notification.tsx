@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Card,
   Form,
   Input,
   Select,
@@ -81,7 +80,7 @@ const NewNotification: React.FC = () => {
   };
 
   return (
-    <Card className="!bg-background">
+    <div className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm">
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
           <Link to="/admin/management/notifications">{t("notification.management")}</Link>
@@ -272,7 +271,7 @@ const NewNotification: React.FC = () => {
           </Button>
         </div>
       </Form>
-    </Card>
+    </div>
   );
 };
 

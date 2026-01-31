@@ -197,8 +197,7 @@ export default function ProductsManagement() {
     {
       title: "Sản phẩm",
       key: "product",
-      width: 350,
-      fixed: "left",
+      width: 300,
       render: (_, record) => (
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -348,7 +347,7 @@ export default function ProductsManagement() {
     {
       title: "Thao tác",
       key: "actions",
-      width: 150,
+      width: 120,
       fixed: "right",
       align: "center",
       render: (_, record) => (

@@ -1,4 +1,4 @@
-import { Card, Breadcrumb } from "antd";
+import { Breadcrumb } from "antd";
 import { Link, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import UserDetailTabs from "./tabs";
@@ -7,7 +7,7 @@ export default function UserDetail() {
   const { userId } = useParams<{ userId: string }>();
   const { t } = useTranslation();
   return (
-    <Card className="!bg-background">
+    <div className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm">
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
           <Link to="/admin/management/user">{t("management.user.title")}</Link>
@@ -18,6 +18,6 @@ export default function UserDetail() {
       </Breadcrumb>
 
       <UserDetailTabs userId={userId ?? ""} />
-    </Card>
+    </div>
   );
 }

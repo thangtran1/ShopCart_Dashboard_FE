@@ -67,7 +67,7 @@ export default function CatalogManagement() {
   }));
 
   return (
-    <div className="bg-card text-card-foreground px-6 py-4 flex flex-col gap-2 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm">
       {/* Header */}
       <div>
         <CardTitle className="text-2xl font-bold text-foreground">

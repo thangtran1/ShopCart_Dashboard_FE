@@ -265,7 +265,7 @@ const FeedbackManagement: React.FC = () => {
   ];
 
   return (
-    <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">

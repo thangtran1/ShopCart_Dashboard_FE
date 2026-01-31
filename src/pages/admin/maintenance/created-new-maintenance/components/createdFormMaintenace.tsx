@@ -1,4 +1,4 @@
-import { Form, Input, Select, DatePicker, Button, Space, Row, Col, ConfigProvider } from "antd";
+import { Form, Input, Select, DatePicker, Button, Space, Row, Col } from "antd";
 import { Icon } from "@/components/icon";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -54,13 +54,6 @@ export default function CreatedFormMaintenace() {
   };
 
   return (
-    <ConfigProvider 
-      theme={{
-        token: {
-          borderRadius: 12
-        },
-      }}
-    >
       <div className="transition-colors duration-300">
         {createMaintenanceMutation.isPending && (
           <FullPageLoading message={t("maintenance.create-maintenance-loading")} />
@@ -77,7 +70,7 @@ export default function CreatedFormMaintenace() {
             endTime: dayjs().add(2, 'hour'),
           }}
         >
-          <div className="border border-border bg-muted/40 rounded-[2rem] p-4 shadow-sm">
+          <div className="border border-border bg-muted/40 rounded-xl p-4 shadow-sm">
             <Form.Item
               name="title"
               label={<span className="font-bold">{t("maintenance.title")}</span>}
@@ -124,7 +117,7 @@ export default function CreatedFormMaintenace() {
             </Form.Item>
           </div>
 
-          <div className="border border-border bg-muted/40 rounded-[2rem] p-4 shadow-sm">
+          <div className="border border-border bg-muted/40 rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold flex items-center gap-2 text-foreground">
                 <Icon icon="lucide:calendar-clock" className="text-primary" />
@@ -192,7 +185,7 @@ export default function CreatedFormMaintenace() {
             </Row>
           </div>
 
-          <div className="flex items-center justify-end gap-4 pt-4">
+          <div className="flex items-center justify-end gap-4">
             <Button
               size="large"
               type="text"
@@ -213,6 +206,5 @@ export default function CreatedFormMaintenace() {
           </div>
         </Form>
       </div>
-    </ConfigProvider>
   );
 }

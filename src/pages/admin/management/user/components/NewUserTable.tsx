@@ -137,8 +137,9 @@ export default function NewUserTable({
     {
       title: t("management.user.actions"),
       key: "actions",
-      align: "center" as const,
+      align: "center",
       width: 120,
+      fixed: "right",
       render: (_: React.ReactNode, user: User) => (
         <Popconfirm
           title={t("management.user.confirm-delete")}

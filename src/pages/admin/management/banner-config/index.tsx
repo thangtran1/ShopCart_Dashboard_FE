@@ -39,7 +39,7 @@ export default function BannerConfigPage() {
   ];
 
   return (
-    <div className="bg-card text-card-foreground px-6 flex flex-col gap-4 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

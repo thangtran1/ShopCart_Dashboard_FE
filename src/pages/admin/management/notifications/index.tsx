@@ -192,15 +192,15 @@ const NotificationManagement: React.FC = () => {
       title: t("notification.created-at"),
       dataIndex: "createdAt",
       key: "createdAt",
-      width: 150,
       render: (date: string) =>
         renderWithTooltip(dayjs(date).format("DD/MM/YYYY HH:mm")),
     },
     {
       title: t("notification.actions"),
       key: "actions",
-      width: 120,
       align: "center",
+      fixed: "right",
+      width: 120,
       render: (record: Notification) => {
         return (
           <Space>
@@ -227,7 +227,7 @@ const NotificationManagement: React.FC = () => {
   ];
 
   return (
-    <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
       {/* Header */}
       <div className="pt-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">

@@ -1,4 +1,4 @@
-import { Card, Button, Upload } from "antd";
+import { Button, Upload } from "antd";
 import { Icon } from "@/components/icon";
 import { UploadProps } from "antd";
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,7 @@ export default function UploadCard({
   };
 
   return (
-    <Card>
+    <div className="bg-muted text-card-foreground p-4 rounded-xl border shadow-sm">
       <div className="text-center">
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-foreground mb-2">
@@ -164,6 +164,6 @@ export default function UploadCard({
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

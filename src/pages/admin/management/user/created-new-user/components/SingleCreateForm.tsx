@@ -162,7 +162,7 @@ export default function SingleCreateForm({ onSuccess }: SingleCreateFormProps) {
         <Input.TextArea rows={3} placeholder={t("management.user.bio")} />
       </Form.Item>
 
-      <div className="flex justify-end gap-4 pt-2">
+      <div className="flex justify-end gap-4">
         <Button danger size="large" onClick={() => form.resetFields()}>
           <Icon icon="lucide:x-circle" className="h-5 w-5" />
           {t("management.user.cancel")}

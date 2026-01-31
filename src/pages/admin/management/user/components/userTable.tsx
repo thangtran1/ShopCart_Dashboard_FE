@@ -148,7 +148,8 @@ export default function UserTable({
       title: t("management.user.actions"),
       key: "actions",
       align: "center",
-      width: 150,
+      width: 120,
+      fixed: "right",
       render: (_: React.ReactNode, user: User) => (
         <Space>
           <Popconfirm

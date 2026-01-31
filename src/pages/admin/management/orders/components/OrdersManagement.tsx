@@ -260,10 +260,11 @@ export default function OrdersManagement() {
       {
         title: "THAO TÁC",
         key: "actions",
-        width: 100,
+        width: 120,
         fixed: "right",
+        align: "center",
         render: (_, record) => (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center justify-center gap-1">
             <Tooltip title="Xem chi tiết">
               <Button
                 type="text"

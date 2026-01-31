@@ -117,7 +117,9 @@ const AuthSessionManagement: React.FC = () => {
       title: t("management.auth-session.status"),
       dataIndex: "sessionStatus",
       key: "sessionStatus",
-      width: 150,
+      align: "center",
+      width: 120,
+      fixed: "right",
       ellipsis: true,
       render: (text: string) => (
         <Tag
@@ -133,7 +135,7 @@ const AuthSessionManagement: React.FC = () => {
   ];
 
   return (
-    <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
       <div className="pt-4">
         <div className="flex items-center justify-between">
           <div>

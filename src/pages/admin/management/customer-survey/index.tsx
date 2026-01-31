@@ -40,7 +40,7 @@ const CustomerSurveyManagement = () => {
     ];
 
     return (
-        <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
+        <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
             <div className="space-y-6 mt-4">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
                     <div>

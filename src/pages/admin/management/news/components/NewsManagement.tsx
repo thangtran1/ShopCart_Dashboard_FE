@@ -149,7 +149,7 @@ export default function NewsManagement() {
       {
         title: "THAO TÁC",
         key: "actions",
-        width: 100,
+        width: 120,
         fixed: "right",
         align: "center",
         render: (_, record) => (

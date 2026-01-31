@@ -1,4 +1,4 @@
-import { Card, Typography, Breadcrumb } from "antd";
+import { Typography, Breadcrumb } from "antd";
 import { Icon } from "@/components/icon";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -18,7 +18,7 @@ export default function CreatedNewUser() {
   const [createMethod, setCreateMethod] = useState<CreateMethod>("single");
 
   return (
-    <Card className="!bg-background">
+    <div className="bg-card text-card-foreground p-4 rounded-xl border shadow-sm">
       <Breadcrumb style={{ marginBottom: "8px" }}>
         <Breadcrumb.Item>
           <Link to="/admin/management/user">{t("management.user.title")}</Link>
@@ -38,6 +38,6 @@ export default function CreatedNewUser() {
       <CreateMethodSelector value={createMethod} onChange={setCreateMethod} />
 
       {createMethod === "single" ? <SingleCreateForm /> : <BulkCreateForm />}
-    </Card>
+    </div>
   );
 }

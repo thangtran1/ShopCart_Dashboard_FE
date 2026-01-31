@@ -37,7 +37,7 @@ export default function MaintenceSystemPage() {
   ];
 
   return (
-    <div className="bg-card text-card-foreground px-6 flex flex-col gap-6 rounded-xl border shadow-sm">
+    <div className="bg-card text-card-foreground px-4 flex flex-col gap-6 rounded-xl border shadow-sm">
       <div className="space-y-6">
         <div className="flex flex-col gap-4 pt-4 md:flex-row md:items-center md:justify-between">
           <div>

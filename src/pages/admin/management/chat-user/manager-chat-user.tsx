@@ -258,7 +258,7 @@ const ManagerChatUser: React.FC<ManagerChatUserProps> = () => {
                 </Space>
               </div>
 
-              <div className="flex-1 p-5 overflow-y-auto flex flex-col bg-muted/20" ref={listRef}>
+              <div className="flex-1 p-4 overflow-y-auto flex flex-col bg-muted/20" ref={listRef}>
                 {Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
                     <div className="flex items-center my-4">
