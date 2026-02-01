@@ -29,7 +29,6 @@ import OrdersFilters from "./OrdersFilters";
 import { ShoppingBag, User } from "lucide-react";
 import { CardTitle } from "@/ui/card";
 import { AdminOrderQuery } from "@/api/services/orderApi";
-import { Separator } from "@/ui/separator";
 import { toast } from "sonner";
 
 interface StatusConfigItem {
@@ -311,8 +310,6 @@ export default function OrdersManagement() {
         </div>
       </div>
 
-      <Separator className="my-0" />
-
       <OrdersFilters
         filters={filters}
         onFilterChange={(k, v) =>
@@ -321,19 +318,21 @@ export default function OrdersManagement() {
         onClearFilters={() => setFilters(initialFilters)}
       />
 
-      <TableAntd
-        columns={columns}
-        data={adminOrders}
-        loading={loading}
-        pagination={{
-          page: filters.page ?? 1,
-          limit: filters.limit ?? 10,
-          total: pagination?.total || 0,
-        }}
-        onPageChange={(p, l) =>
-          setFilters((prev) => ({ ...prev, page: p, limit: l || prev.limit }))
-        }
-      />
+      <div className="mt-4">
+        <TableAntd
+          columns={columns}
+          data={adminOrders}
+          loading={loading}
+          pagination={{
+            page: filters.page ?? 1,
+            limit: filters.limit ?? 10,
+            total: pagination?.total || 0,
+          }}
+          onPageChange={(p, l) =>
+            setFilters((prev) => ({ ...prev, page: p, limit: l || prev.limit }))
+          }
+        />
+      </div>
 
       <OrdersModal
         open={isModalOpen}

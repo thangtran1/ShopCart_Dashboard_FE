@@ -5,7 +5,6 @@ import { Tooltip } from "antd";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { Separator } from "@/ui/separator";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import FilterSearch from "./components/filter-search";
 import { Feedback, feedbackService } from "@/api/services/feedback";
@@ -264,8 +263,6 @@ const FeedbackManagement: React.FC = () => {
         </div>
       </div>
 
-
-      <Separator />
 
       <div className="pb-6">
         <FilterSearch

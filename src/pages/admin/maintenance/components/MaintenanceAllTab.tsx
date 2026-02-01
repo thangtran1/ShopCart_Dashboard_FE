@@ -6,6 +6,7 @@ import MaintenanceActionBar from "./MaintenanceActionBar";
 import MaintenanceTable from "./MaintenanceTable";
 import CommonMaintenanceFilters from "./CommonMaintenanceFilters";
 import MaintenanceModal from "./MaintenanceModal";
+import { Separator } from "@/ui/separator";
 
 export default function MaintenanceAllTab() {
   const {
@@ -53,6 +54,7 @@ export default function MaintenanceAllTab() {
         isScheduledTab={false}
       />
 
+      <Separator />
       {/* Action Bar */}
       <MaintenanceActionBar
         selectedMaintenances={selectedMaintenances}
@@ -81,7 +83,7 @@ export default function MaintenanceAllTab() {
         isOpen={isModalOpen}
         maintenance={selectedMaintenance}
         onClose={handleCloseModal}
-        // onUpdate={handleUpdate}
+      // onUpdate={handleUpdate}
       />
     </div>
   );

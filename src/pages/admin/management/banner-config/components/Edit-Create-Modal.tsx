@@ -96,7 +96,7 @@ export default function EditCreateModal({
 
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">{t("management.banner.banner-status")}</Label>
-                <div className="flex items-center gap-3 p-2.5 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center gap-3 p-2.5 bg-muted rounded-lg border border-border">
                   <Switch
                     checked={formData.isActive}
                     onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}

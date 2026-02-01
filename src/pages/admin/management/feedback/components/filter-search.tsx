@@ -25,7 +25,7 @@ export default function FilterSearch({
 
 
   return (
-    <div className="grid grid-cols-1 items-end gap-4 pb-5 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-1 items-end gap-4 py-2 border-y border-border py-6 md:grid-cols-2 xl:grid-cols-4">
       <div>
         <label className="block text-sm font-medium mb-2">
           {t("feedback.search")}

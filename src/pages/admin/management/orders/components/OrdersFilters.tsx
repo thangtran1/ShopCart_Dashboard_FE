@@ -3,7 +3,6 @@
 import { Button, Input, Select, DatePicker } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { AdminOrderQuery } from "@/api/services/orderApi";
-import { Separator } from "@/ui/separator";
 import dayjs from "dayjs";
 
 const { Option } = Select;
@@ -21,7 +20,7 @@ export default function OrdersFilters({
   onClearFilters,
 }: OrdersFiltersProps) {
   return (
-    <div className="py-2 !my-3">
+    <div className="py-2 border-y border-border py-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
           <label className="block text-sm font-medium mb-2 text-foreground">
@@ -102,17 +101,15 @@ export default function OrdersFilters({
       </div>
 
       <div className="flex justify-end mt-4">
-      <Button 
-          size="large" 
-          danger 
+        <Button
+          size="large"
+          danger
           onClick={onClearFilters}
           className="px-8 font-medium"
         >
           Xóa tất cả bộ lọc
         </Button>
       </div>
-
-      <Separator className="mt-6" />
     </div>
   );
 }

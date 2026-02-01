@@ -17,7 +17,6 @@ import CouponFilters from "./CouponFilters";
 import { Ticket, Users } from "lucide-react";
 import { CardTitle } from "@/ui/card";
 import { Icon } from "@/components/icon";
-import { Separator } from "@/ui/separator";
 import { Badge } from "@/ui/badge";
 import { ICouponFilters } from "@/api/services/couponApi";
 
@@ -260,7 +259,7 @@ export default function CouponsManagement() {
 
   return (
     <div>
-      <div className="space-y-8 py-4">
+      <div className="space-y-4 py-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 md:gap-0">
           <div>
             <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -284,9 +283,6 @@ export default function CouponsManagement() {
             </Button>
           </div>
         </div>
-
-
-        <Separator className="my-0" />
 
         <CouponFilters
           filters={filters}

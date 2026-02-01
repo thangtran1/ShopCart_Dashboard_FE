@@ -18,7 +18,6 @@ import NewsModal from "./NewsModal";
 import NewsFilters from "./NewsFilters";
 import { CardTitle } from "@/ui/card";
 import { Icon } from "@/components/icon";
-import { Separator } from "@/ui/separator";
 import { Badge } from "@/ui/badge";
 import { INews, INewsFilters } from "@/api/services/newsApi";
 
@@ -194,7 +193,7 @@ export default function NewsManagement() {
               <Icon icon="lucide:newspaper" className="h-7 w-7 text-primary" />
               Quản lý Tin tức
             </CardTitle>
-            <p className="text-muted-foreground mt-1 text-sm">
+            <p className="text-muted-foreground mt-1">
               Sáng tạo nội dung, quản lý bài viết và theo dõi lượt tương tác của độc giả.
             </p>
           </div>
@@ -211,9 +210,6 @@ export default function NewsManagement() {
             </Button>
           </div>
         </div>
-
-
-        <Separator />
 
         <NewsFilters
           filters={filters}

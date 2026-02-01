@@ -9,9 +9,7 @@ import {
 import { databaseAdmin } from "@/api/services/databaseApi";
 import dayjs from "dayjs";
 import { toast } from "sonner";
-import { Icon } from "@/components/icon";
 import { useTranslation } from "react-i18next";
-import { Separator } from "@/ui/separator";
 import TableAntd from "@/components/common/tables/custom-table-antd";
 import { Backup } from "@/types/entity";
 import CustomConfirmModal from "@/components/common/modals/custom-modal-confirm";
@@ -174,11 +172,6 @@ export default function BackupList({
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-        <Icon icon="lucide:database" className="h-5 w-5 text-blue-600" />
-        {t("management.database.backup-list")}
-      </h2>
-      <Separator className="my-4" />
       <TableAntd
         columns={columns}
         data={backups}

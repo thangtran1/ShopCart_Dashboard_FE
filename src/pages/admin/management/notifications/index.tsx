@@ -11,7 +11,6 @@ import { Link } from "react-router";
 import dayjs from "dayjs";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { Separator } from "@/ui/separator";
 import { useAdminNotifications } from "@/hooks/useAdminNotifications";
 import { Notification } from "@/types/entity";
 import TableAntd from "@/components/common/tables/custom-table-antd";
@@ -254,8 +253,6 @@ const NotificationManagement: React.FC = () => {
         </div>
       </div>
 
-      <Separator />
-
       <div className="pb-2">
         <FilterSearch
           searchText={searchText}
@@ -268,9 +265,7 @@ const NotificationManagement: React.FC = () => {
           handleClearFilter={handleClearFilter}
         />
 
-        <Separator />
-
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto mt-4">
           <TableAntd
             columns={columns}
             data={notifications}

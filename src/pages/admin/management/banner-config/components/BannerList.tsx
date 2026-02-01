@@ -160,7 +160,7 @@ export default function BannerList() {
           />
         ) : (
           <div className="max-h-[650px] overflow-y-auto">
-            <div className="space-y-4">
+            <div className="space-y-4 mb-4">
               {banners.map((banner, index) => (
                 <div
                   key={banner.id}

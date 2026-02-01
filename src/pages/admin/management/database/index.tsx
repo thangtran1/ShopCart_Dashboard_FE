@@ -222,6 +222,8 @@ export default function DatabaseManagement() {
             onClear={handleClearFilters}
           />
 
+          <Separator />
+
           <BackupList
             backups={backups}
             reload={fetchBackups}

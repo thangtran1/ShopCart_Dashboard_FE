@@ -19,7 +19,7 @@ export default function CouponFilters({
   onClearFilters,
 }: CouponFiltersProps) {
   return (
-    <div className="py-2 !mb-4">
+    <div className="py-2 border-t border-border pt-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
         <div>
           <label className="block text-sm font-medium mb-2 text-foreground">
@@ -92,9 +92,9 @@ export default function CouponFilters({
       </div>
 
       <div className="flex justify-end mt-4">
-        <Button 
-          size="large" 
-          danger 
+        <Button
+          size="large"
+          danger
           onClick={onClearFilters}
           className="px-8 font-medium"
         >

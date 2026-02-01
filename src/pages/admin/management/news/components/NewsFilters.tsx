@@ -19,7 +19,7 @@ export default function NewsFilters({
   onClearFilters,
 }: NewsFiltersProps) {
   return (
-    <div className="py-2 !mb-6">
+    <div className="py-2 border-y border-border pt-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
         <div className="md:col-span-1">
           <label className="block text-xs font-bold mb-2 text-muted-foreground uppercase">
@@ -93,7 +93,7 @@ export default function NewsFilters({
         </div>
       </div>
 
-      <div className="flex justify-end mt-4 border-b border-dashed border-border">
+      <div className="flex justify-end mt-4">
         <Button size="large" className="mb-4" danger onClick={onClearFilters}>
           Xóa bộ lọc
         </Button>
