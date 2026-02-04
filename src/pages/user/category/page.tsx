@@ -13,16 +13,16 @@ interface Props {
   categories: any[];
   slug?: string;
   products: any[];
-  onRefresh?: () => Promise<void>; 
-  isFetching?: boolean;         
+  onRefresh?: () => Promise<void>;
+  isFetching?: boolean;
 }
 
-const CategoryPage = ({ 
-  categories, 
+const CategoryPage = ({
+  categories,
   products = [],
-  slug, 
-  onRefresh, 
-  isFetching 
+  slug,
+  onRefresh,
+  isFetching
 }: Props) => {
   const { t } = useTranslation();
   const [currentSlug, setCurrentSlug] = useState(slug || "all");
@@ -79,11 +79,10 @@ const CategoryPage = ({
   }, []);
 
   return (
-    <div className="pb-3 flex flex-row items-start gap-4">
-      <aside className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${
-          isSidebarCollapsed ? "w-16" : "w-64"
+    <div className="pb-3 flex flex-row items-start gap-2">
+      <aside className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${isSidebarCollapsed ? "w-16" : "w-64"
         }`}>
-        
+
         <div className={`p-4 bg-primary flex items-center shadow-sm ${isSidebarCollapsed ? "justify-center" : "justify-between"}`}>
           {!isSidebarCollapsed && (
             <h3 className="font-bold text-white flex items-center gap-2 truncate text-sm uppercase tracking-tighter">
@@ -174,7 +173,7 @@ const CategoryPage = ({
           </div>
         ) : (
           <NoProductAvailable
-            onRefresh={onRefresh} 
+            onRefresh={onRefresh}
             onViewAll={() => navigate("/category")}
           />
         )}

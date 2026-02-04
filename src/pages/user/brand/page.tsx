@@ -70,9 +70,9 @@ const BrandPage = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  
+
   return (
-    <div className="pb-3 flex flex-row items-start gap-4">
+    <div className="pb-3 flex flex-row items-start gap-2">
       <aside
         className={`sticky top-24 rounded-xl shadow-md border bg-card transition-all duration-300 overflow-hidden ${isSidebarCollapsed ? "w-16" : "w-64"
           }`}
@@ -105,7 +105,7 @@ const BrandPage = ({
           {brands.map((item) => {
             const itemSlug = typeof item.slug === 'object' ? item.slug?.current : item.slug;
 
-            if (!itemSlug) return null; 
+            if (!itemSlug) return null;
 
             const isActive = itemSlug === slug;
 

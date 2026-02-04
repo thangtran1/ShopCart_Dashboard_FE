@@ -3,7 +3,6 @@ import { Button, Popconfirm } from "antd";
 import { Badge } from "@/ui/badge";
 import { Switch } from "@/ui/switch";
 import { Input } from "@/ui/input";
-import { Label } from "@/ui/label";
 import { Icon } from "@/components/icon";
 import { useBanner } from "@/hooks/useBanner";
 import type {
@@ -44,7 +43,6 @@ export default function BannerList() {
   useEffect(() => {
     const handleCreateModalEvent = () => {
       setEditingBanner(null);
-      // Tự động tính thứ tự tiếp theo
       const maxOrder =
         banners.length > 0 ? Math.max(...banners.map((b) => b.order || 0)) : 0;
       setFormData({
@@ -56,17 +54,12 @@ export default function BannerList() {
     };
 
     window.addEventListener("openCreateModal", handleCreateModalEvent);
-    return () => {
+    return () =>
       window.removeEventListener("openCreateModal", handleCreateModalEvent);
-    };
   }, [banners]);
 
   const resetForm = () => {
-    setFormData({
-      content: "",
-      isActive: true,
-      order: 0,
-    });
+    setFormData({ content: "", isActive: true, order: 0 });
     setEditingBanner(null);
     setIsModalOpen(false);
   };
@@ -76,7 +69,6 @@ export default function BannerList() {
       toast.error(t("management.banner.banner-content-required"));
       return;
     }
-
     const success = await createBanner(formData);
     if (success) {
       resetForm();
@@ -149,156 +141,148 @@ export default function BannerList() {
         editingBanner={editingBanner}
         isModalOpen={isModalOpen}
       />
-      <div>
-        {loading ? (
-          <FullPageLoading message={t("management.banner.loading-banner")} />
-        ) : banners.length === 0 ? (
-          <EmptyState
-            height="md"
-            title="Trống"
-            description={t("management.banner.no-banner")}
-          />
-        ) : (
-          <div className="max-h-[650px] overflow-y-auto">
-            <div className="space-y-4 mb-4">
-              {banners.map((banner, index) => (
-                <div
-                  key={banner.id}
-                  className="border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Badge
-                          variant={banner.isActive ? "default" : "secondary"}
-                          className="gap-1"
-                        >
-                          <Icon
-                            icon={
-                              banner.isActive
-                                ? "lucide:play-circle"
-                                : "lucide:pause-circle"
-                            }
-                            className="w-3 h-3"
-                          />
-                          {banner.isActive
-                            ? t("management.banner.active-banner")
-                            : t("management.banner.paused-banner")}
-                        </Badge>
-                        <span className="text-sm text-muted-foreground font-mono">
-                          #{banner.order || index + 1}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {t("management.banner.banner-id")}: {banner.id}
-                        </span>
-                      </div>
 
-                      <div
-                        className="p-4 rounded-lg mb-4 border-2 border-dashed overflow-hidden w-full"
-                        style={{
-                          backgroundColor:
-                            settings?.backgroundColor || "#1890ff",
-                          color: settings?.textColor || "#ffffff",
-                          borderColor:
-                            (settings?.backgroundColor || "#1890ff") + "40",
-                        }}
-                      >
-                        <div className="font-medium text-center whitespace-nowrap animate-marquee">
-                          {banner.content}
-                        </div>
-                      </div>
+      {loading ? (
+        <FullPageLoading message={t("management.banner.loading-banner")} />
+      ) : banners.length === 0 ? (
+        <EmptyState
+          height="md"
+          title="Trống"
+          description={t("management.banner.no-banner")}
+        />
+      ) : (
+        <div className="max-h-[650px] overflow-y-auto space-y-4 mb-4">
+          {banners.map((banner, index) => (
+            <div
+              key={banner.id}
+              className="border border-border rounded-md p-4 hover:shadow-sm transition"
+            >
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* LEFT */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Badge
+                      variant={banner.isActive ? "default" : "secondary"}
+                      className="gap-1 text-white"
+                    >
+                      <Icon
+                        icon={
+                          banner.isActive
+                            ? "lucide:play-circle"
+                            : "lucide:pause-circle"
+                        }
+                        className="w-3 h-3"
+                      />
+                      {banner.isActive
+                        ? t("management.banner.active-banner")
+                        : t("management.banner.paused-banner")}
+                    </Badge>
 
-                      <div className="flex items-center gap-6 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Icon icon="lucide:calendar" className="w-4 h-4" />
-                          {t("management.banner.create-banner")}:{" "}
-                          {new Date(banner.createdAt || "").toLocaleDateString(
-                            "vi-VN"
-                          )}
-                        </span>
-                        {banner.updatedAt && (
-                          <span className="flex items-center gap-1">
-                            <Icon icon="lucide:edit" className="w-4 h-4" />
-                            {t("management.banner.update-banner")}:{" "}
-                            {new Date(banner.updatedAt).toLocaleDateString(
-                              "vi-VN"
-                            )}
-                          </span>
+                    <span className="text-sm text-muted-foreground font-mono">
+                      #{banner.order || index + 1}
+                    </span>
+
+                    <span className="text-xs text-muted-foreground truncate">
+                      ID: {banner.id}
+                    </span>
+                  </div>
+
+                  <div
+                    className="px-4 py-2 rounded-md text-sm mb-3 whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{
+                      backgroundColor:
+                        settings?.backgroundColor || "#1890ff",
+                      color: settings?.textColor || "#ffffff",
+                    }}
+                  >
+                    {banner.content}
+                  </div>
+
+                  <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Icon icon="lucide:calendar" className="w-4 h-4" />
+                      {t("management.banner.create-banner")}:{" "}
+                      {new Date(
+                        banner.createdAt || ""
+                      ).toLocaleDateString("vi-VN")}
+                    </span>
+
+                    {banner.updatedAt && (
+                      <span className="flex items-center gap-1">
+                        <Icon icon="lucide:edit" className="w-4 h-4" />
+                        {t("management.banner.update-banner")}:{" "}
+                        {new Date(banner.updatedAt).toLocaleDateString(
+                          "vi-VN"
                         )}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-end gap-3 ml-6">
-                      <div className="flex items-center gap-2">
-                        <Label className="text-xs text-muted-foreground">
-                          {t("management.banner.banner-order")}
-                        </Label>
-                        <Input
-                          type="number"
-                          min="0"
-                          value={banner.order || 0}
-                          onChange={(e) =>
-                            handleOrderChange(
-                              banner.id,
-                              parseInt(e.target.value) || 0
-                            )
-                          }
-                          className="w-16 h-8 text-center"
-                        />
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Switch
-                          checked={banner.isActive}
-                          onCheckedChange={(checked) =>
-                            handleToggle(banner.id, checked)
-                          }
-                        />
-                        <span className="text-xs text-muted-foreground">
-                          {banner.isActive
-                            ? t("management.banner.active-banner")
-                            : t("management.banner.paused-banner")}
-                        </span>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button
-                          type="default"
-                          size="small"
-                          icon={<EditOutlined />}
-                          onClick={() => handleEdit(banner)}
-                          className=" !rounded-[0.25rem] text-primary hover:bg-primary/60"
-                        >
-                          {t("management.banner.update-banner")}
-                        </Button>
-                        <Popconfirm
-                          title={t("management.banner.delete-banner")}
-                          description={t(
-                            "management.banner.delete-banner-description"
-                          )}
-                          onConfirm={() => handleDelete(banner.id)}
-                          okText={t("management.banner.delete-banner")}
-                          cancelText={t("management.banner.cancel")}
-                          okButtonProps={{ danger: true }}
-                        >
-                          <Button
-                            danger
-                            size="small"
-                            icon={<DeleteOutlined />}
-                            className=" !rounded-[0.25rem] text-primary hover:bg-red/60"
-                          >
-                            {t("management.banner.delete-banner")}
-                          </Button>
-                        </Popconfirm>
-                      </div>
-                    </div>
+                      </span>
+                    )}
                   </div>
                 </div>
-              ))}
+
+                {/* RIGHT */}
+                <div className="lg:w-[260px] w-full shrink-0">
+                  <div className="flex gap-4">
+                    <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                      <span>{t("management.banner.banner-order")}</span>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={banner.order || 0}
+                        onChange={(e) =>
+                          handleOrderChange(
+                            banner.id,
+                            parseInt(e.target.value) || 0
+                          )
+                        }
+                        className="w-16 h-8 text-center"
+                      />
+                    </div>
+
+                    <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                      <span>
+                        {banner.isActive
+                          ? t("management.banner.active-banner")
+                          : t("management.banner.paused-banner")}
+                      </span>
+                      <Switch
+                        checked={banner.isActive}
+                        onCheckedChange={(checked) =>
+                          handleToggle(banner.id, checked)
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-row lg:flex-col gap-2 pt-3">
+                    <Button
+                      size="small"
+                      icon={<EditOutlined />}
+                      onClick={() => handleEdit(banner)}
+                    >
+                      {t("management.banner.update-banner")}
+                    </Button>
+
+                    <Popconfirm
+                      title={t("management.banner.delete-banner")}
+                      description={t(
+                        "management.banner.delete-banner-description"
+                      )}
+                      onConfirm={() => handleDelete(banner.id)}
+                      okText={t("management.banner.delete-banner")}
+                      cancelText={t("management.banner.cancel")}
+                      okButtonProps={{ danger: true }}
+                    >
+                      <Button danger size="small" icon={<DeleteOutlined />}>
+                        {t("management.banner.delete-banner")}
+                      </Button>
+                    </Popconfirm>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
