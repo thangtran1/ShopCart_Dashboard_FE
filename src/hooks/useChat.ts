@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { useUserToken } from "@/store/userStore";
 import { ChatMessage, Conversation, CurrentUser } from "@/types/entity";
@@ -25,6 +25,7 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const selectedUserIdRef = useRef<string | null>(null);
   const userToken = useUserToken();
   const API_URL = import.meta.env.VITE_API_URL || "";
   const fetchAllUsers = async () => {
@@ -85,37 +86,47 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
     });
 
     newSocket.on("newMessage", (message: ChatMessage) => {
-      let shouldDisplay = false;
       if (currentUser.role === "admin") {
-        // Admin should see messages from users
-        shouldDisplay = message.senderId !== currentUser.id;
+        // Luôn cập nhật sidebar conversations cho admin
+        const senderId = message.senderId;
+        const isFromSelectedUser = senderId === selectedUserIdRef.current;
+
+        setConversations((prev) => ({
+          ...prev,
+          [senderId]: {
+            userId: senderId,
+            userEmail: message.senderId,
+            lastMessage: message,
+            // Nếu đang xem chat của user này thì không tăng unread
+            unreadCount: isFromSelectedUser
+              ? (prev[senderId]?.unreadCount || 0)
+              : (prev[senderId]?.unreadCount || 0) + 1,
+            isOnline: prev[senderId]?.isOnline || false,
+          },
+        }));
+
+        // Chỉ thêm tin nhắn vào chat window nếu đúng user đang được chọn
+        if (isFromSelectedUser) {
+          setMessages((prev) => {
+            const exists = prev.some(
+              (msg) =>
+                msg.id === message.id || msg.messageId === message.messageId
+            );
+            if (exists) return prev;
+            return [...prev, message];
+          });
+        }
       } else {
-        // User should see messages from admin (recipientId === currentUser.id)
-        shouldDisplay = message.recipientId === currentUser.id;
-      }
-
-      if (shouldDisplay) {
-        setMessages((prev) => {
-          const exists = prev.some(
-            (msg) =>
-              msg.id === message.id || msg.messageId === message.messageId
-          );
-          if (exists) return prev;
-          return [...prev, message];
-        });
-
-        if (currentUser?.role === "admin") {
-          const senderId = message.senderId;
-          setConversations((prev) => ({
-            ...prev,
-            [senderId]: {
-              userId: senderId,
-              userEmail: message.senderId,
-              lastMessage: message,
-              unreadCount: (prev[senderId]?.unreadCount || 0) + 1,
-              isOnline: prev[senderId]?.isOnline || false,
-            },
-          }));
+        // User nhận tin nhắn từ admin
+        if (message.recipientId === currentUser.id) {
+          setMessages((prev) => {
+            const exists = prev.some(
+              (msg) =>
+                msg.id === message.id || msg.messageId === message.messageId
+            );
+            if (exists) return prev;
+            return [...prev, message];
+          });
         }
       }
     });
@@ -206,6 +217,7 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const selectUser = useCallback(
     (userId: string) => {
       setSelectedUserId(userId);
+      selectedUserIdRef.current = userId;
 
       if (currentUser?.role === "admin") {
         setConversations((prev) => ({
