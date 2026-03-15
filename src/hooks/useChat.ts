@@ -6,12 +6,14 @@ import { ChatMessage, Conversation, CurrentUser } from "@/types/entity";
 interface UseChatReturn {
   socket: Socket | null;
   messages: ChatMessage[];
-  conversations: any[]; 
+  conversations: any[];
   isConnected: boolean;
   onlineUsers: string[];
   selectedUserId: string | null;
+  userUnreadCount: number;
   sendMessage: (content: string, recipientId?: string) => void;
   selectUser: (userId: string) => void;
+  setIsReading: (reading: boolean) => void;
 }
 
 export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
@@ -25,7 +27,11 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const [isConnected, setIsConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [userUnreadCount, setUserUnreadCount] = useState(0);
+  const isReadingRef = useRef(false);
   const selectedUserIdRef = useRef<string | null>(null);
+  // Cache tin nhắn theo userId cho admin - chuyển hội thoại tức thì
+  const messageCacheRef = useRef<Record<string, ChatMessage[]>>({});
   const userToken = useUserToken();
   const API_URL = import.meta.env.VITE_API_URL || "";
   const fetchAllUsers = async () => {
@@ -59,11 +65,12 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
 
     const newSocket = io(socketUrl, {
       auth: { token },
-      reconnectionAttempts: 3,
-      reconnectionDelay: 3000,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
       transports: ["websocket"],
-      timeout: 10000,
-      forceNew: true,
+      timeout: 5000,
+      // Bỏ forceNew: true → tái sử dụng connection hiệu quả hơn
     });
 
     setSocket(newSocket);
@@ -99,7 +106,7 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
             lastMessage: message,
             // Nếu đang xem chat của user này thì không tăng unread
             unreadCount: isFromSelectedUser
-              ? (prev[senderId]?.unreadCount || 0)
+              ? prev[senderId]?.unreadCount || 0
               : (prev[senderId]?.unreadCount || 0) + 1,
             isOnline: prev[senderId]?.isOnline || false,
           },
@@ -127,20 +134,33 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
             if (exists) return prev;
             return [...prev, message];
           });
+          // Chỉ tăng unread khi user KHÔNG đang mở modal chat
+          if (!isReadingRef.current) {
+            setUserUnreadCount((prev) => prev + 1);
+          }
         }
       }
     });
 
     newSocket.on("messageSent", (message: ChatMessage) => {
+      // Reconcile: thay thế optimistic message bằng server message (cùng messageId)
       setMessages((prev) => {
+        const optimisticIndex = prev.findIndex(
+          (msg) => msg.messageId && msg.messageId === message.messageId
+        );
+        if (optimisticIndex !== -1) {
+          // Đã có optimistic message → thay thế
+          const updated = [...prev];
+          updated[optimisticIndex] = message;
+          return updated;
+        }
+        // Check duplicate
         const exists = prev.some(
           (msg) =>
             msg.id === message.id ||
             (message.messageId && msg.messageId === message.messageId)
         );
-        if (exists) {
-          return prev;
-        }
+        if (exists) return prev;
         return [...prev, message];
       });
 
@@ -157,12 +177,46 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
       }
     });
 
-    newSocket.on("chatHistory", (data: { messages: ChatMessage[] }) => {
+    newSocket.on("chatHistory", (data: { messages: ChatMessage[]; targetUserId?: string }) => {
       setMessages(data.messages);
+      // Cập nhật cache cho admin
+      if (data.targetUserId && currentUser?.role === "admin") {
+        messageCacheRef.current[data.targetUserId] = data.messages;
+      }
+      // Reset unread count cho user khi load history (= đã đọc)
+      if (currentUser?.role !== "admin") {
+        setUserUnreadCount(0);
+      }
+    });
+
+    // Nhận unread count từ DB khi user kết nối
+    newSocket.on("userUnreadCount", (data: { unreadCount: number }) => {
+      setUserUnreadCount(data.unreadCount);
     });
 
     newSocket.on("initialOnlineUsers", (userIds: string[]) => {
       setOnlineUsers(userIds);
+    });
+
+    // Hydrate conversations từ DB khi admin kết nối (bao gồm unread count đã persist)
+    newSocket.on("initialConversations", (serverConversations: any[]) => {
+      if (currentUser?.role === "admin" && serverConversations?.length > 0) {
+        const convMap: Record<string, Conversation> = {};
+        serverConversations.forEach((conv: any) => {
+          const userInfo = conv.userInfo;
+          if (userInfo) {
+            convMap[userInfo._id] = {
+              userId: userInfo._id,
+              userEmail: userInfo.email,
+              userName: userInfo.name || userInfo.email,
+              lastMessage: conv.lastMessage || null,
+              unreadCount: conv.unreadCount || 0,
+              isOnline: false, // sẽ được cập nhật bởi initialOnlineUsers
+            };
+          }
+        });
+        setConversations(convMap);
+      }
     });
 
     newSocket.on(
@@ -199,6 +253,7 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
     };
   }, [currentUser?.id, userToken.accessToken]);
 
+  // 🚀 Optimistic UI: hiển thị tin nhắn ngay lập tức, không chờ server
   const sendMessage = useCallback(
     (content: string, recipientId?: string) => {
       if (!socket || !isConnected) {
@@ -209,13 +264,48 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
         return;
       }
 
-      socket.emit("sendMessage", { content, recipientId });
+      // Tạo optimistic message ID trùng với format BE
+      const tempId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+      // Tạo optimistic message hiển thị ngay
+      const optimisticMessage: ChatMessage = {
+        id: tempId,
+        senderId: currentUser?.id || "",
+        recipientId: recipientId || "",
+        content,
+        timestamp: new Date().toISOString(),
+        senderRole: currentUser?.role || "user",
+        messageId: tempId,
+      };
+
+      // Hiển thị ngay trên UI
+      setMessages((prev) => [...prev, optimisticMessage]);
+
+      // Cập nhật sidebar cho admin
+      if (currentUser?.role === "admin" && recipientId) {
+        setConversations((prev) => ({
+          ...prev,
+          [recipientId]: {
+            ...prev[recipientId],
+            lastMessage: optimisticMessage,
+            unreadCount: 0,
+          },
+        }));
+      }
+
+      // Gửi lên server kèm tempId để reconcile
+      socket.emit("sendMessage", { content, recipientId, tempId });
     },
-    [socket, isConnected, currentUser?.role]
+    [socket, isConnected, currentUser?.role, currentUser?.id]
   );
 
   const selectUser = useCallback(
     (userId: string) => {
+      // Lưu tin nhắn hiện tại vào cache trước khi chuyển
+      if (selectedUserIdRef.current) {
+        messageCacheRef.current[selectedUserIdRef.current] = messages;
+      }
+
       setSelectedUserId(userId);
       selectedUserIdRef.current = userId;
 
@@ -229,11 +319,20 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
         }));
       }
 
+      // Hiển thị cached messages ngay lập tức (nếu có)
+      const cached = messageCacheRef.current[userId];
+      if (cached && cached.length > 0) {
+        setMessages(cached);
+      } else {
+        setMessages([]);
+      }
+
+      // Fetch fresh từ server (background)
       if (socket) {
         socket.emit("getChatHistory", { userId });
       }
     },
-    [socket, currentUser?.role]
+    [socket, currentUser?.role, messages]
   );
 
   const getConversations = useMemo(() => {
@@ -298,6 +397,15 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
 
   const conversationsList = getConversations;
 
+  // Hàm để ModalChatUser báo trạng thái đang đọc
+  const setIsReading = useCallback((reading: boolean) => {
+    isReadingRef.current = reading;
+    if (reading) {
+      // Reset ngay lập tức, không chờ server
+      setUserUnreadCount(0);
+    }
+  }, []);
+
   return {
     socket,
     messages,
@@ -305,7 +413,9 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
     isConnected,
     onlineUsers,
     selectedUserId,
+    userUnreadCount,
     sendMessage,
     selectUser,
+    setIsReading,
   };
 };

@@ -17,33 +17,65 @@ interface ModalChatUserProps {
   open: boolean;
   onClose: () => void;
   currentUser: CurrentUser;
+  onUnreadCountChange?: (count: number) => void;
 }
 
 const ModalChatUser: React.FC<ModalChatUserProps> = ({
   open,
   onClose,
   currentUser,
+  onUnreadCountChange,
 }) => {
   const { t } = useTranslation()
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const {
+    socket,
     messages,
     isConnected,
     onlineUsers,
     selectedUserId,
+    userUnreadCount,
     sendMessage,
     selectUser,
+    setIsReading,
   } = useChat(currentUser);
 
+  // Báo unread count lên parent để hiển thị badge trên icon
   useEffect(() => {
-    if (messagesEndRef.current) {
+    onUnreadCountChange?.(userUnreadCount);
+  }, [userUnreadCount, onUnreadCountChange]);
+
+  // Khi mở/đóng modal: quản lý trạng thái đọc
+  useEffect(() => {
+    if (open) {
+      // Reset unread NGAY LẬP TỨC + chặn tăng unread khi đang đọc
+      setIsReading(true);
+
+      // Gọi server để persist (background, không block UI)
+      if (socket && isConnected) {
+        socket.emit("getChatHistory", {});
+      }
+
+      // Scroll xuống cuối
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    } else {
+      // Đóng modal → cho phép tăng unread lại
+      setIsReading(false);
+    }
+  }, [open, socket, isConnected, setIsReading]);
+
+  // Scroll xuống khi có tin nhắn mới
+  useEffect(() => {
+    if (open && messagesEndRef.current) {
       setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     }
-  }, [messages]);
+  }, [messages, open]);
 
   const groupedMessages = useMemo(() => {
     const groups: { [key: string]: ChatMessage[] } = {};

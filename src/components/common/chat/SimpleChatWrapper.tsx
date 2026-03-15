@@ -1,4 +1,4 @@
-import React, { useState, useMemo, lazy, Suspense } from "react";
+import React, { useState, useMemo, useCallback, lazy, Suspense } from "react";
 import { useUserInfo, useUserToken } from "@/store/userStore";
 import SimpleChatIcon from "./SimpleChatIcon";
 
@@ -7,6 +7,7 @@ const ModalChatAdmin = lazy(() => import("./ModalChatAdmin"));
 
 const SimpleChatWrapper: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const userInfo = useUserInfo();
   const token = useUserToken();
 
@@ -20,27 +21,41 @@ const SimpleChatWrapper: React.FC = () => {
     };
   }, [userInfo?.id, userInfo?.email, userInfo?.username, userInfo?.role]);
 
+  const handleUnreadCountChange = useCallback((count: number) => {
+    setUnreadCount(count);
+  }, []);
+
+  const handleOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   if (!currentUser) return null;
 
   return (
     <>
-      <SimpleChatIcon onClick={() => setIsOpen(true)} />
+      <SimpleChatIcon
+        onClick={handleOpen}
+        unreadCount={currentUser.role !== "admin" ? unreadCount : 0}
+      />
       
-      {/* BỎ ĐIỀU KIỆN {isOpen && ...} 
-         Luôn luôn render để duy trì kết nối Socket ngầm 
-      */}
+      {/* Luôn render để duy trì kết nối Socket ngầm */}
       <Suspense fallback={null}>
         {currentUser.role === "admin" ? (
           <ModalChatAdmin
             open={isOpen}
-            onClose={() => setIsOpen(false)}
+            onClose={handleClose}
             currentUser={currentUser}
           />
         ) : (
           <ModalChatUser
             open={isOpen}
-            onClose={() => setIsOpen(false)}
+            onClose={handleClose}
             currentUser={currentUser}
+            onUnreadCountChange={handleUnreadCountChange}
           />
         )}
       </Suspense>
