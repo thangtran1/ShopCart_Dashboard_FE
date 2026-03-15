@@ -1,6 +1,6 @@
 ## 🌐 Live Demo
 
-- **URL**: [shop_cart_tvt.vn](https://shop-cart-dashboard-fe.vercel.app/)
+- **URL**: [shop_cart_tvt.vn](https://vanthang.site/) |Hoặc| [vanthang.io.vn](https://vanthang.io.vn/)
 - **Tài khoản dùng thử (User)**:
   - **Email**: `user1@gmail.com`
   - **Mật khẩu**: `123123`
