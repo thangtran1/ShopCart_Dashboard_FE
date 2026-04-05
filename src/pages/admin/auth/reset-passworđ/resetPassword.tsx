@@ -1,6 +1,5 @@
 import userService from "@/api/services/userApi";
 import { useMutation } from "@tanstack/react-query";
-import { Form, Input, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
@@ -11,15 +10,33 @@ import Logo from "@/ui/logo";
 import LocalePicker from "@/components/common/locale-picker";
 import SettingButton from "@/layouts/dashboard/components/setting-button";
 import { FullPageLoading } from "@/components/common/loading";
+
+import { useForm } from "react-hook-form";
+import { Button } from "@/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/ui/form";
+import { Input } from "@/ui/input";
+
 const ResetPassword = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [newPasswordError, setNewPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const location = useLocation();
   const [token, setToken] = useState<string | null>(null);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const form = useForm({
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
 
   const resetPasswordMutation = useMutation({
     mutationFn: userService.resetPassword,
@@ -37,13 +54,13 @@ const ResetPassword = () => {
       toast.error(error?.message || t("auth.reset-password.failChangePas"));
     },
   });
-  const handleResetPassword = () => {
-    if (!validate()) return;
+
+  const handleResetPassword = (values: any) => {
     if (!token) {
       toast.error(t("auth.reset-password.invalidToken"));
       return;
     }
-
+    const { newPassword } = values;
     resetPasswordMutation.mutate({ token, newPassword });
   };
 
@@ -59,52 +76,20 @@ const ResetPassword = () => {
     }
   }, [location, navigate]);
 
-  const validate = () => {
-    let isValid = true;
-
-    if (!newPassword || newPassword.length < 6) {
-      setNewPasswordError(t("auth.reset-password.invalidPassword"));
-      isValid = false;
-    } else {
-      setNewPasswordError("");
-    }
-
-    if (!confirmPassword || confirmPassword !== newPassword) {
-      setConfirmPasswordError(t("auth.reset-password.notConfirmPassword"));
-      isValid = false;
-    } else {
-      setConfirmPasswordError("");
-    }
-
-    return isValid;
-  };
-
-  const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-    if (newPasswordError) setNewPasswordError("");
-  };
-
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setConfirmPassword(e.target.value);
-    if (confirmPasswordError) setConfirmPasswordError("");
-  };
-
   return (
     <>
       {resetPasswordMutation.isPending && (
         <FullPageLoading message={t("auth.reset-password.sending")} />
       )}
       <div className="relative grid min-h-svh lg:grid-cols-2 bg-background">
-        <div className="flex flex-col  gap-4 p-6 md:p-10">
+        <div className="flex flex-col gap-4 p-6 md:p-10">
           <div className="flex justify-center gap-2 md:justify-start">
             <div className="flex items-center gap-2 font-medium cursor-pointer">
               <Logo />
               <span>TVT Admin</span>
             </div>
           </div>
-          <div className="flex flex-1  items-center justify-center">
+          <div className="flex flex-1 items-center justify-center">
             <div className="w-full p-4 rounded-lg max-w-sm">
               <div className="text-center mb-4 space-y-1">
                 <div className="flex justify-center items-center mb-3">
@@ -119,63 +104,89 @@ const ResetPassword = () => {
                 </h1>
               </div>
 
-              <Form layout="vertical" onFinish={handleResetPassword}>
-                <Form.Item
-                  label={
-                    <span
-                      className="font-medium text-muted-foreground text-sm"
-                      style={{ position: "relative", bottom: "-8px" }}
-                    >
-                      {t("auth.reset-password.newPas")}
-                    </span>
-                  }
-                  help={newPasswordError}
-                  style={{
-                    marginBottom: newPasswordError ? 12 : 6,
-                  }}
-                  validateStatus={newPasswordError ? "error" : ""}
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleResetPassword)}
+                  className="space-y-4"
                 >
-                  <Input.Password
-                    placeholder={t("auth.reset-password.newPas")}
-                    value={newPassword}
-                    onChange={handleNewPasswordChange}
+                  <FormField
+                    control={form.control}
+                    name="newPassword"
+                    rules={{
+                      required: t("auth.reset-password.invalidPassword"),
+                      minLength: {
+                        value: 6,
+                        message: t("auth.reset-password.invalidPassword"),
+                      },
+                    }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t("auth.reset-password.newPas")}</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showNewPassword ? "text" : "password"}
+                              placeholder={t("auth.reset-password.newPas")}
+                              {...field}
+                            />
+                            <div
+                              className="absolute right-0 top-0 h-full flex items-center px-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                            >
+                              <Icon icon={showNewPassword ? "lucide:eye-off" : "lucide:eye"} size={16} />
+                            </div>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </Form.Item>
 
-                <Form.Item
-                  label={
-                    <span
-                      className="font-medium text-muted-foreground text-sm"
-                      style={{ position: "relative", bottom: "-8px" }}
-                    >
-                      {t("auth.reset-password.confirmPassword")}
-                    </span>
-                  }
-                  help={confirmPasswordError}
-                  style={{
-                    marginBottom: confirmPasswordError ? 28 : 20,
-                  }}
-                  validateStatus={confirmPasswordError ? "error" : ""}
-                >
-                  <Input.Password
-                    placeholder={t("auth.reset-password.confirmPassword")}
-                    value={confirmPassword}
-                    onChange={handleConfirmPasswordChange}
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    rules={{
+                      required: t("auth.reset-password.notConfirmPassword"),
+                      validate: (value) =>
+                        value === form.getValues("newPassword") ||
+                        t("auth.reset-password.notConfirmPassword"),
+                    }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {t("auth.reset-password.confirmPassword")}
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder={t("auth.reset-password.confirmPassword")}
+                              {...field}
+                            />
+                            <div
+                              className="absolute right-0 top-0 h-full flex items-center px-3 cursor-pointer text-muted-foreground hover:text-foreground"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              <Icon icon={showConfirmPassword ? "lucide:eye-off" : "lucide:eye"} size={16} />
+                            </div>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </Form.Item>
 
-                <Form.Item>
-                  <div className="text-xs p-2 mb-2 rounded-lg text-foreground font-medium bg-muted">
+                  <div className="text-xs p-2 mb-2 rounded-lg text-foreground font-medium bg-muted mt-2">
                     {t("auth.reset-password.resetPasswordDescription")}
                   </div>
+
                   <Button
-                    htmlType="submit"
-                    type="primary"
-                    className="w-full mb-2"
+                    type="submit"
+                    className="w-full mb-2 cursor-pointer text-white font-medium"
                   >
                     {t("auth.reset-password.confirm")}
                   </Button>
-                </Form.Item>
+                </form>
               </Form>
             </div>
           </div>

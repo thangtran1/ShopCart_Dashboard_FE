@@ -37,7 +37,10 @@ function ForgotPasswordForm() {
 
   const onFinish = async () => {
     try {
-      const res = await forgotPasswordMutation.mutateAsync({ email });
+      const res = await forgotPasswordMutation.mutateAsync({ 
+        email, 
+        method: method as 'link' | 'otp' | 'both' 
+      });
       const success = res.data?.success;
 
       if (!success) {
@@ -51,8 +54,11 @@ function ForgotPasswordForm() {
         form.reset();
         setEmail("");
         backToLogin();
-      } else {
+      } else if (method === "otp") {
         toast.success(t("auth.forgot-password.methodOTP"));
+        setIsOtpModalOpen(true);
+      } else {
+        toast.success(t("auth.forgot-password.authBothSuccess"));
         setIsOtpModalOpen(true);
       }
     } catch (error) {
@@ -124,17 +130,27 @@ function ForgotPasswordForm() {
                     <Radio.Group
                       value={method}
                       onChange={(e) => setMethod(e.target.value)}
+                      className="w-full flex justify-center"
                     >
-                      <Radio value="link">
-                        <div className="text-[11px]">
-                          {t("auth.forgot-password.resetLink")}
+                      <div className="flex flex-col gap-2 items-center">
+                        <div className="flex justify-center gap-6">
+                          <Radio value="link">
+                            <div className="text-[12px]">
+                              {t("auth.forgot-password.resetLink")}
+                            </div>
+                          </Radio>
+                          <Radio value="otp">
+                            <div className="text-[12px]">
+                              {t("auth.forgot-password.receiveOTP")}
+                            </div>
+                          </Radio>
                         </div>
-                      </Radio>
-                      <Radio value="otp">
-                        <div className="text-[11px]">
-                          {t("auth.forgot-password.receiveOTP")}
-                        </div>
-                      </Radio>
+                        <Radio value="both">
+                          <div className="text-[12px]">
+                            {t("auth.forgot-password.receiveBoth")}
+                          </div>
+                        </Radio>
+                      </div>
                     </Radio.Group>
                   </div>
                 </FormControl>

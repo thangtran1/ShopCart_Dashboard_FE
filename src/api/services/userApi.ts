@@ -12,6 +12,7 @@ export type SignInRes = { data: UserToken & { user: UserInfo } };
 
 export interface ForgotPasswordReq {
   email: string;
+  method?: 'link' | 'otp' | 'both';
 }
 
 export interface VerifyOtpReq {
