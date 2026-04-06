@@ -14,6 +14,27 @@
       "resetPasswordDescription": "Vui lòng ghi nhớ mật khẩu mới sau khi thay đổi để tránh mất quyền truy cập.",
       "confirm": "Xác nhận"
     },
+    "first-login": {
+      "title": "Đổi mật khẩu lần đầu",
+      "description": "Vì lý do bảo mật, vui lòng đổi mật khẩu tạm thời được cấp khi đăng ký.",
+      "currentPassword": "Mật khẩu hiện tại",
+      "currentPasswordPlaceholder": "Nhập mật khẩu tạm thời",
+      "currentPasswordRequired": "Vui lòng nhập mật khẩu hiện tại",
+      "newPassword": "Mật khẩu mới",
+      "newPasswordPlaceholder": "Nhập mật khẩu mới",
+      "newPasswordRequired": "Vui lòng nhập mật khẩu mới",
+      "passwordMinLength": "Mật khẩu phải có ít nhất 6 ký tự",
+      "samePassword": "Mật khẩu mới phải khác mật khẩu hiện tại",
+      "confirmPassword": "Xác nhận mật khẩu mới",
+      "confirmPasswordPlaceholder": "Nhập lại mật khẩu mới",
+      "confirmPasswordRequired": "Vui lòng xác nhận mật khẩu mới",
+      "passwordMismatch": "Mật khẩu xác nhận không khớp",
+      "note": "Sau khi đổi mật khẩu, bạn sẽ được chuyển đến trang quản trị.",
+      "submitButton": "Đổi mật khẩu",
+      "changing": "Đang đổi mật khẩu...",
+      "changeSuccess": "Đổi mật khẩu thành công!",
+      "changeFailed": "Đổi mật khẩu thất bại. Vui lòng thử lại."
+    },
     "forgot-password": {
       "errorForgetPassword": "Đã có lỗi xảy ra, Vui lòng thử lại sau!!!",
       "linkContent": "Link đặt lại mật khẩu đã được gửi tới email của bạn.",

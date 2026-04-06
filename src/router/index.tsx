@@ -7,6 +7,7 @@ import MaintenanceGuard from "./components/maintenance-guard";
 import { LoginProvider } from "@/pages/admin/auth/login/providers/login-provider";
 import LoginPage from "@/pages/admin/auth";
 import ResetPassword from "@/pages/admin/auth/reset-passworđ/resetPassword";
+import FirstLoginChangePassword from "@/pages/admin/auth/first-login";
 import PageError from "@/pages/admin/sys/error/PageError";
 import Page404 from "@/pages/admin/sys/error/Page404";
 import GoogleSuccess from "@/pages/admin/auth/login/pages/google-success";
@@ -45,6 +46,7 @@ const AUTH_ROUTES: AppRouteObject[] = [
   { path: "/auth/google/error", element: <GoogleError /> },
   { path: "/auth/github/success", element: <GitHubSuccess /> },
   { path: "/auth/github/error", element: <GitHubError /> },
+  { path: "/first-login-change-password", element: <ErrorBoundary FallbackComponent={PageError}><FirstLoginChangePassword /></ErrorBoundary> },
 ];
 
 const NO_MATCHED_ROUTE: AppRouteObject = {

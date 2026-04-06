@@ -14,6 +14,27 @@
       "resetPasswordDescription": "Please remember the new password after changing to avoid losing access.",
       "confirm": "Confirm"
     },
+    "first-login": {
+      "title": "Change your password",
+      "description": "For security reasons, please change the temporary password provided during registration.",
+      "currentPassword": "Current password",
+      "currentPasswordPlaceholder": "Enter temporary password",
+      "currentPasswordRequired": "Please enter current password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter new password",
+      "newPasswordRequired": "Please enter new password",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "samePassword": "New password must be different from current password",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Re-enter new password",
+      "confirmPasswordRequired": "Please confirm new password",
+      "passwordMismatch": "Passwords do not match",
+      "note": "After changing your password, you will be redirected to the dashboard.",
+      "submitButton": "Change password",
+      "changing": "Changing password...",
+      "changeSuccess": "Password changed successfully!",
+      "changeFailed": "Password change failed. Please try again."
+    },
     "forgot-password": {
       "errorForgetPassword": "An error occurred, please try again later!!!",
       "linkContent": "The password reset link has been sent to your email.",
