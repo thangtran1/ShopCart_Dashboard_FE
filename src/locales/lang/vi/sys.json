@@ -996,6 +996,7 @@
     "manager-banner": "Quản lý banner",
     "manager-chat-user": "Quản lý đoạn chat",
     "database": "Quản lý cơ sở dữ liệu",
+    "ai-settings": "Cài đặt AI Chatbot",
 
     "components": "Thành phần",
     "i18n": "Đa ngôn ngữ",
@@ -1098,5 +1099,53 @@
     "selectAll": "Chọn tất cả",
     "selectCol": "Cột chọn",
     "action": "Thao tác"
+  },
+  "aiChat": {
+    "title": "AI Chatbot",
+    "description": "Quản lý cấu hình & theo dõi mức sử dụng AI",
+    "tabs": {
+      "settings": "Cấu hình",
+      "usage": "Thống kê sử dụng"
+    },
+    "settings": {
+      "statusTitle": "Trạng thái hoạt động",
+      "enableLabel": "Kích hoạt Chatbot",
+      "enableDesc": "Bật/tắt tương tác AI Bot trên cửa hàng",
+      "limitsTitle": "Giới hạn sử dụng / mỗi ngày",
+      "maxMsgsLabel": "Số tin nhắn tối đa / user / ngày",
+      "maxMsgsDesc": "Mặc định: 100 tin nhắn",
+      "maxTokensLabel": "Số token tối đa / user / ngày",
+      "maxTokensDesc": "Mặc định: 50,000 tokens (~50 cuộc hội thoại ngắn)",
+      "modelTitle": "Model AI",
+      "modelLabel": "Lựa chọn Model hỗ trợ",
+      "modelPlaceholder": "Chọn một model AI...",
+      "modelDesc": "Dữ liệu được cập nhật tự động từ máy chủ. Model mạnh hơn sẽ hao Quota nhanh hơn.",
+      "saveBtn": "Lưu cài đặt",
+      "updateSuccess": "Đã cập nhật cài đặt AI Chatbot!",
+      "updateFail": "Cập nhật thất bại!",
+      "defaultModel": "Mặc định"
+    },
+    "usage": {
+      "emptyTitle": "Chưa có dữ liệu",
+      "emptyDesc": "Chưa có người dùng nào sử dụng AI Chatbot hôm nay.",
+      "users": "Người dùng (Hôm nay)",
+      "lifetimeUsers": "Người dùng (Tất cả)",
+      "messages": "Tin nhắn",
+      "tokens": "Tokens (Hôm nay)",
+      "lifetimeTokens": "Tổng Token (Tất cả)",
+      "overLimit": "Vượt giới hạn",
+      "tableTitle": "Chi tiết sử dụng theo người dùng (Hôm nay)",
+      "table": {
+        "user": "Người dùng",
+        "messages": "Tin nhắn",
+        "tokens": "Tokens",
+        "usageLevel": "Mức sử dụng",
+        "status": "Trạng thái",
+        "lastActive": "Hoạt động cuối",
+        "outOfQuota": "Hết lượt",
+        "normal": "Bình thường",
+        "unknown": "N/A"
+      }
+    }
   }
 }

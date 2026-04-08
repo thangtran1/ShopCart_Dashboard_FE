@@ -996,6 +996,7 @@
     "manager-banner": "Management banner",
     "manager-chat-user": "Management chat user",
     "database": "Management database",
+    "ai-settings": "AI Chatbot Settings",
 
     "components": "Components",
     "i18n": "Multi-language",
@@ -1099,6 +1100,53 @@
     "selectAll": "Select All",
     "selectCol": "Select Col",
     "action": "Action"
-
+  },
+  "aiChat": {
+    "title": "AI Chatbot",
+    "description": "Manage configuration & monitor AI usage",
+    "tabs": {
+      "settings": "Configuration",
+      "usage": "Usage Statistics"
+    },
+    "settings": {
+      "statusTitle": "Operational Status",
+      "enableLabel": "Enable Chatbot",
+      "enableDesc": "Toggle AI Bot interaction on the store",
+      "limitsTitle": "Daily Usage Limits",
+      "maxMsgsLabel": "Max messages / user / day",
+      "maxMsgsDesc": "Default: 100 messages",
+      "maxTokensLabel": "Max tokens / user / day",
+      "maxTokensDesc": "Default: 50,000 tokens (~50 short conversations)",
+      "modelTitle": "AI Model",
+      "modelLabel": "Select AI Model",
+      "modelPlaceholder": "Select an AI model...",
+      "modelDesc": "Data is automatically fetched from the server. Smarter models consume quota faster.",
+      "saveBtn": "Save Settings",
+      "updateSuccess": "AI Chatbot settings updated!",
+      "updateFail": "Update failed!",
+      "defaultModel": "Default"
+    },
+    "usage": {
+      "emptyTitle": "No Data",
+      "emptyDesc": "No users have used the AI Chatbot today.",
+      "users": "Users (Today)",
+      "lifetimeUsers": "Total Users (All-time)",
+      "messages": "Messages",
+      "tokens": "Tokens (Today)",
+      "lifetimeTokens": "Total Tokens (All-time)",
+      "overLimit": "Over Limit",
+      "tableTitle": "Usage Details By User (Today)",
+      "table": {
+        "user": "User",
+        "messages": "Messages",
+        "tokens": "Tokens",
+        "usageLevel": "Usage Level",
+        "status": "Status",
+        "lastActive": "Last Active",
+        "outOfQuota": "Out of quota",
+        "normal": "Normal",
+        "unknown": "N/A"
+      }
+    }
   }
 }

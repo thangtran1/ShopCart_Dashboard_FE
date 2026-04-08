@@ -49,6 +49,9 @@ const OrdersManagement = lazy(
 const ProductsManagement = lazy(
   () => import("@/pages/admin/management/products/index")
 );
+const AiChatSettingsPage = lazy(
+  () => import("@/pages/admin/management/ai-settings/index")
+);
 
 const management: AppRouteObject = {
   order: 2,
@@ -278,6 +281,19 @@ const management: AppRouteObject = {
       meta: {
         label: "siderbar-labels.products-manager",
         key: "/admin/management/products",
+      },
+    },
+    {
+      path: "ai-settings",
+      element: (
+        <Suspense fallback={<LineLoading />}>
+          <AiChatSettingsPage />
+        </Suspense>
+      ),
+      meta: {
+        label: "siderbar-labels.ai-settings",
+        icon: <Icon icon="lucide:bot" className="ant-menu-item-icon" size="24" />,
+        key: "/admin/management/ai-settings",
       },
     },
   ],

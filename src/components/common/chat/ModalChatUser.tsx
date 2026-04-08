@@ -134,16 +134,19 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
         `}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center px-4 py-3 border-b border-border bg-muted flex-shrink-0">
-          <div className="min-w-0">
-            <Text strong className="block truncate">Chat Support</Text>
-            <div className="flex items-center gap-1">
-              <Text
-                type={isConnected ? "success" : "danger"}
-                className="text-[12px] whitespace-nowrap"
-              >
-                ● {isConnected ? "Connected" : "Disconnected"}
-              </Text>
+        <div className="flex justify-between items-center px-4 py-3 border-b border-border bg-muted flex-shrink-0 shadow-sm">
+          <div className="flex items-center gap-3">
+            <Avatar className="bg-blue-600 flex-shrink-0" icon={<UserOutlined />} size={38} />
+            <div className="min-w-0">
+              <Text strong className="block truncate text-[15px]">Hỗ trợ Trực tuyến (Admin)</Text>
+              <div className="flex items-center gap-1">
+                <div className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}></div>
+                <Text
+                  className={`text-[12px] whitespace-nowrap ${isConnected ? "text-green-600" : "text-red-500"}`}
+                >
+                  {isConnected ? "Đang kết nối" : "Mất kết nối"}
+                </Text>
+              </div>
             </div>
           </div>
           <Button
@@ -184,7 +187,7 @@ const ModalChatUser: React.FC<ModalChatUserProps> = ({
           <div className="flex-1 flex flex-col bg-background min-h-0 relative">
             <div className="flex-1 p-4 overflow-y-auto overflow-x-hidden min-h-0 scroll-smooth">
               {messages.length === 0 ? (
-                <EmptyState height="sm" title={t('chat.empty')} description={t('chat.no_messages_yet')} />
+                <EmptyState height="sm" title="Bắt đầu trò chuyện" description="Hãy chia sẻ vấn đề của bạn, Admin sẽ trực tiếp phản hồi lại ngay!" />
               ) : (
                 Object.entries(groupedMessages).map(([date, msgs]) => (
                   <div key={date}>
