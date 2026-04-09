@@ -3,7 +3,7 @@
 import { useSearchParams } from "react-router";
 import { Suspense, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Check, Package, CreditCard, Truck, Wallet, Loader2 } from "lucide-react";
+import { Check, Package, CreditCard, Truck, Wallet, Loader2, QrCode } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useOrder } from "@/hooks/useOrder";
 import { toast } from "sonner";
@@ -45,6 +45,16 @@ const SuccessPageContent = () => {
         message: isSuccess
           ? "Thank you for your payment via MoMo."
           : "Transaction failed or was canceled. Please check your MoMo app."
+      };
+    }
+
+    if (paymentMethod === "BANK_TRANSFER") {
+      return {
+        icon: <QrCode className="w-5 h-5 text-blue-500" />,
+        label: "Chuyển khoản Ngân hàng",
+        status: "Chờ thanh toán",
+        statusColor: "text-blue-500",
+        message: "Vui lòng quét mã QR bên dưới bằng ứng dụng Ngân hàng để thanh toán."
       };
     }
 
@@ -141,6 +151,44 @@ const SuccessPageContent = () => {
               <p className="text-sm opacity-70 mt-2">{paymentInfo.message}</p>
             </div>
           </div>
+
+          {/* QR Code Section */}
+          {paymentMethod === "BANK_TRANSFER" && (
+            <div className="bg-white rounded-2xl p-6 border border-blue-200 mt-4 mb-6 flex flex-col items-center shadow-lg relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-400 to-indigo-600"></div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <QrCode className="w-5 h-5 text-blue-600" /> Quét mã để thanh toán
+              </h3>
+              <p className="text-sm text-gray-500 mb-4 text-center">Vui lòng quét mã QR dưới đây bằng ứng dụng Ngân hàng của bạn</p>
+              <div className="p-2 bg-white border rounded-2xl shadow-sm mb-4">
+                <img
+                  src="/qr-payment.jpg"
+                  alt="Mã QR Thanh Toán của Admin"
+                  className="w-56 h-fit object-contain rounded-xl"
+                />
+              </div>
+
+              <div className="w-full bg-blue-50/50 rounded-xl p-4 border border-blue-100 text-left mb-2">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm font-medium text-gray-600">Tổng tiền cần CK:</span>
+                  <span className="text-base font-bold text-blue-700">{parseInt(searchParams.get("amount") || "0").toLocaleString('vi-VN')} đ</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">Nội dung CK:</span>
+                  <span className="text-sm font-mono font-bold tracking-wide bg-blue-100 text-blue-800 px-3 py-1 rounded-md">{orderNumber}</span>
+                </div>
+              </div>
+
+              <div className="mt-2 w-full p-3 bg-amber-50 border border-amber-200 rounded-lg text-center">
+                <p className="text-sm font-medium text-amber-800">
+                  ⚠️ Yêu cầu bắt buộc:
+                </p>
+                <p className="text-xs text-amber-700 mt-1">
+                  Sau khi chuyển khoản thành công, vui lòng <strong>nhắn tin cho Admin</strong> (nhấn vào biểu tượng Chat góc dưới màn hình) kèm hình ảnh CK hoặc đọc mã đơn <strong>{orderNumber}</strong> để Admin xác nhận ngay nhé!
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Timeline Section */}
           <div className="bg-muted rounded-2xl p-4 border border-border shadow-inner">

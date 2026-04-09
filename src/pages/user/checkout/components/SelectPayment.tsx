@@ -26,24 +26,19 @@ export default function SelectPayment({ method, onChange }: SelectPaymentProps) 
 
   const paymentMethods = [
     {
-      id: "STORE",
-      title: t("checkout.payment.methods.store"),
-      description: t("checkout.payment.methods.store_desc"),
-      icon: "https://cdn2.cellphones.com.vn/x400,webp,q100/media/payment-logo/COS.png",
+      id: "BANK_TRANSFER",
+      title: "Chuyển khoản Ngân hàng",
+      description: "Quét mã QR để chuyển khoản",
+      icon: "https://cdn-icons-png.flaticon.com/512/2830/2830284.png",
     },
     {
       id: "MOMO",
       title: "MoMo",
       description: t("checkout.payment.methods.momo_desc"),
       icon: "https://cdn2.cellphones.com.vn/x/media/logo/gw2/momo_vi.png",
-    },
-    {
-      id: "COD",
-      title: t("checkout.payment.methods.cod"),
-      description: t("checkout.payment.methods.cod_desc"),
-      icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-    },
+    }
   ];
+
 
   const handleConfirm = () => {
     if (tempSelected) {

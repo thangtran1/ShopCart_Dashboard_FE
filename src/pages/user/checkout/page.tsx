@@ -110,7 +110,7 @@ const CheckoutPage = () => {
           window.location.href = result.paymentUrl;
         } else {
           toast.success(t("checkout.messages.order_success"));
-          navigate.push(`/success?orderNumber=${orderNum}&payment=${paymentMethod}`);
+          navigate.push(`/success?orderNumber=${orderNum}&payment=${paymentMethod}&amount=${finalTotal}`);
         }
 
         await clearCart();

@@ -1,38 +1,51 @@
 import { Icon } from "@/components/icon";
-import { Tabs, type TabsProps, Skeleton } from "antd";
+import { Button } from "@/ui/button";
+import { Tabs, type TabsProps, Skeleton, Popover, Badge } from "antd";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/vi";
-import { notificationUserService } from "@/api/services/notificationApi";
+import { notificationUserService, notificationAdminService } from "@/api/services/notificationApi";
 import { NotificationType } from "@/types/enum";
 import { Notification } from "@/types/entity";
-import { useUserToken } from "@/store/userStore";
+import { useUserToken, useUserInfo } from "@/store/userStore";
 import { EmptyState } from "@/components/common/EmptyState";
 import { useTranslation } from "react-i18next";
+import { io, Socket } from "socket.io-client";
+import { useRouter } from "@/router/hooks";
 
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
 
-export default function NoticeContent() {
+export default function NoticeContent({ onUnreadChange }: { onUnreadChange?: (count: number) => void }) {
   const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useUserToken();
+  const { role } = useUserInfo();
 
   const loadNotifications = useCallback(async () => {
     if (!accessToken) return;
     setLoading(true);
     try {
-      const response = await notificationUserService.getAll(1, 15);
-      setNotifications(response.data.notifications as Notification[]);
+      if (role === "admin") {
+        // Chỉ lấy thông báo đơn hàng cho Admin
+        const response = await notificationAdminService.getAll(1, 15, { type: NotificationType.ORDER });
+        setNotifications(response.data.notifications as Notification[]);
+      } else {
+        const response = await notificationUserService.getAll(1, 15);
+        const userNotifs = (response.data.notifications as Notification[]).filter(
+          (n) => n.type !== NotificationType.ORDER
+        );
+        setNotifications(userNotifs);
+      }
     } catch (error) {
       console.error("Failed to load notifications", error);
     } finally {
       setLoading(false);
     }
-  }, [accessToken]);
+  }, [accessToken, role]);
 
   useEffect(() => {
     loadNotifications();
@@ -71,12 +84,18 @@ export default function NoticeContent() {
 
   const unreadCount = notifications.filter((n) => !n.isReadByUser).length;
 
+  useEffect(() => {
+    if (onUnreadChange) {
+      onUnreadChange(unreadCount);
+    }
+  }, [unreadCount, onUnreadChange]);
+
   return (
     <div className="flex flex-col overflow-hidden">
       <div className="relative px-3">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold tracking-tight text-foreground flex items-center gap-2">
-            {t("notifications.center_title")}
+            {role === "admin" ? "Thông Báo Đơn Hàng" : t("notifications.center_title")}
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
           </h3>
           <button
@@ -88,7 +107,7 @@ export default function NoticeContent() {
           </button>
         </div>
         <p className="text-[11px] text-muted-foreground font-medium uppercase tracking-widest">
-          {t("notifications.unread_count", { count: unreadCount })}
+          {role === "admin" ? `` : t("notifications.unread_count", { count: unreadCount })}
         </p>
       </div>
 
@@ -97,6 +116,7 @@ export default function NoticeContent() {
           notifications={notifications}
           loading={loading}
           onMarkAsRead={handleMarkAsRead}
+          role={role}
         />
       </div>
 
@@ -115,7 +135,85 @@ export default function NoticeContent() {
   );
 }
 
-function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
+export function NoticeButton() {
+  const [open, setOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const { accessToken } = useUserToken();
+  const { role } = useUserInfo();
+
+  // Load initial unread count WITHOUT opening the popover
+  useEffect(() => {
+    if (!accessToken) return;
+    const fetchInitialCount = async () => {
+      try {
+        if (role === "admin") {
+          const res = await notificationAdminService.getAll(1, 50, { type: NotificationType.ORDER });
+          const count = res.data.notifications.filter(n => !n.isReadByUser).length;
+          setUnreadCount(count);
+        } else {
+          const res = await notificationUserService.getAll(1, 50);
+          const count = res.data.notifications.filter(n => n.type !== NotificationType.ORDER && !n.isReadByUser).length;
+          setUnreadCount(count);
+        }
+      } catch (e) {
+        console.error("Fetch unread error", e);
+      }
+    };
+    fetchInitialCount();
+  }, [accessToken, role]);
+
+  // Global socket listener mapped onto the persistent Header button
+  useEffect(() => {
+    if (!accessToken) return;
+
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const socket: Socket = io(API_URL, {
+      auth: { token: accessToken },
+      transports: ["websocket", "polling"],
+    });
+
+    socket.on("new_notification", (data: any) => {
+      // Play bell sound
+      const audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=notification-sound-7062.mp3");
+      audio.play().catch(e => console.log('Audio tracking blocked by browser', e));
+
+      // Show toast
+      toast.success(data.message || `CÓ THÔNG BÁO MỚI!`, {
+        icon: "🔔",
+        duration: 5000,
+        description: data.notification?.title || "Kiểm tra hệ thống",
+      });
+
+      // Increment badge without refreshing the full list if closed
+      setUnreadCount(prev => prev + 1);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [accessToken]);
+
+  return (
+    <Popover
+      content={<NoticeContent onUnreadChange={setUnreadCount} />}
+      trigger="click"
+      open={open}
+      onOpenChange={setOpen}
+      placement="bottomRight"
+      overlayClassName="p-0 rounded-2xl overflow-hidden [&_.ant-popover-inner]:p-0 [&_.ant-popover-inner]:bg-background [&_.ant-popover-inner]:border-border/60 shadow-2xl"
+      arrow={false}
+      destroyTooltipOnHide={false}
+    >
+      <Button variant="ghost" size="icon" className="rounded-full">
+        <Badge count={unreadCount} overflowCount={99} size="small" offset={[-4, 4]}>
+          <Icon icon="solar:bell-bing-bold-duotone" size={24} className="text-zinc-600 dark:text-zinc-300" />
+        </Badge>
+      </Button>
+    </Popover>
+  );
+}
+
+function NoticeTabs({ notifications, loading, onMarkAsRead, role }: any) {
   const { t } = useTranslation();
 
   const unreadNotifications = useMemo(
@@ -132,6 +230,7 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
           data={notifications}
           loading={loading}
           onMarkAsRead={onMarkAsRead}
+          role={role}
         />
       ),
     },
@@ -152,6 +251,7 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
           data={unreadNotifications}
           loading={loading}
           onMarkAsRead={onMarkAsRead}
+          role={role}
         />
       ),
     },
@@ -168,7 +268,7 @@ function NoticeTabs({ notifications, loading, onMarkAsRead }: any) {
   );
 }
 
-function NotificationList({ data, loading, onMarkAsRead }: any) {
+function NotificationList({ data, loading, onMarkAsRead, role }: any) {
   const { t } = useTranslation();
 
   if (loading)
@@ -184,8 +284,8 @@ function NotificationList({ data, loading, onMarkAsRead }: any) {
     return (
       <EmptyState
         height="sm"
-        title={t("notifications.empty.title")}
-        description={t("notifications.empty.description")}
+        title={role === "admin" ? "Chưa có đơn hàng nào" : t("notifications.empty.title")}
+        description={role === "admin" ? "Đơn hàng mới của khách sẽ tự động hiển thị ở đây" : t("notifications.empty.description")}
       />
     );
 
@@ -227,6 +327,14 @@ function NotificationItem({
           bg: "bg-red-50 dark:bg-red-500/10",
           label: t("notifications.types.maintenance"), 
         };
+      case "order": // Explicit string check since enum might not have ORDER in frontend types yet
+      case NotificationType.ORDER as string:
+        return {
+          icon: "solar:bag-smile-bold",
+          color: "text-amber-500",
+          bg: "bg-amber-50 dark:bg-amber-500/10",
+          label: "Đơn Hàng",
+        };
       default:
         return {
           icon: "solar:unread-bold",
@@ -238,10 +346,20 @@ function NotificationItem({
   };
 
   const meta = getIcon(item.type);
+  const router = useRouter();
 
   return (
     <div
-      onClick={() => isUnread && onMarkAsRead(item._id)}
+      onClick={() => {
+        if (isUnread) onMarkAsRead(item._id);
+        if (item.actionUrl) {
+          let targetUrl = item.actionUrl;
+          if (targetUrl.startsWith("/management/")) {
+            targetUrl = `/admin${targetUrl}`;
+          }
+          router.push(targetUrl);
+        }
+      }}
       className={`group relative flex gap-2 p-2 rounded-2xl transition-all duration-300 border cursor-pointer ${
         isUnread
           ? "border-border border shadow-md"

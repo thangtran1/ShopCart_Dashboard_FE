@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import AccountDropdown from "./components/account-dropdown";
 import SearchBar from "./components/search-bar";
 import SettingButton from "./components/setting-button";
+import { NoticeButton } from "./components/notice";
 import { useUserInfo } from "@/store/userStore";
 import { useSettings } from "@/store/settingStore";
 import { ScrollArea } from "@/ui/scroll-area";
@@ -46,6 +47,9 @@ export default function Header({ headerLeftSlot }: HeaderProps) {
           <div className="flex items-center shrink-0">
             <div className="flex items-center hover:bg-accent p-1 rounded-full transition-colors">
               <LocalePicker />
+            </div>
+            <div className="flex items-center hover:bg-accent p-1 rounded-full transition-colors">
+              <NoticeButton />
             </div>
             <div className="flex items-center hover:bg-accent p-1 rounded-full transition-colors">
               <SettingButton />

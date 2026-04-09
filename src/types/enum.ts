@@ -82,6 +82,7 @@ export enum NotificationType {
   SYSTEM = "system",
   NEWS = "news",
   MAINTENANCE = "maintenance",
+  ORDER = "order",
 }
 
 export enum AuthSessionStatus {
