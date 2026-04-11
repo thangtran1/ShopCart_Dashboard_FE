@@ -52,6 +52,9 @@ const ProductsManagement = lazy(
 const AiChatSettingsPage = lazy(
   () => import("@/pages/admin/management/ai-settings/index")
 );
+const FlashSalesManagement = lazy(
+  () => import("@/pages/admin/management/flash-sales/index")
+);
 
 const management: AppRouteObject = {
   order: 2,
@@ -294,6 +297,15 @@ const management: AppRouteObject = {
         label: "siderbar-labels.ai-settings",
         icon: <Icon icon="lucide:bot" className="ant-menu-item-icon" size="24" />,
         key: "/admin/management/ai-settings",
+      },
+    },
+    {
+      path: "flash-sales",
+      element: <FlashSalesManagement />,
+      meta: {
+        label: "Flash Sale",
+        key: "/admin/management/flash-sales",
+        icon: <Icon icon="solar:bolt-bold-duotone" className="ant-menu-item-icon" size="24" />,
       },
     },
   ],
