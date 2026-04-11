@@ -11,6 +11,7 @@ import SettingButton from "../dashboard/components/setting-button";
 import Header from "@/components/user/Header";
 import { Separator } from "@/ui/separator";
 import AiChatWidget from "@/components/user/ai-chat/AiChatWidget";
+import CartDrawer from "@/components/user/CartDrawer";
 
 export default function UserLayout() {
   return (
@@ -47,6 +48,9 @@ export default function UserLayout() {
 
       {/* AI Chatbot Widget - only for logged-in users */}
       <AiChatWidget />
+      
+      {/* Mini-Cart Drawer */}
+      <CartDrawer />
     </ThemeProvider>
   );
 }

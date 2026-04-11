@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useCart } from "@/hooks/useCart";
 import { useState } from "react";
 import { useUserToken } from "@/store/userStore";
+import { useCartUIActions } from "@/store/cartUIStore";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/ui/button";
 
@@ -17,6 +18,7 @@ interface Props {
 const AddToCartButton = ({ product }: Props) => {
   const { t } = useTranslation();
   const { items, addToCart } = useCart();
+  const { openDrawer } = useCartUIActions();
   const [isLoading, setIsLoading] = useState(false);
   const token = useUserToken();
   const currentItem = items.find((item: any) => item.product._id === product._id);
@@ -36,6 +38,7 @@ const AddToCartButton = ({ product }: Props) => {
         toast.success(
           t("cart.toast.add_success", { name: product?.name?.substring(0, 12) })
         );
+        openDrawer();
       } catch (error) {
         toast.error(t("cart.toast.add_error"));
       } finally {
