@@ -1375,6 +1375,34 @@
       "delete": "Xóa",
       "cancel": "Hủy"
     }
+  },
+  "login_settings": {
+    "tab_title": "Cài đặt đăng nhập",
+    "title": "Cài đặt phương thức đăng nhập",
+    "desc": "Bạn có thể chọn các hình thức đăng nhập bằng Login name thay cho ID Chính (Email), bằng cách Tắt / Bật hình thức mà bạn muốn.",
+    "main_id": "ID Chính",
+    "login_name": "Login name",
+    "create_new": "Tạo mới",
+    "edit": "Đổi Login name",
+    "note_title": "Lưu ý:",
+    "note_desc": "Khi bạn chọn đăng nhập bằng Login name, bạn không thể sử dụng Email ID để đăng nhập, cho đến khi bạn tắt tính năng đăng nhập bằng Login name.",
+    "modal_create_title": "Tạo Login name mới",
+    "modal_edit_title": "Đổi Login name",
+    "btn_create": "Tạo",
+    "btn_update": "Cập nhật",
+    "btn_cancel": "Hủy",
+    "input_label": "Tên đăng nhập mong muốn",
+    "input_placeholder": "Ví dụ: my_username_99",
+    "input_hint": "Được dùng để thay thế Email khi đăng nhập (nếu tính năng được bật).",
+    "req_username": "Vui lòng nhập tên đăng nhập",
+    "err_pattern": "Username chỉ được chứa chữ không dấu, số và dấu gạch dưới",
+    "err_min": "Username phải từ 4 ký tự",
+    "err_create_first": "Bạn phải Tạo mới Login name trước khi bật tính năng này!",
+    "msg_toggle_on": "Đã bật đăng nhập bằng Login name.",
+    "msg_toggle_off": "Đã tắt đăng nhập bằng Login name.",
+    "err_change_setting": "Không thể thay đổi cài đặt đăng nhập lúc này.",
+    "success_create": "Tạo Login name thành công!",
+    "success_update": "Cập nhật Login name thành công!",
+    "err_create": "Không thể tạo Login name."
   }
-
 }

@@ -40,6 +40,8 @@ export interface User {
   isEmailVerified?: boolean;
   createdAt: string;
   updatedAt: string;
+  username?: string;
+  isUsernameLoginEnabled?: boolean;
 }
 
 export enum UserRole {
@@ -63,6 +65,8 @@ export interface CreateUserReq {
   phone?: string;
   dateOfBirth?: string;
   bio?: string;
+  username?: string;
+  isUsernameLoginEnabled?: boolean;
 }
 
 export interface UpdateUserReq {
@@ -74,6 +78,8 @@ export interface UpdateUserReq {
   phone?: string;
   dateOfBirth?: string;
   bio?: string;
+  username?: string;
+  isUsernameLoginEnabled?: boolean;
 }
 
 export interface AdminUpdateUserPasswordReq {
@@ -119,6 +125,8 @@ const transformUser = (user: any): User => ({
   isEmailVerified: user.isEmailVerified,
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
+  username: user.username,
+  isUsernameLoginEnabled: user.isUsernameLoginEnabled,
 });
 
 // ========== API CALLS ==========

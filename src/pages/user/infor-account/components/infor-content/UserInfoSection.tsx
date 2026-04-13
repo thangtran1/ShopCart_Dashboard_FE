@@ -81,7 +81,7 @@ export default function UserInfoSection({ profile, onEdit, addresses }: any) {
   );
 }
 
-function InfoItem({ label, value, children }: { label: string; value?: string; children?: React.ReactNode }) {
+function InfoItem({ label, value, className, children }: { label: string; value?: string; className?: string; children?: React.ReactNode }) {
   const { t } = useTranslation();
   const fallback = (
     <span className="text-foreground italic font-normal">
@@ -90,7 +90,7 @@ function InfoItem({ label, value, children }: { label: string; value?: string; c
   );
 
   return (
-    <div className="border-b border-border pb-2 flex flex-col sm:flex-row sm:justify-between sm:items-end min-h-[50px]">
+    <div className={`border-b border-border pb-2 flex flex-col sm:flex-row sm:justify-between sm:items-end min-h-[50px] ${className || ''}`}>
       <p className="text-foreground text-sm mb-1 sm:mb-0 whitespace-nowrap">
         {label}:
       </p>

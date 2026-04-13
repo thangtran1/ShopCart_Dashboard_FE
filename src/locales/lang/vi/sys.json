@@ -80,6 +80,8 @@
       "accountPlaceholder": "Nhập tài khoản",
       "emailInvalid": "Email không hợp lệ",
       "userName": "Tài khoản",
+      "userNameInput": "Tên đăng nhập hoặc Email",
+      "userNamePlaceholder": "Nhập tên đăng nhập hoặc email...",
       "passwordPlaceholder": "Nhập mật khẩu",
       "passwordMinLength": "Mật khẩu phải ít nhất 6 ký tự",
       "password": "Mật khẩu",

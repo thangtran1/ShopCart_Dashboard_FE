@@ -80,6 +80,8 @@
       "accountPlaceholder": "Enter your account",
       "emailInvalid": "Email is invalid",
       "userName": "Account",
+      "userNameInput": "Username or Email",
+      "userNamePlaceholder": "Enter your username or email...",
       "passwordPlaceholder": "Enter password",
       "passwordMinLength": "Password must be at least 6 characters",
       "password": "Password",

@@ -24,7 +24,6 @@ import { useUserActions, useUserInfo, useUserToken } from "@/store/userStore";
 import { useMutation } from "@tanstack/react-query";
 import { Navigate } from "react-router";
 import userService from "@/api/services/userApi";
-import { REGEX_EMAIL } from "@/utils/use-always";
 import { toast } from "sonner";
 const { VITE_APP_ADMIN: HOMEPAGE } = import.meta.env;
 
@@ -38,7 +37,7 @@ export function LoginForm() {
 
   const form = useForm<SignInReq>({
     defaultValues: {
-      email: "",
+      loginId: "",
       password: "",
     },
   });
@@ -89,19 +88,22 @@ export function LoginForm() {
 
           <FormField
             control={form.control}
-            name="email"
+            name="loginId"
             rules={{
               required: t("auth.login.accountPlaceholder"),
-              pattern: {
-                value: REGEX_EMAIL,
-                message: t("auth.login.emailInvalid"),
-              },
             }}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("auth.login.userName")}</FormLabel>
+                <div className="flex items-center justify-between">
+                  <FormLabel>
+                    {t("auth.login.userNameInput")}
+                  </FormLabel>
+                </div>
                 <FormControl>
-                  <Input placeholder="admin/test" {...field} />
+                  <Input 
+                    placeholder={t("auth.login.userNamePlaceholder")} 
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

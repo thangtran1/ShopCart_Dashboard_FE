@@ -11,18 +11,20 @@ import {
   LinkOutlined,
   InfoCircleOutlined,
   ShoppingOutlined,
+  LockOutlined,
 } from "@ant-design/icons"
 import { OverviewContent } from "../tab-content/overview-content"
 import { DiscountContent } from "../tab-content/discount-content"
 import { HistoryContent } from "../tab-content/history-content"
 import { ActivityContent, SupportContent, TermsContent, WarrantyContent } from "../tab-content/other-content"
 import InforContent from "../tab-content/infor-content"
+import { LoginSettingsContent } from "../tab-content/login-settings-content"
 import { TFunction } from "i18next"; 
 
 export type TabKey =
   | "overview" | "member" | "discount" | "history" | "activity"
   | "address" | "infor" | "student" | "linked" | "warranty"
-  | "preferences" | "store" | "policy" | "support" | "terms" | "logout"
+  | "preferences" | "store" | "policy" | "support" | "terms" | "logout" | "login-settings"
 
 export interface TabConfig {
   key: TabKey
@@ -87,6 +89,14 @@ export const getTabsConfig = (t: TFunction): TabConfig[] => [
     component: <InforContent />,
     showInTopTabs: true,
     sidebarKey: "infor"
+  },
+  {
+    key: "login-settings",
+    label: t("login_settings.tab_title"),
+    icon: <LockOutlined />,
+    component: <LoginSettingsContent />,
+    showInTopTabs: true,
+    showInSidebar: true,
   },
   {
     key: "warranty",

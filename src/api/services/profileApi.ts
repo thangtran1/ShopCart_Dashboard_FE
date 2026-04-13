@@ -6,6 +6,7 @@ import { API_URL } from "@/router/routes/api.route";
 export interface UserProfile {
   _id: string;
   email: string;
+  username?: string;
   name: string;
   gender?: string;
   role: string;
@@ -20,15 +21,19 @@ export interface UserProfile {
   lastLoginAt: string;
   createdAt: string;
   updatedAt: string;
+  isUsernameLoginEnabled: boolean;
 }
 
 export interface UpdateProfileReq {
+  email?: string;
   name?: string;
-  bio?: string;
-  gender?: string
+  username?: string;
   phone?: string;
   dateOfBirth?: string;
+  gender?: string;
+  bio?: string;
   avatar?: string;
+  isUsernameLoginEnabled?: boolean;
 }
 
 export interface AdminChangePasswordReq {

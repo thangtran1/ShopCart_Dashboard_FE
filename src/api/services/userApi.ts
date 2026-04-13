@@ -4,7 +4,7 @@ import type { UserInfo, UserToken } from "#/entity";
 import { API_URL } from "@/router/routes/api.route";
 
 export interface SignInReq {
-  email: string;
+  loginId: string;
   password: string;
 }
 

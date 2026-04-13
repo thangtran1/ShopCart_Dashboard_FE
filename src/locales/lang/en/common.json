@@ -1375,5 +1375,34 @@
       "delete": "Clear",
       "cancel": "Cancel"
     }
+  },
+  "login_settings": {
+    "tab_title": "Login Settings",
+    "title": "Login Method Settings",
+    "desc": "You can choose to login by Login name instead of Main ID (Email), by toggling the method you prefer.",
+    "main_id": "Main ID",
+    "login_name": "Login name",
+    "create_new": "Create New",
+    "edit": "Edit Login name",
+    "note_title": "Note:",
+    "note_desc": "When you choose to login by Login name, you cannot use Email ID to login, until you turn off the Login name feature.",
+    "modal_create_title": "Create new Login name",
+    "modal_edit_title": "Edit Login name",
+    "btn_create": "Create",
+    "btn_update": "Update",
+    "btn_cancel": "Cancel",
+    "input_label": "Desired Login name",
+    "input_placeholder": "Example: my_username_99",
+    "input_hint": "Used to replace Email when logging in (if the feature is enabled).",
+    "req_username": "Please enter a username",
+    "err_pattern": "Username can only contain letters without accents, numbers, and underscores",
+    "err_min": "Username must be at least 4 characters long",
+    "err_create_first": "You must Create a new Login name before enabling this feature!",
+    "msg_toggle_on": "Login by Login name enabled.",
+    "msg_toggle_off": "Login by Login name disabled.",
+    "err_change_setting": "Cannot change login settings at this time.",
+    "success_create": "Login name created successfully!",
+    "success_update": "Login name updated successfully!",
+    "err_create": "Cannot create Login name."
   }
 }
