@@ -23,7 +23,7 @@ export default function SecurityTab({}: SecurityTabProps) {
       toast.success(t("profile.change-password-success"));
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      console.error("Change password failed:", error);
     },
   });
 

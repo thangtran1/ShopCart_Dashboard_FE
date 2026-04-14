@@ -1,4 +1,4 @@
-import { LogOut, Shield, UserCircle, Settings } from "lucide-react";
+import { LogOut, Shield, Settings } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "@/router/hooks";
 import { useUserActions, useUserToken } from "@/store/userStore";
@@ -72,15 +72,12 @@ const SignIn = () => {
           {/* --- Trigger Button --- */}
           <div className="flex items-center gap-2 cursor-pointer p-1 pr-3 rounded-full bg-zinc-100/50 dark:bg-zinc-800/50 border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 transition-all shadow-sm group">
             <div className="relative">
-              {profile?.avatar ? (
-                <img
-                  src={`${import.meta.env.VITE_API_URL}${profile.avatar}`}
-                  className="w-7 h-7 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow-sm transition-transform group-hover:scale-105"
-                  alt="Avatar"
-                />
-              ) : (
-                <UserCircle className="w-7 h-7 text-zinc-400 group-hover:text-primary transition-colors" />
-              )}
+              <img
+                src={profile?.avatar ? `${import.meta.env.VITE_API_URL}${profile.avatar}` : "/default-avatar.jpg"}
+                className="w-7 h-7 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow-sm transition-transform group-hover:scale-105"
+                alt="Avatar"
+                onError={(e) => { e.currentTarget.src = "/default-avatar.jpg"; }}
+              />
               <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full" />
             </div>
             <span className="hidden md:block font-bold text-[11px] text-zinc-700 dark:text-zinc-200 uppercase tracking-tight">
@@ -96,13 +93,12 @@ const SignIn = () => {
             <div className="bg-background backdrop-blur-xl rounded-[24px] border border-border shadow-[0_20px_40px_rgba(0,0,0,0.15)] overflow-hidden">
               <div className="p-4 flex items-center gap-3 bg-muted/30">
                 <div className="w-10 h-10 rounded-xl overflow-hidden ring-1 ring-border">
-                  {profile?.avatar ? (
-                    <img src={`${import.meta.env.VITE_API_URL}${profile.avatar}`} className="w-full h-full object-cover" alt="Avatar" />
-                  ) : (
-                    <div className="w-full h-full bg-zinc-200 flex items-center justify-center">
-                      <UserCircle className="text-zinc-400" size={20} />
-                    </div>
-                  )}
+                  <img 
+                    src={profile?.avatar ? `${import.meta.env.VITE_API_URL}${profile.avatar}` : "/default-avatar.jpg"} 
+                    className="w-full h-full object-cover" 
+                    alt="Avatar" 
+                    onError={(e) => { e.currentTarget.src = "/default-avatar.jpg"; }}
+                  />
                 </div>
                 <div className="flex flex-col min-w-0">
                   <h4 className="font-bold text-sm truncate">{profile?.name || t("user.unknown_user")}</h4>

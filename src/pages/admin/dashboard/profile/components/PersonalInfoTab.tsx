@@ -55,7 +55,7 @@ export default function PersonalInfoTab({
       setIsChanged(false);
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      console.error("Update profile failed:", error);
     },
   });
 
@@ -67,7 +67,7 @@ export default function PersonalInfoTab({
       onProfileUpdate(updated);
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      console.error("Upload avatar failed:", error);
     },
   });
 
@@ -98,7 +98,7 @@ export default function PersonalInfoTab({
 
   const avatarUrl = profile?.avatar
     ? `${import.meta.env.VITE_API_URL}${profile.avatar}`
-    : undefined;
+    : "/default-avatar.jpg";
 
   return (
     <div>

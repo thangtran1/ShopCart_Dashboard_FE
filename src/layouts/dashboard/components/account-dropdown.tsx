@@ -2,7 +2,6 @@
 import { useUserActions } from "@/store/userStore";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Button } from "@/ui/button";
-import DefaultAvatar from "@/assets/images/background/default_avt.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +38,7 @@ export default function AccountDropdown() {
 
   const avatarUrl = profile?.avatar
     ? `${import.meta.env.VITE_API_URL}${profile.avatar}`
-    : DefaultAvatar;
+    : "/default-avatar.jpg";
 
   return (
     <DropdownMenu>
@@ -52,6 +51,7 @@ export default function AccountDropdown() {
             className="h-6 w-6 rounded-full object-cover shadow-sm"
             src={avatarUrl}
             alt="User Avatar"
+            onError={(e) => { e.currentTarget.src = "/default-avatar.jpg"; }}
           />
         </Button>
       </DropdownMenuTrigger>
@@ -65,6 +65,7 @@ export default function AccountDropdown() {
             className="h-8 w-8 rounded-full object-cover border border-primary/40"
             src={avatarUrl}
             alt="Admin Profile"
+            onError={(e) => { e.currentTarget.src = "/default-avatar.jpg"; }}
           />
           <div className="flex flex-col overflow-hidden">
             <span className="text-sm font-bold text-foreground truncate">

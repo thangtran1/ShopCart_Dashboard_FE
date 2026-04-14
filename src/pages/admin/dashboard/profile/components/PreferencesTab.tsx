@@ -58,7 +58,7 @@ export default function PreferencesTab({
       setIsChanged(false);
     },
     onError: (error: Error) => {
-      toast.error(error.message);
+      console.error("Update system settings failed:", error);
     },
   });
 
