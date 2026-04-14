@@ -33,18 +33,34 @@ export const useOrder = (param?: string | AdminOrderQuery) => {
 
   const placeOrderMutation = useMutation({
     mutationFn: (orderData: CreateOrderRequest) => orderService.createOrder(orderData),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["orders"] }),
+        queryClient.invalidateQueries({ queryKey: ["products"] }),
+        queryClient.invalidateQueries({ queryKey: ["cart"] })
+      ]);
+    },
   });
 
   const cancelOrderMutation = useMutation({
     mutationFn: (id: string) => orderService.cancelOrders(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["orders"] }),
+        queryClient.invalidateQueries({ queryKey: ["products"] })
+      ]);
+    },
   });
 
   const updateOrderAdminMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateOrderAdminRequest }) => 
       orderService.updateOrderAdmin(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["orders"] }),
+        queryClient.invalidateQueries({ queryKey: ["products"] })
+      ]);
+    },
   });
 
   const deleteOrderMutation = useMutation({
