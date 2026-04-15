@@ -110,6 +110,12 @@ export const updateSystemSettings = async (
   return response.data.data;
 };
 
+// Clear and Sync system cache
+export const clearSystemCache = async (): Promise<{ success: boolean; message: string }> => {
+  const response = await apiClient.post({ url: '/cache-sync/clear' });
+  return response.data;
+};
+
 // Get default language
 export const getDefaultLanguage = async (): Promise<string> => {
   const response = await apiClient.get({ url: API_URL.PROFILE.GetDefaultLanguage });

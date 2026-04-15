@@ -6,6 +6,7 @@ import {
   UpdateSystemSettingsReq,
   updateSystemSettings,
   SystemSettings,
+  clearSystemCache,
 } from "@/api/services/profileApi";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
@@ -62,6 +63,20 @@ export default function PreferencesTab({
     },
   });
 
+  const { mutateAsync: performClearCache, isPending: isClearing } = useMutation({
+    mutationFn: () => clearSystemCache(),
+    onSuccess: (data) => {
+      if (data.success) {
+         toast.success(data.message || "Cache cleared successfully");
+      } else {
+         toast.error(data.message || "Failed to clear cache");
+      }
+    },
+    onError: (error: Error) => {
+      console.error("Clear cache failed:", error);
+    },
+  });
+
   const handleSubmit = async (values: UpdateSystemSettingsReq) => {
     await updateSettings(values);
   };
@@ -111,6 +126,22 @@ export default function PreferencesTab({
           </Button>
         </div>
       </Form>
+
+      <div className="mt-10 border-t pt-6 border-border">
+        <h4 className="text-md font-semibold mb-2 text-warning">Tối ưu hiệu suất Server (Bộ nhớ đệm Dữ liệu)</h4>
+        <p className="text-sm text-muted-foreground mb-4">
+          Xóa toàn bộ Cache trên hệ thống sẽ kích hoạt đồng bộ (Sync) dữ liệu từ phiên bản mới nhất trên Database lên bộ nhớ RAM. Dùng khi bạn thấy dữ liệu bị treo.
+        </p>
+        <Button 
+          loading={isClearing} 
+          danger 
+          onClick={() => performClearCache()} 
+          size="large"
+          className="font-semibold shadow-sm border-error text-error hover:bg-error/10"
+        >
+          Làm sạch & Đồng bộ Cache Hệ thống
+        </Button>
+      </div>
     </div>
   );
 }

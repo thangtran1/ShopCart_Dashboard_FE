@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Chart, useChart } from "@/components/admin/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/ui/card";
@@ -9,8 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/ui/select";
-import { orderService } from "@/api/services/orderApi";
-import type { OrderConfig } from "@/types";
+import { analyticsApi } from "@/api/services/analyticsApi";
 import { Skeleton } from "@/ui/skeleton";
 import { motion } from "framer-motion";
 
@@ -19,7 +18,9 @@ type TimeRange = "7d" | "30d" | "90d" | "all";
 export default function RevenueChart() {
   const { t } = useTranslation();
   const A = "dashboard.analysis";
-  const [orders, setOrders] = useState<OrderConfig[]>([]);
+  const [labels, setLabels] = useState<string[]>([]);
+  const [revenueData, setRevenueData] = useState<number[]>([]);
+  const [orderCountData, setOrderCountData] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<TimeRange>("all");
 
@@ -27,58 +28,18 @@ export default function RevenueChart() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const res = await orderService.getAllOrdersAdmin({ page: 1, limit: 500 });
-        setOrders(res?.data || []);
+        const data = await analyticsApi.getRevenueChart(timeRange);
+        setLabels(data.labels);
+        setRevenueData(data.revenueData);
+        setOrderCountData(data.orderCountData);
       } catch (e) {
-        console.error("Error fetching orders for revenue:", e);
+        console.error("Error fetching revenue chart:", e);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
-
-  const { labels, revenueData, orderCountData } = useMemo(() => {
-    if (!orders.length)
-      return { labels: [] as string[], revenueData: [] as number[], orderCountData: [] as number[] };
-
-    const now = new Date();
-    let filtered = orders;
-
-    if (timeRange !== "all") {
-      let daysBack = 30;
-      if (timeRange === "7d") daysBack = 7;
-      if (timeRange === "90d") daysBack = 90;
-
-      const startDate = new Date(now);
-      startDate.setDate(startDate.getDate() - daysBack);
-
-      filtered = orders.filter((o) => {
-        const d = new Date(o.createdAt);
-        return d >= startDate && d <= now;
-      });
-    }
-
-    const grouped: Record<string, { revenue: number; count: number }> = {};
-    for (const order of filtered) {
-      const date = new Date(order.createdAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" });
-      if (!grouped[date]) grouped[date] = { revenue: 0, count: 0 };
-      grouped[date].revenue += order.totalAmount || 0;
-      grouped[date].count += 1;
-    }
-
-    const entries = Object.entries(grouped).sort((a, b) => {
-      const [da, ma] = a[0].split("/").map(Number);
-      const [db, mb] = b[0].split("/").map(Number);
-      return ma !== mb ? ma - mb : da - db;
-    });
-
-    return {
-      labels: entries.map(([k]) => k),
-      revenueData: entries.map(([, v]) => v.revenue),
-      orderCountData: entries.map(([, v]) => v.count),
-    };
-  }, [orders, timeRange]);
+  }, [timeRange]);
 
   const chartOptions = useChart({
     chart: { stacked: false },

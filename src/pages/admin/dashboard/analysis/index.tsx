@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { orderService } from "@/api/services/orderApi";
-import { productService } from "@/api/services/product";
-import { StatsPeriod, statsService } from "@/api/services/chartApi";
-import type { OrderConfig } from "@/types";
+import { analyticsApi } from "@/api/services/analyticsApi";
+import type { KPISummary } from "@/api/services/analyticsApi";
 
 import AnalysisCard from "./analysis-card";
 import RevenueChart from "./revenue-chart";
@@ -23,17 +21,6 @@ const GRADIENTS = {
   products: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
 };
 
-interface KPISummary {
-  totalRevenue: number;
-  totalOrders: number;
-  totalUsers: number;
-  totalProducts: number;
-  revenueTrend: number;
-  orderTrend: number;
-  userTrend: number;
-  productTrend: number;
-}
-
 const formatCurrency = (v: number) => {
   if (v >= 1_000_000_000) return `${(v / 1_000_000_000).toFixed(1)}B ₫`;
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M ₫`;
@@ -50,97 +37,14 @@ function Analysis() {
     const fetchKPI = async () => {
       try {
         setKpiLoading(true);
-        const [ordersRes, productsRes, userStatsRes] =
-          await Promise.allSettled([
-            orderService.getAllOrdersAdmin({ page: 1, limit: 1000 }),
-            productService.getAllProducts(1, 1, {}),
-            statsService.user(StatsPeriod.MONTH),
-          ]);
-
-        let totalRevenue = 0;
-        let totalOrders = 0;
-        let orders: OrderConfig[] = [];
-        if (ordersRes.status === "fulfilled") {
-          const res = ordersRes.value;
-          orders = res?.data || [];
-          totalOrders = res?.pagination?.total || orders.length;
-          totalRevenue = orders.reduce(
-            (sum, o) => sum + (o.totalAmount || 0),
-            0
-          );
-        }
-
-        let totalProducts = 0;
-        if (productsRes.status === "fulfilled") {
-          const res = productsRes.value;
-          totalProducts = res?.data?.pagination?.total || 0;
-        }
-
-        let totalUsers = 0;
-        let userTrend = 0;
-        if (userStatsRes.status === "fulfilled") {
-          const stats = userStatsRes.value;
-          if (stats.series[0]?.data) {
-            totalUsers = stats.series[0].data.reduce((a, b) => a + b, 0);
-            const data = stats.series[0].data;
-            if (data.length >= 2) {
-              const last = data[data.length - 1];
-              const prev = data[data.length - 2];
-              userTrend = prev > 0 ? ((last - prev) / prev) * 100 : 0;
-            }
-          }
-        }
-
-        let revenueTrend = 0;
-        let orderTrend = 0;
-        if (orders.length > 0) {
-          const now = new Date();
-          const mid = new Date(now);
-          mid.setDate(mid.getDate() - 15);
-          const start = new Date(now);
-          start.setDate(start.getDate() - 30);
-
-          const recent = orders.filter((o) => new Date(o.createdAt) >= mid);
-          const prev = orders.filter(
-            (o) =>
-              new Date(o.createdAt) >= start && new Date(o.createdAt) < mid
-          );
-
-          const recentRevenue = recent.reduce(
-            (s, o) => s + (o.totalAmount || 0),
-            0
-          );
-          const prevRevenue = prev.reduce(
-            (s, o) => s + (o.totalAmount || 0),
-            0
-          );
-          revenueTrend =
-            prevRevenue > 0
-              ? ((recentRevenue - prevRevenue) / prevRevenue) * 100
-              : 0;
-          orderTrend =
-            prev.length > 0
-              ? ((recent.length - prev.length) / prev.length) * 100
-              : 0;
-        }
-
-        setSummary({
-          totalRevenue,
-          totalOrders,
-          totalUsers,
-          totalProducts,
-          revenueTrend,
-          orderTrend,
-          userTrend,
-          productTrend: 0,
-        });
+        const data = await analyticsApi.getKPISummary();
+        setSummary(data);
       } catch (e) {
         console.error("Error fetching KPI summary:", e);
       } finally {
         setKpiLoading(false);
       }
     };
-
     fetchKPI();
   }, []);
 
