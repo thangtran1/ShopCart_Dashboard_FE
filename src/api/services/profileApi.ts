@@ -116,6 +116,18 @@ export const clearSystemCache = async (): Promise<{ success: boolean; message: s
   return response.data;
 };
 
+export interface CacheItemStatus {
+  name: string;
+  key: string;
+  synced: boolean;
+}
+
+// Get System Cache Status
+export const getSystemCacheStatus = async (): Promise<{ success: boolean; message: string; data: CacheItemStatus[] }> => {
+  const response = await apiClient.get({ url: '/cache-sync/status' });
+  return response.data;
+};
+
 // Get default language
 export const getDefaultLanguage = async (): Promise<string> => {
   const response = await apiClient.get({ url: API_URL.PROFILE.GetDefaultLanguage });
@@ -142,6 +154,8 @@ export default {
   adminChangePassword,
   getSystemSettings,
   updateSystemSettings,
+  clearSystemCache,
+  getSystemCacheStatus,
   getDefaultLanguage,
   uploadAvatar,
 };

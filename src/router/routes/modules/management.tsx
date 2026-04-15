@@ -55,6 +55,9 @@ const AiChatSettingsPage = lazy(
 const FlashSalesManagement = lazy(
   () => import("@/pages/admin/management/flash-sales/index")
 );
+const CacheSyncManagement = lazy(
+  () => import("@/pages/admin/management/cache-sync/index")
+);
 
 const management: AppRouteObject = {
   order: 2,
@@ -306,6 +309,15 @@ const management: AppRouteObject = {
         label: "Flash Sale",
         key: "/admin/management/flash-sales",
         icon: <Icon icon="solar:bolt-bold-duotone" className="ant-menu-item-icon" size="24" />,
+      },
+    },
+    {
+      path: "cache-sync",
+      element: <CacheSyncManagement />,
+      meta: {
+        label: "Quản lý Cache",
+        key: "/admin/management/cache-sync",
+        icon: <Icon icon="lucide:database-zap" className="ant-menu-item-icon" size="24" />,
       },
     },
   ],
