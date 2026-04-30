@@ -95,7 +95,7 @@ const NewSlugDetail = () => {
             </div>
           </div>
 
-          <div className="w-full aspect-video overflow-hidden rounded-2xl shadow-lg mb-10 bg-muted">
+            <div className="w-full h-[300px] aspect-video overflow-hidden rounded-2xl shadow-lg mb-10 bg-muted">
             <img
               src={news?.thumbnail}
               alt={news?.title}
