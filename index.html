@@ -12,10 +12,15 @@
           .then(function(res) {
             if (res && res.success && res.data && res.data.isUnderMaintenance) {
               window.location.href = maintenanceUrl;
+            } else {
+              var preloader = document.getElementById("maintenance-preloader");
+              if (preloader) preloader.style.display = "none";
             }
           })
           .catch(function(err) {
             console.error("Maintenance check failed:", err);
+            var preloader = document.getElementById("maintenance-preloader");
+            if (preloader) preloader.style.display = "none";
           });
       })();
     </script>
@@ -36,6 +41,17 @@
     <meta name="twitter:image" content="https://vcdn1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=i2M2IgCcw574LT-bXFY92g" />
   </head>
   <body>
+    <!-- Preloader to cover page while checking maintenance status -->
+    <div id="maintenance-preloader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 999999; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; flex-direction: column;">
+      <div style="width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1677ff; border-radius: 50%; animation: maintenance-spin 1s linear infinite;"></div>
+      <div style="margin-top: 16px; color: #4b5563; font-size: 14px; font-weight: 500;">Đang kết nối hệ thống...</div>
+    </div>
+    <style>
+      @keyframes maintenance-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

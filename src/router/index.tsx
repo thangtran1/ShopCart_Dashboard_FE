@@ -1,4 +1,5 @@
 import { Navigate, type RouteObject, createBrowserRouter, RouterProvider } from "react-router";
+import { useMemo } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import DashboardLayout from "@/layouts/dashboard";
 import UserLayout from "@/layouts/user/user-layout";
@@ -64,78 +65,82 @@ const NO_MATCHED_ROUTE: AppRouteObject = {
 export default function Router() {
   const permissionRoutes = usePermissionRoutes();
 
-  // 2. CỤM ADMIN (Trong /admin)
-  const ADMIN_SECTION: AppRouteObject = {
-    path: "/admin",
-    element: (
-      <MaintenanceGuard redirectUrl={MAIN_APP}>
-        <ProtectedRoute>
-          <DashboardLayout />
-        </ProtectedRoute>
-      </MaintenanceGuard>
-    ),
-    children: [
-      { index: true, element: <Navigate to={HOMEPAGE} replace /> },
-      ...permissionRoutes,
-      { path: "*", element: <Page404 /> },
-    ],
-  };
-
-  // 3. USER PUBLIC (Không cần login)
-  const USER_PUBLIC_SECTION: AppRouteObject = {
-    path: "/",
-    element: (
-      <MaintenanceGuard redirectUrl={MAIN_APP}>
-        <ErrorBoundary FallbackComponent={PageError}>
-          <UserLayout />
-        </ErrorBoundary>
-      </MaintenanceGuard>
-    ),
-    children: [
-      { index: true, element: <UserHomePage /> },
-      { path: "contact", element: <Contact /> },
-      { path: "shop", element: <Shop /> },
-      { path: "wishlist", element: <WishListPage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "orders", element: <OrdersPage /> },
-      { path: "product/:slug", element: <SingleProductPage /> },
-      { path: "terms", element: <TermsPage /> },
-      { path: "about", element: <AboutUs /> },
-      { path: "faqs", element: <FAQs /> },
-      { path: "help", element: <Help /> },
-      { path: "all-news", children: [{ index: true, element: <NewsPage /> }, { path: ":slug", element: <NewSlugDetail /> }] },
-      { path: "category", element: <DetailCategory />, children: [{ path: ":slug", element: <DetailCategory /> }]},
-      { path: "brand", element: <DetailBrand />, children: [{ path: ":slug", element: <DetailBrand /> }]},
-    ],
-  };
-
-  // 4. USER PRIVATE (Phải login mới hiện Layout)
-  const USER_PRIVATE_SECTION: AppRouteObject = {
-    element: (
-      <ProtectedRoute>
+  const router = useMemo(() => {
+    // 2. CỤM ADMIN (Trong /admin)
+    const ADMIN_SECTION: AppRouteObject = {
+      path: "/admin",
+      element: (
         <MaintenanceGuard redirectUrl={MAIN_APP}>
-          <ErrorBoundary FallbackComponent={PageError}><UserLayout /></ErrorBoundary>
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
         </MaintenanceGuard>
-      </ProtectedRoute>
-    ),
-    children: [
-      { path: "infor-account", element: <InforAccount /> },
-      { path: "checkout", element: <CheckoutPage /> },
-      { path: "success", element: <SuccessPage /> },
-    ],
-  };
+      ),
+      children: [
+        { index: true, element: <Navigate to={HOMEPAGE} replace /> },
+        ...permissionRoutes,
+        { path: "*", element: <Page404 /> },
+      ],
+    };
 
-  // 5. TỔNG HỢP ROUTER
-  const routes = [
-    ...AUTH_ROUTES,
-    ADMIN_SECTION,
-    USER_PUBLIC_SECTION,
-    USER_PRIVATE_SECTION,
-    ERROR_ROUTE,
-    NO_MATCHED_ROUTE,
-  ] as RouteObject[];
+    // 3. USER PUBLIC (Không cần login)
+    const USER_PUBLIC_SECTION: AppRouteObject = {
+      path: "/",
+      element: (
+        <MaintenanceGuard redirectUrl={MAIN_APP}>
+          <ErrorBoundary FallbackComponent={PageError}>
+            <UserLayout />
+          </ErrorBoundary>
+        </MaintenanceGuard>
+      ),
+      children: [
+        { index: true, element: <UserHomePage /> },
+        { path: "contact", element: <Contact /> },
+        { path: "shop", element: <Shop /> },
+        { path: "wishlist", element: <WishListPage /> },
+        { path: "cart", element: <CartPage /> },
+        { path: "orders", element: <OrdersPage /> },
+        { path: "product/:slug", element: <SingleProductPage /> },
+        { path: "terms", element: <TermsPage /> },
+        { path: "about", element: <AboutUs /> },
+        { path: "faqs", element: <FAQs /> },
+        { path: "help", element: <Help /> },
+        { path: "all-news", children: [{ index: true, element: <NewsPage /> }, { path: ":slug", element: <NewSlugDetail /> }] },
+        { path: "category", element: <DetailCategory />, children: [{ path: ":slug", element: <DetailCategory /> }]},
+        { path: "brand", element: <DetailBrand />, children: [{ path: ":slug", element: <DetailBrand /> }]},
+      ],
+    };
 
-  return <RouterProvider router={createBrowserRouter(routes)} />;
+    // 4. USER PRIVATE (Phải login mới hiện Layout)
+    const USER_PRIVATE_SECTION: AppRouteObject = {
+      element: (
+        <ProtectedRoute>
+          <MaintenanceGuard redirectUrl={MAIN_APP}>
+            <ErrorBoundary FallbackComponent={PageError}><UserLayout /></ErrorBoundary>
+          </MaintenanceGuard>
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "infor-account", element: <InforAccount /> },
+        { path: "checkout", element: <CheckoutPage /> },
+        { path: "success", element: <SuccessPage /> },
+      ],
+    };
+
+    // 5. TỔNG HỢP ROUTER
+    const routes = [
+      ...AUTH_ROUTES,
+      ADMIN_SECTION,
+      USER_PUBLIC_SECTION,
+      USER_PRIVATE_SECTION,
+      ERROR_ROUTE,
+      NO_MATCHED_ROUTE,
+    ] as RouteObject[];
+
+    return createBrowserRouter(routes);
+  }, [permissionRoutes]);
+
+  return <RouterProvider router={router} />;
   // thêm dấu # createHashRouter vd http://localhost:/#/3000/
 
 }
