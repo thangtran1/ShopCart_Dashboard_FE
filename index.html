@@ -2,6 +2,23 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function() {
+        var backendUrl = "%VITE_API_URL%" || "http://localhost:5000";
+        var maintenanceUrl = "%VITE_API_URL_MAINTENANCE%" || "http://localhost:3001";
+        
+        fetch(backendUrl + "/maintenance/current-status")
+          .then(function(res) { return res.json(); })
+          .then(function(res) {
+            if (res && res.success && res.data && res.data.isUnderMaintenance) {
+              window.location.href = maintenanceUrl;
+            }
+          })
+          .catch(function(err) {
+            console.error("Maintenance check failed:", err);
+          });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TVT Admin</title>
   

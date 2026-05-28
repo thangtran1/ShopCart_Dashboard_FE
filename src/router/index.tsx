@@ -47,7 +47,14 @@ const AUTH_ROUTES: AppRouteObject[] = [
   { path: "/auth/github/success", element: <GitHubSuccess /> },
   { path: "/auth/github/error", element: <GitHubError /> },
   { path: "/first-login-change-password", element: <ErrorBoundary FallbackComponent={PageError}><FirstLoginChangePassword /></ErrorBoundary> },
-];
+].map((route) => ({
+  ...route,
+  element: (
+    <MaintenanceGuard redirectUrl={MAIN_APP}>
+      {route.element}
+    </MaintenanceGuard>
+  ),
+}));
 
 const NO_MATCHED_ROUTE: AppRouteObject = {
   path: "*",
@@ -60,7 +67,13 @@ export default function Router() {
   // 2. CỤM ADMIN (Trong /admin)
   const ADMIN_SECTION: AppRouteObject = {
     path: "/admin",
-    element: <ProtectedRoute><DashboardLayout /></ProtectedRoute>,
+    element: (
+      <MaintenanceGuard redirectUrl={MAIN_APP}>
+        <ProtectedRoute>
+          <DashboardLayout />
+        </ProtectedRoute>
+      </MaintenanceGuard>
+    ),
     children: [
       { index: true, element: <Navigate to={HOMEPAGE} replace /> },
       ...permissionRoutes,

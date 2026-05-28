@@ -5,13 +5,11 @@ import { useLocation } from "react-router";
 interface MaintenanceGuardProps {
   children: ReactNode;
   redirectUrl: string;
-  delayMs?: number;
 }
 
 const MaintenanceGuard = ({
   children,
   redirectUrl,
-  delayMs = 1000,
 }: MaintenanceGuardProps) => {
   const [, setLoading] = useState(true);
 
@@ -24,24 +22,22 @@ const MaintenanceGuard = ({
         const response = await maintenanceApi.getCurrentStatus();
         const isUnderMaintenance = response.data.data.isUnderMaintenance;
 
-        setTimeout(() => {
-          if (isUnderMaintenance) {
-            window.location.href = redirectUrl;
-          } else {
-            setLoading(false);
-          }
-        }, delayMs);
+        if (isUnderMaintenance) {
+          window.location.href = redirectUrl;
+        } else {
+          setLoading(false);
+        }
       } catch (err) {
-        setTimeout(() => setLoading(false), delayMs);
+        setLoading(false);
       }
     };
 
     checkMaintenance();
-  }, [redirectUrl, delayMs, pathname]);
 
-  // if (loading) {
-  //   return <LoadingMaintenance />;
-  // }
+    const interval = setInterval(checkMaintenance, 5000);
+
+    return () => clearInterval(interval);
+  }, [redirectUrl, pathname]);
 
   return <>{children}</>;
 };
