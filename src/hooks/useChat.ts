@@ -12,13 +12,17 @@ interface UseChatReturn {
   selectedUserId: string | null;
   userUnreadCount: number;
   sendMessage: (content: string, recipientId?: string) => void;
-  selectUser: (userId: string) => void;
+  selectUser: (userId: string | null) => void;
   setIsReading: (reading: boolean) => void;
 }
 
 export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const messagesRef = useRef<ChatMessage[]>([]);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
   const [conversations, setConversations] = useState<
     Record<string, Conversation>
   >({});
@@ -101,8 +105,10 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
         setConversations((prev) => ({
           ...prev,
           [senderId]: {
+            ...prev[senderId],
             userId: senderId,
-            userEmail: message.senderId,
+            userEmail: prev[senderId]?.userEmail || message.senderId,
+            userName: prev[senderId]?.userName || prev[senderId]?.userEmail || message.senderId,
             lastMessage: message,
             // Nếu đang xem chat của user này thì không tăng unread
             unreadCount: isFromSelectedUser
@@ -178,13 +184,18 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
     });
 
     newSocket.on("chatHistory", (data: { messages: ChatMessage[]; targetUserId?: string }) => {
-      setMessages(data.messages);
       // Cập nhật cache cho admin
       if (data.targetUserId && currentUser?.role === "admin") {
         messageCacheRef.current[data.targetUserId] = data.messages;
       }
-      // Reset unread count cho user khi load history (= đã đọc)
-      if (currentUser?.role !== "admin") {
+      
+      // Chỉ hiển thị tin nhắn lên UI nếu targetUserId trùng với selectedUserId đang chọn (tránh race condition)
+      if (currentUser?.role === "admin") {
+        if (data.targetUserId === selectedUserIdRef.current) {
+          setMessages(data.messages);
+        }
+      } else {
+        setMessages(data.messages);
         setUserUnreadCount(0);
       }
     });
@@ -192,6 +203,21 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
     // Nhận unread count từ DB khi user kết nối
     newSocket.on("userUnreadCount", (data: { unreadCount: number }) => {
       setUserUnreadCount(data.unreadCount);
+    });
+
+    newSocket.on("conversationMarkedAsRead", (data: { userId: string; readerId: string }) => {
+      if (currentUser?.role === "admin") {
+        setConversations((prev) => {
+          if (!prev[data.userId]) return prev;
+          return {
+            ...prev,
+            [data.userId]: {
+              ...prev[data.userId],
+              unreadCount: 0,
+            },
+          };
+        });
+      }
     });
 
     newSocket.on("initialOnlineUsers", (userIds: string[]) => {
@@ -300,16 +326,16 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
   );
 
   const selectUser = useCallback(
-    (userId: string) => {
+    (userId: string | null) => {
       // Lưu tin nhắn hiện tại vào cache trước khi chuyển
       if (selectedUserIdRef.current) {
-        messageCacheRef.current[selectedUserIdRef.current] = messages;
+        messageCacheRef.current[selectedUserIdRef.current] = messagesRef.current;
       }
 
       setSelectedUserId(userId);
       selectedUserIdRef.current = userId;
 
-      if (currentUser?.role === "admin") {
+      if (userId && currentUser?.role === "admin") {
         setConversations((prev) => ({
           ...prev,
           [userId]: {
@@ -319,20 +345,24 @@ export const useChat = (currentUser: CurrentUser | null): UseChatReturn => {
         }));
       }
 
-      // Hiển thị cached messages ngay lập tức (nếu có)
-      const cached = messageCacheRef.current[userId];
-      if (cached && cached.length > 0) {
-        setMessages(cached);
+      if (userId) {
+        // Hiển thị cached messages ngay lập tức (nếu có)
+        const cached = messageCacheRef.current[userId];
+        if (cached && cached.length > 0) {
+          setMessages(cached);
+        } else {
+          setMessages([]);
+        }
+
+        // Fetch fresh từ server (background)
+        if (socket) {
+          socket.emit("getChatHistory", { userId });
+        }
       } else {
         setMessages([]);
       }
-
-      // Fetch fresh từ server (background)
-      if (socket) {
-        socket.emit("getChatHistory", { userId });
-      }
     },
-    [socket, currentUser?.role, messages]
+    [socket, currentUser?.role]
   );
 
   const getConversations = useMemo(() => {

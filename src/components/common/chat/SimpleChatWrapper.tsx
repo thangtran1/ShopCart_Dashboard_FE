@@ -39,7 +39,7 @@ const SimpleChatWrapper: React.FC = () => {
     <>
       <SimpleChatIcon
         onClick={handleOpen}
-        unreadCount={currentUser.role !== "admin" ? unreadCount : 0}
+        unreadCount={unreadCount}
       />
       
       {/* Luôn render để duy trì kết nối Socket ngầm */}
@@ -49,6 +49,7 @@ const SimpleChatWrapper: React.FC = () => {
             open={isOpen}
             onClose={handleClose}
             currentUser={currentUser}
+            onUnreadCountChange={handleUnreadCountChange}
           />
         ) : (
           <ModalChatUser

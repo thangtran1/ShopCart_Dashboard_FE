@@ -34,12 +34,14 @@ interface ModalChatAdminProps {
   open: boolean;
   onClose: () => void;
   currentUser: CurrentUser;
+  onUnreadCountChange?: (count: number) => void;
 }
 
 const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
   open,
   onClose,
   currentUser,
+  onUnreadCountChange,
 }) => {
   const { t } = useTranslation()
   const [inputValue, setInputValue] = useState("");
@@ -63,6 +65,22 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
     messages,
   } = useChat(currentUser);
 
+  const totalUnreadCount = useMemo(() => {
+    return conversations.reduce((sum: number, conv: any) => sum + (conv.unreadCount || 0), 0);
+  }, [conversations]);
+
+  useEffect(() => {
+    onUnreadCountChange?.(totalUnreadCount);
+  }, [totalUnreadCount, onUnreadCountChange]);
+
+  useEffect(() => {
+    if (open && selectedUserId) {
+      selectUser(selectedUserId);
+    } else if (!open) {
+      selectUser(null);
+    }
+  }, [open, selectedUserId, selectUser]);
+
   const activeConversation = conversations.find(
     (conv: Conversation) => conv.userId === selectedUserId
   );
@@ -77,9 +95,20 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
     }
   }, []);
 
+  const lastSelectedUserIdRef = useRef<string | null>(null);
+  const lastMessagesLengthRef = useRef<number>(0);
+
   useEffect(() => {
-    scrollToBottom();
-  }, [activeConversation, messages, scrollToBottom]);
+    const hasUserChanged = selectedUserId !== lastSelectedUserIdRef.current;
+    const hasNewMessage = messages.length > lastMessagesLengthRef.current;
+
+    if (hasUserChanged || hasNewMessage) {
+      scrollToBottom();
+    }
+
+    lastSelectedUserIdRef.current = selectedUserId;
+    lastMessagesLengthRef.current = messages.length;
+  }, [selectedUserId, messages, scrollToBottom]);
 
   const handleSendMessage = () => {
     if (inputValue.trim() && selectedUserId) {
@@ -158,10 +187,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div
-            className="flex-1 overflow-y-auto"
-            key={`user-list-${filteredConversations.length}`}
-          >
+          <div className="flex-1 overflow-y-auto">
             {filteredConversations.length > 0 ? (
               filteredConversations.map((conversation: Conversation) => (
                 <div
@@ -189,8 +215,15 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
                   </div>
 
                   <div className="flex-1 min-w-0 ml-2">
-                    <div className="font-medium truncate text-sm">
-                      {conversation.userName || conversation.userEmail}
+                    <div className="flex justify-between items-start">
+                      <div className="font-medium truncate text-sm pr-2">
+                        {conversation.userName || conversation.userEmail}
+                      </div>
+                      {conversation.unreadCount > 0 && (
+                        <div className="bg-error text-white rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-bold">
+                          {conversation.unreadCount}
+                        </div>
+                      )}
                     </div>
                     <div className="text-xs text-muted-foreground truncate">
                       {conversation.lastMessage?.content ||
@@ -209,7 +242,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
           </div>
         </div>
 
-        <div className="w-[65%] flex flex-col bg-background">
+        <div className="w-[65%] flex flex-col bg-background overflow-hidden min-h-0 relative">
           {activeConversation ? (
             <>
               <div className="flex justify-between items-center p-[15px_20px] border-b border-border bg-background">
@@ -256,7 +289,7 @@ const ModalChatAdmin: React.FC<ModalChatAdminProps> = ({
               </div>
 
               <div
-                className="flex-1 p-5 overflow-y-auto flex flex-col"
+                className="flex-1 p-5 overflow-y-auto overflow-x-hidden min-h-0 scroll-smooth"
                 ref={listRef}
               >
                 {Object.entries(groupedMessages).map(([date, msgs]) => (
