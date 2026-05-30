@@ -117,7 +117,6 @@ const CheckoutPage = () => {
       }
     } catch (error: any) {
       setLoading(false);
-      toast.error(error?.response?.data?.message || "Order failed");
       console.error(error);
     } finally {
       setLoading(false);
